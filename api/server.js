@@ -6,7 +6,6 @@ var bodyParser = require('body-parser');
 //var Parse = require('parse/node').Parse;
 //Parse.initialize();
 
-
 //Allow cross origin requests
 app.use(function(req, res, next) {
     //console.log("Running CORS middlesware");
@@ -24,35 +23,19 @@ app.use(express.static(__dirname + '/public'));
 var port = process.env.PORT || 3000;
 
 var router = express.Router();
+var examples = require('./routes/examples.js')
 
 //Route to test if API is working
 router.get('/', function(req, res) {
-    res.json({ message: 'this is the api' });
+    res.json({ message: 'This is the Hobbyte API', status: 200 });
 });
+            
+//example routes
+router.route('/v1/examples')
+    .get(examples.sampleGET)
+    .post(examples.samplePOST);
 
-//example route
-router.route('/example')
-
-    //example POST route
-    .post(function(req, res) {
-
-        var data = JSON.parse(JSON.stringify(req.body));
-
-        if (data)
-            res.send(200)
-        else
-            res.send(400)
-    })
-
-    .get(function(req, res) {
-
-        var data = {
-            example: "data"
-        }
-
-        res.send(data);
-    });
-
+    
 app.use('/api', router);
 
 app.listen(port);
