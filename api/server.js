@@ -29,13 +29,13 @@ var examples = require('./routes/examples.js')
 router.get('/', function(req, res) {
     res.json({ message: 'This is the Hobbyte API', status: 200 });
 });
-            
+
 //example routes
 router.route('/v1/examples')
     .get(examples.sampleGET)
     .post(examples.samplePOST);
 
-    
+
 app.use('/api', router);
 
 app.listen(port);
