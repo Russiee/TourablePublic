@@ -10,7 +10,8 @@ import UIKit
 
 class MainTableTableViewController: UITableViewController {
     
-    var models = ["iPhone 6 Plus Gold 128 GB", "iPhone 6 Plus Gold 64 GB", "iPhone 6 Plus Gold 16 GB", "iPhone 6 Gold 128 GB", "iPhone 6 Gold 64 GB", "iPhone 6 Gold 16 GB"]
+    var models = [String]()
+//["iPhone 6 Plus Gold 128 GB", "iPhone 6 Plus Gold 64 GB", "iPhone 6 Plus Gold 16 GB", "iPhone 6 Gold 128 GB", "iPhone 6 Gold 64 GB", "iPhone 6 Gold 16 GB"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +21,22 @@ class MainTableTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        
+        
+        // Load empty state view if necessary.
+        if tableView(tableView, numberOfRowsInSection: 1) == 0 {
+          let  empty_state_image = UIImage(named: "empty_tv_placeholder")
+            let empty_state_label = UIImageView(image: empty_state_image)
+            empty_state_label.contentMode = .ScaleAspectFit
+
+            
+            // style it as necessary
+            
+            tableView.backgroundView = empty_state_label
+            tableView.separatorStyle = UITableViewCellSeparatorStyle.None
+        } else {
+            tableView.backgroundView = nil
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -36,6 +53,7 @@ class MainTableTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
+        
         return models.count
     }
 
