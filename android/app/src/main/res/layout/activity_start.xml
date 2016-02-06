@@ -10,6 +10,16 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.hobbyte.touringandroid.StartActivity">
 
+    <LinearLayout
+        android:id="@+id/previousToursLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:paddingTop="@dimen/previous_tour_padding_top">
+
+    </LinearLayout>
+
     <RelativeLayout
         android:id="@+id/keyEntryLayout"
         android:layout_width="match_parent"
