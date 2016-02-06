@@ -1,9 +1,9 @@
 package com.hobbyte.touringandroid;
 
-import android.support.v7.app.AppCompatActivity;
+import android.app.Activity;
 import android.os.Bundle;
 
-public class StartActivity extends AppCompatActivity {
+public class StartActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

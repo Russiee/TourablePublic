@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">TouringAndroid</string>
     <string name="start_activity_enter_key">Enter a tour key:</string>
+    <string name="submit_key_button_text">Submit</string>
 </resources>
