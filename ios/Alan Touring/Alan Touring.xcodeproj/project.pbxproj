@@ -15,6 +15,7 @@
 		E536DCCC1C6510FD00A7B2FC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E536DCCA1C6510FD00A7B2FC /* LaunchScreen.storyboard */; };
 		E536DCD71C6510FD00A7B2FC /* Alan_TouringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E536DCD61C6510FD00A7B2FC /* Alan_TouringTests.swift */; };
 		E536DCE21C6510FD00A7B2FC /* Alan_TouringUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E536DCE11C6510FD00A7B2FC /* Alan_TouringUITests.swift */; };
+		FA9803291C666195001D23E2 /* MainTableTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9803281C666195001D23E2 /* MainTableTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		E536DCDD1C6510FD00A7B2FC /* Alan TouringUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Alan TouringUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E536DCE11C6510FD00A7B2FC /* Alan_TouringUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alan_TouringUITests.swift; sourceTree = "<group>"; };
 		E536DCE31C6510FD00A7B2FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FA9803281C666195001D23E2 /* MainTableTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTableTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +108,7 @@
 				E536DCCA1C6510FD00A7B2FC /* LaunchScreen.storyboard */,
 				E536DCCD1C6510FD00A7B2FC /* Info.plist */,
 				E536DCC51C6510FD00A7B2FC /* Alan_Touring.xcdatamodeld */,
+				FA9803281C666195001D23E2 /* MainTableTableViewController.swift */,
 			);
 			path = "Alan Touring";
 			sourceTree = "<group>";
@@ -263,6 +266,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E536DCC71C6510FD00A7B2FC /* Alan_Touring.xcdatamodeld in Sources */,
+				FA9803291C666195001D23E2 /* MainTableTableViewController.swift in Sources */,
 				E536DCC11C6510FD00A7B2FC /* ViewController.swift in Sources */,
 				E536DCBF1C6510FD00A7B2FC /* AppDelegate.swift in Sources */,
 			);
@@ -408,6 +412,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "Alan Touring/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Hobbyte.Alan-Touring";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -420,6 +425,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "Alan Touring/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Hobbyte.Alan-Touring";
 				PRODUCT_NAME = "$(TARGET_NAME)";
