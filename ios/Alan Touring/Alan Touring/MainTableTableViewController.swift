@@ -71,6 +71,33 @@ class MainTableTableViewController: UITableViewController {
     
     @IBAction func saveTourDetail(segue:UIStoryboardSegue) {
     }
+    @IBAction func plussPressed(sender: UIBarButtonItem) {
+        
+        showAlert()
+        
+        
+        
+    }
+    
+    func showAlert(){
+        
+        let alert = UIAlertView(title: "Add New Tour", message: "Enter the key you have recieved", delegate: self, cancelButtonTitle:"Cancel")
+       alert.alertViewStyle = UIAlertViewStyle.PlainTextInput
+        alert.addButtonWithTitle("Add")
+        let textField = alert.textFieldAtIndex(0)
+        textField!.placeholder = "Enter Tour ID"
+        alert.show()
+    }
+    
+    func alertView(View: UIAlertView!, clickedButtonAtIndex buttonIndex: Int){
+        switch buttonIndex{
+        case 1: print("Blue")
+        let Field = View.textFieldAtIndex(0)
+            print(Field?.text)
+        case 0: print("Red")
+        default: print("Is this part even possible?")
+        }
+    }
     /*
     // Override to support conditional editing of the table view.
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {

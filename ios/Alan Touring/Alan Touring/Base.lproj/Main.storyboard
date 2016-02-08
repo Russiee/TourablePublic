@@ -33,7 +33,7 @@
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="QEQ-yJ-zsf"/>
                         <barButtonItem systemItem="add" id="tKK-QG-O8f">
                             <connections>
-                                <segue destination="xqZ-b6-00V" kind="show" id="Zny-lA-BAs"/>
+                                <action selector="plussPressed:" destination="Bbx-Al-6dq" id="kzC-Z4-EeY"/>
                             </connections>
                         </barButtonItem>
                     </toolbarItems>
@@ -60,8 +60,19 @@
                         <viewControllerLayoutGuide type="bottom" id="u5V-LO-tHL"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="V9B-aU-NhZ">
-                        <rect key="frame" x="0.0" y="64" width="600" height="492"/>
+                        <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="RL5-Uc-xOK">
+                                <rect key="frame" x="246" y="144" width="108" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PNh-6h-T5E">
+                                <rect key="frame" x="266" y="182" width="69" height="30"/>
+                                <state key="normal" title="Download"/>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
