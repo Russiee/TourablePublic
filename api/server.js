@@ -43,6 +43,7 @@ var admin = require('./routes/admin.js');
 var section = require('./routes/section.js');
 var tour = require('./routes/tour.js');
 var organization = require('./routes/organization.js');
+var key = require('./routes/key.js');
 
 
 

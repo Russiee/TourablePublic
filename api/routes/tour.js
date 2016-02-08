@@ -1,3 +1,4 @@
+var validate = require('./validate.js');
 var tour = {
 
 	GET: function(req, res) {
@@ -28,11 +29,28 @@ var tour = {
 	},
 
 	POST: function(req, res) {
-		var data = JSON.parse(JSON.stringify(req.body));
-		if (data)
-			res.send(200)
+		console.log("POST TOUR:",req.body);
+		var data = req.body;
+
+		var expectedInput = {
+			id: "",
+			description: "",
+			title: "",
+			admin: "",
+			sections: "",
+			keys: [],
+            s3url: "",
+            isPublic: ""
+		};
+
+		var validInput = validate.validateInput(data, expectedInput);
+
+		console.log(validInput);
+
+		if (validInput)
+			res.sendStatus(200);
 		else
-			res.send(400)
+			res.sendStatus(400);
 	},
 
 	PUT: function(req, res) {

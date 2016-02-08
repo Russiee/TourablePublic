@@ -1,3 +1,4 @@
+var validate = require('./validate.js');
 var admin = {
 
 	GET: function(req, res) {
@@ -27,7 +28,7 @@ var admin = {
 		}
 	},
 
-	POST: function(req, res) {
+//	POST: function(req, res) {
 
 
 //		var Test = Parse.Object.extend("Test");
@@ -43,7 +44,31 @@ var admin = {
 //		  }
 //		});
 
-		res.sendStatus(200);
+//		res.sendStatus(200);
+//	},
+    
+   	POST: function(req, res) {
+		console.log("POST ADMIN:",req.body);
+		var data = req.body;
+
+		var expectedInput = {
+			id: "",
+			name: "",
+			email: "",
+			password: "",
+			organization: "",
+			tours: [],
+            isSuper: ""
+		};
+
+		var validInput = validate.validateInput(data, expectedInput);
+
+		console.log(validInput);
+
+		if (validInput)
+			res.sendStatus(200);
+		else
+			res.sendStatus(400);
 	},
 
 	PUT: function(req, res) {
