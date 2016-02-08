@@ -12,7 +12,7 @@ var organization = {
 		query.get(id, {
 			success: function(org) {
 				// The object was retrieved successfully.
-				console.log("Organization with " + id + " retrieved succesfully");
+				console.log("Organization " + id + " retrieved succesfully");
 				res.send(org);
 			},
 			error: function(object, error) {
@@ -23,9 +23,8 @@ var organization = {
 	},
 
 	POST: function(req, res) {
-		console.log("POST ORGANIZATION:\n",req.body);
+		console.log("POST ORGANIZATION:\n", req.body);
 		var data = req.body;
-        console.log(req.body);
 		var expectedInput = {
 			"key": "",
 			"name": "",
@@ -38,7 +37,7 @@ var organization = {
 		var validInput = validate.validateInput(data, expectedInput);
         var parseData = validate.parseData(data, expectedInput);
         
-        console.log(parseData);
+        console.log("Parsed Data: ", parseData);
 		if (!validInput) {
 			res.sendStatus(400);
 		} else {
@@ -52,9 +51,10 @@ var organization = {
 	},
 
 	PUT: function(req, res) {
-		var id = req.params.id;
+        console.log("PUT ORGANIZATION:\n", req.body);
 		var data = req.body;
-
+		var id = req.params.id;
+		
 		var expectedInput = {
 			key: "",
 			name: "",
@@ -65,14 +65,29 @@ var organization = {
 		};
 
 		var validInput = validate.validateInput(data, expectedInput);
-
-		console.log(validInput);
-
-		if (validInput)
-			res.sendStatus(200);
-		else
-			res.sendStatus(400);
-	},
+        var parseData = validate.parseData(data, expectedInput);
+        console.log("Parsed Data: ", parseData);
+        
+        var query = new Parse.Query(Organization);
+		query.get(id, {
+			success: function(org) {
+				// The object was retrieved successfully.
+                console.log("Organization " + id + " retrieved succesfully");
+				for (var prop in parseData) {
+                    org.set(prop.toString(), parseData[prop]); 
+                }
+                org.save();
+                console.log("Organization " + id + " updated succesfully");
+                res.status(200).send(org);
+                
+			},
+			error: function(object, error) {
+				console.log("Error retrieving " + id);
+                console.log(error);
+                res.sendStatus(404);
+			}
+		});
+    },
 
 	DELETE: function(req, res) {
         var id = req.params.id;
@@ -80,11 +95,11 @@ var organization = {
 		query.get(id, {
 			success: function(org) {
 				// The object was retrieved successfully.
-                console.log("Organization with " + id + " retrieved succesfully");
+                console.log("Organization " + id + " retrieved succesfully");
 				org.destroy({
                     success: function(org) {
                         // The object was deleted from the Parse database.
-                        console.log("Deleted organization with id: " + org.id);
+                        console.log("Deleted organization " + org.id);
                         res.sendStatus(200);
                     },
                     error: function(org, error) {
@@ -98,7 +113,8 @@ var organization = {
 			},
 			error: function(object, error) {
 				console.log("Error retrieving " + id);
-                res.sendStatus(500);
+                console.log(error);
+                res.sendStatus(404);
 			}
 		});
         
