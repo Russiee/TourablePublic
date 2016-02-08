@@ -31,7 +31,11 @@
                     </tableView>
                     <toolbarItems>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="QEQ-yJ-zsf"/>
-                        <barButtonItem systemItem="add" id="tKK-QG-O8f"/>
+                        <barButtonItem systemItem="add" id="tKK-QG-O8f">
+                            <connections>
+                                <segue destination="xqZ-b6-00V" kind="show" id="Zny-lA-BAs"/>
+                            </connections>
+                        </barButtonItem>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="Alan Touring" id="lbB-tE-EcH"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
@@ -56,7 +60,7 @@
                         <viewControllerLayoutGuide type="bottom" id="8ev-h0-Yhq"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="uUp-JA-Rdr">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="556"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
