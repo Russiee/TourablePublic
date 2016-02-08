@@ -1,4 +1,4 @@
-var poi = {
+var tour = {
 
 	GET: function(req, res) {
 		var id = req.params.id;
@@ -9,7 +9,6 @@ var poi = {
 			createdAt: "2016-02-08T11:11:36Z",
 			updatedAt: new Date(),
 			title: "Sample Title",
-            description: "blah described",
 			post: {
 				content: [
 					"Text text text text",
@@ -50,4 +49,4 @@ var poi = {
 	}
 }
 
-module.exports = poi;
+module.exports = tour;

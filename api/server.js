@@ -22,19 +22,60 @@ app.use(express.static(__dirname + '/public'));
 
 var port = process.env.PORT || 3000;
 
+//requiring the routes
+
 var router = express.Router();
-var examples = require('./routes/examples.js');
 var poi = require('./routes/poi.js');
+var admin = require('./routes/admin.js');
+var section = require('./routes/section.js');
+var tour = require('./routes/tour.js');
+var organization = require('./routes/organization.js');
+
+
+
 //Route to test if API is working
 router.get('/', function(req, res) {
 	res.json({ message: 'This is the Hobbyte API', status: 200 });
 });
+
+//Organization routes
+router.get('/v1/organization/:id'), organization.GET;
+router.put('/v1/organization/:id'),organization.PUT;
+router.delete('/v1/organization/:id'),organization.DELETE;
+
+//Admin routes
+router.get('/v1/admin/:id');
+router.post('/v1/admin/');
+router.put('/v1/admin/:id');
+router.delete('/v1/admin/:id');
+
+//Tour routes
+router.get('/v1/tour/:id');
+router.post('/v1/tour/');
+router.put('/v1/tour/:id');
+router.delete('/v1/tour/:id');
+
+//Section routes
+router.get('/v1/section/:id');
+router.post('v1/section/');
+router.put('/v1/section/:id');
+router.delete('/v1/section/:id');
+
+//Key routes
+router.get('/v1/key/:id');
+router.post('/v1/key/');
+router.put('/v1/key/:id');
+router.delete('/v1/key/:id');
+
+
 
 //POI routes
 router.get('/v1/poi/:id', poi.GET);
 router.post('/v1/poi/', poi.POST);
 router.put('/v1/poi/:id', poi.PUT);
 router.delete('/v1/poi/:id', poi.DELETE);
+
+
 
 
 

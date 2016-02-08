@@ -1,15 +1,15 @@
-var poi = {
+var key = {
 
 	GET: function(req, res) {
 		var id = req.params.id;
 		//example date string (ISO 8601)
 		//2012-04-23T18:25:43.511Z
 		var mockData = {
-			id: "8EDFA1BF",
+			id: "7DACX13",
 			createdAt: "2016-02-08T11:11:36Z",
 			updatedAt: new Date(),
+            code: "RBH-1251",
 			title: "Sample Title",
-            description: "blah described",
 			post: {
 				content: [
 					"Text text text text",
@@ -21,7 +21,7 @@ var poi = {
 			}
 		}
 
-		if (id === "8EDFA1BF") {
+		if (id === "7DACX13") {
 			res.send(mockData);
 		} else {
 			res.send(404);
@@ -50,4 +50,4 @@ var poi = {
 	}
 }
 
-module.exports = poi;
+module.exports = key;
