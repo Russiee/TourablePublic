@@ -7,13 +7,13 @@ var Organization = Parse.Object.extend("Organization");
 var organization = {
 
 	GET: function(req, res) {
+        console.log("GET ORGANIZATION:\n", req.body);
 		var id = req.params.id;
 		var query = new Parse.Query(Organization);
 		query.get(id, {
 			success: function(org) {
-				// The object was retrieved successfully.
 				console.log("Organization " + id + " retrieved succesfully");
-				res.send(org);
+				res.status(200).send(org);
 			},
 			error: function(object, error) {
 				console.log("Error retrieving " + id);
@@ -21,7 +21,27 @@ var organization = {
 			}
 		});
 	},
-
+    
+    GET_ALL: function(req, res) {
+        console.log("GET ALL ORGANIZATIONS");
+        var limit = req.query.limit || 5;
+        var orderBy = req.query.limit || null;
+        
+		var query = new Parse.Query(Organization);
+        query.limit(parseInt(limit));
+        query.find({
+            success: function(results) {
+                console.log(results.length + " organizations retrieved");
+                res.status(200).send(results);
+            },
+            error: function(error) {
+                console.log("Failed to retrieve organizations");
+                console.log(error);
+                res.send(500);
+            }
+        });
+	},
+    
 	POST: function(req, res) {
 		console.log("POST ORGANIZATION:\n", req.body);
 		var data = req.body;
@@ -71,7 +91,6 @@ var organization = {
         var query = new Parse.Query(Organization);
 		query.get(id, {
 			success: function(org) {
-				// The object was retrieved successfully.
                 console.log("Organization " + id + " retrieved succesfully");
 				for (var prop in parseData) {
                     org.set(prop.toString(), parseData[prop]); 
@@ -94,17 +113,13 @@ var organization = {
         var query = new Parse.Query(Organization);
 		query.get(id, {
 			success: function(org) {
-				// The object was retrieved successfully.
                 console.log("Organization " + id + " retrieved succesfully");
 				org.destroy({
                     success: function(org) {
-                        // The object was deleted from the Parse database.
                         console.log("Deleted organization " + org.id);
                         res.sendStatus(200);
                     },
                     error: function(org, error) {
-                        // The delete failed.
-                        // error is a Parse.Error with an error code and message.
                         console.log("Failed to delete " + org.id);
                         console.log(error);
                         res.sendStatus(500);
@@ -126,13 +141,11 @@ function createOrganization (data, callback) {
 	var org = new Organization();
 	org.save(data, {
 		success: function(org) {
-			// The object was saved successfully.
 			console.log("Created Organization with ID " + org.id + " at time " + org.createdAt);
 			console.log(org);
 			callback(org);
 		},
 		error: function(org, error) {
-			// The save failed.
 			console.log("Failed to create Organization.");
 			console.log("Error: ", error);
 			callback({status: 500});

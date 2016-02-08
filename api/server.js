@@ -55,6 +55,7 @@ router.get('/', function(req, res) {
 
 //Organization routes
 router.get('/v1/organization/:id', organization.GET);
+router.get('/v1/organizations', organization.GET_ALL);
 router.post('/v1/organization', organization.POST);
 router.put('/v1/organization/:id',organization.PUT);
 router.delete('/v1/organization/:id',organization.DELETE);

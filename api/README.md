@@ -4,7 +4,7 @@ To run this api:
 
 ```npm install```
 
-```node server.js```
+```gulp```
 
 ```open http://localhost:3000/api```
 
