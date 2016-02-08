@@ -39,6 +39,7 @@ var port = process.env.PORT || 3000;
 
 var router = express.Router();
 var poi = require('./routes/poi.js');
+var key = require('./routes/key.js');
 var admin = require('./routes/admin.js');
 var section = require('./routes/section.js');
 var tour = require('./routes/tour.js');
@@ -81,6 +82,7 @@ router.get('/v1/key/:id', key.GET);
 router.post('/v1/key/',key.POST);
 router.put('/v1/key/:id', key.PUT);
 router.delete('/v1/key/:id', key.DELETE);
+//router.post('/v1/validate/:key', key.validateKey);
 
 //POI routes
 router.get('/v1/poi/:id', poi.GET);
