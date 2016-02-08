@@ -34,7 +34,6 @@ var key = {
 		var data = req.body;
 
 		var expectedInput = {
-			id: "",
 			code: "",
 			tour: "",
 			expiresAt: ""
@@ -52,11 +51,22 @@ var key = {
 
 	PUT: function(req, res) {
 		var id = req.params.id;
-		var data = JSON.parse(JSON.stringify(req.body));
-		if (data)
-			res.send(200)
+		var data = req.body;
+
+		var expectedInput = {
+			code: "",
+			tour: "",
+			expiresAt: ""
+        };
+
+		var validInput = validate.validateInput(data, expectedInput);
+
+		console.log(validInput);
+
+		if (validInput)
+			res.sendStatus(200);
 		else
-			res.send(400)
+			res.sendStatus(400);
 	},
 
 	DELETE: function(req, res) {

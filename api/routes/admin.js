@@ -52,7 +52,6 @@ var admin = {
 		var data = req.body;
 
 		var expectedInput = {
-			id: "",
 			name: "",
 			email: "",
 			password: "",
