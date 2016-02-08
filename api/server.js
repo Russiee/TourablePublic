@@ -2,9 +2,22 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 
-//If we use Parse
-//var Parse = require('parse/node').Parse;
-//Parse.initialize();
+var Parse = require('parse/node').Parse;
+Parse.initialize("touring", "yF85llv84OI0NV41ieaHU7PM0oyRCMLT");
+Parse.serverURL = 'http://touring-db.herokuapp.com/parse';
+
+//var Test = Parse.Object.extend("Test");
+////var test = new Test();
+////test.save();
+//var query = new Parse.Query(Test);
+//query.find({
+//  success: function(results) {
+//	console.log("Successfully retrieved " + results.length + " tests.");
+//  },
+//  error: function(error) {
+//	console.log("Error: " + error.code + " " + error.message);
+//  }
+//});
 
 //Allow cross origin requests
 app.use(function(req, res, next) {
@@ -39,9 +52,10 @@ router.get('/', function(req, res) {
 });
 
 //Organization routes
-router.get('/v1/organization/:id'), organization.GET;
-router.put('/v1/organization/:id'),organization.PUT;
-router.delete('/v1/organization/:id'),organization.DELETE;
+router.get('/v1/organization/:id', organization.GET);
+router.post('/v1/organization', organization.POST);
+router.put('/v1/organization/:id',organization.PUT);
+router.delete('/v1/organization/:id',organization.DELETE);
 
 //Admin routes
 router.get('/v1/admin/:id');
@@ -66,8 +80,6 @@ router.get('/v1/key/:id');
 router.post('/v1/key/');
 router.put('/v1/key/:id');
 router.delete('/v1/key/:id');
-
-
 
 //POI routes
 router.get('/v1/poi/:id', poi.GET);

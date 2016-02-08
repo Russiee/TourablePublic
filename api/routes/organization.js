@@ -1,3 +1,5 @@
+var validate = require('./validate.js');
+
 var organization = {
 
 	GET: function(req, res) {
@@ -28,11 +30,27 @@ var organization = {
 	},
 
 	POST: function(req, res) {
-		var data = JSON.parse(JSON.stringify(req.body));
-		if (data)
-			res.send(200)
+		console.log("POST ORGANIZATION:",req.body);
+		var data = req.body;
+
+		var expectedInput = {
+			key: "",
+			name: "",
+			superAdmins: [],
+			admins: [],
+			color: "",
+			logo: ""
+		};
+
+//		boolean x = validateInput(data, expectedInput)
+		var validInput = validate.validateInput(data, expectedInput);
+
+		console.log(validInput);
+
+		if (validInput)
+			res.sendStatus(200);
 		else
-			res.send(400)
+			res.sendStatus(400);
 	},
 
 	PUT: function(req, res) {

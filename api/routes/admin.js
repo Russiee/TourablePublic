@@ -28,11 +28,22 @@ var admin = {
 	},
 
 	POST: function(req, res) {
-		var data = JSON.parse(JSON.stringify(req.body));
-		if (data)
-			res.send(200)
-		else
-			res.send(400)
+
+
+//		var Test = Parse.Object.extend("Test");
+//		//var test = new Test();
+//		//test.save();
+//		var query = new Parse.Query(Test);
+//		query.find({
+//		  success: function(results) {
+//			console.log("Successfully retrieved " + results.length + " tests.");
+//		  },
+//		  error: function(error) {
+//			console.log("Error: " + error.code + " " + error.message);
+//		  }
+//		});
+
+		res.sendStatus(200);
 	},
 
 	PUT: function(req, res) {
