@@ -1,5 +1,4 @@
 var validate = require('./validate.js');
-
 var organization = {
 
 	GET: function(req, res) {
@@ -42,7 +41,6 @@ var organization = {
 			logo: ""
 		};
 
-//		boolean x = validateInput(data, expectedInput)
 		var validInput = validate.validateInput(data, expectedInput);
 
 		console.log(validInput);

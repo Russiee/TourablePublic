@@ -1,6 +1,7 @@
+var validate = require('./validate.js');
 var key = {
 
-	GET: function(req, res) {
+    GET: function(req, res) {
 		var id = req.params.id;
 		//example date string (ISO 8601)
 		//2012-04-23T18:25:43.511Z
@@ -29,11 +30,24 @@ var key = {
 	},
 
 	POST: function(req, res) {
-		var data = JSON.parse(JSON.stringify(req.body));
-		if (data)
-			res.send(200)
+		console.log("POST KEY:",req.body);
+		var data = req.body;
+
+		var expectedInput = {
+			id: "",
+			code: "",
+			tour: "",
+			expiresAt: ""
+        };
+
+		var validInput = validate.validateInput(data, expectedInput);
+
+		console.log(validInput);
+
+		if (validInput)
+			res.sendStatus(200);
 		else
-			res.send(400)
+			res.sendStatus(400);
 	},
 
 	PUT: function(req, res) {
