@@ -1,7 +1,30 @@
-var organization = {
+var poi = {
 
 	GET: function(req, res) {
 		var id = req.params.id;
+		//example date string (ISO 8601)
+		//2012-04-23T18:25:43.511Z
+		var mockData = {
+			id: "8EDFA1BF",
+			createdAt: "2016-02-08T11:11:36Z",
+			updatedAt: new Date(),
+			title: "Sample Title",
+			post: {
+				content: [
+					"Text text text text",
+					"imageurl",
+					"text tesxasdasd;flkj a;sldkfja;sldf",
+					"videourl",
+					"Text text text text"
+				]
+			}
+		}
+
+		if (id === "8EDFA1BF") {
+			res.send(mockData);
+		} else {
+			res.send(404);
+		}
 	},
 
 	POST: function(req, res) {
@@ -26,4 +49,4 @@ var organization = {
 	}
 }
 
-module.exports = organization;
+module.exports = poi;
