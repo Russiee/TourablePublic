@@ -58,28 +58,28 @@ router.put('/v1/organization/:id',organization.PUT);
 router.delete('/v1/organization/:id',organization.DELETE);
 
 //Admin routes
-router.get('/v1/admin/:id');
-router.post('/v1/admin/');
-router.put('/v1/admin/:id');
-router.delete('/v1/admin/:id');
+router.get('/v1/admin/:id', admin.GET);
+router.post('/v1/admin/',admin.POST);
+router.put('/v1/admin/:id',admin.PUT);
+router.delete('/v1/admin/:id',admin.DELETE);
 
 //Tour routes
-router.get('/v1/tour/:id');
-router.post('/v1/tour/');
-router.put('/v1/tour/:id');
-router.delete('/v1/tour/:id');
+router.get('/v1/tour/:id',tour.GET);
+router.post('/v1/tour/', tour.POST);
+router.put('/v1/tour/:id', tour.PUT);
+router.delete('/v1/tour/:id', tour.DELETE);
 
 //Section routes
-router.get('/v1/section/:id');
-router.post('v1/section/');
-router.put('/v1/section/:id');
-router.delete('/v1/section/:id');
+router.get('/v1/section/:id', section.GET);
+router.post('v1/section/', section.POST);
+router.put('/v1/section/:id', section.PUT);
+router.delete('/v1/section/:id', section.DELETE);
 
 //Key routes
-router.get('/v1/key/:id');
-router.post('/v1/key/');
-router.put('/v1/key/:id');
-router.delete('/v1/key/:id');
+router.get('/v1/key/:id', key.GET);
+router.post('/v1/key/',key.POST);
+router.put('/v1/key/:id', key.PUT);
+router.delete('/v1/key/:id', key.DELETE);
 
 //POI routes
 router.get('/v1/poi/:id', poi.GET);
