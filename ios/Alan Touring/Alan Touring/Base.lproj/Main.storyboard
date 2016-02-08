@@ -47,6 +47,24 @@
             </objects>
             <point key="canvasLocation" x="302" y="-5"/>
         </scene>
+        <!--Add New Tour View Controller-->
+        <scene sceneID="Bwp-4b-I2N">
+            <objects>
+                <viewController id="xqZ-b6-00V" customClass="addNewTourViewController" customModule="Alan_Touring" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="J7A-es-Vi5"/>
+                        <viewControllerLayoutGuide type="bottom" id="8ev-h0-Yhq"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="uUp-JA-Rdr">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="p6H-uK-RQh" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="302" y="790"/>
+        </scene>
         <!--entryController-->
         <scene sceneID="OIh-ep-3KP">
             <objects>
