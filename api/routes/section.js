@@ -33,7 +33,6 @@ var section = {
 		var data = req.body;
 
 		var expectedInput = {
-			id: "",
 			title: "",
 			description: "",
 			supersection: "",
@@ -53,11 +52,24 @@ var section = {
 
 	PUT: function(req, res) {
 		var id = req.params.id;
-		var data = JSON.parse(JSON.stringify(req.body));
-		if (data)
-			res.send(200)
+		var data = req.body;
+
+		var expectedInput = {
+			title: "",
+			description: "",
+			supersection: "",
+			subsections: [],
+			pois: [],
+		};
+
+		var validInput = validate.validateInput(data, expectedInput);
+
+		console.log(validInput);
+
+		if (validInput)
+			res.sendStatus(200);
 		else
-			res.send(400)
+			res.sendStatus(400);
 	},
 
 	DELETE: function(req, res) {
