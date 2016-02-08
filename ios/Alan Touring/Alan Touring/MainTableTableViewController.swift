@@ -66,7 +66,11 @@ class MainTableTableViewController: UITableViewController {
         return cell
     }
     
-
+    @IBAction func cancelToAddNewTourController(segue:UIStoryboardSegue) {
+    }
+    
+    @IBAction func saveTourDetail(segue:UIStoryboardSegue) {
+    }
     /*
     // Override to support conditional editing of the table view.
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
