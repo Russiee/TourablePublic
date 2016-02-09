@@ -81,6 +81,7 @@ router.delete('/v1/section/:id', section.DELETE);
 
 //Key routes
 router.get('/v1/key/:id', key.GET);
+router.get('/v1/keys', key.GET_ALL);
 router.post('/v1/key/',key.POST);
 router.put('/v1/key/:id', key.PUT);
 router.delete('/v1/key/:id', key.DELETE);

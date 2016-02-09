@@ -117,6 +117,7 @@ var organization = {
     },
 
 	DELETE: function(req, res) {
+        console.log("DELETE ORGANIZATION");
         var id = req.params.id;
         var query = new Parse.Query(Organization);
 		query.get(id, {

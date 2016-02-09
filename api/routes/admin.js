@@ -120,6 +120,7 @@ var admin = {
 
     //TODO: AUTHENTICATE FOR THIS ROUTE TO WORK
 	DELETE: function(req, res) {
+        console.log("DELETE ADMIN");
         var id = req.params.id;
         var query = new Parse.Query(Admin);
 		query.get(id, {
