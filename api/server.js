@@ -69,6 +69,7 @@ router.delete('/v1/admin/:id',admin.DELETE);
 
 //Tour routes
 router.get('/v1/tour/:id',tour.GET);
+router.get('/v1/tours',tour.GET_ALL);
 router.post('/v1/tour/', tour.POST);
 router.put('/v1/tour/:id', tour.PUT);
 router.delete('/v1/tour/:id', tour.DELETE);
@@ -82,7 +83,7 @@ router.delete('/v1/section/:id', section.DELETE);
 //Key routes
 router.get('/v1/key/:id', key.GET);
 router.get('/v1/keys', key.GET_ALL);
-router.post('/v1/key/',key.POST);
+router.post('/v1/key/', key.POST);
 router.put('/v1/key/:id', key.PUT);
 router.delete('/v1/key/:id', key.DELETE);
 //router.post('/v1/validate/:key', key.validateKey);
