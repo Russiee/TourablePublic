@@ -39,6 +39,9 @@
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="Alan Touring" id="lbB-tE-EcH"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
+                    <connections>
+                        <segue destination="xqZ-b6-00V" kind="push" identifier="goToAddTour" id="thC-0w-L7C"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="apu-A8-5aL" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="QJT-8b-jcJ">
@@ -60,7 +63,7 @@
                         <viewControllerLayoutGuide type="bottom" id="u5V-LO-tHL"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="V9B-aU-NhZ">
-                        <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                        <rect key="frame" x="0.0" y="64" width="600" height="492"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="RL5-Uc-xOK">
