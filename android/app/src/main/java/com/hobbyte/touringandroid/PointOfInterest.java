@@ -53,4 +53,8 @@ public class PointOfInterest implements Serializable{
         }
         return returnString;
     }
+
+    public String getName() {
+        return name;
+    }
 }

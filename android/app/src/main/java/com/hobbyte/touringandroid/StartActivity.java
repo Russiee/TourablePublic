@@ -19,7 +19,6 @@ import java.util.ArrayList;
 
 public class StartActivity extends Activity {
     public static final String TAG = "StartActivity";
-    public static final String EXTRA_MESSAGE = "com.hobbyte.touringandroid.StartActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +55,7 @@ public class StartActivity extends Activity {
             ArrayList<SubSection> subsectionList = new ArrayList<SubSection>();
             subsectionList = testTour.getSubSections();
             Intent intent = new Intent(this, TourActivity.class);
-            intent.putExtra(this.EXTRA_MESSAGE, subsectionList);
+            intent.putExtra(TourActivity.EXTRA_MESSAGE_SUB, subsectionList);
             startActivity(intent);
         } else {
             Log.d(TAG, "Invalid key");
