@@ -105,6 +105,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
             let Field = alertView.textFieldAtIndex(0)
             alertView.textFieldAtIndex(0)?.resignFirstResponder()
             tourIdParser.addNewTourId(Field!.text!)
+            tourIdParser.confirmTourId(true)
             performSegueWithIdentifier("goToAddTour", sender: self)
             
             

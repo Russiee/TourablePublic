@@ -17,7 +17,7 @@ class addNewTourViewController: UIViewController {
     }
     
     @IBAction func withVideoButton(sender: AnyObject) {
-        tourIdParser.confirmTourId(true)
+        //tourIdParser.confirmTourId(true)
         
         
     }
@@ -25,6 +25,6 @@ class addNewTourViewController: UIViewController {
 
     }
     override func viewWillDisappear(animated: Bool) {
-        tourIdParser.confirmTourId(true)
+       // tourIdParser.confirmTourId(true)
     }
 }
