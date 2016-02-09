@@ -8,13 +8,16 @@
 
 import UIKit
 
-class MainTableTableViewController: UITableViewController {
+class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     
+   
     var models = [String]()
-    //["iPhone 6 Plus Gold 128 GB", "iPhone 6 Plus Gold 64 GB", "iPhone 6 Plus Gold 16 GB", "iPhone 6 Gold 128 GB", "iPhone 6 Gold 64 GB", "iPhone 6 Gold 16 GB"]
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        tourIdParser.addNewTourId("hello")
+        tourIdParser.confirmTourId(true)
+        models = tourIdParser.getAllTours()
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -24,7 +27,7 @@ class MainTableTableViewController: UITableViewController {
         
         
         // Load empty state view if necessary.
-        if tableView(tableView, numberOfRowsInSection: 1) == 0 {
+        if models.count == 0 {
           let  empty_state_image = UIImage(named: "empty_tv_placeholder")
             let empty_state_label = UIImageView(image: empty_state_image)
             empty_state_label.contentMode = .ScaleAspectFit
@@ -70,6 +73,11 @@ class MainTableTableViewController: UITableViewController {
     }
     
     @IBAction func saveTourDetail(segue:UIStoryboardSegue) {
+        
+        models = tourIdParser.getAllTours()
+        tableView.reloadData()
+        
+        
     }
     @IBAction func plussPressed(sender: UIBarButtonItem) {
         
@@ -87,18 +95,27 @@ class MainTableTableViewController: UITableViewController {
         let textField = alert.textFieldAtIndex(0)
         textField!.placeholder = "Enter Tour ID"
         alert.show()
+
     }
     
-    func alertView(View: UIAlertView!, clickedButtonAtIndex buttonIndex: Int){
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
         switch buttonIndex{
+            
         case 1: print("Blue")
-        let Field = View.textFieldAtIndex(0)
-            print(Field?.text)
-            [self .performSegueWithIdentifier("goToAddTour", sender: self)]
+            let Field = alertView.textFieldAtIndex(0)
+            alertView.textFieldAtIndex(0)?.resignFirstResponder()
+            tourIdParser.addNewTourId(Field!.text!)
+            performSegueWithIdentifier("goToAddTour", sender: self)
+            
+            
         case 0: print("Red")
+            
         default: print("Is this part even possible?")
+        
         }
     }
+    
+    
     /*
     // Override to support conditional editing of the table view.
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
@@ -107,8 +124,7 @@ class MainTableTableViewController: UITableViewController {
     }
     */
 
-    /*
-    // Override to support editing the table view.
+   
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             // Delete the row from the data source
@@ -117,7 +133,7 @@ class MainTableTableViewController: UITableViewController {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }
-    */
+    
 
     /*
     // Override to support rearranging the table view.

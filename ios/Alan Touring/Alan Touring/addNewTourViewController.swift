@@ -10,4 +10,21 @@ import UIKit
 
 class addNewTourViewController: UIViewController {
 
+    var tourID: String = ""
+    
+    override func viewDidLoad() {
+
+    }
+    
+    @IBAction func withVideoButton(sender: AnyObject) {
+        tourIdParser.confirmTourId(true)
+        
+        
+    }
+    @IBAction func withoutVideoButton(sender: AnyObject) {
+
+    }
+    override func viewWillDisappear(animated: Bool) {
+        tourIdParser.confirmTourId(true)
+    }
 }
