@@ -94,6 +94,7 @@ class MainTableTableViewController: UITableViewController {
         case 1: print("Blue")
         let Field = View.textFieldAtIndex(0)
             print(Field?.text)
+            [self .performSegueWithIdentifier("goToAddTour", sender: self)]
         case 0: print("Red")
         default: print("Is this part even possible?")
         }
