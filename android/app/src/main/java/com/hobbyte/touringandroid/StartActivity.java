@@ -2,6 +2,8 @@ package com.hobbyte.touringandroid;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -11,11 +13,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
+
+import com.hobbyte.touringandroid.helpers.FileManager;
 
 public class StartActivity extends Activity {
     public static final String TAG = "StartActivity";
@@ -24,6 +24,11 @@ public class StartActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+
+        SharedPreferences prefs = this.getPreferences(Context.MODE_PRIVATE);
+        boolean isFreshInstall = prefs.getBoolean(getString(R.string.prefs_is_new_install), true);
+
+        if (isFreshInstall) { FileManager.makeTourDir(this); }
 
         loadPreviousTours();
     }
