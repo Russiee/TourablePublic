@@ -1,6 +1,7 @@
 package com.hobbyte.touringandroid;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -10,8 +11,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
+
 public class StartActivity extends Activity {
     public static final String TAG = "StartActivity";
+    public static final String EXTRA_MESSAGE = "com.hobbyte.touringandroid.StartActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +52,12 @@ public class StartActivity extends Activity {
         if (tourKey.equals("jeroenTour")) {
             Log.d(TAG, "Valid key");
             // move to next activity
+            Tour testTour = new Tour();
+            ArrayList<SubSection> subsectionList = new ArrayList<SubSection>();
+            subsectionList = testTour.getSubSections();
+            Intent intent = new Intent(this, TourActivity.class);
+            intent.putExtra(this.EXTRA_MESSAGE, subsectionList);
+            startActivity(intent);
         } else {
             Log.d(TAG, "Invalid key");
             Toast toast = Toast.makeText(this, "Invalid tour key", Toast.LENGTH_SHORT);
