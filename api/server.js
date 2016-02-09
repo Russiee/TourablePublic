@@ -62,6 +62,7 @@ router.delete('/v1/organization/:id',organization.DELETE);
 
 //Admin routes
 router.get('/v1/admin/:id', admin.GET);
+router.get('/v1/admins', admin.GET_ALL);
 router.post('/v1/admin/',admin.POST);
 router.put('/v1/admin/:id',admin.PUT);
 router.delete('/v1/admin/:id',admin.DELETE);

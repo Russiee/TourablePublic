@@ -7,7 +7,7 @@ var Organization = Parse.Object.extend("Organization");
 var organization = {
 
 	GET: function(req, res) {
-        console.log("GET ORGANIZATION:\n", req.body);
+        console.log("GET ORGANIZATION");
 		var id = req.params.id;
 		var query = new Parse.Query(Organization);
 		query.get(id, {
@@ -61,11 +61,11 @@ var organization = {
 		if (!validInput) {
 			res.sendStatus(400);
 		} else {
-			createOrganization(data, function(result) {
+			createOrganization(parseData, function(result) {
 				if (result.status !== 500)
 					res.status(201).send(result);
 				else
-					res.sendStatus(500);
+					res.status(result.status).send(result.data);
 			});
 		}
 	},
@@ -95,9 +95,17 @@ var organization = {
 				for (var prop in parseData) {
                     org.set(prop.toString(), parseData[prop]); 
                 }
-                org.save();
-                console.log("Organization " + id + " updated succesfully");
-                res.status(200).send(org);
+                org.save(null, {
+                    success: function(org) {
+                        console.log("Organization " + id + " updated succesfully");
+                        res.status(200).send(org);
+                    },
+                    error:  function(org, error) {
+                        console.log("Failed to update organization " + id);
+                        console.log(error);
+                        res.status(500).send(error);
+                    }
+                });
                 
 			},
 			error: function(object, error) {
@@ -116,11 +124,11 @@ var organization = {
                 console.log("Organization " + id + " retrieved succesfully");
 				org.destroy({
                     success: function(org) {
-                        console.log("Deleted organization " + org.id);
+                        console.log("Deleted organization " + id);
                         res.sendStatus(200);
                     },
-                    error: function(org, error) {
-                        console.log("Failed to delete " + org.id);
+                    error: function(error) {
+                        console.log("Failed to delete " + id);
                         console.log(error);
                         res.sendStatus(500);
                     }
@@ -141,14 +149,14 @@ function createOrganization (data, callback) {
 	var org = new Organization();
 	org.save(data, {
 		success: function(org) {
-			console.log("Created Organization with ID " + org.id + " at time " + org.createdAt);
+			console.log("Created organization with ID " + org.id + " at time " + org.createdAt);
 			console.log(org);
 			callback(org);
 		},
 		error: function(org, error) {
-			console.log("Failed to create Organization.");
+			console.log("Failed to create organization.");
 			console.log("Error: ", error);
-			callback({status: 500});
+			callback({status: 500, data: error});
 		}
 	});
 }
