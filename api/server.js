@@ -91,6 +91,7 @@ router.delete('/v1/key/:id', key.DELETE);
 
 //POI routes
 router.get('/v1/poi/:id', poi.GET);
+router.get('/v1/pois', poi.GET_ALL);
 router.post('/v1/poi/', poi.POST);
 router.put('/v1/poi/:id', poi.PUT);
 router.delete('/v1/poi/:id', poi.DELETE);
