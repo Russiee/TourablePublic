@@ -11,7 +11,7 @@ import Foundation
 class tourIdParser {
     
     //again temporary, will need replacing by a database.
-   static var tourIdContainer = [String]()
+   static var tourIdContainer = NSMutableArray()
     
     //TourId user has entered but not confirmed download of yet.
     static var tourIdtoDownload = ""
@@ -35,7 +35,7 @@ class tourIdParser {
         
         //Method stub for downloading tour. Will return true to confirm download complete and it has been added to the database.
         
-        tourIdContainer.append(tourIdtoDownload)
+        tourIdContainer.addObject(tourIdtoDownload)
         print("tourId to confirm "+tourIdtoDownload)
         
         if readyToDownload == true{
@@ -52,7 +52,7 @@ class tourIdParser {
     
     
     
-    static func getAllTours() ->[String] {
+    static func getAllTours() -> NSMutableArray {
         //temporary method for getting tourIds that have been added for checking the table updates.
         print("total \(tourIdContainer.count)tourIds:")
         return tourIdContainer

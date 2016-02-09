@@ -8,10 +8,11 @@
 
 import UIKit
 
+
 class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     
    
-    var models = [String]()
+    var models = NSMutableArray()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,20 +27,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
         
-        // Load empty state view if necessary.
-        if models.count == 0 {
-          let  empty_state_image = UIImage(named: "empty_tv_placeholder")
-            let empty_state_label = UIImageView(image: empty_state_image)
-            empty_state_label.contentMode = .ScaleAspectFit
-
-            
-            // style it as necessary
-            
-            tableView.backgroundView = empty_state_label
-            tableView.separatorStyle = UITableViewCellSeparatorStyle.None
-        } else {
-            tableView.backgroundView = nil
-        }
+        checkStateOfScreen()
     }
 
     override func didReceiveMemoryWarning() {
@@ -65,8 +53,27 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         let cell = tableView.dequeueReusableCellWithIdentifier("tableCell", forIndexPath: indexPath)
 
         // Configure the cell...
-        cell.textLabel?.text = models[indexPath.row]
+        cell.textLabel?.text = models.objectAtIndex(indexPath.row) as? String
         return cell
+    }
+    
+    
+    // a function to tell change the background image when loading the app AND when deleting a cell results in no tours left
+    func checkStateOfScreen(){
+        if models.count == 0 {
+            let  empty_state_image = UIImage(named: "empty_tv_placeholder")
+            let empty_state_label = UIImageView(image: empty_state_image)
+            empty_state_label.contentMode = .ScaleAspectFit
+            
+            
+            // style it as necessary
+            
+            tableView.backgroundView = empty_state_label
+            tableView.separatorStyle = UITableViewCellSeparatorStyle.None
+        } else {
+            tableView.backgroundView = nil
+        }
+        
     }
     
     @IBAction func cancelToAddNewTourController(segue:UIStoryboardSegue) {
@@ -107,6 +114,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
             tourIdParser.addNewTourId(Field!.text!)
             tourIdParser.confirmTourId(true)
             performSegueWithIdentifier("goToAddTour", sender: self)
+            tableView.backgroundView = nil //to change the background image
             
             
         case 0: print("Red")
@@ -115,6 +123,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         
         }
     }
+    
     
     
     /*
@@ -129,7 +138,12 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             // Delete the row from the data source
+            //models.removeAtIndex(indexPath.row)
+            //upDateTourArray(models, itemToDelete: indexPath.row)
+            models.removeObjectAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            checkStateOfScreen()
+            tableView.reloadData()
         } else if editingStyle == .Insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
