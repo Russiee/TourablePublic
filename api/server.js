@@ -57,25 +57,26 @@ router.get('/', function(req, res) {
 router.get('/v1/organization/:id', organization.GET);
 router.get('/v1/organizations', organization.GET_ALL);
 router.post('/v1/organization', organization.POST);
-router.put('/v1/organization/:id',organization.PUT);
-router.delete('/v1/organization/:id',organization.DELETE);
+router.put('/v1/organization/:id', organization.PUT);
+router.delete('/v1/organization/:id', organization.DELETE);
 
 //Admin routes
 router.get('/v1/admin/:id', admin.GET);
 router.get('/v1/admins', admin.GET_ALL);
-router.post('/v1/admin/',admin.POST);
-router.put('/v1/admin/:id',admin.PUT);
-router.delete('/v1/admin/:id',admin.DELETE);
+router.post('/v1/admin/', admin.POST);
+router.put('/v1/admin/:id', admin.PUT);
+router.delete('/v1/admin/:id', admin.DELETE);
 
 //Tour routes
 router.get('/v1/tour/:id',tour.GET);
-router.get('/v1/tours',tour.GET_ALL);
+router.get('/v1/tours', tour.GET_ALL);
 router.post('/v1/tour/', tour.POST);
 router.put('/v1/tour/:id', tour.PUT);
 router.delete('/v1/tour/:id', tour.DELETE);
 
 //Section routes
 router.get('/v1/section/:id', section.GET);
+router.get('/v1/sections', section.GET_ALL);
 router.post('v1/section/', section.POST);
 router.put('/v1/section/:id', section.PUT);
 router.delete('/v1/section/:id', section.DELETE);

@@ -45,6 +45,7 @@ var organization = {
 	POST: function(req, res) {
 		console.log("POST ORGANIZATION:\n", req.body);
 		var data = req.body;
+        
 		var expectedInput = {
 			"key": "",
 			"name": "",
