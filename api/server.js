@@ -45,7 +45,7 @@ var section = require('./routes/section.js');
 var tour = require('./routes/tour.js');
 var organization = require('./routes/organization.js');
 var key = require('./routes/key.js');
-
+var bundle = require('./routes/bundle.js');
 
 
 //Route to test if API is working
@@ -96,8 +96,8 @@ router.post('/v1/poi/', poi.POST);
 router.put('/v1/poi/:id', poi.PUT);
 router.delete('/v1/poi/:id', poi.DELETE);
 
-
-
+//Bundle route
+router.get('/v1/bundle/:id', bundle.GET);
 
 
 app.use('/api', router);
