@@ -19,3 +19,4 @@ from the main directory:
 and if force is required:
 
 ```git push heroku `git subtree split --prefix api master`:master --force```
+
