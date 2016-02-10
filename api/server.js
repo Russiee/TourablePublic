@@ -77,7 +77,7 @@ router.delete('/v1/tour/:id', tour.DELETE);
 //Section routes
 router.get('/v1/section/:id', section.GET);
 router.get('/v1/sections', section.GET_ALL);
-router.post('v1/section/', section.POST);
+router.post('/v1/section/', section.POST);
 router.put('/v1/section/:id', section.PUT);
 router.delete('/v1/section/:id', section.DELETE);
 
@@ -87,7 +87,7 @@ router.get('/v1/keys', key.GET_ALL);
 router.post('/v1/key/', key.POST);
 router.put('/v1/key/:id', key.PUT);
 router.delete('/v1/key/:id', key.DELETE);
-//router.post('/v1/validate/:key', key.validateKey);
+router.get('/v1/key/verify/:code', key.verify);
 
 //POI routes
 router.get('/v1/poi/:id', poi.GET);
