@@ -22,6 +22,10 @@ public class tourIdParser {
     
     public init(){
             //pulls the latest version from the cache.
+        if(NSUserDefaults.standardUserDefaults().stringArrayForKey("Array")==nil){
+             let newArray = [AnyObject]()
+            self.saveArray(newArray)
+        }
             self.updateWorkingArray()
         
             }
