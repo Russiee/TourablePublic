@@ -22,6 +22,9 @@
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="uSc-BO-M9N" kind="show" identifier="toTableSummary" id="04o-v7-evA"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <sections/>
@@ -53,7 +56,42 @@
                     </items>
                 </toolbar>
             </objects>
-            <point key="canvasLocation" x="302" y="-5"/>
+            <point key="canvasLocation" x="302" y="-19"/>
+        </scene>
+        <!--Tour Summary-->
+        <scene sceneID="AVS-R3-3Zd">
+            <objects>
+                <viewController title="Tour Summary" id="uSc-BO-M9N" customClass="TourSummaryController" customModule="Alan_Touring" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="AcZ-3T-jdS"/>
+                        <viewControllerLayoutGuide type="bottom" id="WLy-3d-JbQ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="gDk-oh-3PA">
+                        <rect key="frame" x="0.0" y="64" width="600" height="492"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZPW-QH-duZ">
+                                <rect key="frame" x="279" y="235" width="42" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="ZPW-QH-duZ" firstAttribute="centerX" secondItem="gDk-oh-3PA" secondAttribute="centerX" id="5m6-p5-tl9"/>
+                            <constraint firstItem="ZPW-QH-duZ" firstAttribute="centerY" secondItem="gDk-oh-3PA" secondAttribute="centerY" id="nad-ZZ-a2H"/>
+                        </constraints>
+                    </view>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
+                    <connections>
+                        <outlet property="tourIdLabel" destination="ZPW-QH-duZ" id="Atn-Co-ZJv"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rKp-Eq-GHi" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1156" y="66"/>
         </scene>
         <!--Hello-->
         <scene sceneID="Bwp-4b-I2N">
@@ -73,9 +111,18 @@
                                     <constraint firstAttribute="height" constant="21" id="nUX-Yf-rev"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y22-dL-SYm">
+                                <rect key="frame" x="20" y="304" width="560" height="168"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <state key="normal" title="Without Video"/>
+                                <connections>
+                                    <action selector="withoutVideoButton:" destination="xqZ-b6-00V" eventType="touchUpInside" id="JU9-so-nnC"/>
+                                    <segue destination="tFV-kM-qdT" kind="unwind" unwindAction="saveTourDetail:" id="ssc-v4-CdP"/>
+                                </connections>
+                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="D6z-7G-kRU">
                                 <rect key="frame" x="20" y="77" width="560" height="159"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
@@ -86,15 +133,6 @@
                                 <connections>
                                     <action selector="withVideoButton:" destination="xqZ-b6-00V" eventType="touchUpInside" id="96D-Oj-Yk4"/>
                                     <segue destination="tFV-kM-qdT" kind="unwind" unwindAction="saveTourDetail:" id="Nue-fV-sYC"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y22-dL-SYm">
-                                <rect key="frame" x="20" y="304" width="560" height="168"/>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <state key="normal" title="Without Video"/>
-                                <connections>
-                                    <action selector="withoutVideoButton:" destination="xqZ-b6-00V" eventType="touchUpInside" id="JU9-so-nnC"/>
-                                    <segue destination="tFV-kM-qdT" kind="unwind" unwindAction="saveTourDetail:" id="ssc-v4-CdP"/>
                                 </connections>
                             </button>
                         </subviews>
