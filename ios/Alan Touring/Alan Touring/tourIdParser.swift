@@ -8,37 +8,87 @@
 
 import Foundation
 
-class tourIdParser {
+public class tourIdParser {
     
-    //again temporary, will need replacing by a database.
-   static var tourIdContainer = NSMutableArray()
+    //READ ONLY. TO ADD ITEM USE updateArray()
+   var tourIdContainer = NSMutableArray()
     
     //TourId user has entered but not confirmed download of yet.
-    static var tourIdtoDownload = ""
+    var tourIdtoDownload = ""
     
     //Failsafe to make sure methods called in order.
-    static var readyToDownload = false
-    init(){
+    var readyToDownload = false
+    
+    
+    public init(){
+            //pulls the latest version from the cache.
+            self.updateWorkingArray()
+        
+            }
+    
+  
+    //Clears all records from the array permanently. Use with caution
+    public func clearArray(){
+        let newArray = [AnyObject]()
+        saveArray(newArray)
         
     }
-    static func addNewTourId(tourId: String) -> Bool{
-        //function to allow us to check the tour id is valid without attempting to 
-        //add it to the database until we know if user wants video. If id is valid, ready to download becomes true.
-        //will only return true if tourId is valid.
-        print("tour id added "+tourId)
+    
+   public func deleteTourIdAtRow(row:Int){
+        var newArray : [AnyObject] = tourIdContainer as [AnyObject]
+       newArray.removeAtIndex(row)
+        saveArray(newArray)
+        
+    }
+    
+    private func updateWorkingArray(){
+
+       tourIdContainer  = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! NSMutableArray
+    }
+    
+    //Adds a new tourId to the array
+    func updateArray(tourId: String){
+        //Duplicates the array, creating a mutable version that the new tourId can be added to.
+        var newArray : [AnyObject] = tourIdContainer as [AnyObject]
+        newArray.append(tourId)
+        saveArray(newArray)
+    }
+    
+    
+    
+    //saves the copy of the array passed to it persistently and updates working copy kept in this class.
+    //Never called outside of this class
+    private func saveArray(newArray: AnyObject){
+        
+        //This updates the working copy
+        tourIdContainer = NSMutableArray(objects: newArray)
+        //Stores the Array in NSUserDefaults, overwriting existing copy
+        NSUserDefaults.standardUserDefaults().setObject(newArray, forKey: "Array")
+        //Commits changes to memory, required for iOS 7 and below.
+        NSUserDefaults.standardUserDefaults().synchronize()
+        //Pushes changes to working copy
+        self.updateWorkingArray()
+        
+    }
+    
+    
+    //function to allow us to check the tour id is valid without attempting to
+    //add it to the database until we know if user wants video. If id is valid, ready to download becomes true.
+    //will only return true if tourId is valid.
+    //NOTE: THIS DOES NOT UPDATE THE ARRAY IN WAY.
+    public func addNewTourId(tourId: String) -> Bool{
+        
         tourIdtoDownload = tourId
         readyToDownload = true
         return true
     }
     
-    static func confirmTourId(withVideo: Bool) -> Bool{
-        
-        //Method stub for downloading tour. Will return true to confirm download complete and it has been added to the database.
-        
-        tourIdContainer.addObject(tourIdtoDownload)
-        print("tourId to confirm "+tourIdtoDownload)
+    
+    //Method stub for downloading tour. Will return true to confirm download complete and it has been added to the database.
+    public func confirmTourId(withVideo: Bool) -> Bool{
         
         if readyToDownload == true{
+             self.updateArray(tourIdtoDownload)
             //download will only happen if readyToDownload is true. This is a failsafe to make sure func arent called
             //out of order.
             readyToDownload = false
@@ -51,10 +101,9 @@ class tourIdParser {
     
     
     
-    
-    static func getAllTours() -> NSMutableArray {
-        //temporary method for getting tourIds that have been added for checking the table updates.
-        print("total \(tourIdContainer.count)tourIds:")
+      //temporary method for getting tourIds that have been added for checking the table updates.
+    func getAllTours() -> NSMutableArray {
+      
         return tourIdContainer
     }
     
