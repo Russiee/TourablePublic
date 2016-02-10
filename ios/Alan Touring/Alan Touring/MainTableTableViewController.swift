@@ -13,12 +13,11 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     
    
     var models = NSMutableArray()
+    var tourParser = tourIdParser.init()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tourIdParser.addNewTourId("hello")
-        tourIdParser.confirmTourId(true)
-        models = tourIdParser.getAllTours()
+        models = tourParser.getAllTours()
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -65,13 +64,15 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
             let empty_state_label = UIImageView(image: empty_state_image)
             empty_state_label.contentMode = .ScaleAspectFit
             
-            
             // style it as necessary
             
             tableView.backgroundView = empty_state_label
             tableView.separatorStyle = UITableViewCellSeparatorStyle.None
         } else {
             tableView.backgroundView = nil
+            tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
+            print("this was called")
+
         }
         
     }
@@ -81,7 +82,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     
     @IBAction func saveTourDetail(segue:UIStoryboardSegue) {
         
-        models = tourIdParser.getAllTours()
+        models = tourParser.getAllTours()
         tableView.reloadData()
         
         
@@ -109,15 +110,21 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         switch buttonIndex{
             
         case 1: print("Blue")
+            //gets text field and hides keyboard in preperation for segue
             let Field = alertView.textFieldAtIndex(0)
             alertView.textFieldAtIndex(0)?.resignFirstResponder()
-            tourIdParser.addNewTourId(Field!.text!)
-            tourIdParser.confirmTourId(true)
+        
+            //passes the entered tourId into the tourParser
+            tourParser.addNewTourId(Field!.text!)
+            tourParser.confirmTourId(true)
+        
+            //goes to the AddNewTourPage
             performSegueWithIdentifier("goToAddTour", sender: self)
             tableView.backgroundView = nil //to change the background image
             
             
         case 0: print("Red")
+                //Cancel pressed, unwind segue executed automatically
             
         default: print("Is this part even possible?")
         
@@ -140,7 +147,9 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
             // Delete the row from the data source
             //models.removeAtIndex(indexPath.row)
             //upDateTourArray(models, itemToDelete: indexPath.row)
-            models.removeObjectAtIndex(indexPath.row)
+
+            tourParser.deleteTourIdAtRow(indexPath.row)
+            models = tourParser.getAllTours()
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
             checkStateOfScreen()
             tableView.reloadData()
