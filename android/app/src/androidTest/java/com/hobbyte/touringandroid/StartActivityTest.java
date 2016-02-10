@@ -1,8 +1,10 @@
 package com.hobbyte.touringandroid;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.hobbyte.touringandroid.helpers.FileManager;
+import com.hobbyte.touringandroid.helpers.TourDBManager;
 
 import java.io.File;
 
@@ -27,5 +29,17 @@ public class StartActivityTest extends ActivityInstrumentationTestCase2<StartAct
 
         assertEquals(true, tourDir.exists());
         assertEquals(true, tourDir.isDirectory());
+    }
+
+    public void testDBExists() {
+        // TODO: this test will fail as soon as there's some data in the
+        // db, and will need changing
+        TourDBManager dbHelper = new TourDBManager(getActivity());
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        boolean empty = dbHelper.dbIsEmpty(db);
+        db.close();
+
+        assertEquals(true, empty);
     }
 }
