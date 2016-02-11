@@ -13,6 +13,7 @@ import com.hobbyte.touringandroid.helpers.TourDBContract.TourList;
 import java.util.Calendar;
 
 import com.hobbyte.touringandroid.helpers.TourDBContract.TourList;
+
 /**
  * Performs all required database operations.
  *
