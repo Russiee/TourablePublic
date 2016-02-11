@@ -24,6 +24,9 @@ public class StartActivityTest extends ActivityInstrumentationTestCase2<StartAct
         // do repeated actions here
     }
 
+    /**
+     * Make sure that the holding directory for all tour media is created upon initial use.
+     */
     public void testTourDirExists() {
         File tourDir = new File(getActivity().getFilesDir(), FileManager.TOUR_DIR);
 
