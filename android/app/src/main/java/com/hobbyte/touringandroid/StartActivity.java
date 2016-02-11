@@ -14,10 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import android.database.sqlite.SQLiteDatabase;
 
 import com.hobbyte.touringandroid.helpers.FileManager;
-import com.hobbyte.touringandroid.helpers.TourDBManager;
 
 public class StartActivity extends Activity {
     private static final String TAG = "StartActivity";
