@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class PointOfInterestActivity extends Activity {
@@ -22,6 +23,9 @@ public class PointOfInterestActivity extends Activity {
         Intent intent = getIntent();
         PointOfInterest poi = (PointOfInterest) intent.getSerializableExtra(TourActivity.EXTRA_MESSAGE_FINAL);
         System.out.println(poi.toString());
+        RelativeLayout layout = (RelativeLayout) findViewById(R.id.poiLayout);
+        View poiText = getLayoutInflater().inflate(R.layout.points_of_interest, layout, false);
+        layout.addView(poiText);
         TextView text = (TextView) findViewById(R.id.pointsOfInterestText);
         text.setText(poi.toString());
     }
