@@ -17,6 +17,13 @@ touring.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 		templateUrl: "/app/components/home/home.view.html",
 		controller: "HomeCtrl"
 	})
+    .state('tour', {
+		url: "/tour",
+		templateUrl: "/app/components/tour/tour.view.html",
+		controller: "TourCtrl"
+	})
+    
+    
 	.state('admin', {
 		url: "/admin",
 		templateUrl: "/app/components/admin/admin.view.html",
