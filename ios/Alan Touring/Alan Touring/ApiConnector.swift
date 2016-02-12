@@ -1,4 +1,4 @@
-//
+
 //  ApiConnector.swift
 //  Alan Touring
 //
@@ -11,42 +11,45 @@ import Foundation
 class ApiConnector: NSObject, NSURLConnectionDelegate{
     
     lazy var data = NSMutableData()
-
+    
     var urlPath: String = ""
     
     func startConnection(tourId: String){
-        urlPath = ""
-        var newData = NSMutableData()
-        data = newData
-        urlPath = "https://touring-api.herokuapp.com/api/v1/key/verify/" + tourId
-        let url: NSURL = NSURL(string: urlPath)!
-        let request: NSURLRequest = NSURLRequest(URL: url)
-        let connection: NSURLConnection = NSURLConnection(request: request, delegate: self, startImmediately: false)!
-        connection.start()
-        print("starting connection")
+    urlPath = ""
+    var newData = NSMutableData()
+    data = newData
+    urlPath = "https://touring-api.herokuapp.com/api/v1/key/verify/" + tourId
+    let url: NSURL = NSURL(string: urlPath)!
+    let request: NSURLRequest = NSURLRequest(URL: url)
+    let connection: NSURLConnection = NSURLConnection(request: request, delegate: self, startImmediately: false)!
+    connection.start()
+
     }
     
     func connection(connection: NSURLConnection!, didReceiveData data: NSData!){
-        self.data.appendData(data)
+    self.data.appendData(data)
     }
     
     func initateConnection(tourId: String){
-        startConnection(tourId)
+    startConnection(tourId)
     }
     
     func connectionDidFinishLoading(connection: NSURLConnection!) {
-        print("connected")
-        print(urlPath)
-        
-        // throwing an error on the line below (can't figure out where the error message is)
-        do{
-        let jsonResult: NSArray = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as! NSArray
-        print(jsonResult)
+   
+    do{
+    let jsonResult: NSArray = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as! NSArray
+
+    self.dealWithData(jsonResult)
+}
+    catch let err as NSError{
+    print(err.description)
     }
-        catch let err as NSError{
-            print(err.description)
-        }
     
+    }
+    
+    func dealWithData(JSONData: NSArray){
+    var data = JSONData
+    print(JSONData)
     }
     
 }
