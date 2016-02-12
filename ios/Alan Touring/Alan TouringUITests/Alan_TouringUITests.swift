@@ -28,9 +28,22 @@ class Alan_TouringUITests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
+    func testAddTour() {
         // Use recording to get started writing UI tests.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
+        
+        
+        let app = XCUIApplication()
+        app.toolbars.buttons["Add"].tap()
+        
+        let collectionViewsQuery = app.alerts["Add New Tour"].collectionViews
+        collectionViewsQuery.textFields["Enter Tour ID"].typeText("test1")
+        
+        let addButton = collectionViewsQuery.buttons["Add"]
+        addButton.tap()
+        app.buttons["With Video"].tap()
+        
+        
     }
     
 }
