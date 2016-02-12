@@ -51,8 +51,7 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
         var data = JSONData
        let tour = tourIdParser.init()
         tour.addTourMetaData(JSONData)
-        print(tour.getTourMetadata("KCL-1010").description+"LIFE IS BADr")
-    
+
     
     //print(JSONData)
     }
