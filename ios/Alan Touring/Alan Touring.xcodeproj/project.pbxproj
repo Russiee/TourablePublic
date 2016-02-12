@@ -19,6 +19,7 @@
 		FA4EBAC01C68CC1100E6E601 /* addNewTourViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4EBABF1C68CC1100E6E601 /* addNewTourViewController.swift */; };
 		FA57DD201C6B7EDA002739FF /* DataCacheTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA57DD1F1C6B7EDA002739FF /* DataCacheTest.swift */; };
 		FA9803291C666195001D23E2 /* MainTableTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9803281C666195001D23E2 /* MainTableTableViewController.swift */; };
+		FAB049191C6E34BF00679C10 /* ApiConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB049181C6E34BF00679C10 /* ApiConnector.swift */; };
 		FAD1B1541C6BAEB400CA5327 /* TourSummaryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD1B1531C6BAEB400CA5327 /* TourSummaryController.swift */; };
 /* End PBXBuildFile section */
 
@@ -58,6 +59,7 @@
 		FA4EBABF1C68CC1100E6E601 /* addNewTourViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = addNewTourViewController.swift; sourceTree = "<group>"; };
 		FA57DD1F1C6B7EDA002739FF /* DataCacheTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataCacheTest.swift; sourceTree = "<group>"; };
 		FA9803281C666195001D23E2 /* MainTableTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTableTableViewController.swift; sourceTree = "<group>"; };
+		FAB049181C6E34BF00679C10 /* ApiConnector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiConnector.swift; sourceTree = "<group>"; };
 		FAD1B1531C6BAEB400CA5327 /* TourSummaryController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TourSummaryController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -120,6 +122,7 @@
 				E536DCC51C6510FD00A7B2FC /* Alan_Touring.xcdatamodeld */,
 				FA9803281C666195001D23E2 /* MainTableTableViewController.swift */,
 				FA4EBABF1C68CC1100E6E601 /* addNewTourViewController.swift */,
+				FAB049181C6E34BF00679C10 /* ApiConnector.swift */,
 			);
 			path = "Alan Touring";
 			sourceTree = "<group>";
@@ -279,6 +282,7 @@
 			files = (
 				FAD1B1541C6BAEB400CA5327 /* TourSummaryController.swift in Sources */,
 				E536DCC71C6510FD00A7B2FC /* Alan_Touring.xcdatamodeld in Sources */,
+				FAB049191C6E34BF00679C10 /* ApiConnector.swift in Sources */,
 				FA9803291C666195001D23E2 /* MainTableTableViewController.swift in Sources */,
 				FA4EBAC01C68CC1100E6E601 /* addNewTourViewController.swift in Sources */,
 				E536DCC11C6510FD00A7B2FC /* ViewController.swift in Sources */,
