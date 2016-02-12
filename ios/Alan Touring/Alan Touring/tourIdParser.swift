@@ -8,21 +8,20 @@
 
 import Foundation
 
+let mySpecialNotificationKey = "com.andrewcbancroft.specialNotificationKey"
+
 public class tourIdParser {
     
     //READ ONLY. TO ADD ITEM USE updateArray()
    var tourIdContainer = NSMutableArray()
     var API = ApiConnector.init()
+
     
-    //TourId user has entered but not confirmed download of yet.
-    public var tourIdtoDownload = ""
-    
-    //Failsafe to make sure methods called in order.
-    var readyToDownload = false
     
     
     public init(){
-            //pulls the latest version from the cache.
+        
+        //pulls the latest version from the cache.
         if(NSUserDefaults.standardUserDefaults().stringArrayForKey("Array")==nil){
              let newArray = [AnyObject]()
             self.saveArray(newArray)
@@ -55,12 +54,11 @@ public class tourIdParser {
 
 
     public func updateArray(tourId: String){
-        
-       API.initateConnection(tourIdtoDownload)
 
         //Duplicates the array, creating a mutable version that the new tourId can be added to.
         var newArray : [AnyObject] = tourIdContainer as [AnyObject]
         newArray.append(tourId)
+        print("Update Array called now saving changes")
         saveArray(newArray)
     }
     
@@ -71,50 +69,57 @@ public class tourIdParser {
     private func saveArray(newArray: AnyObject){
         
         //This updates the working copy
-        tourIdContainer = NSMutableArray(objects: newArray)
+        self.tourIdContainer = NSMutableArray(objects: newArray)
         //Stores the Array in NSUserDefaults, overwriting existing copy
         NSUserDefaults.standardUserDefaults().setObject(newArray, forKey: "Array")
         //Commits changes to memory, required for iOS 7 and below.
         NSUserDefaults.standardUserDefaults().synchronize()
+
         //Pushes changes to working copy
-        self.updateWorkingArray()
         
+        self.tourIdContainer  = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! NSMutableArray
+        NSUserDefaults.standardUserDefaults().synchronize()
+        print("Save Array called, table size is now \(self.tourIdContainer.count )")
+        notify()
+    }
+    
+    func addTourMetaData(metadata: NSArray){
+
+        let keys = ["code","createdAt","expiresAt","objectId","tour","updatedAt"]
+        var dict = metadata.dictionaryWithValuesForKeys(keys)
+        let tourCode = dict["code"]!
+
+
+        let fuckEverything = dict as! NSDictionary
+        NSUserDefaults.standardUserDefaults().setObject(fuckEverything, forKey: tourCode[0] as! String)
+        NSUserDefaults.standardUserDefaults().synchronize()
+        print("here")
+        self.updateArray(tourCode[0] as! String)
+        
+        NSNotificationCenter.defaultCenter().addObserver(
+            self,
+            selector: "TableChanged:",
+            name: "TabledDataChanged",
+            object: nil)
+        notify()
+   
+    }
+    
+    func getTourMetadata(tourCode: String) -> Dictionary<String,AnyObject>{
+       return NSUserDefaults.standardUserDefaults().objectForKey(tourCode) as! Dictionary<String,AnyObject>
     }
     
     
-    //function to allow us to check the tour id is valid without attempting to
-    //add it to the database until we know if user wants video. If id is valid, ready to download becomes true.
-    //will only return true if tourId is valid.
-    //NOTE: THIS DOES NOT UPDATE THE ARRAY IN WAY.
-    public func addNewTourId(tourId: String) -> Bool{
-        
-        tourIdtoDownload = tourId
-        readyToDownload = true
-        return true
+    func notify() {
+        NSNotificationCenter.defaultCenter().postNotificationName(mySpecialNotificationKey, object: self)
+        print("notify called")
     }
-    
-    
-    //Method stub for downloading tour. Will return true to confirm download complete and it has been added to the database.
-    public func confirmTourId(withVideo: Bool) -> Bool{
-        
-        if readyToDownload == true{
-             self.updateArray(tourIdtoDownload)
-            //download will only happen if readyToDownload is true. This is a failsafe to make sure func arent called
-            //out of order.
-            readyToDownload = false
-            //this will return true if download is successful
-            return true
-        }
-        return false
-    }
-    
-    
     
     
       //temporary method for getting tourIds that have been added for checking the table updates.
     public func getAllTours() -> NSMutableArray {
-      
-        return tourIdContainer
+        print("TABLE SIZE PASSED TO VIEW IS \(self.tourIdContainer.count)")
+        return NSUserDefaults.standardUserDefaults().objectForKey("Array") as! NSMutableArray
     }
     
 

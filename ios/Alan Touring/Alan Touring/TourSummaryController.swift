@@ -11,9 +11,18 @@ import UIKit
 class TourSummaryController: UIViewController {
 
     @IBOutlet weak var tourIdLabel: UILabel!
-    
     var tourId = String()
+    
+    @IBOutlet weak var TourExpiryLabel: UILabel!
+    
     override func viewWillAppear(animated: Bool) {
         tourIdLabel.text = tourId
+
+        let setup = tourIdParser.init().getTourMetadata(tourId)
+        let data = setup["expiresAt"]![0]
+        TourExpiryLabel.text = data as! String
+        
     }
+    
+    
 }

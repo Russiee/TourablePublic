@@ -9,15 +9,19 @@
 import UIKit
 
 
+
 class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     
    
     var models = NSMutableArray()
     var tourParser = tourIdParser.init()
+    var API = ApiConnector.init()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         models = tourParser.getAllTours()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "actOnSpecialNotification", name: mySpecialNotificationKey, object: nil)
+    
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -32,6 +36,12 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func actOnSpecialNotification() {
+        print("notified")
+        models = self.tourParser.getAllTours()
+        tableView.reloadData()
     }
 
     // MARK: - Table view data source
@@ -82,15 +92,22 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     
     @IBAction func saveTourDetail(segue:UIStoryboardSegue) {
         
-        models = tourParser.getAllTours()
+        self.models = self.tourParser.getAllTours()
         tableView.reloadData()
         
-        
     }
+    
+    @objc func TableChanged(notification: NSNotification){
+        //do stuff
+        print("notifed")
+    }
+    
+    
+    
     @IBAction func plussPressed(sender: UIBarButtonItem) {
         
         showAlert()
-        
+    
         
         
     }
@@ -115,8 +132,9 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
             alertView.textFieldAtIndex(0)?.resignFirstResponder()
         
             //passes the entered tourId into the tourParser
-            tourParser.addNewTourId(Field!.text!)
-            tourParser.confirmTourId(true)
+           // tourParser.addNewTourId(Field!.text!)
+            API.initateConnection(Field!.text!)
+        
         
             //goes to the AddNewTourPage
             performSegueWithIdentifier("goToAddTour", sender: self)
