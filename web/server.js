@@ -3,7 +3,7 @@ var app = express();
 var bodyParser = require('body-parser');
 
 app.get('*', function(req, res) {
-    res.sendfile('./public/index.html');
+    res.sendFile(__dirname + '/app/index.html');
 });
 
 var port = process.env.PORT || 3000;
