@@ -45,7 +45,7 @@ var section = require('./routes/section.js');
 var tour = require('./routes/tour.js');
 var organization = require('./routes/organization.js');
 var key = require('./routes/key.js');
-
+var bundle = require('./routes/bundle.js');
 
 
 //Route to test if API is working
@@ -77,7 +77,7 @@ router.delete('/v1/tour/:id', tour.DELETE);
 //Section routes
 router.get('/v1/section/:id', section.GET);
 router.get('/v1/sections', section.GET_ALL);
-router.post('v1/section/', section.POST);
+router.post('/v1/section/', section.POST);
 router.put('/v1/section/:id', section.PUT);
 router.delete('/v1/section/:id', section.DELETE);
 
@@ -87,7 +87,7 @@ router.get('/v1/keys', key.GET_ALL);
 router.post('/v1/key/', key.POST);
 router.put('/v1/key/:id', key.PUT);
 router.delete('/v1/key/:id', key.DELETE);
-//router.post('/v1/validate/:key', key.validateKey);
+router.get('/v1/key/verify/:code', key.verify);
 
 //POI routes
 router.get('/v1/poi/:id', poi.GET);
@@ -96,8 +96,8 @@ router.post('/v1/poi/', poi.POST);
 router.put('/v1/poi/:id', poi.PUT);
 router.delete('/v1/poi/:id', poi.DELETE);
 
-
-
+//Bundle route
+router.get('/v1/bundle/:id', bundle.GET);
 
 
 app.use('/api', router);
