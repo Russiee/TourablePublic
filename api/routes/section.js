@@ -50,7 +50,7 @@ var section = {
 		var expectedInput = {
 			"title": "",
 			"description": "",
-            "tour": "",
+			"tour": "",
 			"superSection": "",
 			"subsections": [],
 			"pois": []
@@ -65,20 +65,23 @@ var section = {
 		} else {
 			createSection(parseData, function(result) {
 				if (result.status !== 500) {
-                    var query = new Parse.Query(Tour);
-                    query.equalTo("objectId", result.get("tour").objectId);
-                    query.find({
-                        success: function(results) {
-                            results[0].add("sections", result);
-                            results[0].save();
-                        },
-                        error: function(error) {
-                            console.log("Failed to retrieve tour");
-                            console.log(error);
-                        }
-                    });
-                    res.status(201).send(result);
-                }
+					if (result.get("superSection").length === 0) {
+						var query = new Parse.Query(Tour);
+						query.equalTo("objectId", result.get("tour").objectId);
+						query.find({
+							success: function(results) {
+								results[0].add("sections", result);
+								results[0].save();
+							},
+							error: function(error) {
+								console.log("Failed to retrieve tour");
+								console.log(error);
+							}
+						});
+					}
+
+					res.status(201).send(result);
+				}
 				else
 					res.status(result.status).send(result.data);
 			});
@@ -93,7 +96,7 @@ var section = {
 		var expectedInput = {
 			"title": "",
 			"description": "",
-            "tour": "",
+			"tour": "",
 			"superSection": "",
 			"subsections": [],
 			"pois": []
@@ -163,11 +166,11 @@ var section = {
 function createSection (data, callback) {
 
 	var section = new Section();
-    var tourID = data.tour;
+	var tourID = data.tour;
 	delete data.tour;
-    
+
 	section.set("tour",  {"__type":"Pointer","className":"Tour","objectId":tourID});
-    
+
 	section.save(data, {
 		success: function(section) {
 			console.log("Created section with ID " + section.id + " at time " + section.createdAt);
