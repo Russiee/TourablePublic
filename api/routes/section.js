@@ -26,7 +26,6 @@ var section = {
 	GET_ALL: function(req, res) {
 		console.log("GET ALL SECTIONS");
 		var limit = req.query.limit || 5;
-		var orderBy = req.query.limit || null;
 
 		var query = new Parse.Query(Section);
 		query.limit(parseInt(limit));
@@ -64,10 +63,10 @@ var section = {
 			res.sendStatus(400);
 		} else {
 			createSection(parseData, function(result) {
-				if (result.status !== 500) {
-					if (result.get("superSection").length === 0) {
+				if (result.status !== 500 && result.status !== 400) {
+					if (result.toJSON().superSection.objectId === null) {
 						var query = new Parse.Query(Tour);
-						query.equalTo("objectId", result.get("tour").objectId);
+						query.equalTo("objectId", result.toJSON().tour.objectId);
 						query.find({
 							success: function(results) {
 								results[0].add("sections", result);
@@ -80,7 +79,7 @@ var section = {
 						});
 					} else {
 						var query = new Parse.Query(Section);
-						query.equalTo("objectId", result.get("superSection").objectId);
+						query.equalTo("objectId", result.toJSON().superSection.objectId);
 						query.find({
 							success: function(results) {
 								results[0].add("subsections", result);
@@ -181,22 +180,35 @@ function createSection (data, callback) {
 
 	var section = new Section();
 	var tourID = data.tour;
-	delete data.tour;
+	var superSectionID = data.superSection;
 
-	section.set("tour",  {"__type":"Pointer","className":"Tour","objectId":tourID});
+	if (tourID.length !== 0 && data.superSection.length !== 0) {
+		callback({status: 400, data: {"error": "Cannot attach to a tour AND supersection, pick one."}});
+	} else {
+		delete data.tour;
+		delete data.superSection;
 
-	section.save(data, {
-		success: function(section) {
-			console.log("Created section with ID " + section.id + " at time " + section.createdAt);
-			console.log(section);
-			callback(section);
-		},
-		error: function(section, error) {
-			console.log("Failed to create section.");
-			console.log("Error: ", error);
-			callback({status: 500, data: error});
+		if (tourID.length !== 0) {
+			section.set("tour",  {"__type":"Pointer","className":"Tour","objectId":tourID});
+			section.set("superSection",  {"__type":"Pointer","className":"Section","objectId":null});
+		} else if (superSectionID.length !== 0) {
+			section.set("tour",  {"__type":"Pointer","className":"Tour","objectId":null});
+			section.set("superSection",  {"__type":"Pointer","className":"Section","objectId":superSectionID});
 		}
-	});
+
+		section.save(data, {
+			success: function(section) {
+				console.log("Created section with ID " + section.id + " at time " + section.createdAt);
+				console.log(section);
+				callback(section);
+			},
+			error: function(section, error) {
+				console.log("Failed to create section.");
+				console.log("Error: ", error);
+				callback({status: 500, data: error});
+			}
+		});
+	}
 }
 
 module.exports = section;
