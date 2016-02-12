@@ -14,11 +14,6 @@ public class tourIdParser {
    var tourIdContainer = NSMutableArray()
     var API = ApiConnector.init()
     
-    //TourId user has entered but not confirmed download of yet.
-    public var tourIdtoDownload = ""
-    
-    //Failsafe to make sure methods called in order.
-    var readyToDownload = false
     
     
     public init(){
@@ -55,8 +50,6 @@ public class tourIdParser {
 
 
     public func updateArray(tourId: String){
-        
-       API.initateConnection(tourIdtoDownload)
 
         //Duplicates the array, creating a mutable version that the new tourId can be added to.
         var newArray : [AnyObject] = tourIdContainer as [AnyObject]
@@ -81,40 +74,22 @@ public class tourIdParser {
         
     }
     
-    
-    //function to allow us to check the tour id is valid without attempting to
-    //add it to the database until we know if user wants video. If id is valid, ready to download becomes true.
-    //will only return true if tourId is valid.
-    //NOTE: THIS DOES NOT UPDATE THE ARRAY IN WAY.
-    public func addNewTourId(tourId: String) -> Bool{
-        
-        tourIdtoDownload = tourId
-        readyToDownload = true
-        return true
-    }
-    
-    
-    //Method stub for downloading tour. Will return true to confirm download complete and it has been added to the database.
-    public func confirmTourId(withVideo: Bool) -> Bool{
-        
-        if readyToDownload == true{
-             self.updateArray(tourIdtoDownload)
-            //download will only happen if readyToDownload is true. This is a failsafe to make sure func arent called
-            //out of order.
-            readyToDownload = false
-            //this will return true if download is successful
-            return true
-        }
-        return false
-    }
-    
     func addTourMetaData(metadata: NSArray){
 
-        let keys = ["code","createdAt","ExpiresAt","objectId","tour","_type","className","objectId","updatedAt"]
+        let keys = ["code","createdAt","expiresAt","objectId","tour","updatedAt"]
         var dict = metadata.dictionaryWithValuesForKeys(keys)
-        print(dict["code"])
+        let tourCode = dict["code"]!
+        print(tourCode[0])
+        print(dict)
+        let fuckEverything = dict as! NSDictionary
+        NSUserDefaults.standardUserDefaults().setObject(fuckEverything, forKey: tourCode[0] as! String)
+        NSUserDefaults.standardUserDefaults().synchronize()
         
    
+    }
+    
+    func getTourMetadata(tourCode: String) -> Dictionary<String,AnyObject>{
+       return NSUserDefaults.standardUserDefaults().objectForKey(tourCode) as! Dictionary<String,AnyObject>
     }
     
       //temporary method for getting tourIds that have been added for checking the table updates.

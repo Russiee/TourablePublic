@@ -120,12 +120,6 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
             API.initateConnection(Field!.text!)
         
         
-        
-        
-        
-        
-            tourParser.confirmTourId(true)
-        
             //goes to the AddNewTourPage
             performSegueWithIdentifier("goToAddTour", sender: self)
             tableView.backgroundView = nil //to change the background image
