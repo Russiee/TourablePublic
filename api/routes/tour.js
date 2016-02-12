@@ -1,13 +1,14 @@
 var validate = require('./validate.js');
 var Parse = require('parse/node').Parse;
-Parse.initialize("touring", "yF85llv84OI0NV41ieaHU7PM0oyRCMLT");
+Parse.initialize("touring", "yF85llv84OI0NV41ieaHU7PM0oyRCMLT", "yF85llv84OI0NV41ieaHU7PM0oyRCMLT");
 Parse.serverURL = 'http://touring-db.herokuapp.com/parse';
+var Admin = Parse.Object.extend("_User");
 var Tour = Parse.Object.extend("Tour");
 
 var tour = {
 
 	GET: function(req, res) {
-        console.log("GET TOUR");
+		console.log("GET TOUR");
 		var id = req.params.id;
 		var query = new Parse.Query(Tour);
 		query.get(id, {
@@ -21,50 +22,67 @@ var tour = {
 			}
 		});
 	},
-    
-    GET_ALL: function(req, res) {
-        console.log("GET ALL TOURS");
-        var limit = req.query.limit || 5;
-        var orderBy = req.query.limit || null;
-        
+
+	GET_ALL: function(req, res) {
+		console.log("GET ALL TOURS");
+		var limit = req.query.limit || 5;
+		var orderBy = req.query.limit || null;
+
 		var query = new Parse.Query(Tour);
-        query.limit(parseInt(limit));
-        query.find({
-            success: function(results) {
-                console.log(results.length + " tours retrieved");
-                res.status(200).send(results);
-            },
-            error: function(error) {
-                console.log("Failed to retrieve tours");
-                console.log(error);
-                res.send(500);
-            }
-        });
+		query.limit(parseInt(limit));
+		query.find({
+			success: function(results) {
+				console.log(results.length + " tours retrieved");
+				res.status(200).send(results);
+			},
+			error: function(error) {
+				console.log("Failed to retrieve tours");
+				console.log(error);
+				res.send(500);
+			}
+		});
 	},
-    
+
 	POST: function(req, res) {
 		console.log("POST TOUR:\n", req.body);
 		var data = req.body;
-        
-        var expectedInput = {
+
+		var expectedInput = {
 			"description": "",
 			"title": "",
 			"admin": "",
 			"sections": "",
 			"keys": [],
-            "isPublic": ""
+			"isPublic": ""
 		};
-        
+
 		var validInput = validate.validateInput(data, expectedInput);
-        var parseData = validate.parseData(data, expectedInput);
-        
-        console.log("Parsed Data: ", parseData);
+		var parseData = validate.parseData(data, expectedInput);
+
+		console.log("Parsed Data: ", parseData);
 		if (!validInput) {
 			res.sendStatus(400);
 		} else {
 			createTour(parseData, function(result) {
-				if (result.status !== 500)
+				if (result.status !== 500) {
+					//TODO check if superadmin
+					var query = new Parse.Query(Admin);
+					query.equalTo("objectId", result.get("admin").objectId);
+					query.find({
+						success: function(results) {
+							console.log("results", results);
+							results[0].add("tours", result);
+							console.log("tours", results[0].get("tours"));
+							results[0].save(null, {useMasterKey: true});
+							Parse.Cloud.run("hello");
+						},
+						error: function(error) {
+							console.log("Failed to retrieve admins");
+							console.log(error);
+						}
+					});
 					res.status(201).send(result);
+				}
 				else
 					res.status(result.status).send(result.data);
 			});
@@ -72,83 +90,87 @@ var tour = {
 	},
 
 	PUT: function(req, res) {
-        console.log("PUT TOUR:\n", req.body);
+		console.log("PUT TOUR:\n", req.body);
 		var data = req.body;
 		var id = req.params.id;
-		
+
 		var expectedInput = {
 			"description": "",
 			"title": "",
 			"admin": "",
 			"sections": "",
 			"keys": [],
-            "isPublic": ""
+			"isPublic": ""
 		};
 
 		var validInput = validate.validateInput(data, expectedInput);
-        var parseData = validate.parseData(data, expectedInput);
-        console.log("Parsed Data: ", parseData);
-        
-        var query = new Parse.Query(Tour);
+		var parseData = validate.parseData(data, expectedInput);
+		console.log("Parsed Data: ", parseData);
+
+		var query = new Parse.Query(Tour);
 		query.get(id, {
 			success: function(tour) {
-                console.log("Tour " + id + " retrieved succesfully");
+				console.log("Tour " + id + " retrieved succesfully");
 				for (var prop in parseData) {
-                    tour.set(prop.toString(), parseData[prop]); 
-                }
-                tour.save(null, {
-                    success: function(tour) {
-                        console.log("Tour " + id + " updated succesfully");
-                        res.status(200).send(tour);
-                    },
-                    error:  function(tour, error) {
-                        console.log("Failed to update tour " + id);
-                        console.log(error);
-                        res.status(500).send(error);
-                    }
-                });
-                
+					tour.set(prop.toString(), parseData[prop]);
+				}
+				tour.save(null, {
+					success: function(tour) {
+						console.log("Tour " + id + " updated succesfully");
+						res.status(200).send(tour);
+					},
+					error:  function(tour, error) {
+						console.log("Failed to update tour " + id);
+						console.log(error);
+						res.status(500).send(error);
+					}
+				});
+
 			},
 			error: function(object, error) {
 				console.log("Error retrieving " + id);
-                console.log(error);
-                res.sendStatus(404);
+				console.log(error);
+				res.sendStatus(404);
 			}
 		});
-    },
+	},
 
 	DELETE: function(req, res) {
-        console.log("DELETE TOUR");
-        var id = req.params.id;
-        var query = new Parse.Query(Tour);
+		console.log("DELETE TOUR");
+		var id = req.params.id;
+		var query = new Parse.Query(Tour);
 		query.get(id, {
 			success: function(tour) {
-                console.log("Tour " + id + " retrieved succesfully");
+				console.log("Tour " + id + " retrieved succesfully");
 				tour.destroy({
-                    success: function(tour) {
-                        console.log("Deleted tour " + id);
-                        res.sendStatus(200);
-                    },
-                    error: function(error) {
-                        console.log("Failed to delete " + id);
-                        console.log(error);
-                        res.sendStatus(500);
-                    }
-                });
+					success: function(tour) {
+						console.log("Deleted tour " + id);
+						res.sendStatus(200);
+					},
+					error: function(error) {
+						console.log("Failed to delete " + id);
+						console.log(error);
+						res.sendStatus(500);
+					}
+				});
 			},
 			error: function(object, error) {
 				console.log("Error retrieving " + id);
-                console.log(error);
-                res.sendStatus(404);
+				console.log(error);
+				res.sendStatus(404);
 			}
 		});
-        
+
 	}
 }
 
 function createTour (data, callback) {
-    
+
 	var tour = new Tour();
+	var adminID = data.admin;
+	delete data.admin;
+	tour.set("admin",  {"__type":"Pointer","className":"Admin","objectId":adminID});
+
 	tour.save(data, {
 		success: function(tour) {
 			console.log("Created tour with ID " + tour.id + " at time " + tour.createdAt);
