@@ -20,11 +20,6 @@ import com.hobbyte.touringandroid.helpers.FileManager;
 import com.hobbyte.touringandroid.internet.ServerAPI;
 
 import java.util.ArrayList;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Bundle;
-import android.util.Log;
 
 import com.hobbyte.touringandroid.helpers.FileManager;
 import com.hobbyte.touringandroid.internet.ServerAPI;
