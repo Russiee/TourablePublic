@@ -52,13 +52,12 @@ public class tourIdParser {
     }
     
     //Adds a new tourId to the array
-<<<<<<< 4e73480fa1591f59b84a74726da8497671514085
-   public func updateArray(tourId: String){
-=======
+
+
     func updateArray(tourId: String){
         
        API.newConnection()
->>>>>>> IOS-5
+
         //Duplicates the array, creating a mutable version that the new tourId can be added to.
         var newArray : [AnyObject] = tourIdContainer as [AnyObject]
         newArray.append(tourId)
