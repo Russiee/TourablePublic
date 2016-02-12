@@ -1,0 +1,35 @@
+#key-form {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 30px;
+    margin-top: 200px;
+}
+
+#key-form input {
+    
+}
+
+#key-form button {
+    width: 100%;
+}
+
+#key-form input,
+#key-form button {
+    border: 0;
+    padding: 15px;
+    height: auto;
+    text-align: center;
+    outline: 0;
+}
+
+#key-form label {
+    width: 100%;
+}
+
+#key-form h4 {
+    text-align: center;
+    font-weight: 600;
+    margin-top: 10px;
+    margin-bottom: 30px;
+    color: #666;
+}
