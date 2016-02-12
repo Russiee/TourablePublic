@@ -28,6 +28,10 @@ class Alan_TouringUITests: XCTestCase {
         super.tearDown()
     }
     
+    func testExistsOnNavigationBarWhenViewDidLoad(){
+        XCTAssertTrue(XCUIApplication().navigationBars["Alan Touring"].exists)
+    }
+    
     func testAddTour() {
         // Use recording to get started writing UI tests.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
@@ -61,8 +65,21 @@ class Alan_TouringUITests: XCTestCase {
         let tablesQuery = app.tables
         tablesQuery.staticTexts["test3"].swipeLeft()
         tablesQuery.buttons["Delete"].tap()
+    }
+    
+    func testTapTourGoToSummary() {
         
+        let app = XCUIApplication()
+        app.toolbars.buttons["Add"].tap()
         
+        let collectionViewsQuery = app.alerts["Add New Tour"].collectionViews
+        collectionViewsQuery.textFields["Enter Tour ID"].typeText("another_test")
+        collectionViewsQuery.buttons["Add"].tap()
+        app.buttons["With Video"].tap()
+        app.tables.staticTexts["another_test"].tap()
+        
+        let heckthisStaticText = app.staticTexts["another_test"]
+        heckthisStaticText.tap()
         
     }
     
@@ -87,5 +104,6 @@ class Alan_TouringUITests: XCTestCase {
         tablesQuery.buttons["Delete"].tap()
         
     }
+
     
 }
