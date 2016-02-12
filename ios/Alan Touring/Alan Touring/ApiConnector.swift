@@ -11,9 +11,13 @@ import Foundation
 class ApiConnector: NSObject, NSURLConnectionDelegate{
     
     lazy var data = NSMutableData()
+
     var urlPath: String = ""
     
     func startConnection(tourId: String){
+        urlPath = ""
+        var newData = NSMutableData()
+        data = newData
         urlPath = "https://touring-api.herokuapp.com/api/v1/key/verify/" + tourId
         let url: NSURL = NSURL(string: urlPath)!
         let request: NSURLRequest = NSURLRequest(URL: url)
