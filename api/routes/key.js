@@ -6,6 +6,7 @@ var Parse = require('parse/node').Parse;
 Parse.initialize("touring", "yF85llv84OI0NV41ieaHU7PM0oyRCMLT");
 Parse.serverURL = 'http://touring-db.herokuapp.com/parse';
 var Key = Parse.Object.extend("Key");
+var Tour = Parse.Object.extend("Tour");
 
 var key = {
 
@@ -71,8 +72,21 @@ var key = {
 						res.sendStatus(400);
 					} else {
 						createKey(parseData, function(result) {
-							if (result.status !== 500)
+							if (result.status !== 500) {
+                                var query = new Parse.Query(Tour);
+                                query.equalTo("objectId", result.get("tour").objectId);
+                                query.find({
+                                    success: function(results) {
+                                        results[0].add("keys", result);
+                                        results[0].save();
+                                    },
+                                    error: function(error) {
+                                        console.log("Failed to retrieve admins");
+                                        console.log(error);
+                                    }
+                                });
 								res.status(201).send(result);
+                            }
 							else
 								res.status(result.status).send(result.data);
 						});
@@ -182,6 +196,11 @@ var key = {
 function createKey (data, callback) {
 
 	var key = new Key();
+    var tourID = data.tour;
+	delete data.tour;
+    
+	key.set("tour",  {"__type":"Pointer","className":"Tour","objectId":tourID});
+    
 	key.save(data, {
 		success: function(key) {
 			console.log("Created key with ID " + key.id + " at time " + key.createdAt);
