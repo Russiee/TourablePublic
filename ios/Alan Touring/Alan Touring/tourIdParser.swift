@@ -56,7 +56,7 @@ public class tourIdParser {
 
     func updateArray(tourId: String){
         
-       API.newConnection()
+       API.initateConnection()
 
         //Duplicates the array, creating a mutable version that the new tourId can be added to.
         var newArray : [AnyObject] = tourIdContainer as [AnyObject]
