@@ -108,8 +108,14 @@ public class tourIdParser {
         return false
     }
     
-    
-    
+    func addTourMetaData(metadata: NSArray){
+
+        let keys = ["code","createdAt","ExpiresAt","objectId","tour","_type","className","objectId","updatedAt"]
+        var dict = metadata.dictionaryWithValuesForKeys(keys)
+        print(dict["code"])
+        
+   
+    }
     
       //temporary method for getting tourIds that have been added for checking the table updates.
     public func getAllTours() -> NSMutableArray {

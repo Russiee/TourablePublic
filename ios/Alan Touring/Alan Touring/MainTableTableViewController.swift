@@ -14,6 +14,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
    
     var models = NSMutableArray()
     var tourParser = tourIdParser.init()
+    var API = ApiConnector.init()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -115,7 +116,14 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
             alertView.textFieldAtIndex(0)?.resignFirstResponder()
         
             //passes the entered tourId into the tourParser
-            tourParser.addNewTourId(Field!.text!)
+           // tourParser.addNewTourId(Field!.text!)
+            API.initateConnection(Field!.text!)
+        
+        
+        
+        
+        
+        
             tourParser.confirmTourId(true)
         
             //goes to the AddNewTourPage

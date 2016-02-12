@@ -48,8 +48,11 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
     }
     
     func dealWithData(JSONData: NSArray){
-    var data = JSONData
-    print(JSONData)
+        var data = JSONData
+       let tour = tourIdParser.init()
+        tour.addTourMetaData(JSONData)
+    
+    //print(JSONData)
     }
     
 }
