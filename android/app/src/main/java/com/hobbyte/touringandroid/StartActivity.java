@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import com.hobbyte.touringandroid.helpers.FileManager;
+import com.hobbyte.touringandroid.internet.ServerAPI;
 
 public class StartActivity extends Activity {
     private static final String TAG = "StartActivity";
@@ -52,6 +54,9 @@ public class StartActivity extends Activity {
         EditText textKey = (EditText) findViewById(R.id.textEnterTour);
         String tourKey = textKey.getText().toString();
 
+        KeyCheckTask k = new KeyCheckTask();
+        k.execute(tourKey);
+
         // this will be changed in the future
         if (tourKey.equals("jeroenTour")) {
             Log.d(TAG, "Valid key");
@@ -82,5 +87,30 @@ public class StartActivity extends Activity {
         View noToursText = getLayoutInflater().inflate(R.layout.text_no_tours, layout, false);
 
         layout.addView(noToursText);
+    }
+
+    /**
+     * Asynchronously checks the server to see if a key which the user entered is a real, valid key.
+     * If the key is valid, take the user to the next activity.
+     */
+    private class KeyCheckTask extends AsyncTask<String, Void, Boolean> {
+        private static final String TAG = "KeyCheckTask";
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            String key = params[0];
+
+            boolean isValid = ServerAPI.checkKeyValidity(key);
+
+            // TODO: change this when we have some real keys on the server
+            return (isValid || key.equals("jeroenTour"));
+        }
+
+        @Override
+        protected void onPostExecute(Boolean isValid) {
+            if (isValid) {
+                //do something
+            }
+        }
     }
 }
