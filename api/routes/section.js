@@ -78,6 +78,20 @@ var section = {
 								console.log(error);
 							}
 						});
+					} else {
+						var query = new Parse.Query(Section);
+						query.equalTo("objectId", result.get("superSection").objectId);
+						query.find({
+							success: function(results) {
+								results[0].add("subsections", result);
+								results[0].save();
+							},
+							error: function(error) {
+								console.log("Failed to retrieve tour");
+								console.log(error);
+							}
+						});
+
 					}
 
 					res.status(201).send(result);
