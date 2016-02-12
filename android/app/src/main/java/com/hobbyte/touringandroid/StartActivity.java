@@ -21,9 +21,6 @@ import com.hobbyte.touringandroid.internet.ServerAPI;
 
 import java.util.ArrayList;
 
-import com.hobbyte.touringandroid.helpers.FileManager;
-import com.hobbyte.touringandroid.internet.ServerAPI;
-
 public class StartActivity extends Activity {
     private static final String TAG = "StartActivity";
 
