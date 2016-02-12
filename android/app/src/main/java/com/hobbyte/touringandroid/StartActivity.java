@@ -22,6 +22,8 @@ import com.hobbyte.touringandroid.internet.ServerAPI;
 public class StartActivity extends Activity {
     private static final String TAG = "StartActivity";
 
+    private EditText textKey;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,31 +51,31 @@ public class StartActivity extends Activity {
      * @param v the submit button
      */
     public void checkTourKey(View v) {
-        // TODO: hook this up to the api to securely validate the key
-
-        EditText textKey = (EditText) findViewById(R.id.textEnterTour);
+        textKey = (EditText) findViewById(R.id.textEnterTour);
         String tourKey = textKey.getText().toString();
 
         KeyCheckTask k = new KeyCheckTask();
         k.execute(tourKey);
+    }
 
-        // this will be changed in the future
-        if (tourKey.equals("jeroenTour")) {
-            Log.d(TAG, "Valid key");
-            // move to next activity
-            Tour testTour = new Tour();
-            ArrayList<SubSection> subsectionList = new ArrayList<SubSection>();
-            subsectionList = testTour.getSubSections();
-            Intent intent = new Intent(this, TourActivity.class);
-            intent.putExtra(TourActivity.EXTRA_MESSAGE_SUB, subsectionList);
-            startActivity(intent);
-        } else {
-            Log.d(TAG, "Invalid key");
-            Toast toast = Toast.makeText(this, "Invalid tour key", Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.BOTTOM, 0, 20);
-            toast.show();
-            textKey.setText("");
-        }
+    /**
+     * Called from KeyCheckTask when a valid key is entered. It takes the user to an Activity with
+     * download options for the tour media.
+     */
+    private void goToTourDownload() {
+        // TODO: this currently goes to a new tour activity, but needs to go to the download screen
+
+        String tourKey = textKey.getText().toString();
+        textKey.setText("");
+
+        // move to next activity
+        Tour testTour = new Tour();
+        ArrayList<SubSection> subsectionList = new ArrayList<SubSection>();
+        subsectionList = testTour.getSubSections();
+
+        Intent intent = new Intent(this, TourActivity.class);
+        intent.putExtra(TourActivity.EXTRA_MESSAGE_SUB, subsectionList);
+        startActivity(intent);
     }
 
     /**
@@ -109,7 +111,12 @@ public class StartActivity extends Activity {
         @Override
         protected void onPostExecute(Boolean isValid) {
             if (isValid) {
-                //do something
+                goToTourDownload();
+            } else {
+                Toast toast = Toast.makeText(getApplicationContext(), "Invalid tour key", Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.BOTTOM, 0, 20);
+                toast.show();
+                textKey.setText("");
             }
         }
     }
