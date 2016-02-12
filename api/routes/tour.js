@@ -70,11 +70,14 @@ var tour = {
 					query.equalTo("objectId", result.get("admin").objectId);
 					query.find({
 						success: function(results) {
-							console.log("results", results);
-							results[0].add("tours", result);
-							console.log("tours", results[0].get("tours"));
-							results[0].save(null, {useMasterKey: true});
-							Parse.Cloud.run("hello");
+                            Parse.Cloud.run('addTour', { username: results[0].getUsername(), tour: {"__type":"Pointer","className":"Admin","objectId": result.id} }, {
+                                success: function(status) {
+                                    console.log(status);
+                                },
+                                error: function(error) {
+                                    console.log(error);
+                                }
+                            });
 						},
 						error: function(error) {
 							console.log("Failed to retrieve admins");
