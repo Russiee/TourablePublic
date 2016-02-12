@@ -27,7 +27,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.hobbyte.touringandroid.helpers.FileManager;
-import com.hobbyte.touringandroid.helpers.TourDBManager;
+import com.hobbyte.touringandroid.internet.ServerAPI;
 
 public class StartActivity extends Activity {
     private static final String TAG = "StartActivity";
