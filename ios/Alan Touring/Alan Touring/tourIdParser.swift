@@ -12,9 +12,10 @@ public class tourIdParser {
     
     //READ ONLY. TO ADD ITEM USE updateArray()
    var tourIdContainer = NSMutableArray()
+    var API = ApiConnector.init()
     
     //TourId user has entered but not confirmed download of yet.
-    var tourIdtoDownload = ""
+    public var tourIdtoDownload = ""
     
     //Failsafe to make sure methods called in order.
     var readyToDownload = false
@@ -51,7 +52,12 @@ public class tourIdParser {
     }
     
     //Adds a new tourId to the array
-   public func updateArray(tourId: String){
+
+
+    public func updateArray(tourId: String){
+        
+       API.initateConnection(tourIdtoDownload)
+
         //Duplicates the array, creating a mutable version that the new tourId can be added to.
         var newArray : [AnyObject] = tourIdContainer as [AnyObject]
         newArray.append(tourId)
