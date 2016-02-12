@@ -28,9 +28,82 @@ class Alan_TouringUITests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
+    func testExistsOnNavigationBarWhenViewDidLoad(){
+        XCTAssertTrue(XCUIApplication().navigationBars["Alan Touring"].exists)
+    }
+    
+    func testAddTour() {
         // Use recording to get started writing UI tests.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
+        
+        
+        let app = XCUIApplication()
+        app.toolbars.buttons["Add"].tap()
+        
+        let collectionViewsQuery = app.alerts["Add New Tour"].collectionViews
+        collectionViewsQuery.textFields["Enter Tour ID"].typeText("test1")
+        
+        let addButton = collectionViewsQuery.buttons["Add"]
+        addButton.tap()
+        app.buttons["With Video"].tap()
+        
+        
     }
+    
+    func testDeleteTour() {
+        
+        let app = XCUIApplication()
+        app.toolbars.buttons["Add"].tap()
+        
+        let collectionViewsQuery = app.alerts["Add New Tour"].collectionViews
+        collectionViewsQuery.textFields["Enter Tour ID"].typeText("test3")
+        
+        let addButton = collectionViewsQuery.buttons["Add"]
+        addButton.tap()
+        app.buttons["With Video"].tap()
+        
+        let tablesQuery = app.tables
+        tablesQuery.staticTexts["test3"].swipeLeft()
+        tablesQuery.buttons["Delete"].tap()
+    }
+    
+    func testTapTourGoToSummary() {
+        
+        let app = XCUIApplication()
+        app.toolbars.buttons["Add"].tap()
+        
+        let collectionViewsQuery = app.alerts["Add New Tour"].collectionViews
+        collectionViewsQuery.textFields["Enter Tour ID"].typeText("another_test")
+        collectionViewsQuery.buttons["Add"].tap()
+        app.buttons["With Video"].tap()
+        app.tables.staticTexts["another_test"].tap()
+        
+        let heckthisStaticText = app.staticTexts["another_test"]
+        heckthisStaticText.tap()
+        
+    }
+    
+    func testTapTour(){
+        
+        let app = XCUIApplication()
+        app.toolbars.buttons["Add"].tap()
+        
+        let collectionViewsQuery = app.alerts["Add New Tour"].collectionViews
+        collectionViewsQuery.textFields["Enter Tour ID"].typeText("testTap")
+        
+        let addButton = collectionViewsQuery.buttons["Add"]
+
+        addButton.tap()
+        app.buttons["With Video"].tap()
+        
+        let tablesQuery = app.tables
+        let testtapStaticText = tablesQuery.staticTexts["testTap"]
+        tablesQuery.staticTexts["testTap"].tap()
+        app.navigationBars["Tour Summary"].buttons["Alan Touring"].tap()
+        tablesQuery.staticTexts["testTap"].swipeLeft()
+        tablesQuery.buttons["Delete"].tap()
+        
+    }
+
     
 }
