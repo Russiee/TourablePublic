@@ -6,23 +6,29 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.EditText;
+import android.view.animation.AlphaAnimation;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-
+import com.github.clans.fab.FloatingActionButton;
+import com.hobbyte.touringandroid.helpers.BackAwareEditText;
 import com.hobbyte.touringandroid.helpers.FileManager;
 import com.hobbyte.touringandroid.internet.ServerAPI;
+
+import java.util.ArrayList;
 
 public class StartActivity extends Activity {
     private static final String TAG = "StartActivity";
 
-    private EditText textKey;
+    private static boolean FADE_IN = true;
+    private static boolean FADE_OUT = false;
+    private LinearLayout keyEntryLayout;
+    private LinearLayout previousToursLayout;
+    private BackAwareEditText textKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +40,21 @@ public class StartActivity extends Activity {
 
         if (isFreshInstall) { FileManager.makeTourDir(this); }
 
+        //get references for animations
+        keyEntryLayout = (LinearLayout) findViewById(R.id.keyEntryLayout);
+        previousToursLayout = (LinearLayout) findViewById(R.id.previousToursLayout);
+        textKey = (BackAwareEditText) findViewById(R.id.textEnterTour);
+        textKey.setCallBackClass(this);
+
+        //make the FAB do something
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showInput();
+            }
+        });
+
         loadPreviousTours();
     }
 
@@ -41,8 +62,58 @@ public class StartActivity extends Activity {
     protected void onRestart() {
         super.onRestart();
 
-        // needed in the event that a user adds a tour and then returns to this screen
-        loadPreviousTours();
+    }
+
+    @Override
+    protected void onPause() {
+        //need this so if user switches app and come back, the input fields do not show
+        hideInput();
+        super.onPause();
+    }
+
+    /**
+     * Shows input box, keyboard and hides the existing tours table
+     */
+    private void showInput() {
+        //layout.xml defines the layout as invisible. Otherwise it shows when the app is loaded.
+        keyEntryLayout.setVisibility(View.VISIBLE);
+
+        fade(keyEntryLayout, FADE_IN);
+        fade(previousToursLayout, FADE_OUT);
+
+        showKeyboard();
+    }
+
+    /**
+     * Hides the input box, shows the existing tours table
+     */
+    public void hideInput() {
+        fade(keyEntryLayout, FADE_OUT);
+        fade(previousToursLayout, FADE_IN);
+        textKey.clearFocus();
+    }
+
+    /**
+     * Shows the keyboard
+     */
+    private void showKeyboard() {
+
+        InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        keyboard.showSoftInput(textKey, InputMethodManager.SHOW_IMPLICIT);
+    }
+
+    /**
+     * Fades a view from opaque to hidden or visa versa
+     *
+     * @param view   view to fade
+     * @param fadeIn true if transparent to opaque, false if opaque to transparent
+     */
+    private void fade(View view, boolean fadeIn) {
+        //current alpha --> opaque or transparent
+        AlphaAnimation a = new AlphaAnimation(view.getAlpha(), fadeIn ? 1.0f : 0.0f);
+        a.setDuration(400); //system 'medium' animation time
+        a.setFillAfter(true); //so alpha sticks
+        view.startAnimation(a); //run
     }
 
     /**
@@ -51,7 +122,6 @@ public class StartActivity extends Activity {
      * @param v the submit button
      */
     public void checkTourKey(View v) {
-        textKey = (EditText) findViewById(R.id.textEnterTour);
         String tourKey = textKey.getText().toString();
 
         KeyCheckTask k = new KeyCheckTask();
