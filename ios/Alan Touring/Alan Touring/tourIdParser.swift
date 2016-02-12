@@ -51,7 +51,7 @@ public class tourIdParser {
     }
     
     //Adds a new tourId to the array
-    func updateArray(tourId: String){
+   public func updateArray(tourId: String){
         //Duplicates the array, creating a mutable version that the new tourId can be added to.
         var newArray : [AnyObject] = tourIdContainer as [AnyObject]
         newArray.append(tourId)
@@ -106,7 +106,7 @@ public class tourIdParser {
     
     
       //temporary method for getting tourIds that have been added for checking the table updates.
-    func getAllTours() -> NSMutableArray {
+    public func getAllTours() -> NSMutableArray {
       
         return tourIdContainer
     }
