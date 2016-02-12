@@ -73,7 +73,7 @@ var section = {
                             results[0].save();
                         },
                         error: function(error) {
-                            console.log("Failed to retrieve admins");
+                            console.log("Failed to retrieve tour");
                             console.log(error);
                         }
                     });

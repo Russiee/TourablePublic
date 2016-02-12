@@ -3,6 +3,7 @@ var Parse = require('parse/node').Parse;
 Parse.initialize("touring", "yF85llv84OI0NV41ieaHU7PM0oyRCMLT");
 Parse.serverURL = 'http://touring-db.herokuapp.com/parse';
 var POI = Parse.Object.extend("POI");
+var Section = Parse.Object.extend("Section");
 
 var poi = {
 
@@ -50,6 +51,7 @@ var poi = {
 			"title": "",
 			"description": "",
 			"post": {},
+            "section": ""
 		};
         
 		var validInput = validate.validateInput(data, expectedInput);
@@ -60,8 +62,21 @@ var poi = {
 			res.sendStatus(400);
 		} else {
 			createPOI(parseData, function(result) {
-				if (result.status !== 500)
-					res.status(201).send(result);
+				if (result.status !== 500) {
+                    var query = new Parse.Query(Section);
+                    query.equalTo("objectId", result.get("section").objectId);
+                    query.find({
+                        success: function(results) {
+                            results[0].add("pois", result);
+                            results[0].save();
+                        },
+                        error: function(error) {
+                            console.log("Failed to retrieve section");
+                            console.log(error);
+                        }
+                    });
+                    res.status(201).send(result);
+                }
 				else
 					res.status(result.status).send(result.data);
 			});
@@ -77,6 +92,7 @@ var poi = {
 			"title": "",
 			"description": "",
 			"post": {},
+            "section": ""
 		};
 
 		var validInput = validate.validateInput(data, expectedInput);
@@ -143,6 +159,11 @@ var poi = {
 function createPOI (data, callback) {
     
 	var poi = new POI();
+    var sectionID = data.section;
+	delete data.section;
+    
+	poi.set("section",  {"__type":"Pointer","className":"Section","objectId":sectionID});
+    
 	poi.save(data, {
 		success: function(poi) {
 			console.log("Created poi with ID " + poi.id + " at time " + poi.createdAt);
