@@ -9,10 +9,18 @@ var bundle = {
 		console.log("GET BUNDLE " + req.params.id);
 		var id = req.params.id;
 		var query = new Parse.Query(Tour);
+        query.include("sections");
+        query.include("sections.pois");
+        query.include("sections.subsections");
+//        query.include("subsections.pois");
 		query.get(id, {
 			success: function(tour) {
 				console.log("Tour " + id + " retrieved succesfully");
-				res.status(200).send(tour);
+                var package = tour.toJSON();
+                
+                //Remove metadata for client-side
+                delete package.admin, delete package.keys, delete package.isPublic;
+				res.status(200).send(package);
 			},
 			error: function(object, error) {
 				console.log("Error retrieving " + id);
