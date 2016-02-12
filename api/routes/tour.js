@@ -14,6 +14,7 @@ var tour = {
 		query.get(id, {
 			success: function(tour) {
 				console.log("Tour " + id + " retrieved succesfully");
+                console.log(tour);
 				res.status(200).send(tour);
 			},
 			error: function(object, error) {
@@ -51,7 +52,7 @@ var tour = {
 			"description": "",
 			"title": "",
 			"admin": "",
-			"sections": "",
+			"sections": [],
 			"keys": [],
 			"isPublic": ""
 		};
@@ -101,7 +102,7 @@ var tour = {
 			"description": "",
 			"title": "",
 			"admin": "",
-			"sections": "",
+			"sections": [],
 			"keys": [],
 			"isPublic": ""
 		};
