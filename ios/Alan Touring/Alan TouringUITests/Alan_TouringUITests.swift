@@ -46,4 +46,24 @@ class Alan_TouringUITests: XCTestCase {
         
     }
     
+    func testDeleteTour() {
+        
+        let app = XCUIApplication()
+        app.toolbars.buttons["Add"].tap()
+        
+        let collectionViewsQuery = app.alerts["Add New Tour"].collectionViews
+        collectionViewsQuery.textFields["Enter Tour ID"].typeText("test3")
+        
+        let addButton = collectionViewsQuery.buttons["Add"]
+        addButton.tap()
+        app.buttons["With Video"].tap()
+        
+        let tablesQuery = app.tables
+        tablesQuery.staticTexts["test3"].swipeLeft()
+        tablesQuery.buttons["Delete"].tap()
+        
+        
+        
+    }
+    
 }
