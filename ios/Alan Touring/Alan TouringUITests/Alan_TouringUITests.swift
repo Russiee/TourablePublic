@@ -66,4 +66,26 @@ class Alan_TouringUITests: XCTestCase {
         
     }
     
+    func testTapTour(){
+        
+        let app = XCUIApplication()
+        app.toolbars.buttons["Add"].tap()
+        
+        let collectionViewsQuery = app.alerts["Add New Tour"].collectionViews
+        collectionViewsQuery.textFields["Enter Tour ID"].typeText("testTap")
+        
+        let addButton = collectionViewsQuery.buttons["Add"]
+
+        addButton.tap()
+        app.buttons["With Video"].tap()
+        
+        let tablesQuery = app.tables
+        let testtapStaticText = tablesQuery.staticTexts["testTap"]
+        tablesQuery.staticTexts["testTap"].tap()
+        app.navigationBars["Tour Summary"].buttons["Alan Touring"].tap()
+        tablesQuery.staticTexts["testTap"].swipeLeft()
+        tablesQuery.buttons["Delete"].tap()
+        
+    }
+    
 }
