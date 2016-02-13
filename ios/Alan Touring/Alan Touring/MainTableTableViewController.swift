@@ -22,9 +22,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         models = tourParser.getAllTours()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "actOnSpecialNotification", name: mySpecialNotificationKey, object: nil)
     
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
+        self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
@@ -40,7 +38,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     
     func actOnSpecialNotification() {
         print("notified")
-        models = self.tourParser.getAllTours()
+        models = tourParser.getAllTours()
         tableView.reloadData()
     }
 
@@ -162,15 +160,18 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
    
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
+
             // Delete the row from the data source
-            //models.removeAtIndex(indexPath.row)
-            //upDateTourArray(models, itemToDelete: indexPath.row)
             
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            print("BEFORE DELETE \(models.count)")
             tourParser.deleteTourIdAtRow(indexPath.row)
             models = tourParser.getAllTours()
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            print("AFTER DELETE \(models.count)")
             checkStateOfScreen()
             tableView.reloadData()
+            
+            
         } else if editingStyle == .Insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    

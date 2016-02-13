@@ -13,7 +13,7 @@ let mySpecialNotificationKey = "com.andrewcbancroft.specialNotificationKey"
 public class tourIdParser {
     
     //READ ONLY. TO ADD ITEM USE updateArray()
-   var tourIdContainer = NSMutableArray()
+
     var API = ApiConnector.init()
 
     
@@ -26,7 +26,7 @@ public class tourIdParser {
              let newArray = [AnyObject]()
             self.saveArray(newArray)
         }
-            self.updateWorkingArray()
+        
         
             }
     
@@ -46,11 +46,7 @@ public class tourIdParser {
         saveArray(newArray)
         
     }
-    
-    private func updateWorkingArray(){
-
-       tourIdContainer  = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! NSMutableArray
-    }
+   
     
     //Adds a new tourId to the array
 
@@ -58,7 +54,7 @@ public class tourIdParser {
     public func updateArray(tourId: String){
 
         //Duplicates the array, creating a mutable version that the new tourId can be added to.
-        var newArray : [AnyObject] = tourIdContainer as [AnyObject]
+        var newArray : [AnyObject] = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! NSMutableArray as [AnyObject]
         newArray.append(tourId)
         print("Update Array called now saving changes")
         saveArray(newArray)
@@ -71,17 +67,14 @@ public class tourIdParser {
     private func saveArray(newArray: AnyObject){
         
         //This updates the working copy
-        self.tourIdContainer = NSMutableArray(objects: newArray)
+
         //Stores the Array in NSUserDefaults, overwriting existing copy
         NSUserDefaults.standardUserDefaults().setObject(newArray, forKey: "Array")
         //Commits changes to memory, required for iOS 7 and below.
         NSUserDefaults.standardUserDefaults().synchronize()
 
-        //Pushes changes to working copy
-        
-        self.tourIdContainer  = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! NSMutableArray
         NSUserDefaults.standardUserDefaults().synchronize()
-        print("Save Array called, table size is now \(self.tourIdContainer.count )")
+
         notify()
     }
     
@@ -120,7 +113,7 @@ public class tourIdParser {
     
       //temporary method for getting tourIds that have been added for checking the table updates.
     public func getAllTours() -> NSMutableArray {
-        print("TABLE SIZE PASSED TO VIEW IS \(self.tourIdContainer.count)")
+
         return NSUserDefaults.standardUserDefaults().objectForKey("Array") as! NSMutableArray
     }
     
