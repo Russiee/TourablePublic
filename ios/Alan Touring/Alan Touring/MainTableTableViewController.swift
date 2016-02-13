@@ -165,7 +165,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
             // Delete the row from the data source
             //models.removeAtIndex(indexPath.row)
             //upDateTourArray(models, itemToDelete: indexPath.row)
-
+            
             tourParser.deleteTourIdAtRow(indexPath.row)
             models = tourParser.getAllTours()
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)

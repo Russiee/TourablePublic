@@ -36,7 +36,7 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
     func connectionDidFinishLoading(connection: NSURLConnection!) {
    
         do {
-            let jsonResult: NSArray = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.   MutableContainers) as! NSArray
+            let jsonResult: NSArray = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as! NSArray
 
             self.dealWithData(jsonResult)
         }

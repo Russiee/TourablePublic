@@ -39,7 +39,9 @@ public class tourIdParser {
     }
     
    public func deleteTourIdAtRow(row:Int){
-        var newArray : [AnyObject] = tourIdContainer as [AnyObject]
+    
+    var newArray : [AnyObject] = NSUserDefaults.standardUserDefaults().objectForKey("Array")! as AnyObject as! [AnyObject]
+    NSUserDefaults.standardUserDefaults().removeObjectForKey(newArray[row] as! String)
        newArray.removeAtIndex(row)
         saveArray(newArray)
         
