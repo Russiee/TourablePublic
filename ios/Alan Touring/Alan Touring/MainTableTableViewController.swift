@@ -20,6 +20,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         models = tourParser.getAllTours()
+        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "actOnSpecialNotification", name: mySpecialNotificationKey, object: nil)
     
         self.clearsSelectionOnViewWillAppear = false
@@ -162,14 +163,19 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         if editingStyle == .Delete {
 
             // Delete the row from the data source
-            
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
             print("BEFORE DELETE \(models.count)")
+
+            
             tourParser.deleteTourIdAtRow(indexPath.row)
             models = tourParser.getAllTours()
             print("AFTER DELETE \(models.count)")
             checkStateOfScreen()
+            tableView.beginUpdates()
+            tableView.endUpdates()
             tableView.reloadData()
+            
+            //Don't touch. Magic.
+            //tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
             
             
         } else if editingStyle == .Insert {

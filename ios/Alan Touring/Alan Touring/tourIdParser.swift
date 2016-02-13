@@ -96,7 +96,7 @@ public class tourIdParser {
             selector: "TableChanged:",
             name: "TabledDataChanged",
             object: nil)
-        notify()
+
    
     }
     
