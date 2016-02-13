@@ -20,11 +20,10 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         models = tourParser.getAllTours()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "actOnSpecialNotification", name: mySpecialNotificationKey, object: nil)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "Notified", name: TableUpdateNotificationKey, object: nil)
     
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
+        self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
@@ -38,9 +37,9 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-    func actOnSpecialNotification() {
+    func Notified() {
         print("notified")
-        models = self.tourParser.getAllTours()
+        models = tourParser.getAllTours()
         tableView.reloadData()
     }
 
@@ -159,18 +158,23 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     }
     */
 
-   
+   //Deletes data from the table and updates the cache to reflect his.
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
-            // Delete the row from the data source
-            //models.removeAtIndex(indexPath.row)
-            //upDateTourArray(models, itemToDelete: indexPath.row)
 
+            // Delete the row from the data source
             tourParser.deleteTourIdAtRow(indexPath.row)
+            //Update copy of data to display
+            
             models = tourParser.getAllTours()
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
             checkStateOfScreen()
+            //Reload Table
             tableView.reloadData()
+            
+            //Don't touch. Magic.
+            //tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            
+            
         } else if editingStyle == .Insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    

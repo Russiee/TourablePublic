@@ -8,55 +8,34 @@
 
 import Foundation
 
-let mySpecialNotificationKey = "com.andrewcbancroft.specialNotificationKey"
+let TableUpdateNotificationKey = "tableAddWasComplete"
 
 public class tourIdParser {
-    
-    //READ ONLY. TO ADD ITEM USE updateArray()
-   var tourIdContainer = NSMutableArray()
-    var API = ApiConnector.init()
 
-    
+    var API = ApiConnector.init()
     
     
     public init(){
-        
-        //pulls the latest version from the cache.
+        //If the app is launched for the first time, a new empty array is created for the 
+        //tour ids.
         if(NSUserDefaults.standardUserDefaults().stringArrayForKey("Array")==nil){
-             let newArray = [AnyObject]()
+            let newArray = [AnyObject]()
             self.saveArray(newArray)
         }
-            self.updateWorkingArray()
-        
-            }
-    
-  
-    //Clears all records from the array permanently. Use with caution
-    public func clearArray(){
-        let newArray = [AnyObject]()
-        saveArray(newArray)
-        
     }
     
    public func deleteTourIdAtRow(row:Int){
-        var newArray : [AnyObject] = tourIdContainer as [AnyObject]
-       newArray.removeAtIndex(row)
+        var newArray : [AnyObject] = NSUserDefaults.standardUserDefaults().objectForKey("Array")! as AnyObject as! [AnyObject]
+        NSUserDefaults.standardUserDefaults().removeObjectForKey(newArray[row] as! String)
+        newArray.removeAtIndex(row)
         saveArray(newArray)
-        
     }
-    
-    private func updateWorkingArray(){
-
-       tourIdContainer  = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! NSMutableArray
-    }
+   
     
     //Adds a new tourId to the array
-
-
     public func updateArray(tourId: String){
-
         //Duplicates the array, creating a mutable version that the new tourId can be added to.
-        var newArray : [AnyObject] = tourIdContainer as [AnyObject]
+        var newArray : [AnyObject] = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! NSMutableArray as [AnyObject]
         newArray.append(tourId)
         print("Update Array called now saving changes")
         saveArray(newArray)
@@ -67,31 +46,25 @@ public class tourIdParser {
     //saves the copy of the array passed to it persistently and updates working copy kept in this class.
     //Never called outside of this class
     private func saveArray(newArray: AnyObject){
-        
-        //This updates the working copy
-        self.tourIdContainer = NSMutableArray(objects: newArray)
         //Stores the Array in NSUserDefaults, overwriting existing copy
         NSUserDefaults.standardUserDefaults().setObject(newArray, forKey: "Array")
         //Commits changes to memory, required for iOS 7 and below.
         NSUserDefaults.standardUserDefaults().synchronize()
-
-        //Pushes changes to working copy
-        
-        self.tourIdContainer  = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! NSMutableArray
         NSUserDefaults.standardUserDefaults().synchronize()
-        print("Save Array called, table size is now \(self.tourIdContainer.count )")
+
         notify()
     }
     
+    //Adds the metadata passed to it into the cache, after turning it into a dictonary that can be retrieved 
+    // from the cache with its tour Id code
     func addTourMetaData(metadata: NSArray){
 
         let keys = ["code","createdAt","expiresAt","objectId","tour","updatedAt"]
         var dict = metadata.dictionaryWithValuesForKeys(keys)
         let tourCode = dict["code"]!
 
-
-        let fuckEverything = dict as! NSDictionary
-        NSUserDefaults.standardUserDefaults().setObject(fuckEverything, forKey: tourCode[0] as! String)
+        let metadataDict = dict as NSDictionary
+        NSUserDefaults.standardUserDefaults().setObject(metadataDict, forKey: tourCode[0] as! String)
         NSUserDefaults.standardUserDefaults().synchronize()
         print("here")
         self.updateArray(tourCode[0] as! String)
@@ -100,27 +73,22 @@ public class tourIdParser {
             self,
             selector: "TableChanged:",
             name: "TabledDataChanged",
-            object: nil)
-        notify()
-   
+            object: nil
+        )
     }
     
+    //Gets the dictonary from the cache with the tour code passed to it
     func getTourMetadata(tourCode: String) -> Dictionary<String,AnyObject>{
        return NSUserDefaults.standardUserDefaults().objectForKey(tourCode) as! Dictionary<String,AnyObject>
     }
-    
-    
+    //Notifies observers that the table of tour Ids has been updated.
     func notify() {
-        NSNotificationCenter.defaultCenter().postNotificationName(mySpecialNotificationKey, object: self)
+        NSNotificationCenter.defaultCenter().postNotificationName(TableUpdateNotificationKey, object: self)
         print("notify called")
     }
     
-    
-      //temporary method for getting tourIds that have been added for checking the table updates.
+    //method for getting tourIds that have been added for checking the table updates.
     public func getAllTours() -> NSMutableArray {
-        print("TABLE SIZE PASSED TO VIEW IS \(self.tourIdContainer.count)")
         return NSUserDefaults.standardUserDefaults().objectForKey("Array") as! NSMutableArray
     }
-    
-
 }
