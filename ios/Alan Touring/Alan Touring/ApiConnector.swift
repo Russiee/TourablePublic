@@ -17,12 +17,15 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
     lazy var data = NSMutableData()
     var urlPath: String = ""
     
-    func startConnection(tourId: String){
+
+    func startConnection(var tourId: String){
         let resetData = NSMutableData()
         //Reseting data to blank with every new connection
         data = resetData
+        tourId = cleanTourId(tourId)
         //The path to where the Tour Data is stored
         urlPath = "https://touring-api.herokuapp.com/api/v1/key/verify/" + tourId
+        
         //Standard URLConnection method
         let request: NSURLRequest = NSURLRequest(URL: NSURL(string: urlPath)!)
         let connection: NSURLConnection = NSURLConnection(request: request, delegate: self, startImmediately: true)!
@@ -49,27 +52,25 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
         catch let err as NSError{
             //Need to let user know if the tourID they entered was faulty here
             print(err.description)
-            
-            
-            NSNotificationCenter.defaultCenter().addObserver(
-                self,
-                selector: "TourAddFailed:",
-                name: "TourIdAddFailed",
-                object: nil)
-            func notify() {
-                NSNotificationCenter.defaultCenter().postNotificationName(invalidIdNotificationKey, object: self)
-                print("invalid key notify called")
-            }
-            notify()
-            
-            
+            self.triggerInvalidKeyNotification()
         }
     
     }
     
-    func storeJson(JSONData: NSArray){
-        //Storing Meta Data so we can access it for other use
-        _ = tourIdParser.init().addTourMetaData(JSONData)
+    func triggerInvalidKeyNotification() {
+        NSNotificationCenter.defaultCenter().addObserver(
+            self,
+            selector: "TourAddFailed:",
+            name: "TourIdAddFailed",
+            object: nil)
+        func notify() {
+            NSNotificationCenter.defaultCenter().postNotificationName(invalidIdNotificationKey, object: self)
+            print("invalid key notify called")
+        }
+        notify()
+    }
+    
+    func triggerValidKeyNotification() {
         NSNotificationCenter.defaultCenter().addObserver(
             self,
             selector: "TourAddSuccess:",
@@ -80,6 +81,25 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
             print("Valid key notify called")
         }
         notify()
+    }
+    
+    func storeJson(JSONData: NSArray){
+        //Storing Meta Data so we can access it for other use
+        _ = tourIdParser.init().addTourMetaData(JSONData)
+        self.triggerValidKeyNotification()
+    }
+    
+    // remove the heading and trailing spaces
+    func cleanTourId(tourId: String) -> String {
+
+        let trimmedTourId = tourId.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+
+        if trimmedTourId.containsString(" ") {
+            print("the tour id ou input must not contain whitespaces.")
+            return ""
+        }
+        
+        return trimmedTourId
     }
     
 }
