@@ -17,7 +17,7 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
     lazy var data = NSMutableData()
     var urlPath: String = ""
     
-
+    //Makes the connection to the API
     func startConnection(var tourId: String){
         let resetData = NSMutableData()
         //Reseting data to blank with every new connection
@@ -56,7 +56,7 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
         }
     
     }
-    
+    //send a notification that the tour id
     func triggerInvalidKeyNotification() {
         NSNotificationCenter.defaultCenter().addObserver(
             self,
@@ -70,6 +70,7 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
         notify()
     }
     
+    //Send a notifcation that the tour id entered was valid and parsed correctly
     func triggerValidKeyNotification() {
         NSNotificationCenter.defaultCenter().addObserver(
             self,
@@ -83,6 +84,7 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
         notify()
     }
     
+    //Takes the metadata and passes it to the tourIdParser.
     func storeJson(JSONData: NSArray){
         //Storing Meta Data so we can access it for other use
         _ = tourIdParser.init().addTourMetaData(JSONData)

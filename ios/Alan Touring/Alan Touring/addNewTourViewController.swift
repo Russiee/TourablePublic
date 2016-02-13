@@ -47,7 +47,7 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
     //Called if the tourId entered is invalid. Stops busy wheel, hides view and presents error message.
     func NotifiedInvalid() {
         self.busyWheel.stopAnimating()
-        self.busyWheel.hidden = true
+
         //Shows warning to user that tour id was invalid.
         let alert = UIAlertView(title: "Tour ID Error", message: "The tour ID entered is not valid or is out of date", delegate: self, cancelButtonTitle:"OK")
         alert.alertViewStyle = UIAlertViewStyle.Default
@@ -61,7 +61,6 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
     //Called if the tourId if valid. Stops the busy wheel and shows the download settings.
     func NotifiedValid(){
         self.busyWheel.stopAnimating()
-        self.busyWheel.hidden = true
         self.hideButtonsForBusyWheel(false)
     }
     
