@@ -10,6 +10,7 @@ import UIKit
 
 class TourSummaryController: UIViewController {
 
+    
     @IBOutlet weak var tourIdLabel: UILabel!
     var tourId = String()
     
@@ -23,6 +24,6 @@ class TourSummaryController: UIViewController {
         TourExpiryLabel.text = (data as! String)
         
     }
-    
+   
     
 }

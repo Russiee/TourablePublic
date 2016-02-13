@@ -8,7 +8,7 @@
 
 import Foundation
 
-let mySpecialNotificationKey = "com.andrewcbancroft.specialNotificationKey"
+let TableUpdateNotificationKey = "tableAddWasComplete"
 
 public class tourIdParser {
     
@@ -106,7 +106,7 @@ public class tourIdParser {
     
     
     func notify() {
-        NSNotificationCenter.defaultCenter().postNotificationName(mySpecialNotificationKey, object: self)
+        NSNotificationCenter.defaultCenter().postNotificationName(TableUpdateNotificationKey, object: self)
         print("notify called")
     }
     

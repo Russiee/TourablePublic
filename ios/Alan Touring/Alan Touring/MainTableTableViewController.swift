@@ -21,7 +21,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         super.viewDidLoad()
         models = tourParser.getAllTours()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "actOnSpecialNotification", name: mySpecialNotificationKey, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "Notified", name: TableUpdateNotificationKey, object: nil)
     
         self.clearsSelectionOnViewWillAppear = false
 
@@ -37,7 +37,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-    func actOnSpecialNotification() {
+    func Notified() {
         print("notified")
         models = tourParser.getAllTours()
         tableView.reloadData()

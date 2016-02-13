@@ -7,6 +7,10 @@
 //
 //
 import Foundation
+import UIKit
+
+let invalidIdNotificationKey = "InvalidKeyEnteredNotification"
+let validIdNotificationKey = "ValidKeyEnteredNotification"
 
 class ApiConnector: NSObject, NSURLConnectionDelegate{
     
@@ -20,8 +24,7 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
         //The path to where the Tour Data is stored
         urlPath = "https://touring-api.herokuapp.com/api/v1/key/verify/" + tourId
         //Standard URLConnection method
-        let url: NSURL = NSURL(string: urlPath)!
-        let request: NSURLRequest = NSURLRequest(URL: url)
+        let request: NSURLRequest = NSURLRequest(URL: NSURL(string: urlPath)!)
         let connection: NSURLConnection = NSURLConnection(request: request, delegate: self, startImmediately: true)!
         connection.start()
     }
@@ -46,14 +49,37 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
         catch let err as NSError{
             //Need to let user know if the tourID they entered was faulty here
             print(err.description)
+            
+            
+            NSNotificationCenter.defaultCenter().addObserver(
+                self,
+                selector: "TourAddFailed:",
+                name: "TourIdAddFailed",
+                object: nil)
+            func notify() {
+                NSNotificationCenter.defaultCenter().postNotificationName(invalidIdNotificationKey, object: self)
+                print("invalid key notify called")
+            }
+            notify()
+            
+            
         }
     
     }
     
     func storeJson(JSONData: NSArray){
         //Storing Meta Data so we can access it for other use
-        let tour = tourIdParser.init()
-        tour.addTourMetaData(JSONData)
+        _ = tourIdParser.init().addTourMetaData(JSONData)
+        NSNotificationCenter.defaultCenter().addObserver(
+            self,
+            selector: "TourAddSuccess:",
+            name: "TourIdAddSuccess",
+            object: nil)
+        func notify() {
+            NSNotificationCenter.defaultCenter().postNotificationName(validIdNotificationKey, object: self)
+            print("Valid key notify called")
+        }
+        notify()
     }
     
 }
