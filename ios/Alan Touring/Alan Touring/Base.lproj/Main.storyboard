@@ -197,6 +197,9 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
                     <connections>
                         <outlet property="busyWheel" destination="MTY-ww-ae4" id="Ha3-Fi-XQM"/>
+                        <outlet property="tourInformationLabel" destination="4vk-pv-7vj" id="7Xc-bK-GIy"/>
+                        <outlet property="withOutVideoButton" destination="Y22-dL-SYm" id="6SN-D1-6TD"/>
+                        <outlet property="withVideoButton" destination="D6z-7G-kRU" id="End-fH-jQN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="p6H-uK-RQh" userLabel="First Responder" sceneMemberID="firstResponder"/>

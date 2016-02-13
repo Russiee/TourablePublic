@@ -13,17 +13,22 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
     var tourID: String = ""
     
     @IBOutlet weak var busyWheel: UIActivityIndicatorView!
+    @IBOutlet weak var withVideoButton: UIButton!
+    @IBOutlet weak var withOutVideoButton: UIButton!
+    @IBOutlet weak var tourInformationLabel: UILabel!
+    
+    
     override func viewDidLoad() {
         print("view summary was loaded")
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedInvalid", name: invalidIdNotificationKey, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedValid", name: validIdNotificationKey, object: nil)
         self.busyWheel.startAnimating()
+        self.hideButtonsForBusyWheel(true)
 
     }
     
     @IBAction func withVideoButton(sender: AnyObject) {
         //tourIdParser.confirmTourId(true)
-        
         
     }
     @IBAction func withoutVideoButton(sender: AnyObject) {
@@ -46,5 +51,12 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
     func NotifiedValid(){
         self.busyWheel.stopAnimating()
         self.busyWheel.hidden = true
+        self.hideButtonsForBusyWheel(false)
+    }
+    
+    func hideButtonsForBusyWheel(visibility: Bool){
+        withOutVideoButton.hidden = visibility
+        withVideoButton.hidden = visibility
+        tourInformationLabel.hidden = visibility
     }
 }
