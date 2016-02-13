@@ -20,7 +20,7 @@ class TourSummaryController: UIViewController {
 
         let setup = tourIdParser.init().getTourMetadata(tourId)
         let data = setup["expiresAt"]![0]
-        TourExpiryLabel.text = data as! String
+        TourExpiryLabel.text = (data as! String)
         
     }
     

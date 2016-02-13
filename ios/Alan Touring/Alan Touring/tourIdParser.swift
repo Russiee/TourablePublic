@@ -90,7 +90,7 @@ public class tourIdParser {
         let tourCode = dict["code"]!
 
 
-        let fuckEverything = dict as! NSDictionary
+        let fuckEverything = dict as NSDictionary
         NSUserDefaults.standardUserDefaults().setObject(fuckEverything, forKey: tourCode[0] as! String)
         NSUserDefaults.standardUserDefaults().synchronize()
         print("here")

@@ -16,7 +16,7 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
     
     func startConnection(tourId: String){
     urlPath = ""
-    var newData = NSMutableData()
+    let newData = NSMutableData()
     data = newData
     urlPath = "https://touring-api.herokuapp.com/api/v1/key/verify/" + tourId
     let url: NSURL = NSURL(string: urlPath)!
