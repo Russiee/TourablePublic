@@ -8,50 +8,69 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.hobbyte.touringandroid.StartActivity">
+    tools:context="com.hobbyte.touringandroid.StartActivity"
+    android:animateLayoutChanges="true">
+
+    <LinearLayout
+        android:id="@+id/keyEntryLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:orientation="vertical"
+        android:visibility="invisible">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/start_activity_enter_key" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.hobbyte.touringandroid.helpers.BackAwareEditText
+                android:id="@+id/textEnterTour"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:inputType="text"
+                />
+
+            <Button
+                android:id="@+id/buttonSubmitKey"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="checkTourKey"
+                android:text="@string/submit_key_button_text" />
+        </LinearLayout>
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/previousToursLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_above="@+id/fab"
+        android:layout_alignParentStart="true"
         android:gravity="center_horizontal"
-        android:paddingTop="@dimen/previous_tour_padding_top">
+        android:orientation="vertical"
+        android:paddingTop="@dimen/previous_tour_padding_top"
+        android:layout_alignParentTop="true">
 
     </LinearLayout>
 
-    <RelativeLayout
-        android:id="@+id/keyEntryLayout"
-        android:layout_width="match_parent"
+    <com.github.clans.fab.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="50dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/textEnterTour"
-            android:layout_centerHorizontal="true"
-            android:text="@string/start_activity_enter_key"/>
-
-        <EditText
-            android:id="@+id/textEnterTour"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/buttonSubmitKey"
-            android:layout_centerHorizontal="true"
-            android:inputType="text"
-            android:layout_gravity="center_horizontal"/>
-
-        <Button
-            android:id="@+id/buttonSubmitKey"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:onClick="checkTourKey"
-            android:text="@string/submit_key_button_text"/>
-
-    </RelativeLayout>
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="end"
+        android:src="@drawable/fab_add" />
 
 </RelativeLayout>

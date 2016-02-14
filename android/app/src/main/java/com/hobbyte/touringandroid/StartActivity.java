@@ -2,28 +2,58 @@ package com.hobbyte.touringandroid;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.EditText;
+import android.view.animation.AlphaAnimation;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
+import com.github.clans.fab.FloatingActionButton;
+import com.hobbyte.touringandroid.helpers.BackAwareEditText;
+import com.hobbyte.touringandroid.helpers.FileManager;
+import com.hobbyte.touringandroid.internet.ServerAPI;
+
 import java.util.ArrayList;
 
 public class StartActivity extends Activity {
-    public static final String TAG = "StartActivity";
+    private static final String TAG = "StartActivity";
+
+    private static boolean FADE_IN = true;
+    private static boolean FADE_OUT = false;
+    private LinearLayout keyEntryLayout;
+    private LinearLayout previousToursLayout;
+    private BackAwareEditText textKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+
+        SharedPreferences prefs = this.getPreferences(Context.MODE_PRIVATE);
+        boolean isFreshInstall = prefs.getBoolean(getString(R.string.prefs_is_new_install), true);
+
+        if (isFreshInstall) { FileManager.makeTourDir(this); }
+
+        //get references for animations
+        keyEntryLayout = (LinearLayout) findViewById(R.id.keyEntryLayout);
+        previousToursLayout = (LinearLayout) findViewById(R.id.previousToursLayout);
+        textKey = (BackAwareEditText) findViewById(R.id.textEnterTour);
+        textKey.setCallBackClass(this);
+
+        //make the FAB do something
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showInput();
+            }
+        });
 
         loadPreviousTours();
     }
@@ -32,8 +62,58 @@ public class StartActivity extends Activity {
     protected void onRestart() {
         super.onRestart();
 
-        // needed in the event that a user adds a tour and then returns to this screen
-        loadPreviousTours();
+    }
+
+    @Override
+    protected void onPause() {
+        //need this so if user switches app and come back, the input fields do not show
+        hideInput();
+        super.onPause();
+    }
+
+    /**
+     * Shows input box, keyboard and hides the existing tours table
+     */
+    private void showInput() {
+        //layout.xml defines the layout as invisible. Otherwise it shows when the app is loaded.
+        keyEntryLayout.setVisibility(View.VISIBLE);
+
+        fade(keyEntryLayout, FADE_IN);
+        fade(previousToursLayout, FADE_OUT);
+
+        showKeyboard();
+    }
+
+    /**
+     * Hides the input box, shows the existing tours table
+     */
+    public void hideInput() {
+        fade(keyEntryLayout, FADE_OUT);
+        fade(previousToursLayout, FADE_IN);
+        textKey.clearFocus();
+    }
+
+    /**
+     * Shows the keyboard
+     */
+    private void showKeyboard() {
+
+        InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        keyboard.showSoftInput(textKey, InputMethodManager.SHOW_IMPLICIT);
+    }
+
+    /**
+     * Fades a view from opaque to hidden or visa versa
+     *
+     * @param view   view to fade
+     * @param fadeIn true if transparent to opaque, false if opaque to transparent
+     */
+    private void fade(View view, boolean fadeIn) {
+        //current alpha --> opaque or transparent
+        AlphaAnimation a = new AlphaAnimation(view.getAlpha(), fadeIn ? 1.0f : 0.0f);
+        a.setDuration(400); //system 'medium' animation time
+        a.setFillAfter(true); //so alpha sticks
+        view.startAnimation(a); //run
     }
 
     /**
@@ -42,28 +122,30 @@ public class StartActivity extends Activity {
      * @param v the submit button
      */
     public void checkTourKey(View v) {
-        // TODO: hook this up to the api to securely validate the key
-
-        EditText textKey = (EditText) findViewById(R.id.textEnterTour);
         String tourKey = textKey.getText().toString();
 
-        // this will be changed in the future
-        if (tourKey.equals("jeroenTour")) {
-            Log.d(TAG, "Valid key");
-            // move to next activity
-            Tour testTour = new Tour();
-            ArrayList<SubSection> subsectionList = new ArrayList<SubSection>();
-            subsectionList = testTour.getSubSections();
-            Intent intent = new Intent(this, TourActivity.class);
-            intent.putExtra(TourActivity.EXTRA_MESSAGE_SUB, subsectionList);
-            startActivity(intent);
-        } else {
-            Log.d(TAG, "Invalid key");
-            Toast toast = Toast.makeText(this, "Invalid tour key", Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.BOTTOM, 0, 20);
-            toast.show();
-            textKey.setText("");
-        }
+        KeyCheckTask k = new KeyCheckTask();
+        k.execute(tourKey);
+    }
+
+    /**
+     * Called from KeyCheckTask when a valid key is entered. It takes the user to an Activity with
+     * download options for the tour media.
+     */
+    private void goToTourDownload() {
+        // TODO: this currently goes to a new tour activity, but needs to go to the download screen
+
+        String tourKey = textKey.getText().toString();
+        textKey.setText("");
+
+        // move to next activity
+        Tour testTour = new Tour();
+        ArrayList<SubSection> subsectionList = new ArrayList<SubSection>();
+        subsectionList = testTour.getSubSections();
+
+        Intent intent = new Intent(this, TourActivity.class);
+        intent.putExtra(TourActivity.EXTRA_MESSAGE_SUB, subsectionList);
+        startActivity(intent);
     }
 
     /**
@@ -77,5 +159,35 @@ public class StartActivity extends Activity {
         View noToursText = getLayoutInflater().inflate(R.layout.text_no_tours, layout, false);
 
         layout.addView(noToursText);
+    }
+
+    /**
+     * Asynchronously checks the server to see if a key which the user entered is a real, valid key.
+     * If the key is valid, take the user to the next activity.
+     */
+    private class KeyCheckTask extends AsyncTask<String, Void, Boolean> {
+        private static final String TAG = "KeyCheckTask";
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            String key = params[0];
+
+            boolean isValid = ServerAPI.checkKeyValidity(key);
+
+            // TODO: change this when we have some real keys on the server
+            return (isValid || key.equals("jeroenTour"));
+        }
+
+        @Override
+        protected void onPostExecute(Boolean isValid) {
+            if (isValid) {
+                goToTourDownload();
+            } else {
+                Toast toast = Toast.makeText(getApplicationContext(), "Invalid tour key", Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.BOTTOM, 0, 20);
+                toast.show();
+                textKey.setText("");
+            }
+        }
     }
 }

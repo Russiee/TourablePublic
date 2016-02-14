@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">TouringAndroid</string>
+    <string name="prefs_is_new_install">KEY_FRESH</string>
     <string name="start_activity_enter_key">Enter a tour key:</string>
     <string name="submit_key_button_text">Submit</string>
     <string name="no_tours_exist">You don\'t have any existing tours</string>
     <string name="title_activity_tour">TourActivity</string>
+    <string name="title_activity_pointofinterest">PointOfInterestActivity</string>
+    <string name="poi_first_text">Current placeholder text</string>
 </resources>
