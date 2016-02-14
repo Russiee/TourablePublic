@@ -25,8 +25,16 @@ touring.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
     
     
 	.state('admin', {
-		url: "/admin",
 		templateUrl: "/app/components/admin/admin.view.html",
+		controller: "AdminCtrl",
+        data: {
+            access: access.admin
+        }
+	})
+    .state('admin.login', {
+		url: "/admin",
+        parent: 'admin',
+		templateUrl: "/app/components/admin/login.view.html",
 		controller: "AdminCtrl"
 	});
 });
