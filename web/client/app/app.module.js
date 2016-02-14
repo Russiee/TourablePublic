@@ -1,1 +1,7 @@
-var touring = angular.module('touring', ['ui.router']);
+var touring = angular.module('touring', 
+    [
+        //Third Party
+        'ui.router'
+    
+        
+    ]);

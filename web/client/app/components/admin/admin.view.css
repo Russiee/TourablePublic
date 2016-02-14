@@ -1,0 +1,37 @@
+#admin-dash-nav {
+    min-height: 100vh;
+    background-color: #14233C;
+    padding-right: 0;
+}
+
+#admin-dash-nav-list {
+    list-style-type: none;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    padding-top: 15px;
+}
+
+#admin-dash-nav-list li {
+    padding: 15px 30px;
+    width: 100%;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+#admin-dash-nav-list li {
+    padding: 15px 30px;
+    width: 100%;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+#admin-dash-main {
+    min-height: 100vh;
+} 
+
+#admin-dash-help {
+    min-height: 100vh;
+    background-color: #fff;
+}
