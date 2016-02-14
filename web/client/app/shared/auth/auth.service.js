@@ -70,6 +70,9 @@ angular.module('touring')
         if (toState.authenticate && !AuthService.isLoggedIn()){
             $state.transitionTo("admin.login");
             event.preventDefault(); 
+        } else if (toState.name === "admin.login" && AuthService.isLoggedIn()) {
+            $state.transitionTo("admin.dashboard");
+            event.preventDefault(); 
         }
     });
 });
