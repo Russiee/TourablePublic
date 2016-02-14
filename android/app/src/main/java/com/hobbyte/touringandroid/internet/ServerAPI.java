@@ -12,8 +12,8 @@ import java.net.URL;
 public class ServerAPI {
     private static final String TAG = "ServerAPI";
 
-    private static final String keyValidationURL = "http://192.168.56.1:3000/api/v1/key/";
-//    private static final String keyValidationURL = "https://touring-api.herokuapp.com/api/v1/key/";
+    private static final String keyValidationURL = "http://192.168.56.1:3000/api/v1/key/verify/";
+//    private static final String keyValidationURL = "https://touring-api.herokuapp.com/api/v1/key/verify";
 
     /**
      * Asks the server if a provided Tour Key is a real, valid key.
