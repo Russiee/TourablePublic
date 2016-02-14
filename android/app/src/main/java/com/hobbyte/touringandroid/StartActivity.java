@@ -184,6 +184,8 @@ public class StartActivity extends Activity {
 
             String tourId = ServerAPI.checkKeyValidity(key);
 
+            // if a valid tourId is returned, store it in SharedPreferences so that the key can
+            // be used elsewhere in the app
             if (tourId != null) {
                 SharedPreferences prefs = getApplicationContext().getSharedPreferences(
                         getString(R.string.preference_file_key),

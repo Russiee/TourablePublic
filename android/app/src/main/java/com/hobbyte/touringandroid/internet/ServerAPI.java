@@ -7,7 +7,6 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -22,10 +21,11 @@ public class ServerAPI {
 //    private static final String keyValidationURL = "https://touring-api.herokuapp.com/api/v1/key/verify";
 
     /**
-     * Asks the server if a provided Tour Key is a real, valid key.
+     * Asks the server if a provided Tour Key is a real, valid key. If it is, return the
+     * corresponding tour ID.
      *
      * @param tourKey a key for a tour
-     * @return true if the key exists on the server
+     * @return the tour ID that corresponds to the provided key.
      */
     public static String checkKeyValidity(String tourKey) {
         try {
