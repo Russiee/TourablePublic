@@ -2,6 +2,12 @@ package com.hobbyte.touringandroid.internet;
 
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -21,7 +27,7 @@ public class ServerAPI {
      * @param tourKey a key for a tour
      * @return true if the key exists on the server
      */
-    public static boolean checkKeyValidity(String tourKey) {
+    public static String checkKeyValidity(String tourKey) {
         try {
             URL url = new URL(keyValidationURL + tourKey);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -30,20 +36,37 @@ public class ServerAPI {
             connection.connect();
 
             int response = connection.getResponseCode();
+
+            StringBuilder jsonString = new StringBuilder("");
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String line = in.readLine();
+
+            while (line != null) {
+                jsonString.append(line);
+                line = in.readLine();
+            }
+
+            in.close();
             connection.disconnect();
+
 
             if (response == 200) {
                 Log.d(TAG, "Valid key: " + tourKey);
-                return true;
+                JSONObject json = (JSONObject) new JSONArray(jsonString.toString()).get(0);
+                String tourID = json.getJSONObject("tour").getString("objectId");
+                Log.d(TAG, "Fetched tourId: " + tourID);
+
+                return tourID;
             } else {
                 Log.d(TAG, "Invalid key: " + tourKey);
-                return false;
+                return null;
             }
 
         } catch (Exception e) {
             e.printStackTrace();
             Log.e(TAG, "Something went wrong!");
-            return false;
+            return null;
         }
     }
+
 }

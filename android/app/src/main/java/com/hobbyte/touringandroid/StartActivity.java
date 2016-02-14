@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -35,10 +36,17 @@ public class StartActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
-        SharedPreferences prefs = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences prefs = this.getSharedPreferences(
+                getString(R.string.preference_file_key),
+                Context.MODE_PRIVATE);
         boolean isFreshInstall = prefs.getBoolean(getString(R.string.prefs_is_new_install), true);
 
-        if (isFreshInstall) { FileManager.makeTourDir(this); }
+        // make the directory for tour media and set the "first install" flag to false
+        if (isFreshInstall) {
+            FileManager.makeTourDir(this);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean(getString(R.string.prefs_is_new_install), false);
+        }
 
         //get references for animations
         keyEntryLayout = (LinearLayout) findViewById(R.id.keyEntryLayout);
@@ -61,7 +69,7 @@ public class StartActivity extends Activity {
     @Override
     protected void onRestart() {
         super.onRestart();
-
+        Log.d(TAG, "onRestart() called");
     }
 
     @Override
@@ -122,6 +130,8 @@ public class StartActivity extends Activity {
      * @param v the submit button
      */
     public void checkTourKey(View v) {
+        // current valid key: KCL-1010
+
         String tourKey = textKey.getText().toString();
 
         KeyCheckTask k = new KeyCheckTask();
@@ -172,10 +182,18 @@ public class StartActivity extends Activity {
         protected Boolean doInBackground(String... params) {
             String key = params[0];
 
-            boolean isValid = ServerAPI.checkKeyValidity(key);
+            String tourId = ServerAPI.checkKeyValidity(key);
 
-            // TODO: change this when we have some real keys on the server
-            return (isValid || key.equals("jeroenTour"));
+            if (tourId != null) {
+                SharedPreferences prefs = getApplicationContext().getSharedPreferences(
+                        getString(R.string.preference_file_key),
+                        Context.MODE_PRIVATE);
+
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString(getString(R.string.prefs_current_tour), tourId);
+                return true;
+            }
+            return false;
         }
 
         @Override
