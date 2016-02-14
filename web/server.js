@@ -2,14 +2,32 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var path = require('path');
-var wwwhisper = require('connect-wwwhisper');
 
-app.use(wwwhisper());
+var basicAuth = require('basic-auth');
+
+var auth = function (req, res, next) {
+    function unauthorized(res) {
+        res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
+        return res.send(401);
+    };
+
+    var user = basicAuth(req);
+
+    if (!user || !user.name || !user.pass) {
+        return unauthorized(res);
+    };
+
+    if (user.name === 'foo' && user.pass === 'bar') {
+        return next();
+    } else {
+        return unauthorized(res);
+    };
+};
 
 app.use(express.static(__dirname + '/client'));
 
 app.route('*')
-	.get(function(req, res) {
+	.get(auth, function(req, res) {
 		res.sendFile(path.resolve('client/index.html'));
 	});
 
