@@ -8,18 +8,10 @@
     tools:context="com.hobbyte.touringandroid.PointOfInterestActivity"
     android:id="@+id/poiLayout">
 
-    <LinearLayout
-        android:id="@+id/pointsOfInterestLayout"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/previous_tour_padding_top" >
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/pointsOfInterestText" />
-    </LinearLayout>
-
+    <ListView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/poiListView"
+        android:choiceMode="none"
+        android:clickable="false" />
 </RelativeLayout>

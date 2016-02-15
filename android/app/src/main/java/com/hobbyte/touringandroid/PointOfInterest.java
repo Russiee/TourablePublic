@@ -15,6 +15,7 @@ public class PointOfInterest implements Serializable{
     private String body;
     private String url;
     private String urlDescription;
+    private ArrayList<String> content;
 
     /**
      * Create a Point Of Interest based on it's name, description and specific information strings already prepared
@@ -37,6 +38,11 @@ public class PointOfInterest implements Serializable{
         this.body = body;
         this.url = url;
         this.urlDescription = urlDescription;
+        content = new ArrayList<>();
+        content.add(header);
+        content.add(body);
+        content.add(url);
+        content.add(urlDescription);
     }
 
     /**
@@ -61,5 +67,9 @@ public class PointOfInterest implements Serializable{
 
     public String getName() {
         return name;
+    }
+
+    public ArrayList<String> getContent() {
+        return content;
     }
 }

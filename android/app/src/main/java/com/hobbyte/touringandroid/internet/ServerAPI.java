@@ -76,6 +76,12 @@ public class ServerAPI {
         }
     }
 
+    /**
+     * Method takes in the Tour ID retrieved by the Key, gets the bundle from the tourId,
+     * then retrieves id's of every subsection from this tour url
+     * @param bundle
+     * @return
+     */
     public static Tour allocateTourSections(String bundle) {
         try {
             URL url = new URL(tourBundleURL + bundle);
@@ -123,6 +129,13 @@ public class ServerAPI {
         }
     }
 
+    /**
+     * Method takes in a subsection id identified in the previous method,
+     * opens a connection to the url of said subsection id,
+     * then retrieves id's of Points of Interest and opens a method to them, creating a subsection
+     * @param section
+     * @return Subsection
+     */
     public static SubSection allocateSectionPOIs(String section) {
         try {
             URL url = new URL(sectionURL + section);
@@ -172,6 +185,12 @@ public class ServerAPI {
         }
     }
 
+    /**
+     * Retrieves information regarding the POI of the POI id passed to the constructor
+     * Creates point of interest from this and passes back to caller
+     * @param poi
+     * @return PointOfInterest
+     */
     public static PointOfInterest allocatePOIs(String poi) {
         try {
             URL url = new URL(poiURL + poi);
