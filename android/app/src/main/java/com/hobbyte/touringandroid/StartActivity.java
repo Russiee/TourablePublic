@@ -1,8 +1,8 @@
 package com.hobbyte.touringandroid;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
@@ -153,8 +152,8 @@ public class StartActivity extends Activity {
         ArrayList<SubSection> subsectionList = new ArrayList<SubSection>();
         subsectionList = testTour.getSubSections();
 
-        Intent intent = new Intent(this, TourActivity.class);
-        intent.putExtra(TourActivity.EXTRA_MESSAGE_SUB, subsectionList);
+        Intent intent = new Intent(this, DownloadActivity.class);
+        //intent.putExtra(TourActivity.EXTRA_MESSAGE_SUB, subsectionList);
         startActivity(intent);
     }
 

@@ -10,4 +10,10 @@
     <string name="title_activity_tour">TourActivity</string>
     <string name="title_activity_pointofinterest">PointOfInterestActivity</string>
     <string name="poi_first_text">Current placeholder text</string>
+    <string name="title_activity_download">DownloadActivity</string>
+
+    <string name="download_option_image">Download just Images</string>
+    <string name="download_option_video">Download with Video</string>
+    <string name="download_option_image_label">Videos streamed over network when needed.</string>
+    <string name="download_option_video_label">Videos viewable without internet connection.</string>
 </resources>
