@@ -111,7 +111,6 @@ public class ServerAPI {
                 for (int i = 0; i < jsonA.length(); i++) {
                     subList.add(allocateSectionPOIs(jsonA.getJSONObject(i).getString("objectId")));
                 }
-                Log.d(TAG, "Fetched tourId:");
                 return new Tour(name, description, subList);
             } else {
                 Log.d(TAG, "Invalid bundle: " + bundle);
@@ -209,10 +208,6 @@ public class ServerAPI {
 
                 name = json.getString("title");
                 description = json.getString("description");
-
-//                System.out.println(name);
-//                System.out.println(jsonArr.toString());
-
                 header = "";
                 body = "";
                 image = "";
@@ -231,7 +226,7 @@ public class ServerAPI {
                     } else if ((jsonArr.getJSONObject(i).getString(" type")).equals("Header")) {
                         header = jsonArr.getJSONObject(i).getString(" content");
                     } else {
-                        body = jsonArr.getJSONObject(i).getString("content");
+//                        body = temp.getString("content");
                     }
                 }
 
