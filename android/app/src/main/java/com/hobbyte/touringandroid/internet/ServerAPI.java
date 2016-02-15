@@ -22,11 +22,12 @@ import java.util.ArrayList;
 public class ServerAPI {
     private static final String TAG = "ServerAPI";
 
-//    private static final String keyValidationURL = "https://192.168.56.1:3000/api/v1/key/verify/";
+    //    private static final String keyValidationURL = "https://192.168.56.1:3000/api/v1/key/verify/";
     private static final String keyValidationURL = "https://touring-api.herokuapp.com/api/v1/key/verify/";
     private static final String tourBundleURL = "https://touring-api.herokuapp.com/api/v1/bundle/";
     private static final String sectionURL = "https://touring-api.herokuapp.com/api/v1/section/";
     private static final String poiURL = "https://touring-api.herokuapp.com/api/v1/poi/";
+
     /**
      * Asks the server if a provided Tour Key is a real, valid key. If it is, return the
      * corresponding tour ID.
@@ -76,7 +77,6 @@ public class ServerAPI {
     }
 
     public static Tour allocateTourSections(String bundle) {
-
         try {
             URL url = new URL(tourBundleURL + bundle);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -108,7 +108,7 @@ public class ServerAPI {
                 JSONArray jsonArr = json.getJSONArray("sections");
                 JSONObject jobj = jsonArr.getJSONObject(0);
                 JSONArray jsonA = jobj.getJSONArray("subsections");
-                for(int i = 0; i < jsonA.length(); i++) {
+                for (int i = 0; i < jsonA.length(); i++) {
                     subList.add(allocateSectionPOIs(jsonA.getJSONObject(i).getString("objectId")));
                 }
                 Log.d(TAG, "Fetched tourId:");
@@ -117,7 +117,7 @@ public class ServerAPI {
                 Log.d(TAG, "Invalid bundle: " + bundle);
                 return null;
             }
-        }  catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Log.e(TAG, "Something went wrong with retrieving bundle!");
             return null;
@@ -157,7 +157,7 @@ public class ServerAPI {
                 name = json.getString("title");
                 description = json.getString("description");
 
-                for(int i = 0; i < jsonArr.length(); i++) {
+                for (int i = 0; i < jsonArr.length(); i++) {
                     poiList.add(allocatePOIs(jsonArr.getJSONObject(i).getString("objectId")));
                 }
                 return new SubSection(name, description, poiList);
@@ -203,28 +203,38 @@ public class ServerAPI {
 
             if (response == 200) {
                 Log.d(TAG, "Valid POI: " + poi);
+
                 JSONObject json = new JSONObject(jsonString.toString());
                 JSONArray jsonArr = json.getJSONArray("post");
+
                 name = json.getString("title");
                 description = json.getString("description");
-                System.out.println(name);
-                System.out.println(jsonArr.toString());
+
+//                System.out.println(name);
+//                System.out.println(jsonArr.toString());
+
                 header = "";
                 body = "";
                 image = "";
                 imageDesc = "";
-                for(int i = 0; i < jsonArr.length(); i++) {
-                    if(jsonArr.getJSONObject(i).has("url")) {
+
+                for (int i = 0; i < jsonArr.length(); i++) {
+                    if (jsonArr.getJSONObject(i).has("url")) {
                         System.out.println("has URL");
                         System.out.println(jsonArr.getJSONObject(i).toString());
                         image = jsonArr.getJSONObject(i).getString("url");
                         imageDesc = jsonArr.getJSONObject(i).getString("description");
-                    } else if((jsonArr.getJSONObject(i).getString("type")).equals("Header")) {
-                        header = jsonArr.getJSONObject(i).getString("content");
+                    } else if (jsonArr.getJSONObject(i).has("type")) {
+                        if ((jsonArr.getJSONObject(i).getString("type")).equals("Header")) {
+                            header = jsonArr.getJSONObject(i).getString("content");
+                        }
+                    } else if ((jsonArr.getJSONObject(i).getString(" type")).equals("Header")) {
+                        header = jsonArr.getJSONObject(i).getString(" content");
                     } else {
                         body = jsonArr.getJSONObject(i).getString("content");
                     }
                 }
+
                 return new PointOfInterest(name, description, header, body, image, imageDesc);
             } else {
                 Log.d(TAG, "Invalid POI: " + poi);
