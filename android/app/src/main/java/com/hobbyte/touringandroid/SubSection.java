@@ -12,6 +12,7 @@ public class SubSection implements Serializable {
     //Serializable implemented for easy of transfer via Intents
     private ArrayList<PointOfInterest> listOfPOI;
     private String name;
+    private String description;
     private boolean hasPOI; //To check whether this has subsections nested within or if it ends with a POI
 
     /**
@@ -19,8 +20,9 @@ public class SubSection implements Serializable {
      * @param name of subsection
      * @param poi PointsOfInterest contained within subsection
      */
-    public SubSection(String name, PointOfInterest... poi) {
+    public SubSection(String name, String description, ArrayList<PointOfInterest> poi) {
         this.name = name;
+        this.description = description;
         this.hasPOI = true;
         listOfPOI = new ArrayList<PointOfInterest>();
         for(PointOfInterest p: poi) {
@@ -33,6 +35,7 @@ public class SubSection implements Serializable {
      */
     public SubSection() {
         this.name = "Temp Subsection Name";
+        this.description = "Temp Subsection Description";
         this.hasPOI = true;
         listOfPOI = new ArrayList<PointOfInterest>();
         listOfPOI.add(new PointOfInterest());

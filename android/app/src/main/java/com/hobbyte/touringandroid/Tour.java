@@ -7,6 +7,7 @@ import java.util.ArrayList;
  */
 public class Tour {
     private String name;
+    private String description;
     private ArrayList<SubSection> listOfSubSections;
 
     /**
@@ -14,8 +15,9 @@ public class Tour {
      * @param name of tour
      * @param subsections to be added
      */
-    public Tour(String name, SubSection... subsections) {
+    public Tour(String name, String description, ArrayList<SubSection> subsections) {
         this.name = name;
+        this.description = description;
         listOfSubSections = new ArrayList<SubSection>();
         for(SubSection s: subsections) {
             listOfSubSections.add(s);
@@ -27,6 +29,7 @@ public class Tour {
      */
     public Tour() {
         this.name = "Temp Tour Name";
+        this.description = "Temporary Description";
         listOfSubSections = new ArrayList<SubSection>();
         listOfSubSections.add(new SubSection());
     }

@@ -75,6 +75,7 @@ public class TourActivity extends Activity {
     private void openPOIs(ArrayList<PointOfInterest> poi) {
         System.out.println("Gets POIS");
         PointOfInterestAdapter adapter = new PointOfInterestAdapter(this, poi); //Creates adapter for sorting list into Points of Interest
+        System.out.println("Gets adapter");
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

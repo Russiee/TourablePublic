@@ -10,19 +10,33 @@ public class PointOfInterest implements Serializable{
 
     //Implements serializable for easy of transfer in intents
     private String name;
-    private ArrayList<String> information;
+    private String description;
+    private String header;
+    private String body;
+    private String url;
+    private String urlDescription;
 
     /**
-     * Create a Point Of Interest based on it's name and specific information strings already prepared
+     * Create a Point Of Interest based on it's name, description and specific information strings already prepared
+     * containing the format of:
+     * Header
+     * Body
+     * URL
+     * URL Description
      * @param name
-     * @param information
+     * @param description
+     * @param header
+     * @param body
+     * @param url
+     * @param urlDescription
      */
-    public PointOfInterest(String name, String... information) {
-        this.information = new ArrayList<String>();
+    public PointOfInterest(String name, String description, String header, String body, String url, String urlDescription) {
+        this.description = description;
         this.name = name;
-        for(String s: information) {
-            this.information.add(s);
-        }
+        this.header = header;
+        this.body = body;
+        this.url = url;
+        this.urlDescription = urlDescription;
     }
 
     /**
@@ -30,16 +44,11 @@ public class PointOfInterest implements Serializable{
      */
     public PointOfInterest() {
         this.name = "Temp POI Name";
-        this.information = new ArrayList<String>();
-        this.information.add("Lorem Ipsum Bla Bla Bla Bla");
-    }
-
-    /**
-     * Add extra Information to the Point of Interest if needed
-     * @param extraInfo Extra Information to be added
-     */
-    public void addInformation(String extraInfo) {
-        this.information.add(extraInfo);
+        this.description = "Temp POI Description";
+        this.header = "Hello i'm a header";
+        this.body = "Hello, this is body?";
+        this.url = "http://i.imgur.com/Ucwvp1x.jpg";
+        this.urlDescription = "#soReal";
     }
 
     /**
@@ -47,11 +56,7 @@ public class PointOfInterest implements Serializable{
      * @return string containing information line by line
      */
     public String toString() {
-        String returnString = "";
-        for(String s: this.information) {
-            returnString += s + "\n";
-        }
-        return returnString;
+        return header + "\n\n" + body + "\n\n" + url + "\n\n" + urlDescription;
     }
 
     public String getName() {

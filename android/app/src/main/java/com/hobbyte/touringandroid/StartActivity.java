@@ -29,6 +29,7 @@ public class StartActivity extends Activity {
     private LinearLayout keyEntryLayout;
     private LinearLayout previousToursLayout;
     private BackAwareEditText textKey;
+    private Tour tour;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,13 +148,7 @@ public class StartActivity extends Activity {
         String tourKey = textKey.getText().toString();
         textKey.setText("");
 
-        // move to next activity
-        Tour testTour = new Tour();
-        ArrayList<SubSection> subsectionList = new ArrayList<SubSection>();
-        subsectionList = testTour.getSubSections();
-
         Intent intent = new Intent(this, DownloadActivity.class);
-        //intent.putExtra(TourActivity.EXTRA_MESSAGE_SUB, subsectionList);
         startActivity(intent);
     }
 
@@ -182,6 +177,7 @@ public class StartActivity extends Activity {
             String key = params[0];
 
             String tourId = ServerAPI.checkKeyValidity(key);
+            tour = ServerAPI.allocateTourSections("DnPRFaSYEk");
 
             // if a valid tourId is returned, store it in SharedPreferences so that the key can
             // be used elsewhere in the app
