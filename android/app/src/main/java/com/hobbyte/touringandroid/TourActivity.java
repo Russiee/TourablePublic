@@ -65,7 +65,7 @@ public class TourActivity extends Activity {
                 if (subSection.isHasPOI()) { //If Subsection contains POIs within - Creates new intent with
                     intent.putExtra(EXTRA_MESSAGE_POI, subSection.getPOIs());
                 } else {
-                    intent.putExtra(EXTRA_MESSAGE_SUB, subSection.getPOIs()); //Todo: Change getPOIs to new method containing subsections
+                    intent.putExtra(EXTRA_MESSAGE_SUB, subSection.getListOfSub()); //Todo: Change getPOIs to new method containing subsections
                 }
                 startActivity(intent);
             }
