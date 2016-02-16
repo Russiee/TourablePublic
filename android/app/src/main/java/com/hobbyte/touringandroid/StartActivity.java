@@ -22,7 +22,9 @@ import com.hobbyte.touringandroid.helpers.FileManager;
 import com.hobbyte.touringandroid.helpers.TourDBManager;
 import com.hobbyte.touringandroid.internet.ServerAPI;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class StartActivity extends Activity {
     private static final String TAG = "StartActivity";
@@ -171,8 +173,21 @@ public class StartActivity extends Activity {
         } else {
             // fetches a cursor pointing at the first row in the db
             Cursor c = dbHelper.getTours(db);
+            DateFormat df = DateFormat.getDateInstance();
 
             do {
+                View tourItem = getLayoutInflater().inflate(R.layout.text_tour_item, layout, false);
+
+                TextView tourName = (TextView) tourItem.findViewById(R.id.textTourName);
+                TextView expiryDate = (TextView) tourItem.findViewById(R.id.textTourExpiry);
+
+                String name = c.getString(1);
+                long expiryTime = c.getLong(4);
+                String expiryText = df.format(new Date(expiryTime));
+
+                tourName.setText(name);
+                expiryDate.setText(expiryText);
+
                 c.moveToNext();
             } while (!c.isLast());
         }
