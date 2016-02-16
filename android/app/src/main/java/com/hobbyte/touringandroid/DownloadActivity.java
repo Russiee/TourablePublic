@@ -8,7 +8,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StatFs;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -148,13 +147,11 @@ public class DownloadActivity extends Activity {
             //when we want to load images only
             if (params[0] == IMAGES) {
 
-                Log.i("FJEIFHEOFH", "Images");
                 //TODO make this work
 
                 //when we want to load images and video
             } else if (params[0] == VIDEO) {
 
-                Log.i("FJEIFHEOFH", "video");
                 //TODO make this work
             } else return false;
 
