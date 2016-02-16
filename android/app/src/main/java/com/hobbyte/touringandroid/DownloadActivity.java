@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StatFs;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -15,10 +16,17 @@ import android.widget.TextView;
 
 public class DownloadActivity extends Activity {
 
+    private static String IMAGES = "images";
+    private static String VIDEO = "video";
+
     private ProgressBar progressBar;
     private TextView bottomTextView;
-    private TextView downloadImageLabel;
-    private TextView downloadVideoLabel;
+
+    private TextView imageOptionCaptionEditText;
+    private TextView videoOptionCaptionEditText;
+    private TextView imageOptionSizeEditText;
+    private TextView videoOptionSizeEditText;
+
     private Button downloadImagesButton;
     private Button downloadVideoButton;
 
@@ -30,8 +38,10 @@ public class DownloadActivity extends Activity {
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         bottomTextView = (TextView) findViewById(R.id.bottomText);
 
-        downloadImageLabel = (TextView) findViewById(R.id.imageDownloadSizeLabel);
-        downloadVideoLabel = (TextView) findViewById(R.id.videoDownloadSizeLabel);
+        imageOptionCaptionEditText = (TextView) findViewById(R.id.imageOptionCaptionEditText);
+        videoOptionCaptionEditText = (TextView) findViewById(R.id.videoOptionCaptionEditText);
+        imageOptionSizeEditText = (TextView) findViewById(R.id.imageOptionSizeEditText);
+        videoOptionSizeEditText = (TextView) findViewById(R.id.videoOptionSizeEditText);
 
         downloadImagesButton = (Button) findViewById(R.id.imageOptionButton);
         downloadVideoButton = (Button) findViewById(R.id.videoOptionButton);
@@ -39,16 +49,17 @@ public class DownloadActivity extends Activity {
         downloadImagesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String param = "images";
+                String param = IMAGES;
                 downloadTourMediaClass k = new downloadTourMediaClass();
                 k.execute(param);
                 changeUiAfterSelection("");
             }
         });
+
         downloadVideoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String param = "video";
+                String param = VIDEO;
                 downloadTourMediaClass k = new downloadTourMediaClass();
                 k.execute(param);
                 changeUiAfterSelection(" & video");
@@ -71,20 +82,20 @@ public class DownloadActivity extends Activity {
         if (freeSpaceInBytes < imageDownloadSizeBytes) {
 
             downloadImagesButton.setEnabled(false);
-            downloadImageLabel.setTextColor(ColorStateList.valueOf(Color.RED));
-            downloadImageLabel.setText(
-                    getResources().getString(R.string.download_activity_not_enough_space));
+            imageOptionCaptionEditText.setTextColor(ColorStateList.valueOf(Color.RED));
+            imageOptionCaptionEditText.setText(getResources().getString(R.string.download_activity_not_enough_space));
+            imageOptionSizeEditText.setTextColor(ColorStateList.valueOf(Color.RED));
         }
         if (freeSpaceInBytes < videoDownloadSizeBytes) {
 
             downloadVideoButton.setEnabled(false);
-            downloadVideoLabel.setTextColor(ColorStateList.valueOf(Color.RED));
-            downloadVideoLabel.setText(
-                    getResources().getString(R.string.download_activity_not_enough_space));
+            videoOptionSizeEditText.setTextColor(ColorStateList.valueOf(Color.RED));
+            videoOptionCaptionEditText.setTextColor(ColorStateList.valueOf(Color.RED));
+            videoOptionCaptionEditText.setText(getResources().getString(R.string.download_activity_not_enough_space));
         }
 
-        TextView imageDownloadSizeLabel = (TextView) findViewById(R.id.imageDownloadSizeLabel);
-        TextView videoDownloadSizeLabel = (TextView) findViewById(R.id.videoDownloadSizeLabel);
+        TextView imageDownloadSizeLabel = (TextView) findViewById(R.id.imageOptionSizeEditText);
+        TextView videoDownloadSizeLabel = (TextView) findViewById(R.id.videoOptionSizeEditText);
 
         imageDownloadSizeLabel.setText(
                 android.text.format.Formatter.formatFileSize(this, imageDownloadSizeBytes));
@@ -126,13 +137,15 @@ public class DownloadActivity extends Activity {
         protected Boolean doInBackground(String... params) {
 
             //when we want to load images only
-            if (params.equals("images")) {
+            if (params[0] == IMAGES) {
 
+                Log.i("FJEIFHEOFH", "Images");
                 //TODO make this work
 
             //when we want to load images and video
-            } else if (params.equals("video")) {
+            } else if (params[0] == VIDEO) {
 
+                Log.i("FJEIFHEOFH", "video");
                 //TODO make this work
             } else return false;
 
