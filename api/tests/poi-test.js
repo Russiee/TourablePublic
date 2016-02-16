@@ -48,7 +48,6 @@ request(url)
         if (err) {
             throw err;
         }
-        console.log(res.body);
         res.body.title.should.equal('TestPOI');
         res.body.description.should.equal("described");                    
         res.body.post.should.deepEqual([{type: "header"}]);
@@ -75,11 +74,8 @@ it('should correctly update the existing POI ', function(done) {
     .send(poi2)
     .end(function(err, res) {
           if (err) {
-            console.log(res.body);
-            console.log(err);
             throw err;
           }
-
           res.body.should.have.property("title");
           res.body.should.have.property("description");
           res.body.should.have.property("post");
@@ -100,7 +96,6 @@ request(url)
         if (err) {
             throw err;
         }
-        console.log(res.body);
         res.body.title.should.equal('TestPOI2');
         res.body.description.should.equal("described2");                    
         res.body.post.should.deepEqual([{type: "header2"}]);
