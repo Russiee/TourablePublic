@@ -3,16 +3,17 @@ package com.hobbyte.touringandroid.helpers;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.hobbyte.touringandroid.helpers.TourDBContract.TourList;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
-
-import com.hobbyte.touringandroid.helpers.TourDBContract.TourList;
+import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * Performs all required database operations.
@@ -26,15 +27,19 @@ public class TourDBManager extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "TourData.db";
 
+    public static final String dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
+
     /*=============================================
         SQL QUERY STRINGS
      =============================================*/
 
     private static final String SQL_CREATE_TABLE =
             "CREATE TABLE " + TourList.TABLE_NAME + " (" +
-                    TourList.COL_TOUR_KEY + " TEXT PRIMARY KEY," +
+                    TourList.COL_TOUR_ID + " TEXT PRIMARY KEY," +
+                    TourList.COL_DATE_CREATED + " NUMERIC NOT NULL," +
+                    TourList.COL_DATE_UPDATED + " NUMERIC NOT NULL" +
                     TourList.COL_DATE_EXPIRES_ON + " NUMERIC," +
-                    TourList.COL_DATE_LAST_ACCESSED + " NUMERIC" +
+                    TourList.COL_DATE_LAST_ACCESSED + " NUMERIC," +
                     TourList.COL_HAS_VIDEO + "INTEGER DEFAULT 0" +
             ")";
 
@@ -42,10 +47,11 @@ public class TourDBManager extends SQLiteOpenHelper {
             "DROP TABLE IF EXISTS " + TourList.TABLE_NAME;
 
     private static final String SQL_ROW_COUNT =
-            "SELECT COUNT(" + TourList.COL_TOUR_KEY + ") FROM " + TourList.TABLE_NAME;
+            "SELECT COUNT(" + TourList.COL_TOUR_ID + ") FROM " + TourList.TABLE_NAME;
 
-    private static final String SQL_GET_ALL =
-            "SELECT * FROM " + TourList.TABLE_NAME;
+    private static final String SQL_GET_TOURS =
+            "SELECT * FROM " + TourList.TABLE_NAME +
+                    " ORDER BY " + TourList.COL_DATE_LAST_ACCESSED + " DESC";
 
     /*=============================================
         DATABASE METHODS
@@ -73,16 +79,48 @@ public class TourDBManager extends SQLiteOpenHelper {
         Log.w(TAG, "A call to onUpgrade() was made.");
     }
 
-    public void putRow(SQLiteDatabase db, String tourKey, long expiryDate, boolean hasVideo) {
+    public Cursor getTours(SQLiteDatabase db) {
+        Cursor c = db.rawQuery(SQL_GET_TOURS, null);
+        c.moveToFirst();
+        return c;
+    }
+
+    public void putRow(SQLiteDatabase db, String tourKey, String creationDate, String updateDate,
+                       String expiryDate, boolean hasVideo) {
         if (db.isReadOnly()) {
             Log.w(TAG, "Can't write to this DB!!!");
             return;
         }
+
         ContentValues values = new ContentValues();
         Calendar cal = Calendar.getInstance();
+        cal.setTimeZone(TimeZone.getTimeZone("UTC"));
+        long now = cal.getTimeInMillis();
+
+        // default times in case there's an error below
+        long tCreated = now;
+        long tUpdated = now;
+        long tExpires = now;
+
+        SimpleDateFormat df = new SimpleDateFormat(dateFormat);
+        try {
+            Date dCreated = df.parse(creationDate);
+            Date dUpdated = df.parse(updateDate);
+            Date dExpires = df.parse(expiryDate);
+
+            tCreated = dCreated.getTime();
+            tUpdated = dUpdated.getTime();
+            tExpires = dExpires.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+            Log.w(TAG, "Error when parsing date string!");
+        }
+
         int video = (hasVideo ? 1 : 0);
 
-        values.put(TourList.COL_TOUR_KEY, tourKey);
+        values.put(TourList.COL_TOUR_ID, tourKey);
+        values.put(TourList.COL_DATE_CREATED, tCreated);
+        values.put(TourList.COL_DATE_UPDATED, tUpdated);
         values.put(TourList.COL_DATE_EXPIRES_ON, expiryDate);
         values.put(TourList.COL_DATE_LAST_ACCESSED, cal.getTimeInMillis());
         values.put(TourList.COL_HAS_VIDEO, video);
@@ -90,17 +128,26 @@ public class TourDBManager extends SQLiteOpenHelper {
         db.insert(TourList.TABLE_NAME, null, values);
     }
 
-    public void deleteRow(SQLiteDatabase db, String tourKey) {
-        String selection = TourList.COL_TOUR_KEY + " = ?";
-        String[] args = {tourKey};
+    /**
+     * Deletes a row in the db corresponding to a particular tour key.
+     * @param db an SQLite db instance
+     * @param keyID the ID of a tour key (not the tour ID itself)
+     */
+    public void deleteRow(SQLiteDatabase db, String keyID) {
+        String selection = TourList.COL_TOUR_ID + " = ?";
+        String[] args = {keyID};
         db.delete(TourList.TABLE_NAME, selection, args);
     }
 
+    /**
+     * Checks if there are any tours in the database.
+     * @param db an SQLite db instance
+     * @return true if the table is empty
+     */
     public boolean dbIsEmpty(SQLiteDatabase db) {
         Cursor c = db.rawQuery(SQL_ROW_COUNT, null);
         c.moveToFirst();
 
-        c.moveToFirst();
         int count = c.getInt(0);
         c.close();
 

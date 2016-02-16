@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +19,7 @@ import android.widget.Toast;
 import com.github.clans.fab.FloatingActionButton;
 import com.hobbyte.touringandroid.helpers.BackAwareEditText;
 import com.hobbyte.touringandroid.helpers.FileManager;
+import com.hobbyte.touringandroid.helpers.TourDBManager;
 import com.hobbyte.touringandroid.internet.ServerAPI;
 
 import java.util.ArrayList;
@@ -156,13 +159,24 @@ public class StartActivity extends Activity {
      * If the user has tours saved to the device, show their names and expiry information.
      */
     private void loadPreviousTours() {
-        // TODO: need to finalise design
-        // TODO: hook up to filesystem to check if tours exist
+        TourDBManager dbHelper = new TourDBManager(this);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         LinearLayout layout = (LinearLayout) findViewById(R.id.previousToursLayout);
-        View noToursText = getLayoutInflater().inflate(R.layout.text_no_tours, layout, false);
 
-        layout.addView(noToursText);
+        if (dbHelper.dbIsEmpty(db)) {
+            // no tours saved, so show the empty text
+            View noToursText = getLayoutInflater().inflate(R.layout.text_no_tours, layout, false);
+            layout.addView(noToursText);
+        } else {
+            // fetches a cursor pointing at the first row in the db
+            Cursor c = dbHelper.getTours(db);
+
+            do {
+                c.moveToNext();
+            } while (!c.isLast());
+        }
+
     }
 
     /**
