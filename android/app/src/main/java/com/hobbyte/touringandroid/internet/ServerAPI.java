@@ -1,5 +1,8 @@
 package com.hobbyte.touringandroid.internet;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.hobbyte.touringandroid.PointOfInterest;
@@ -260,6 +263,24 @@ public class ServerAPI {
             Log.e(TAG, "Something went wrong with retrieving POIs!");
             return null;
         }
+    }
+
+    /**
+     * Checks if the phone currently has an internet connection, whether it's data or wifi.
+     *
+     * Taken from the Android
+     * <a href="https://developer.android.com/training/monitoring-device-state/connectivity-monitoring.html">training guides.</a>
+     *
+     * @param context an Activity
+     * @return true if the device has an internet connection
+     */
+    public static boolean checkConnection(Context context) {
+        ConnectivityManager cm =
+                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
 }

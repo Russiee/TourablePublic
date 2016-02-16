@@ -155,8 +155,16 @@ public class StartActivity extends Activity {
 
         String tourKey = textKey.getText().toString();
 
-        KeyCheckTask k = new KeyCheckTask();
-        k.execute(tourKey);
+        // only check the key if we have an internet connection
+        if (ServerAPI.checkConnection(this)) {
+            KeyCheckTask k = new KeyCheckTask();
+            k.execute(tourKey);
+        } else {
+            Toast toast = Toast.makeText(getApplicationContext(), "No internet connection", Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.BOTTOM, 0, 20);
+            toast.show();
+            textKey.setText("");
+        }
     }
 
     /**
