@@ -11,11 +11,13 @@ import UIKit
 class addNewTourViewController: UIViewController, UIAlertViewDelegate {
 
     var tourID: String = ""
+    var tourIndex: Int?
     
     @IBOutlet weak var busyWheel: UIActivityIndicatorView!
     @IBOutlet weak var withVideoButton: UIButton!
     @IBOutlet weak var withOutVideoButton: UIButton!
     @IBOutlet weak var tourInformationLabel: UILabel!
+    
     
     
     override func viewDidLoad() {
@@ -26,8 +28,24 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
        //Starts busy wheel animation and hides the other items in the view.
         self.busyWheel.startAnimating()
         self.hideButtonsForBusyWheel(true)
+        
+        let newCancelButton = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "cancelDownload")
+        self.navigationItem.setLeftBarButtonItem(newCancelButton, animated: false)
 
     }
+    
+    //a method to allow the user to cancel the data download and return to the main table view
+    func cancelDownload() {
+        print("LOL")
+        //delete the metaData and data stored in "Array"
+        print(tourIndex!)
+        TourIdParser.sharedInstance.deleteTourIdAtRow(tourIndex!)
+        
+        //unwind segue back to the main tableview
+        self.dismissViewControllerAnimated(true, completion: nil)
+        
+    }
+    
     
     //Will be used to confirm downloads of video for the tour
     @IBAction func withVideoButton(sender: AnyObject) {
@@ -62,6 +80,7 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
     func NotifiedValid(){
         self.busyWheel.stopAnimating()
         self.hideButtonsForBusyWheel(false)
+        print("Notified as valid")
     }
     
     //Method for hiding all other items in the view besides teh busy wheel. 
