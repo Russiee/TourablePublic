@@ -24,7 +24,7 @@ var organization = {
 
 	GET_ALL: function(req, res) {
 		console.log("GET ALL ORGANIZATIONS");
-		var limit = req.query.limit || 5;
+		var limit = req.query.limit || 20;
 		var orderBy = req.query.limit || null;
 
 		var query = new Parse.Query(Organization);

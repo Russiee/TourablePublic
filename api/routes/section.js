@@ -25,7 +25,7 @@ var section = {
 
 	GET_ALL: function(req, res) {
 		console.log("GET ALL SECTIONS");
-		var limit = req.query.limit || 5;
+		var limit = req.query.limit || 20;
 
 		var query = new Parse.Query(Section);
 		query.limit(parseInt(limit));

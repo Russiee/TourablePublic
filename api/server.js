@@ -6,25 +6,12 @@ var Parse = require('parse/node').Parse;
 Parse.initialize("touring", "yF85llv84OI0NV41ieaHU7PM0oyRCMLT");
 Parse.serverURL = 'http://touring-db.herokuapp.com/parse';
 
-//var Test = Parse.Object.extend("Test");
-////var test = new Test();
-////test.save();
-//var query = new Parse.Query(Test);
-//query.find({
-//  success: function(results) {
-//  console.log("Successfully retrieved " + results.length + " tests.");
-//  },
-//  error: function(error) {
-//  console.log("Error: " + error.code + " " + error.message);
-//  }
-//});
-
 //Allow cross origin requests
 app.use(function(req, res, next) {
-    //console.log("Running CORS middlesware");
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
+	//console.log("Running CORS middlesware");
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+	next();
 });
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -50,7 +37,7 @@ var bundle = require('./routes/bundle.js');
 
 //Route to test if API is working
 router.get('/', function(req, res) {
-    res.json({ message: 'This is the Hobbyte API', status: 200 });
+	res.json({ message: 'This is the Hobbyte API', status: 200 });
 });
 
 //Organization routes

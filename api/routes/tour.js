@@ -14,7 +14,7 @@ var tour = {
 		query.get(id, {
 			success: function(tour) {
 				console.log("Tour " + id + " retrieved succesfully");
-                console.log(tour);
+				console.log(tour);
 				res.status(200).send(tour);
 			},
 			error: function(object, error) {
@@ -26,7 +26,7 @@ var tour = {
 
 	GET_ALL: function(req, res) {
 		console.log("GET ALL TOURS");
-		var limit = req.query.limit || 5;
+		var limit = req.query.limit || 20;
 		var orderBy = req.query.limit || null;
 
 		var query = new Parse.Query(Tour);
@@ -71,14 +71,14 @@ var tour = {
 					query.equalTo("objectId", result.get("admin").objectId);
 					query.find({
 						success: function(results) {
-                            Parse.Cloud.run('addTour', { username: results[0].getUsername(), tour: {"__type":"Pointer","className":"Admin","objectId": result.id} }, {
-                                success: function(status) {
-                                    console.log(status);
-                                },
-                                error: function(error) {
-                                    console.log(error);
-                                }
-                            });
+							Parse.Cloud.run('addTour', { username: results[0].getUsername(), tour: {"__type":"Pointer","className":"Admin","objectId": result.id} }, {
+								success: function(status) {
+									console.log(status);
+								},
+								error: function(error) {
+									console.log(error);
+								}
+							});
 						},
 						error: function(error) {
 							console.log("Failed to retrieve admins");
