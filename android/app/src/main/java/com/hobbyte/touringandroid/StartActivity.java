@@ -54,8 +54,9 @@ public class StartActivity extends Activity {
             FileManager.makeTourDir(this);
             SharedPreferences.Editor editor = prefs.edit();
             editor.putBoolean(getString(R.string.prefs_is_new_install), false);
-            editor.commit();
+            editor.apply();
 
+            // this is a temporary measure to get a previous tour
             TourDBManager dbHelper = new TourDBManager(this);
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             dbHelper.putRow(db,
@@ -288,6 +289,7 @@ public class StartActivity extends Activity {
 
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putString(getString(R.string.prefs_current_tour), tourId);
+                editor.apply();
                 return true;
             }
             return false;
