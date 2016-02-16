@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,11 +15,13 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.hobbyte.touringandroid.helpers.BackAwareEditText;
 import com.hobbyte.touringandroid.helpers.FileManager;
+import com.hobbyte.touringandroid.helpers.TourDBContract;
 import com.hobbyte.touringandroid.helpers.TourDBManager;
 import com.hobbyte.touringandroid.internet.ServerAPI;
 
@@ -51,6 +54,19 @@ public class StartActivity extends Activity {
             FileManager.makeTourDir(this);
             SharedPreferences.Editor editor = prefs.edit();
             editor.putBoolean(getString(R.string.prefs_is_new_install), false);
+            editor.commit();
+
+            TourDBManager dbHelper = new TourDBManager(this);
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            dbHelper.putRow(db,
+                    "49L6FrRwe4",
+                    "DnPRFaSYEk",
+                    "Ultimate Flat Tour",
+                    "2016-02-12T15:51:17.125Z",
+                    "2016-02-12T15:51:17.125Z",
+                    "2016-02-25T00:39:31.000Z",
+                    false);
+            db.close();
         }
 
         //get references for animations
@@ -173,24 +189,32 @@ public class StartActivity extends Activity {
         } else {
             // fetches a cursor pointing at the first row in the db
             Cursor c = dbHelper.getTours(db);
+            c.moveToPosition(-1);
+
+            Log.d(TAG, DatabaseUtils.dumpCursorToString(c));
+
             DateFormat df = DateFormat.getDateInstance();
 
-            do {
+            while (c.moveToNext()) {
+                // for each tour, add an item with tour name and expiry date
                 View tourItem = getLayoutInflater().inflate(R.layout.text_tour_item, layout, false);
 
                 TextView tourName = (TextView) tourItem.findViewById(R.id.textTourName);
                 TextView expiryDate = (TextView) tourItem.findViewById(R.id.textTourExpiry);
 
-                String name = c.getString(1);
-                long expiryTime = c.getLong(4);
+                String name = c.getString(c.getColumnIndex(TourDBContract.TourList.COL_TOUR_NAME));
+                long expiryTime = c.getLong(c.getColumnIndex(TourDBContract.TourList.COL_DATE_EXPIRES_ON));
                 String expiryText = df.format(new Date(expiryTime));
 
                 tourName.setText(name);
                 expiryDate.setText(expiryText);
+                layout.addView(tourItem);
+            }
 
-                c.moveToNext();
-            } while (!c.isLast());
+            c.close();
         }
+
+        db.close();
 
     }
 
@@ -206,7 +230,6 @@ public class StartActivity extends Activity {
             String key = params[0];
 
             String tourId = ServerAPI.checkKeyValidity(key);
-            tour = ServerAPI.allocateTourSections("DnPRFaSYEk");
 
             // if a valid tourId is returned, store it in SharedPreferences so that the key can
             // be used elsewhere in the app

@@ -27,7 +27,7 @@ public class TourDBManager extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "TourData.db";
 
-    public static final String dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
+    public static final String dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS";
 
     /*=============================================
         SQL QUERY STRINGS
@@ -35,13 +35,14 @@ public class TourDBManager extends SQLiteOpenHelper {
 
     private static final String SQL_CREATE_TABLE =
             "CREATE TABLE " + TourList.TABLE_NAME + " (" +
-                    TourList.COL_TOUR_ID + " TEXT PRIMARY KEY," +
+                    TourList.COL_KEY_ID + " TEXT PRIMARY KEY," +
+                    TourList.COL_TOUR_ID + " TEXT NOT NULL," +
                     TourList.COL_TOUR_NAME + " TEXT NOT NULL," +
                     TourList.COL_DATE_CREATED + " NUMERIC NOT NULL," +
-                    TourList.COL_DATE_UPDATED + " NUMERIC NOT NULL" +
+                    TourList.COL_DATE_UPDATED + " NUMERIC NOT NULL," +
                     TourList.COL_DATE_EXPIRES_ON + " NUMERIC," +
                     TourList.COL_DATE_LAST_ACCESSED + " NUMERIC," +
-                    TourList.COL_HAS_VIDEO + "INTEGER DEFAULT 0" +
+                    TourList.COL_HAS_VIDEO + " INTEGER DEFAULT 0" +
             ")";
 
     private static final String SQL_DELETE_TABLE =
@@ -86,8 +87,8 @@ public class TourDBManager extends SQLiteOpenHelper {
         return c;
     }
 
-    public void putRow(SQLiteDatabase db, String tourKey, String tourName, String creationDate,
-                       String updateDate, String expiryDate, boolean hasVideo) {
+    public void putRow(SQLiteDatabase db, String keyID, String tourID, String tourName,
+                       String creationDate, String updateDate, String expiryDate, boolean hasVideo) {
         if (db.isReadOnly()) {
             Log.w(TAG, "Can't write to this DB!!!");
             return;
@@ -119,11 +120,12 @@ public class TourDBManager extends SQLiteOpenHelper {
 
         int video = (hasVideo ? 1 : 0);
 
-        values.put(TourList.COL_TOUR_ID, tourKey);
+        values.put(TourList.COL_KEY_ID, keyID);
+        values.put(TourList.COL_TOUR_ID, tourID);
         values.put(TourList.COL_TOUR_NAME, tourName);
         values.put(TourList.COL_DATE_CREATED, tCreated);
         values.put(TourList.COL_DATE_UPDATED, tUpdated);
-        values.put(TourList.COL_DATE_EXPIRES_ON, expiryDate);
+        values.put(TourList.COL_DATE_EXPIRES_ON, tExpires);
         values.put(TourList.COL_DATE_LAST_ACCESSED, cal.getTimeInMillis());
         values.put(TourList.COL_HAS_VIDEO, video);
 

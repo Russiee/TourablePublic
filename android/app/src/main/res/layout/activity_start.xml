@@ -8,14 +8,25 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.hobbyte.touringandroid.StartActivity"
-    android:animateLayoutChanges="true">
+    android:animateLayoutChanges="true"
+    tools:context="com.hobbyte.touringandroid.StartActivity" >
+
+    <LinearLayout
+        android:id="@+id/previousToursLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/previous_tour_padding_top"
+        android:layout_alignParentStart="true">
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/keyEntryLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
+
         android:layout_centerVertical="true"
         android:orientation="vertical"
         android:visibility="invisible">
@@ -51,18 +62,6 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/previousToursLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/fab"
-        android:layout_alignParentStart="true"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:paddingTop="@dimen/previous_tour_padding_top"
-        android:layout_alignParentTop="true">
-
-    </LinearLayout>
 
     <com.github.clans.fab.FloatingActionButton
         android:id="@+id/fab"
