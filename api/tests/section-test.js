@@ -9,7 +9,6 @@ describe('Section tests', function() {
 var objID;
 var url = 'http://touring-api.herokuapp.com/';
 
-// this is referencing the Alex's Room Section  
 it('should correctly add a section', function(done) {
     var section  = {
         "tour":  "DnPRFaSYEk",
@@ -52,7 +51,6 @@ request(url)
         if (err) {
             throw err;
         }
-        console.log(res.body);
         res.body.title.should.equal('The Test');
         res.body.description.should.equal("This is the main section test");                    
         res.body.tour.should.not.equal(null);
