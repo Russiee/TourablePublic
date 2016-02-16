@@ -173,6 +173,37 @@ public class StartActivity extends Activity {
         startActivity(intent);
     }
 
+    private void goToTour(final String tourId) {
+        // TODO: this queries the api for tour data but should be looking at the file system
+        ArrayList<SubSection> subsectionList = new ArrayList<SubSection>();
+
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                tour = ServerAPI.allocateTourSections(tourId);
+            }
+        });
+
+        t.start();
+
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        subsectionList = tour.getSubSections();
+
+        // temporary measure
+        if (subsectionList != null) {
+            Intent intent = new Intent(this, TourActivity.class);
+            intent.putExtra(TourActivity.EXTRA_MESSAGE_SUB, subsectionList);
+            startActivity(intent);
+        } else {
+            Log.w(TAG, "Tour subsectionlist was null!");
+        }
+    }
+
     /**
      * If the user has tours saved to the device, show their names and expiry information.
      */
@@ -205,13 +236,22 @@ public class StartActivity extends Activity {
                 String name = c.getString(c.getColumnIndex(TourDBContract.TourList.COL_TOUR_NAME));
                 long expiryTime = c.getLong(c.getColumnIndex(TourDBContract.TourList.COL_DATE_EXPIRES_ON));
                 String expiryText = df.format(new Date(expiryTime));
+                final String tourId = c.getString(c.getColumnIndex(TourDBContract.TourList.COL_TOUR_ID));
 
                 tourName.setText(name);
                 expiryDate.setText(expiryText);
                 layout.addView(tourItem);
+
+                tourItem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        goToTour(tourId);
+                    }
+                });
             }
 
             c.close();
+
         }
 
         db.close();
