@@ -127,6 +127,15 @@ public class DownloadActivity extends Activity {
         bottomTextView.setText(getResources().getString(R.string.download_activity_label) + stuff + "...");
     }
 
+    /**
+     * Opens the tour activty witha  tour
+     */
+    protected void moveToTourActivity() {
+
+        //TODO need to pass tour data in here
+        Intent intent = new Intent(this, TourActivity.class);
+        startActivity(intent);
+    }
 
     /**
      * Asynchronously downloads the media of the tour
@@ -142,7 +151,7 @@ public class DownloadActivity extends Activity {
                 Log.i("FJEIFHEOFH", "Images");
                 //TODO make this work
 
-            //when we want to load images and video
+                //when we want to load images and video
             } else if (params[0] == VIDEO) {
 
                 Log.i("FJEIFHEOFH", "video");
@@ -160,16 +169,6 @@ public class DownloadActivity extends Activity {
             //removes activity from stack users stack so when they press back from a tour tehy go back to the main menu
             DownloadActivity.this.finish();
         }
-    }
-
-    /**
-     * Opens the tour activty witha  tour
-     */
-    protected void moveToTourActivity() {
-
-        //TODO need to pass tour data in here
-        Intent intent = new Intent(this, TourActivity.class);
-        startActivity(intent);
     }
 
 }
