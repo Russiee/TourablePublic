@@ -14,7 +14,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     
    
     var models = NSMutableArray()
-    var tourParser = tourIdParser.init()
+    var tourParser = TourIdParser()
     var API = ApiConnector.init()
     
     override func viewDidLoad() {
@@ -29,6 +29,11 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
         
+        checkStateOfScreen()
+    }
+    
+    //to check if should be emptry screen when cancelling a tour download
+    override func viewWillAppear(animated: Bool) {
         checkStateOfScreen()
     }
 
@@ -208,6 +213,13 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
                 if let tourIndex = tableView.indexPathForSelectedRow?.row {
                     destination.tourId = models[tourIndex] as! String
                 }
+            }
+        }
+        
+        if segue.identifier == "goToAddTour" {
+            if let destination = (segue.destinationViewController as! UINavigationController).topViewController as? addNewTourViewController {
+                print("LOL+++")
+                destination.tourIndex = models.count 
             }
         }
     }

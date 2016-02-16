@@ -19,45 +19,45 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
     
     //Makes the connection to the API
     func startConnection(var tourId: String){
-        let resetData = NSMutableData()
-        data = resetData
-        //The path to where the Tour Data is stored
-        urlPath = "https://touring-api.herokuapp.com/api/v1/key/verify/" + tourId
-        let request = NSURLRequest(URL: NSURL(string: urlPath)!)
-        let config = NSURLSessionConfiguration.defaultSessionConfiguration()
-        let session = NSURLSession(configuration: config)
-        
-        let task = session.dataTaskWithRequest(request) { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            self.data.appendData(data!)
-            do {
-                let jsonResult: NSArray = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSArray
-                
-                self.storeJson(jsonResult)
-            }
-            catch let err as NSError{
-                //Need to let user know if the tourID they entered was faulty here
-                print(err.description)
-                self.triggerInvalidKeyNotification()
-            }
-        }
-        task.resume()
-        
-        
+//        let resetData = NSMutableData()
+//        data = resetData
+//        //The path to where the Tour Data is stored
+//        urlPath = "https://touring-api.herokuapp.com/api/v1/key/verify/" + tourId
+//        let request = NSURLRequest(URL: NSURL(string: urlPath)!)
+//        let config = NSURLSessionConfiguration.defaultSessionConfiguration()
+//        let session = NSURLSession(configuration: config)
+//        
+//        let task = session.dataTaskWithRequest(request) { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+//            self.data.appendData(data!)
+//            do {
+//                let jsonResult: NSArray = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSArray
+//                
+//                self.storeJson(jsonResult)
+//            }
+//            catch let err as NSError{
+//                //Need to let user know if the tourID they entered was faulty here
+//                print(err.description)
+//                self.triggerInvalidKeyNotification()
+//            }
+//        }
+//        task.resume()
         
         
-        //        let resetData = NSMutableData()
-        //        //Reseting data to blank with every new connection
-        //        data = resetData
-        //        tourId = cleanTourId(tourId)
-        //        //The path to where the Tour Data is stored
-        //        urlPath = "https://touring-api.herokuapp.com/api/v1/key/verify/" + tourId
-        //
-        //        //Standard URLConnection method
-        //        let request: NSURLRequest = NSURLRequest(URL: NSURL(string: urlPath)!)
-        //
-        //        //change to URLSession
-        //        let connection: NSURLConnection = NSURLConnection(request: request, delegate: self, startImmediately: true)!
-        //        connection.start()
+        
+        
+                let resetData = NSMutableData()
+                //Reseting data to blank with every new connection
+                data = resetData
+                tourId = cleanTourId(tourId)
+                //The path to where the Tour Data is stored
+                urlPath = "https://touring-api.herokuapp.com/api/v1/key/verify/" + tourId
+        
+                //Standard URLConnection method
+                let request: NSURLRequest = NSURLRequest(URL: NSURL(string: urlPath)!)
+        
+                //change to URLSession
+                let connection: NSURLConnection = NSURLConnection(request: request, delegate: self, startImmediately: true)!
+                connection.start()
     }
     
     
@@ -115,7 +115,7 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
     //Takes the metadata and passes it to the tourIdParser.
     func storeJson(JSONData: NSArray){
         //Storing Meta Data so we can access it for other use
-        _ = tourIdParser.init().addTourMetaData(JSONData)
+        _ = TourIdParser().addTourMetaData(JSONData)
         self.triggerValidKeyNotification()
     }
     

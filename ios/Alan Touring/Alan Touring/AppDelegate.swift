@@ -20,6 +20,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         self.window?.backgroundColor = UIColor.whiteColor()
         
+        //if app is launched for first time, creates an empty array in the cache for the tours
+        if(NSUserDefaults.standardUserDefaults().objectForKey("Array")==nil){
+            let newArray = [AnyObject]()
+            //Stores the Array in NSUserDefaults, overwriting existing copy
+            NSUserDefaults.standardUserDefaults().setObject(newArray, forKey: "Array")
+            //Commits changes to memory, required for iOS 7 and below.
+            NSUserDefaults.standardUserDefaults().synchronize()
+        }
+        
         return true
     }
 
