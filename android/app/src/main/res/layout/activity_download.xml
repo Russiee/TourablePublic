@@ -30,7 +30,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/download_option_image"
-                android:id="@+id/imageOptionButton" />
+                android:id="@+id/imageOptionButton"
+                android:textColor="#ffffff" />
 
             <TextView
                 android:layout_width="fill_parent"
@@ -65,7 +66,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/download_option_video"
-                android:id="@+id/videoOptionButton" />
+                android:id="@+id/videoOptionButton"
+                android:textColor="#ffffff" />
 
             <TextView
                 android:layout_width="fill_parent"

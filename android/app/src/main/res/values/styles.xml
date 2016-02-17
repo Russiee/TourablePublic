@@ -6,6 +6,7 @@
         <!-- Customize your theme here. -->
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowActionBar">false</item>
+        <item name="android:colorButtonNormal">#2196f3</item>
     </style>
 
 </resources>
