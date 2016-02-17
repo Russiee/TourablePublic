@@ -27,7 +27,7 @@ public class ServerAPI {
 
     //    private static final String keyValidationURL = "https://192.168.56.1:3000/api/v1/key/verify/";
     private static final String keyValidationURL = "https://touring-api.herokuapp.com/api/v1/key/verify/";
-    private static final String tourBundleURL = "https://touring-api.herokuapp.com/api/v1/bundle/";
+    private static final String tourBundleURL = "https://touring-api.herokuapp.com/api/v1/tour/";
     private static final String sectionURL = "https://touring-api.herokuapp.com/api/v1/section/";
     private static final String poiURL = "https://touring-api.herokuapp.com/api/v1/poi/";
 
@@ -115,10 +115,10 @@ public class ServerAPI {
                 name = json.getString("title");
                 description = json.getString("description");
                 JSONArray jsonArr = json.getJSONArray("sections");
-                JSONObject jobj = jsonArr.getJSONObject(0);
-                JSONArray jsonA = jobj.getJSONArray("subsections");
-                for (int i = 0; i < jsonA.length(); i++) {
-                    subList.add(allocateSectionPOIs(jsonA.getJSONObject(i).getString("objectId")));
+                //JSONObject jobj = jsonArr.getJSONObject(0);
+                //JSONArray jsonA = jobj.getJSONArray("subsections");
+                for (int i = 0; i < jsonArr.length(); i++) {
+                    subList.add(allocateSectionPOIs(jsonArr.getJSONObject(i).getString("objectId")));
                 }
                 return new Tour(name, description, subList);
             } else {

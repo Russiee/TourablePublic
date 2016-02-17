@@ -11,6 +11,7 @@ public class SubSection implements Serializable {
     //Todo: Implement method for adding subsections as arraylist instead of POIs
     //Serializable implemented for easy of transfer via Intents
     private ArrayList<PointOfInterest> listOfPOI;
+    private ArrayList<SubSection> listOfSub;
     private String name;
     private String description;
     private boolean hasPOI; //To check whether this has subsections nested within or if it ends with a POI
@@ -24,10 +25,14 @@ public class SubSection implements Serializable {
         this.name = name;
         this.description = description;
         this.hasPOI = true;
-        listOfPOI = new ArrayList<PointOfInterest>();
-        for(PointOfInterest p: poi) {
-            listOfPOI.add(p);
-        }
+        listOfPOI = poi;
+    }
+
+    public SubSection(String name, String description, Boolean bool, ArrayList<SubSection> sub) {
+        this.name = name;
+        this.description = description;
+        this.hasPOI = bool;
+        listOfSub = sub;
     }
 
     /**
@@ -77,4 +82,6 @@ public class SubSection implements Serializable {
     public boolean isHasPOI() {
         return hasPOI;
     }
+
+    public ArrayList<SubSection> getListOfSub() { return listOfSub; }
 }
