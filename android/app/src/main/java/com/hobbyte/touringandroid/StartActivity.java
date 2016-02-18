@@ -161,7 +161,8 @@ public class StartActivity extends Activity {
             KeyCheckTask k = new KeyCheckTask();
             k.execute(tourKey);
         } else {
-            Toast toast = Toast.makeText(getApplicationContext(), "No internet connection", Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.msg_no_internet),
+                    Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.BOTTOM, 0, 20);
             toast.show();
             textKey.setText("");
@@ -300,7 +301,8 @@ public class StartActivity extends Activity {
             if (isValid) {
                 goToTourDownload();
             } else {
-                Toast toast = Toast.makeText(getApplicationContext(), "Invalid tour key", Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.msg_invalid_key),
+                        Toast.LENGTH_SHORT);
                 toast.setGravity(Gravity.BOTTOM, 0, 20);
                 toast.show();
                 textKey.setText("");
