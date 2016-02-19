@@ -61,7 +61,7 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
             print(err.description)
             self.triggerInvalidKeyNotification()
         }
-        catch let err as NSCocoaError{
+        catch _ as NSCocoaError{
             
             self.triggerInvalidKeyNotification()
         }

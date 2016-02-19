@@ -78,7 +78,7 @@ public class TourIdParser {
         dict["objectId"] = "m1dUFsZ1gt"
         let tourCode = dict["code"]!
 
-        var metadataDict = dict as NSDictionary
+        let metadataDict = dict as NSDictionary
         
         NSUserDefaults.standardUserDefaults().setObject(metadataDict, forKey: tourCode[0] as! String)
         NSUserDefaults.standardUserDefaults().synchronize()
