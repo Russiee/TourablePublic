@@ -8,7 +8,7 @@ class bundleRouteConnector: NSObject, NSURLConnectionDelegate{
     var urlPath: String = ""
     
     //Makes the connection to the API
-    func startConnection(var objectID: String){
+    func startConnection( objectID: String){
         
         
         let resetData = NSMutableData()

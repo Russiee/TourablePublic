@@ -16,7 +16,7 @@ class tourDataParser{
     
    private func createNewTour(data: NSDictionary) ->tourSection{
         
-        var toplevelTour = tourSection.init(sectionId: data["objectId"] as! String,
+        let toplevelTour = tourSection.init(sectionId: data["objectId"] as! String,
             description: data["description"] as! String,
             createdAt: data["createdAt"] as! String,
             superSection: data["superSection"] as! NSDictionary,
@@ -43,7 +43,7 @@ class tourDataParser{
     
     func getTourSection(objectId: String)-> tourSection{
       
-        var data = NSUserDefaults.standardUserDefaults().objectForKey(objectId) as! NSDictionary
+        let data = NSUserDefaults.standardUserDefaults().objectForKey(objectId) as! NSDictionary
         return createNewTour(data)
         
     }

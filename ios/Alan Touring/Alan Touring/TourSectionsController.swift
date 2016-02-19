@@ -25,7 +25,7 @@ class TourSectionsController: UITableViewController {
         
         let tdp = tourDataParser.init()
         for subsectionPointer in subsectionArray{
-            var subsectionData = tdp.getTourSection((subsectionPointer["objectId"] as? String)!)
+            let subsectionData = tdp.getTourSection((subsectionPointer["objectId"] as? String)!)
            
            //print("\(subsectionData.title) DATA RECOVERED FROM ID")
             tourTitles[subsectionData.title as String] =  subsectionData.sectionId
