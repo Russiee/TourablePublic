@@ -13,7 +13,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.TimeZone;
 
 /**
  * Performs all required database operations.
@@ -77,7 +76,10 @@ public class TourDBManager extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // TODO - figure out what exactly should go here
+        // for now, just start over with fresh db
+        db.execSQL(SQL_DELETE_TABLE);
+        onCreate(db);
+
         Log.w(TAG, "A call to onUpgrade() was made.");
     }
 
@@ -89,7 +91,6 @@ public class TourDBManager extends SQLiteOpenHelper {
      */
     public Cursor getTours(SQLiteDatabase db) {
         Cursor c = db.rawQuery(SQL_GET_TOURS, null);
-        c.moveToFirst();
         return c;
     }
 
@@ -146,10 +147,26 @@ public class TourDBManager extends SQLiteOpenHelper {
      * @param db an SQLite db instance
      * @param keyID the ID of a tour key (not the tour ID itself)
      */
-    public void deleteRow(SQLiteDatabase db, String keyID) {
-        String selection = TourList.COL_TOUR_ID + " = ?";
-        String[] args = {keyID};
-        db.delete(TourList.TABLE_NAME, selection, args);
+    public void deleteTour(SQLiteDatabase db, String keyID) {
+        String where = TourList.COL_TOUR_ID + " = ?";
+        String[] whereArgs = {keyID};
+        db.delete(TourList.TABLE_NAME, where, whereArgs);
+    }
+
+    /**
+     * Deletes a number of rows corresponding to the provided key IDs. Use when removing expired
+     * tours.
+     *
+     * @param db an SQLite db instance
+     * @param keyIDs the ID of a tour key (not the tour ID itself)
+     */
+    public void deleteTours(SQLiteDatabase db, String[] keyIDs) {
+        String where = String.format(
+                TourList.COL_KEY_ID + " IN (%s)",
+                getPlaceHolders(keyIDs.length)
+        );
+
+        db.delete(TourList.TABLE_NAME, where, keyIDs);
     }
 
     /**
@@ -178,7 +195,7 @@ public class TourDBManager extends SQLiteOpenHelper {
     public String[] getExpiredTours(SQLiteDatabase db) {
         String[] cols = {TourList.COL_KEY_ID};
         String where = TourList.COL_DATE_EXPIRES_ON + " < ?";
-        String[] whereArgs = {String.valueOf(Calendar.getInstance().getTimeInMillis());
+        String[] whereArgs = {String.valueOf(Calendar.getInstance().getTimeInMillis())};
 
         // fetch all keys where the current date is greater than the tour's expiry date
         Cursor c = db.query(
@@ -244,5 +261,26 @@ public class TourDBManager extends SQLiteOpenHelper {
         }
 
         return toReturn;
+    }
+
+    /**
+     * Returns a number of question marks separated by commas. Needed for SQL queries that have
+     * "WHERE x IN (...)" (e.g. `SQL_DELETE_TOURS`). The API can't handle dynamic placeholders so
+     * we have to do it ourselves.
+     * <p>
+     * Don't pass 0 to this as it will return a single question mark anyway.
+     *
+     * @param count the number of placeholders to generate
+     * @return a String of Android SQL placeholders
+     */
+    private String getPlaceHolders(int count) {
+        StringBuilder sb = new StringBuilder("?");
+        if (count > 1) {
+            for (int i = 0; i < count; i++) {
+                sb.append(", ?");
+            }
+        }
+
+        return sb.toString();
     }
 }

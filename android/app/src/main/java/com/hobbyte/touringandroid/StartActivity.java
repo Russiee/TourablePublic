@@ -230,7 +230,6 @@ public class StartActivity extends Activity {
         } else {
             // fetches a cursor pointing at the first row in the db
             Cursor c = dbHelper.getTours(db);
-            c.moveToPosition(-1);
 
             Log.d(TAG, DatabaseUtils.dumpCursorToString(c));
 
