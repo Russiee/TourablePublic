@@ -40,6 +40,27 @@ class tourSection{
        
     }
     
+    func getSectionId() -> String{
+        return self.sectionId
+    }
+    func getDescription() -> String{
+        return self.description
+    }
+    func getCreatedAt() -> String{
+        return self.createdAt
+    }
+    func getSuperSection() -> NSDictionary{
+        return self.superSection
+    }
+    func getSubSections() -> NSArray{
+        return self.subSections
+        
+    }
+    func getPointsOfInterest() -> NSArray{
+        return self.pointsOfInterest
+        
+    }
+    
     
     
    }
