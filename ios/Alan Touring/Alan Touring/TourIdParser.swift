@@ -51,7 +51,6 @@ public class TourIdParser {
         //Duplicates the array, creating a mutable version that the new tourId can be added to.
         var newArray : [AnyObject] = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! NSMutableArray as [AnyObject]
         newArray.append(tourId)
-        print("Update Array called now saving changes\n")
         saveArray(newArray)
     }
     
@@ -73,12 +72,18 @@ public class TourIdParser {
 
         let keys = ["code","createdAt","expiresAt","objectId","tour","updatedAt"]
         var dict = metadata.dictionaryWithValuesForKeys(keys)
+        //TODO: this is a hack to match the KCL-1010 tourID to the mock tour data for testing.
+        //This WILL CAUSE BUGS when working with toursIDs that have actual tours acociated with them
+        
+        dict["objectId"] = "m1dUFsZ1gt"
         let tourCode = dict["code"]!
 
-        let metadataDict = dict as NSDictionary
+        var metadataDict = dict as NSDictionary
+        
         NSUserDefaults.standardUserDefaults().setObject(metadataDict, forKey: tourCode[0] as! String)
         NSUserDefaults.standardUserDefaults().synchronize()
-        print("added Meta Data to NSUserDefaults\n")
+
+        
         self.updateArray(tourCode[0] as! String)
         
         NSNotificationCenter.defaultCenter().addObserver(
@@ -96,7 +101,7 @@ public class TourIdParser {
     //Notifies observers that the table of tour Ids has been updated.
     func notify() {
         NSNotificationCenter.defaultCenter().postNotificationName(TableUpdateNotificationKey, object: self)
-        print("notify called")
+
     }
     
     //method for getting tourIds that have been added for checking the table updates.

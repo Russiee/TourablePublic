@@ -51,11 +51,22 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
                urlPath = "https://touring-api.herokuapp.com/api/v1/key/verify/" + tourId
            // urlPath = "https://touring-api.herokuapp.com/api/v1/section/m1dUFsZ1gt"
                 //Standard URLConnection method
-                let request: NSURLRequest = NSURLRequest(URL: NSURL(string: urlPath)!)
+        do {
+            let request: NSURLRequest = NSURLRequest(URL: NSURL(string: urlPath)!)
+            let connection: NSURLConnection = NSURLConnection(request: request, delegate: self, startImmediately: false)!
+            connection.start()
+        }
+        catch let err as NSError{
+            //Need to let user know if the tourID they entered was faulty here
+            print(err.description)
+            self.triggerInvalidKeyNotification()
+        }
+        catch let err as NSCocoaError{
+            
+            self.triggerInvalidKeyNotification()
+        }
+        //change to URLSession
         
-                //change to URLSession
-                let connection: NSURLConnection = NSURLConnection(request: request, delegate: self, startImmediately: false)!
-                connection.start()
     }
     
     
@@ -91,7 +102,7 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
             object: nil)
         func notify() {
             NSNotificationCenter.defaultCenter().postNotificationName(invalidIdNotificationKey, object: self)
-            print("invalid key notify called")
+
         }
         notify()
     }
@@ -116,7 +127,7 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
         _ = TourIdParser().addTourMetaData(JSONData)
         self.triggerValidKeyNotification()
         //This will be the objectId taken from the key verification route.
-        print("initiating tour download")
+
         _ = bundleRouteConnector.init().startConnection("m1dUFsZ1gt")
     }
     
@@ -125,8 +136,8 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
     func cleanTourId(tourId: String) -> String {
 
         let trimmedTourId = tourId.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-
-        if trimmedTourId.containsString(" ") {
+        
+        if trimmedTourId.containsString(" ") || trimmedTourId.containsString("/")||trimmedTourId.containsString("\""){
             print("the tour id ou input must not contain whitespaces.")
             return ""
         }

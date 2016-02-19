@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="14F1605" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="xBy-sT-h06">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="xBy-sT-h06">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
@@ -89,16 +89,26 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6DD-cZ-3vf">
+                                <rect key="frame" x="263" y="337" width="74" height="30"/>
+                                <state key="normal" title="Begin Tour"/>
+                                <connections>
+                                    <segue destination="YdX-AY-UmE" kind="show" identifier="goToTourSections" id="d1o-YK-Yz6"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="ZPW-QH-duZ" firstAttribute="leading" secondItem="Yjf-Ac-ilS" secondAttribute="trailing" constant="8" symbolic="YES" id="3kN-2l-EQa"/>
                             <constraint firstItem="2bn-5B-Wlz" firstAttribute="centerY" secondItem="gDk-oh-3PA" secondAttribute="centerY" id="648-by-82g"/>
                             <constraint firstItem="ZPW-QH-duZ" firstAttribute="baseline" secondItem="Yjf-Ac-ilS" secondAttribute="baseline" id="B42-jj-QBf"/>
+                            <constraint firstItem="WLy-3d-JbQ" firstAttribute="top" secondItem="6DD-cZ-3vf" secondAttribute="bottom" constant="125" id="Gum-Lm-CdB"/>
                             <constraint firstItem="Yjf-Ac-ilS" firstAttribute="top" secondItem="gDk-oh-3PA" secondAttribute="top" constant="20" symbolic="YES" id="LMh-bq-ITi"/>
                             <constraint firstItem="ZPW-QH-duZ" firstAttribute="firstBaseline" secondItem="Yjf-Ac-ilS" secondAttribute="firstBaseline" id="Oca-2H-5Cd"/>
                             <constraint firstItem="2bn-5B-Wlz" firstAttribute="centerX" secondItem="gDk-oh-3PA" secondAttribute="centerX" id="Qyj-De-qfR"/>
+                            <constraint firstItem="6DD-cZ-3vf" firstAttribute="centerX" secondItem="gDk-oh-3PA" secondAttribute="centerX" id="YVZ-0i-CAN"/>
                             <constraint firstItem="Yjf-Ac-ilS" firstAttribute="leading" secondItem="gDk-oh-3PA" secondAttribute="leadingMargin" id="dHi-wu-wq4"/>
+                            <constraint firstItem="6DD-cZ-3vf" firstAttribute="top" secondItem="2bn-5B-Wlz" secondAttribute="bottom" constant="81" id="dfQ-zF-cY5"/>
                             <constraint firstItem="WLy-3d-JbQ" firstAttribute="top" secondItem="Yjf-Ac-ilS" secondAttribute="bottom" constant="451" id="fr7-38-7j4"/>
                         </constraints>
                     </view>
@@ -111,7 +121,35 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rKp-Eq-GHi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1156" y="66"/>
+            <point key="canvasLocation" x="1024" y="-19"/>
+        </scene>
+        <!--Tour Sections Controller-->
+        <scene sceneID="xGN-Es-PgC">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nhE-MV-GAv" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tableViewController id="YdX-AY-UmE" customClass="TourSectionsController" customModule="Alan_Touring" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="q5v-NL-AGs">
+                        <rect key="frame" x="0.0" y="64" width="600" height="492"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="tableCell2" id="03k-d5-fcy">
+                                <rect key="frame" x="0.0" y="28" width="600" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="03k-d5-fcy" id="MB5-Hk-I9T">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="YdX-AY-UmE" id="Y72-bX-m6I"/>
+                            <outlet property="delegate" destination="YdX-AY-UmE" id="L2J-ZH-ohH"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+            </objects>
+            <point key="canvasLocation" x="1747" y="-19"/>
         </scene>
         <!--Hello-->
         <scene sceneID="Bwp-4b-I2N">
@@ -140,7 +178,7 @@
                                 <state key="normal" title="Without Video"/>
                                 <connections>
                                     <action selector="withoutVideoButton:" destination="xqZ-b6-00V" eventType="touchUpInside" id="JU9-so-nnC"/>
-                                    <segue destination="tFV-kM-qdT" kind="unwind" unwindAction="saveTourDetail:" id="ssc-v4-CdP"/>
+                                    <segue destination="tFV-kM-qdT" kind="unwind" identifier="cancel" unwindAction="cancelToAddNewTourController:" id="ssc-v4-CdP"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="D6z-7G-kRU">

@@ -15,19 +15,22 @@ class tourSection{
     var superSection: NSDictionary
     var subSections: NSArray
     var pointsOfInterest: NSArray
+    var title: NSString
     
-    init(sectionId: String, description: String, createdAt: String, superSection: NSDictionary, subSections:NSArray, pointsOfInterest:NSArray){
+    init(sectionId: String, description: String, createdAt: String, superSection: NSDictionary, subSections:NSArray, pointsOfInterest:NSArray, title:NSString){
         self.sectionId = sectionId
         self.description = description
         self.createdAt = createdAt
         self.superSection = superSection
-        self.subSections = subSections;
-        self.pointsOfInterest = pointsOfInterest;
+        self.subSections = subSections
+        self.pointsOfInterest = pointsOfInterest
+        self.title = title
         //self.triggerRecursion()
         //self.debugDataPass()
     }
     //Recursivley create all other required objects
     func triggerRecursion(){
+        
         
     }
     func debugDataPass(){

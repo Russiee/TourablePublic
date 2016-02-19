@@ -19,6 +19,7 @@
 		FA0A51721C7747B400E4F733 /* tourSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0A51711C7747B400E4F733 /* tourSection.swift */; };
 		FA0A51741C77482D00E4F733 /* tourDataParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0A51731C77482D00E4F733 /* tourDataParser.swift */; };
 		FA0A51771C774CEC00E4F733 /* pointOfInterest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0A51761C774CEC00E4F733 /* pointOfInterest.swift */; };
+		FA0A517B1C775C3700E4F733 /* TourSectionsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0A517A1C775C3700E4F733 /* TourSectionsController.swift */; };
 		FA4D0F5F1C6A4D08007D79E3 /* TourIdParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4D0F5E1C6A4D08007D79E3 /* TourIdParser.swift */; };
 		FA4EBAC01C68CC1100E6E601 /* AddNewTourViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4EBABF1C68CC1100E6E601 /* AddNewTourViewController.swift */; };
 		FA57DD201C6B7EDA002739FF /* DataCacheTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA57DD1F1C6B7EDA002739FF /* DataCacheTest.swift */; };
@@ -63,6 +64,7 @@
 		FA0A51711C7747B400E4F733 /* tourSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = tourSection.swift; sourceTree = "<group>"; };
 		FA0A51731C77482D00E4F733 /* tourDataParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = tourDataParser.swift; sourceTree = "<group>"; };
 		FA0A51761C774CEC00E4F733 /* pointOfInterest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = pointOfInterest.swift; sourceTree = "<group>"; };
+		FA0A517A1C775C3700E4F733 /* TourSectionsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TourSectionsController.swift; sourceTree = "<group>"; };
 		FA4D0F5E1C6A4D08007D79E3 /* TourIdParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TourIdParser.swift; sourceTree = "<group>"; };
 		FA4EBABF1C68CC1100E6E601 /* AddNewTourViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNewTourViewController.swift; sourceTree = "<group>"; };
 		FA57DD1F1C6B7EDA002739FF /* DataCacheTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataCacheTest.swift; sourceTree = "<group>"; };
@@ -134,6 +136,7 @@
 				FAB049181C6E34BF00679C10 /* ApiConnector.swift */,
 				FA0A516F1C772AAD00E4F733 /* bundleRouteConnector.swift */,
 				FA0A51731C77482D00E4F733 /* tourDataParser.swift */,
+				FA0A517A1C775C3700E4F733 /* TourSectionsController.swift */,
 			);
 			path = "Alan Touring";
 			sourceTree = "<group>";
@@ -305,6 +308,7 @@
 				FA0A51701C772AAD00E4F733 /* bundleRouteConnector.swift in Sources */,
 				FA0A51741C77482D00E4F733 /* tourDataParser.swift in Sources */,
 				E536DCC71C6510FD00A7B2FC /* Alan_Touring.xcdatamodeld in Sources */,
+				FA0A517B1C775C3700E4F733 /* TourSectionsController.swift in Sources */,
 				FAB049191C6E34BF00679C10 /* ApiConnector.swift in Sources */,
 				FA9803291C666195001D23E2 /* MainTableTableViewController.swift in Sources */,
 				FA4EBAC01C68CC1100E6E601 /* AddNewTourViewController.swift in Sources */,
