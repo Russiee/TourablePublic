@@ -18,11 +18,11 @@ class TourSectionsController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.clearsSelectionOnViewWillAppear = false
-        let tour = tourDataParser.init().getTourSection(programVar)
-        let subsectionArray = tour.getSubSections();
-        models = subsectionArray
-        print(models.count)
-        print(models.description)
+       // let tour = tourDataParser.init().getTourSection(programVar)
+        
+      //  let subsectionArray = tour.getSubSections();
+      //  models = subsectionArray
+        
         checkStateOfScreen()
     }
     
