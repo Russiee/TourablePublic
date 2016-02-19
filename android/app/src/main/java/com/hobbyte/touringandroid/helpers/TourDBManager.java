@@ -77,16 +77,38 @@ public class TourDBManager extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // TODO
+        // TODO - figure out what exactly should go here
         Log.w(TAG, "A call to onUpgrade() was made.");
     }
 
+    /**
+     * Fetches every row in the table, ordered by when tours were last access by the user.
+     *
+     * @param db an SQLite DB instance
+     * @return a Cursor pointing to the first row of the table
+     */
     public Cursor getTours(SQLiteDatabase db) {
         Cursor c = db.rawQuery(SQL_GET_TOURS, null);
         c.moveToFirst();
         return c;
     }
 
+    /**
+     * Insert a tour entry into the db. All fields, with the exception of `db` and `hasVideo`, will
+     * be extracted from JSON that was fetched from the server.
+     * <p>
+     * All the timestamp parameters should be passed in the string form in which the server stores
+     * them. They will be converted into, and stored as, milliseconds since Epoch.
+     *
+     * @param db an SQLite DB instance
+     * @param keyID the objectId of the key used to fetch the tour
+     * @param tourID the objectId of the tour itself
+     * @param tourName the tour's title
+     * @param creationDate when the tour was created
+     * @param updateDate when the tour was last updated
+     * @param expiryDate when the tour expires
+     * @param hasVideo whether or not the user opted to download the tour with video
+     */
     public void putRow(SQLiteDatabase db, String keyID, String tourID, String tourName,
                        String creationDate, String updateDate, String expiryDate, boolean hasVideo) {
         if (db.isReadOnly()) {
@@ -98,24 +120,13 @@ public class TourDBManager extends SQLiteOpenHelper {
         Calendar cal = Calendar.getInstance();
         cal.setTimeZone(TimeZone.getTimeZone("UTC"));
         long now = cal.getTimeInMillis();
+        long[] datetimes;
 
-        // default times in case there's an error below
-        long tCreated = now;
-        long tUpdated = now;
-        long tExpires = now;
-
-        SimpleDateFormat df = new SimpleDateFormat(dateFormat);
         try {
-            Date dCreated = df.parse(creationDate);
-            Date dUpdated = df.parse(updateDate);
-            Date dExpires = df.parse(expiryDate);
-
-            tCreated = dCreated.getTime();
-            tUpdated = dUpdated.getTime();
-            tExpires = dExpires.getTime();
+            datetimes = stampToMillis(dateFormat, creationDate, updateDate, expiryDate);
         } catch (ParseException e) {
-            e.printStackTrace();
-            Log.w(TAG, "Error when parsing date string!");
+            // is there a better way to handle this?
+            datetimes = new long[] {1, 1, 1};
         }
 
         int video = (hasVideo ? 1 : 0);
@@ -123,9 +134,9 @@ public class TourDBManager extends SQLiteOpenHelper {
         values.put(TourList.COL_KEY_ID, keyID);
         values.put(TourList.COL_TOUR_ID, tourID);
         values.put(TourList.COL_TOUR_NAME, tourName);
-        values.put(TourList.COL_DATE_CREATED, tCreated);
-        values.put(TourList.COL_DATE_UPDATED, tUpdated);
-        values.put(TourList.COL_DATE_EXPIRES_ON, tExpires);
+        values.put(TourList.COL_DATE_CREATED, datetimes[0]);
+        values.put(TourList.COL_DATE_UPDATED, datetimes[1]);
+        values.put(TourList.COL_DATE_EXPIRES_ON, datetimes[2]);
         values.put(TourList.COL_DATE_LAST_ACCESSED, cal.getTimeInMillis());
         values.put(TourList.COL_HAS_VIDEO, video);
 
@@ -134,6 +145,7 @@ public class TourDBManager extends SQLiteOpenHelper {
 
     /**
      * Deletes a row in the db corresponding to a particular tour key.
+     *
      * @param db an SQLite db instance
      * @param keyID the ID of a tour key (not the tour ID itself)
      */
@@ -145,6 +157,7 @@ public class TourDBManager extends SQLiteOpenHelper {
 
     /**
      * Checks if there are any tours in the database.
+     *
      * @param db an SQLite db instance
      * @return true if the table is empty
      */
@@ -156,5 +169,26 @@ public class TourDBManager extends SQLiteOpenHelper {
         c.close();
 
         return count == 0;
+    }
+
+    /**
+     * Takes one or more timestamps and converts them into milliseconds since Epoch.
+     *
+     * @param dateFormat a String representing the format/pattern of the timestamp
+     * @param timeArgs one or more timestamps
+     * @return millisecond representations of the provided timestamps
+     * @throws ParseException if the timestamps don't match the dateFormat
+     */
+    public long[] stampToMillis(String dateFormat, String... timeArgs) throws ParseException {
+        SimpleDateFormat df = new SimpleDateFormat(dateFormat);
+
+        long[] toReturn = new long[timeArgs.length];
+
+        for (int i = 0; i < timeArgs.length; i++) {
+            Date date = df.parse(dateFormat);
+            toReturn[i] = date.getTime();
+        }
+
+        return toReturn;
     }
 }
