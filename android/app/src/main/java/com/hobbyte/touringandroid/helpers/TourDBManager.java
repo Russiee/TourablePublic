@@ -116,20 +116,17 @@ public class TourDBManager extends SQLiteOpenHelper {
             return;
         }
 
-        ContentValues values = new ContentValues();
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeZone(TimeZone.getTimeZone("UTC"));
-        long now = cal.getTimeInMillis();
+        int video = (hasVideo ? 1 : 0);
         long[] datetimes;
 
         try {
-            datetimes = stampToMillis(dateFormat, creationDate, updateDate, expiryDate);
+            datetimes = convertStampToMillis(dateFormat, creationDate, updateDate, expiryDate);
         } catch (ParseException e) {
             // is there a better way to handle this?
             datetimes = new long[] {1, 1, 1};
         }
 
-        int video = (hasVideo ? 1 : 0);
+        ContentValues values = new ContentValues();
 
         values.put(TourList.COL_KEY_ID, keyID);
         values.put(TourList.COL_TOUR_ID, tourID);
@@ -137,7 +134,7 @@ public class TourDBManager extends SQLiteOpenHelper {
         values.put(TourList.COL_DATE_CREATED, datetimes[0]);
         values.put(TourList.COL_DATE_UPDATED, datetimes[1]);
         values.put(TourList.COL_DATE_EXPIRES_ON, datetimes[2]);
-        values.put(TourList.COL_DATE_LAST_ACCESSED, cal.getTimeInMillis());
+        values.put(TourList.COL_DATE_LAST_ACCESSED, Calendar.getInstance().getTimeInMillis());
         values.put(TourList.COL_HAS_VIDEO, video);
 
         db.insert(TourList.TABLE_NAME, null, values);
@@ -153,6 +150,23 @@ public class TourDBManager extends SQLiteOpenHelper {
         String selection = TourList.COL_TOUR_ID + " = ?";
         String[] args = {keyID};
         db.delete(TourList.TABLE_NAME, selection, args);
+    }
+
+    /**
+     * Sets the `lastAccessedOn` field of a tour to be the current time. Should be used when the
+     * user selects a tour from the StartActivity.
+     *
+     * @param db an SQLite db instance
+     * @param keyID the ID of a tour key (not the tour ID itself)
+     */
+    public void updateAccessedTime(SQLiteDatabase db, String keyID) {
+        ContentValues values = new ContentValues();
+        values.put(TourList.COL_DATE_LAST_ACCESSED, Calendar.getInstance().getTimeInMillis());
+
+        String where = TourList.COL_KEY_ID + " = ?";
+        String[] whereArgs = {keyID};
+
+        db.update(TourList.TABLE_NAME, values, where, whereArgs);
     }
 
     /**
@@ -179,7 +193,7 @@ public class TourDBManager extends SQLiteOpenHelper {
      * @return millisecond representations of the provided timestamps
      * @throws ParseException if the timestamps don't match the dateFormat
      */
-    public long[] stampToMillis(String dateFormat, String... timeArgs) throws ParseException {
+    public long[] convertStampToMillis(String dateFormat, String... timeArgs) throws ParseException {
         SimpleDateFormat df = new SimpleDateFormat(dateFormat);
 
         long[] toReturn = new long[timeArgs.length];
