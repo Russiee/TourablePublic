@@ -170,6 +170,46 @@ public class TourDBManager extends SQLiteOpenHelper {
     }
 
     /**
+     * Finds the tours which have expired and returns their keys. These tours should be deleted.
+     *
+     * @param db an SQLite db instance
+     * @return a String array of tour keys which have expired.
+     */
+    public String[] getExpiredTours(SQLiteDatabase db) {
+        String[] cols = {TourList.COL_KEY_ID};
+        String where = TourList.COL_DATE_EXPIRES_ON + " < ?";
+        String[] whereArgs = {String.valueOf(Calendar.getInstance().getTimeInMillis());
+
+        // fetch all keys where the current date is greater than the tour's expiry date
+        Cursor c = db.query(
+                TourList.TABLE_NAME,
+                cols,
+                where,
+                whereArgs,
+                null,
+                null,
+                null
+        );
+
+        int count = c.getCount();
+
+        // return expired keys
+        if (count > 0) {
+            String[] toDelete = new String[count];
+
+            while (c.moveToNext()) {
+                toDelete[--count] = c.getString(0);
+            }
+
+            c.close();
+            return toDelete;
+        }
+
+        c.close();
+        return null;
+    }
+
+    /**
      * Checks if there are any tours in the database.
      *
      * @param db an SQLite db instance
