@@ -25,12 +25,22 @@ class tourSection{
         self.subSections = subSections
         self.pointsOfInterest = pointsOfInterest
         self.title = title
-        //self.triggerRecursion()
+
         //self.debugDataPass()
     }
+    
     //Recursivley create all other required objects
+    
     func triggerRecursion(){
+       // print("recursion on \(sectionId) called")
         
+        for section in subSections{
+            let brp = bundleRouteConnector.init()
+
+            let objectId = section["objectId"] as! String
+            
+            brp.initateConnection(objectId)
+        }
         
     }
     func debugDataPass(){

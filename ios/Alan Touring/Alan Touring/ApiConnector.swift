@@ -49,7 +49,7 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
                 tourId = cleanTourId(tourId)
                 //The path to where the Tour Data is stored
                urlPath = "https://touring-api.herokuapp.com/api/v1/key/verify/" + tourId
-           // urlPath = "https://touring-api.herokuapp.com/api/v1/section/m1dUFsZ1gt"
+
                 //Standard URLConnection method
         do {
             let request: NSURLRequest = NSURLRequest(URL: NSURL(string: urlPath)!)
@@ -127,7 +127,7 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
         _ = TourIdParser().addTourMetaData(JSONData)
         self.triggerValidKeyNotification()
         //This will be the objectId taken from the key verification route.
-
+        
         _ = bundleRouteConnector.init().startConnection("m1dUFsZ1gt")
     }
     

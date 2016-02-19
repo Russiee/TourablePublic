@@ -32,9 +32,13 @@ class tourDataParser{
     func saveTourSection(data: NSDictionary){
        
         let key = data["objectId"] as! String
+        print("now saving: "+key)
         NSUserDefaults.standardUserDefaults().setObject(data, forKey: key)
         //Commits changes to memory, required for iOS 7 and below.
         NSUserDefaults.standardUserDefaults().synchronize()
+        //Makes sure that all sections are recursivley downloaded.
+        
+        _ = createNewTour(data).triggerRecursion()
     }
     
     func getTourSection(objectId: String)-> tourSection{
