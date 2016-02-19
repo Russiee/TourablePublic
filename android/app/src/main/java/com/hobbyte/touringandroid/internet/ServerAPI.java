@@ -95,21 +95,19 @@ public class ServerAPI {
 
             int response = connection.getResponseCode();
 
-            String name;
-            String description;
-            ArrayList<SubSection> subList = new ArrayList<SubSection>();
-            StringBuilder jsonString = new StringBuilder("");
-            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String line = in.readLine();
-
-            while (line != null) {
-                jsonString.append(line);
-                line = in.readLine();
-            }
-            in.close();
-            connection.disconnect();
-
             if (response == 200) {
+                String name;
+                String description;
+                ArrayList<SubSection> subList = new ArrayList<SubSection>();
+                StringBuilder jsonString = new StringBuilder("");
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String line = in.readLine();
+
+                while (line != null) {
+                    jsonString.append(line);
+                    line = in.readLine();
+                }
+                connection.disconnect();
                 Log.d(TAG, "Valid bundle: " + bundle);
                 JSONObject json = new JSONObject(jsonString.toString());
                 name = json.getString("title");
@@ -118,13 +116,22 @@ public class ServerAPI {
                 //JSONObject jobj = jsonArr.getJSONObject(0);
                 //JSONArray jsonA = jobj.getJSONArray("subsections");
                 for (int i = 0; i < jsonArr.length(); i++) {
-                    subList.add(allocateSectionPOIs(jsonArr.getJSONObject(i).getString("objectId")));
+                    SubSection sub = allocateSectionPOIs(jsonArr.getJSONObject(i).getString("objectId"));
+                    if(sub != null) {
+                        subList.add(sub);
+                    } else {
+                        continue;
+                    }
                 }
+                Log.d(TAG, "Fetched tourId:");
+                in.close();
                 return new Tour(name, description, subList);
             } else {
+                connection.disconnect();
                 Log.d(TAG, "Invalid bundle: " + bundle);
                 return null;
             }
+
         } catch (Exception e) {
             e.printStackTrace();
             Log.e(TAG, "Something went wrong with retrieving bundle!");
@@ -149,34 +156,59 @@ public class ServerAPI {
 
             int response = connection.getResponseCode();
 
-            String name;
-            String description;
-            ArrayList<PointOfInterest> poiList = new ArrayList<PointOfInterest>();
-            StringBuilder jsonString = new StringBuilder("");
-            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String line = in.readLine();
-
-            while (line != null) {
-                jsonString.append(line);
-                line = in.readLine();
-            }
-
-            in.close();
-            connection.disconnect();
-
             if (response == 200) {
+
+                String name;
+                String description;
+                ArrayList<PointOfInterest> poiList = new ArrayList<PointOfInterest>();
+                ArrayList<SubSection> subList = new ArrayList<SubSection>();
+                StringBuilder jsonString = new StringBuilder("");
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String line = in.readLine();
+
+                while (line != null) {
+                    jsonString.append(line);
+                    line = in.readLine();
+                }
+                in.close();
+                connection.disconnect();
                 Log.d(TAG, "Valid section: " + section);
                 JSONObject json = new JSONObject(jsonString.toString());
-                JSONArray jsonArr = json.getJSONArray("pois");
-
                 name = json.getString("title");
                 description = json.getString("description");
+                if(json.getJSONArray("subsections").length() == 0) {
+                    JSONArray jsonArr = json.getJSONArray("pois");
 
-                for (int i = 0; i < jsonArr.length(); i++) {
-                    poiList.add(allocatePOIs(jsonArr.getJSONObject(i).getString("objectId")));
+                    for (int i = 0; i < jsonArr.length(); i++) {
+                        if(!jsonArr.getString(0).contains(":")) {
+                            return null;
+                        }
+                        PointOfInterest poi = allocatePOIs(jsonArr.getJSONObject(i).getString("objectId"));
+                        if (poi != null) {
+                            poiList.add(poi);
+                        } else {
+                            continue;
+                        }
+                    }
+                    return new SubSection(name, description, poiList);
+                } else {
+                    JSONArray jsonArr = json.getJSONArray("subsections");
+                    for (int i = 0; i < jsonArr.length(); i++) {
+                        if(!jsonArr.getString(0).contains(":")) {
+                            return null;
+                        }
+                        SubSection sub = allocateSectionPOIs(jsonArr.getJSONObject(i).getString("objectId"));
+                        if (sub != null) {
+                            subList.add(sub);
+                        } else {
+                            continue;
+                        }
+                    }
+                    return new SubSection(name, description, false, subList);
                 }
-                return new SubSection(name, description, poiList);
+
             } else {
+                connection.disconnect();
                 Log.d(TAG, "Invalid section: " + section);
                 return null;
             }
@@ -204,25 +236,24 @@ public class ServerAPI {
 
             int response = connection.getResponseCode();
 
-            String name;
-            String description;
-            String header;
-            String body;
-            String image;
-            String imageDesc;
-            StringBuilder jsonString = new StringBuilder("");
-            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String line = in.readLine();
-
-            while (line != null) {
-                jsonString.append(line);
-                line = in.readLine();
-            }
-
-            in.close();
-            connection.disconnect();
-
             if (response == 200) {
+                String name;
+                String description;
+                String header;
+                String body;
+                String image;
+                String imageDesc;
+                StringBuilder jsonString = new StringBuilder("");
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String line = in.readLine();
+
+                while (line != null) {
+                    jsonString.append(line);
+                    line = in.readLine();
+                }
+
+                in.close();
+                connection.disconnect();
                 Log.d(TAG, "Valid POI: " + poi);
 
                 JSONObject json = new JSONObject(jsonString.toString());
@@ -251,9 +282,9 @@ public class ServerAPI {
 //                        body = temp.getString("content");
                     }
                 }
-
                 return new PointOfInterest(name, description, header, body, image, imageDesc);
             } else {
+                connection.disconnect();
                 Log.d(TAG, "Invalid POI: " + poi);
                 return null;
             }
