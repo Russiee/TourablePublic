@@ -55,7 +55,7 @@ class bundleRouteConnector: NSObject, NSURLConnectionDelegate{
     func storeMetadataJson(JSONData: NSDictionary){
         //Storing Meta Data so we can access it for other use
         print(JSONData["subsections"]!.count)
-        tourDataParser.init().createNewTour(JSONData)
+        tourDataParser.init().saveTourSection(JSONData)
        //print(JSONData)
         
     }

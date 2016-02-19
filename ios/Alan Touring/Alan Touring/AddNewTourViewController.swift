@@ -21,7 +21,7 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
     
     
     override func viewDidLoad() {
-        print("view summary was loaded")
+
         //Adds the observers for a valid or invalid key input completion message from ApiController
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedInvalid", name: invalidIdNotificationKey, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedValid", name: validIdNotificationKey, object: nil)
@@ -36,9 +36,9 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
     
     //a method to allow the user to cancel the data download and return to the main table view
     func cancelDownload() {
-        print("LOL")
+
         //delete the metaData and data stored in "Array"
-        print(tourIndex!)
+
         TourIdParser.sharedInstance.deleteTourIdAtRow(tourIndex!)
         
         //unwind segue back to the main tableview
@@ -72,15 +72,15 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
         alert.show()
         
         //Closes the view and returns user to the mainTableview if key was invalid.
-        print("tour summary was notified")
-        performSegueWithIdentifier("Cancel", sender: self)
+
+        performSegueWithIdentifier("cancel", sender: self)
     }
     
     //Called if the tourId if valid. Stops the busy wheel and shows the download settings.
     func NotifiedValid(){
         self.busyWheel.stopAnimating()
         self.hideButtonsForBusyWheel(false)
-        print("Notified as valid")
+
     }
     
     //Method for hiding all other items in the view besides teh busy wheel. 

@@ -43,7 +43,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     }
     
     func Notified() {
-        print("notified")
+
         models = tourParser.getAllTours()
         tableView.reloadData()
     }
@@ -85,7 +85,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         } else {
             tableView.backgroundView = nil
             tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
-            print("this was called")
+            
 
         }
         
@@ -103,7 +103,6 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     
     @objc func TableChanged(notification: NSNotification){
         //do stuff
-        print("notifed")
     }
     
     
@@ -111,9 +110,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     @IBAction func plussPressed(sender: UIBarButtonItem) {
         
         showAlert()
-    
-        
-        
+     
     }
     
     func showAlert(){
@@ -130,25 +127,21 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
         switch buttonIndex{
             
-        case 1: print("Blue")
-            //gets text field and hides keyboard in preperation for segue
-            let Field = alertView.textFieldAtIndex(0)
-            alertView.textFieldAtIndex(0)?.resignFirstResponder()
+        case 1://gets text field and hides keyboard in preperation for segue
+                let Field = alertView.textFieldAtIndex(0)
+                alertView.textFieldAtIndex(0)?.resignFirstResponder()
         
-            //passes the entered tourId into the tourParser
-           // tourParser.addNewTourId(Field!.text!)
-            API.initateConnection(Field!.text!)
-        
-        
-            //goes to the AddNewTourPage
-            performSegueWithIdentifier("goToAddTour", sender: self)
-            tableView.backgroundView = nil //to change the background image
+                //passes the entered tourId into the tourParser
+                // tourParser.addNewTourId(Field!.text!)
+                API.initateConnection(Field!.text!)
+                //goes to the AddNewTourPage
+                performSegueWithIdentifier("goToAddTour", sender: self)
+                tableView.backgroundView = nil //to change the background image
             
             
-        case 0: print("Red")
-                //Cancel pressed, unwind segue executed automatically
+        case 0: break  //Cancel pressed, unwind segue executed automatically
             
-        default: print("Is this part even possible?")
+        default: print("This is here because Swift")
         
         }
     }
@@ -218,7 +211,6 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         
         if segue.identifier == "goToAddTour" {
             if let destination = (segue.destinationViewController as! UINavigationController).topViewController as? addNewTourViewController {
-                print("LOL+++")
                 destination.tourIndex = models.count 
             }
         }
