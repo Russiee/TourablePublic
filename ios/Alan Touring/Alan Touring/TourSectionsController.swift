@@ -12,16 +12,26 @@ class TourSectionsController: UITableViewController {
 
     
     
-    var models = NSArray()
+    var models = [String: String]()
     var programVar = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.clearsSelectionOnViewWillAppear = false
-       // let tour = tourDataParser.init().getTourSection(programVar)
+       let tour = tourDataParser.init().getTourSection(programVar)
+    
+      let subsectionArray = tour.getSubSections();
+        var tourTitles = [String: String]()
         
-      //  let subsectionArray = tour.getSubSections();
-      //  models = subsectionArray
+        let tdp = tourDataParser.init()
+        for subsectionPointer in subsectionArray{
+            var subsectionData = tdp.getTourSection((subsectionPointer["objectId"] as? String)!)
+           
+           //print("\(subsectionData.title) DATA RECOVERED FROM ID")
+            tourTitles[subsectionData.title as String] =  subsectionData.sectionId
+            
+        }
+      models = tourTitles
         
         checkStateOfScreen()
     }
@@ -57,8 +67,9 @@ class TourSectionsController: UITableViewController {
               let cell = tableView.dequeueReusableCellWithIdentifier("tableCell2", forIndexPath: indexPath)
         
         // Configure the cell...
-        print(models.objectAtIndex(indexPath.row)["description"] as? String)
-        cell.textLabel?.text = models.objectAtIndex(indexPath.row)["objectId"] as? String
+        let keys = Array(models.keys)
+        
+        cell.textLabel?.text = keys[indexPath.row] 
         return cell
     }
     

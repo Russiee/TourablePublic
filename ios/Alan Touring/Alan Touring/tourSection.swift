@@ -26,7 +26,7 @@ class tourSection{
         self.pointsOfInterest = pointsOfInterest
         self.title = title
 
-        //self.debugDataPass()
+       // self.debugDataPass()
     }
     
     //Recursivley create all other required objects
@@ -44,12 +44,15 @@ class tourSection{
         
     }
     func debugDataPass(){
+        print("--------")
         print(sectionId)
         print(description)
         print(createdAt)
         print(superSection)
         print(subSections)
         print(pointsOfInterest)
+        print(title)
+        print("--------")
        
     }
     
