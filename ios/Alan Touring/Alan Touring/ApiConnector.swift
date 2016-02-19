@@ -42,21 +42,19 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
 //        }
 //        task.resume()
         
-        
-        
-        
+
                 let resetData = NSMutableData()
                 //Reseting data to blank with every new connection
                 data = resetData
                 tourId = cleanTourId(tourId)
                 //The path to where the Tour Data is stored
-                urlPath = "https://touring-api.herokuapp.com/api/v1/key/verify/" + tourId
-        
+               urlPath = "https://touring-api.herokuapp.com/api/v1/key/verify/" + tourId
+           // urlPath = "https://touring-api.herokuapp.com/api/v1/section/m1dUFsZ1gt"
                 //Standard URLConnection method
                 let request: NSURLRequest = NSURLRequest(URL: NSURL(string: urlPath)!)
         
                 //change to URLSession
-                let connection: NSURLConnection = NSURLConnection(request: request, delegate: self, startImmediately: true)!
+                let connection: NSURLConnection = NSURLConnection(request: request, delegate: self, startImmediately: false)!
                 connection.start()
     }
     
@@ -75,7 +73,7 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
         do {
             let jsonResult: NSArray = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as! NSArray
 
-            self.storeJson(jsonResult)
+            self.storeMetadataJson(jsonResult)
         }
         catch let err as NSError{
             //Need to let user know if the tourID they entered was faulty here
@@ -113,11 +111,15 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
     }
     
     //Takes the metadata and passes it to the tourIdParser.
-    func storeJson(JSONData: NSArray){
+    func storeMetadataJson(JSONData: NSArray){
         //Storing Meta Data so we can access it for other use
         _ = TourIdParser().addTourMetaData(JSONData)
         self.triggerValidKeyNotification()
+        //This will be the objectId taken from the key verification route.
+        print("initiating tour download")
+        _ = bundleRouteConnector.init().startConnection("m1dUFsZ1gt")
     }
+    
     
     // remove the heading and trailing spaces
     func cleanTourId(tourId: String) -> String {
