@@ -18,14 +18,23 @@ class TourSummaryController: UIViewController {
     let objectId = ""
     var setup = Dictionary<String, AnyObject>()
     
+    @IBOutlet weak var tourTitleLabel: UILabel!
+    
+    @IBOutlet weak var UIDescriptionBox: UITextView!
     
     @IBOutlet weak var TourExpiryLabel: UILabel!
     
     override func viewWillAppear(animated: Bool) {
         tourIdLabel.text = tourId
+        UIDescriptionBox.sizeToFit()
+        UIDescriptionBox.layoutIfNeeded()
+        UIDescriptionBox.textAlignment = NSTextAlignment.Center
 
         setup = TourIdParser.sharedInstance.getTourMetadata(tourId)
         let objectId = setup["objectId"]!
+        let topLayerTourInfo = tourDataParser.init().getTourSection(objectId as! String)
+        tourTitleLabel.text = topLayerTourInfo.title as String
+        UIDescriptionBox.text = topLayerTourInfo.description
         print(objectId)
         let data = setup["expiresAt"]![0]
         TourExpiryLabel.text = (data as! String)
