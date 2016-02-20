@@ -27,4 +27,5 @@
 
     <string name="msg_no_internet">No internet connection</string>
     <string name="msg_invalid_key">Invalid tour key</string>
+    <string name="msg_tour_exists">Tour already exists</string>
 </resources>

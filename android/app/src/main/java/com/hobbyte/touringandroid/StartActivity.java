@@ -20,7 +20,6 @@ import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.hobbyte.touringandroid.helpers.BackAwareEditText;
-import com.hobbyte.touringandroid.helpers.FileManager;
 import com.hobbyte.touringandroid.helpers.TourDBContract;
 import com.hobbyte.touringandroid.helpers.TourDBManager;
 import com.hobbyte.touringandroid.internet.ServerAPI;
@@ -53,7 +52,7 @@ public class StartActivity extends Activity {
         boolean isFreshInstall = prefs.getBoolean(getString(R.string.prefs_is_new_install), true);
 
         // make the directory for tour media and set the "first install" flag to false
-        if (isFreshInstall) {
+        /*if (isFreshInstall) {
             SharedPreferences.Editor editor = prefs.edit();
             editor.putBoolean(getString(R.string.prefs_is_new_install), false);
             editor.apply();
@@ -70,7 +69,23 @@ public class StartActivity extends Activity {
                     "2016-02-25T00:39:31.000Z",
                     false);
             db.close();
-        }
+        }*/
+
+        /*TourDBManager dbHelper = new TourDBManager(this);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        dbHelper.putRow(db,
+                "49L6FrRwe4",
+                "DnPRFaSYEk",
+                "Ultimate Flat Tour",
+                "2016-02-12T15:51:17.125Z",
+                "2016-02-12T15:51:17.125Z",
+                "2016-02-25T00:39:31.000Z",
+                false);
+        db.close();*/
+
+//        TourDBManager dbHelper = new TourDBManager(this);
+//        SQLiteDatabase db = dbHelper.getWritableDatabase();
+//        dbHelper.deleteTour(db, "49L6FrRwe4"); db.close();
 
         //get references for animations
         keyEntryLayout = (LinearLayout) findViewById(R.id.keyEntryLayout);
@@ -158,15 +173,21 @@ public class StartActivity extends Activity {
 
         String tourKey = textKey.getText().toString();
 
-        // only check the key if we have an internet connection
-        if (ServerAPI.checkConnection(this)) {
+        // check if key has already been used
+        TourDBManager dbHelper = new TourDBManager(this);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        boolean exists = dbHelper.doesTourExist(db, tourKey);
+        db.close();
+
+        if (exists) {
+            showToast(getString(R.string.msg_tour_exists));
+            textKey.setText("");
+        } else if (ServerAPI.checkConnection(this)) {
+            // only check the key if we have an internet connection
             KeyCheckTask k = new KeyCheckTask();
             k.execute(tourKey);
         } else {
-            Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.msg_no_internet),
-                    Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.BOTTOM, 0, 20);
-            toast.show();
+            showToast(getString(R.string.msg_no_internet));
             textKey.setText("");
         }
     }
@@ -247,7 +268,7 @@ public class StartActivity extends Activity {
                 String name = c.getString(c.getColumnIndex(TourDBContract.TourList.COL_TOUR_NAME));
                 long expiryTime = c.getLong(c.getColumnIndex(TourDBContract.TourList.COL_DATE_EXPIRES_ON));
                 String expiryText = df.format(new Date(expiryTime));
-                final String tourId = c.getString(c.getColumnIndex(TourDBContract.TourList.COL_TOUR_ID));
+                final String keyID = c.getString(c.getColumnIndex(TourDBContract.TourList.COL_TOUR_ID)); // TODO: this should be changed to COL_KEY_ID
 
                 tourName.setText(name);
                 expiryDate.setText(expiryText);
@@ -256,7 +277,7 @@ public class StartActivity extends Activity {
                 tourItem.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        goToTour(tourId);
+                        goToTour(keyID);
                     }
                 });
             }
@@ -267,6 +288,17 @@ public class StartActivity extends Activity {
 
         db.close();
 
+    }
+
+    /**
+     * Shows a Toast message at the bottom of the screen.
+     *
+     * @param message the message to show
+     */
+    private void showToast(String message) {
+        Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.BOTTOM, 0, 20);
+        toast.show();
     }
 
     /**
@@ -299,6 +331,16 @@ public class StartActivity extends Activity {
                     keyExpiryDate = null;
                 }
 
+                // check if key has already been used
+                TourDBManager dbHelper = new TourDBManager(getApplicationContext());
+                SQLiteDatabase db = dbHelper.getReadableDatabase();
+                boolean exists = dbHelper.doesTourExist(db, keyID);
+                db.close();
+
+                if (exists) {
+                    return null;
+                }
+
                 SharedPreferences prefs = getApplicationContext().getSharedPreferences(
                         getString(R.string.preference_file_key),
                         Context.MODE_PRIVATE);
@@ -323,15 +365,14 @@ public class StartActivity extends Activity {
 
         @Override
         protected void onPostExecute(Boolean isValid) {
-            if (isValid) {
+            if (isValid == null) {
+                showToast(getString(R.string.msg_tour_exists));
+            } else if (isValid) {
                 goToTourDownload();
             } else {
-                Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.msg_invalid_key),
-                        Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.BOTTOM, 0, 20);
-                toast.show();
-                textKey.setText("");
+                showToast(getString(R.string.msg_invalid_key));
             }
+            textKey.setText("");
         }
     }
 }

@@ -123,6 +123,7 @@ public class TourDBManager extends SQLiteOpenHelper {
         try {
             datetimes = convertStampToMillis(dateFormat, creationDate, updateDate, expiryDate);
         } catch (ParseException e) {
+            e.printStackTrace();
             // is there a better way to handle this?
             datetimes = new long[] {1, 1, 1};
         }
@@ -148,9 +149,10 @@ public class TourDBManager extends SQLiteOpenHelper {
      * @param keyID the ID of a tour key (not the tour ID itself)
      */
     public void deleteTour(SQLiteDatabase db, String keyID) {
-        String where = TourList.COL_TOUR_ID + " = ?";
+        String where = TourList.COL_KEY_ID + " = ?";
         String[] whereArgs = {keyID};
-        db.delete(TourList.TABLE_NAME, where, whereArgs);
+        int count = db.delete(TourList.TABLE_NAME, where, whereArgs);
+        Log.d(TAG, "Deleted " + count + " row");
     }
 
     /**
@@ -166,7 +168,8 @@ public class TourDBManager extends SQLiteOpenHelper {
                 getPlaceHolders(keyIDs.length)
         );
 
-        db.delete(TourList.TABLE_NAME, where, keyIDs);
+        int count = db.delete(TourList.TABLE_NAME, where, keyIDs);
+        Log.d(TAG, "Deleted " + count + " row(s)");
     }
 
     /**
@@ -243,6 +246,35 @@ public class TourDBManager extends SQLiteOpenHelper {
     }
 
     /**
+     * Checks if a key has already been used (i.e. there is a row for it in the db). Used when the
+     * user enters a key, to prevent downloading duplicate tours.
+     *
+     * @param db an SQLite db instance
+     * @param keyID the ID of a tour key (not the tour ID itself)
+     * @return true if the tour exists
+     */
+    public boolean doesTourExist(SQLiteDatabase db, String keyID) {
+        String[] cols = {TourList.COL_KEY_ID};
+        String where = TourList.COL_KEY_ID + " = ?";
+        String[] whereArgs = {keyID};
+
+        Cursor c = db.query(
+                TourList.TABLE_NAME,
+                cols,
+                where,
+                whereArgs,
+                null,
+                null,
+                null
+        );
+
+        boolean exists = c.getCount() > 0;
+        c.close();
+
+        return exists;
+    }
+
+    /**
      * Takes one or more timestamps and converts them into milliseconds since Epoch.
      *
      * @param dateFormat a String representing the format/pattern of the timestamp
@@ -256,7 +288,7 @@ public class TourDBManager extends SQLiteOpenHelper {
         long[] toReturn = new long[timeArgs.length];
 
         for (int i = 0; i < timeArgs.length; i++) {
-            Date date = df.parse(dateFormat);
+            Date date = df.parse(timeArgs[i]);
             toReturn[i] = date.getTime();
         }
 
