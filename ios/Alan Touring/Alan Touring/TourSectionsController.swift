@@ -16,12 +16,14 @@ class TourSectionsController: UITableViewController {
     var superTableId = ""
     var keys = [String]()
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.clearsSelectionOnViewWillAppear = false
-       let tour = tourDataParser.init().getTourSection(superTableId)
+        let tour = tourDataParser.init().getTourSection(superTableId)
     
-      let subsectionArray = tour.getSubSections();
+        let subsectionArray = tour.getSubSections()
+        let poiArray = tour.getPointsOfInterest()
         var tourTitles = [String: String]()
         
         let tdp = tourDataParser.init()
@@ -32,7 +34,15 @@ class TourSectionsController: UITableViewController {
             tourTitles[subsectionData.title as String] =  subsectionData.sectionId
             
         }
-      models = tourTitles
+        let poip = POIParser.init()
+        for poiPointer in poiArray{
+            
+            let poiData = poip.getTourSection((poiPointer["objectId"] as? String)!)
+            tourTitles[poiData.title as String] = poiData.objectId
+            }
+        
+        
+        models = tourTitles
         keys = Array(models.keys)
         
         checkStateOfScreen()
@@ -90,7 +100,7 @@ class TourSectionsController: UITableViewController {
         for poi in tourPOIS{
             print("test2")
             if (poi["objectId"] as! String) == objectForSegue{
-                self.performSegueWithIdentifier("pointOfInterestSegue", sender: self)
+                self.performSegueWithIdentifier("PointOfInterestSegue", sender: self)
                 break
             }
         }
@@ -124,14 +134,19 @@ class TourSectionsController: UITableViewController {
         
     }
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        let title = keys[self.tableView.indexPathForSelectedRow!.row]
+        let objectId = models[title]
+        
         if (segue.identifier == "showNextPage") {
-            let destinationVC = segue.destinationViewController as! TourSectionsController
-            let selectedRow = self.tableView.indexPathForSelectedRow!.row
-
-            let title = keys[selectedRow]
-            let objectId = models[title]
+            let newViewController = segue.destinationViewController as! TourSectionsController
+          
             
-            destinationVC.superTableId = objectId!
+            newViewController.superTableId = objectId!
+        }else if(segue.identifier == "PointOfInterestSegue"){
+            let newViewController = segue.destinationViewController as! pointOfInterestController
+            
+            newViewController.poiID = objectId!
+            
         }
     }
    
@@ -182,11 +197,7 @@ class TourSectionsController: UITableViewController {
     // MARK: - Navigation
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
-    
-    func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        
-    }
+
     
     
  

@@ -36,7 +36,8 @@ class POIParser{
         NSUserDefaults.standardUserDefaults().setObject(data, forKey: key)
         //Commits changes to memory, required for iOS 7 and below.
         NSUserDefaults.standardUserDefaults().synchronize()
-
+        //triggers the saving of images to the cache
+        self.createNewPOI(data).downloadContent()
   
     }
     

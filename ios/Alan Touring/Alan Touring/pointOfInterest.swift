@@ -35,6 +35,22 @@ class pointOfInterest {
         
     }
     
+    func downloadContent(){
+        let imghd = imageHandler.init()
+        var urlsToDownload = [String]()
+        
+        for item in post{
+            if var url: String? = item["url"] as? String{
+                if  url != nil{
+                print(url)
+                    
+                urlsToDownload.append(url!)
+                }
+            }
+        }
+        imghd.downloadImageSet(urlsToDownload)
+    }
+    
     //Endless getters fro poi properties
     
     func getCreatedAt() ->String{
