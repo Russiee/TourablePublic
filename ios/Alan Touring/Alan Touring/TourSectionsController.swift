@@ -64,7 +64,7 @@ class TourSectionsController: UITableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-              let cell = tableView.dequeueReusableCellWithIdentifier("tableCell2", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier("tableCell2", forIndexPath: indexPath)
         
         // Configure the cell...
         let keys = Array(models.keys)
@@ -73,6 +73,12 @@ class TourSectionsController: UITableViewController {
         return cell
     }
     
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if let cell = tableView.cellForRowAtIndexPath(indexPath) {
+            cell.addSubview(UITableView(frame: CGRectMake(10, 0, cell.contentView.bounds.size.width, 3)))
+        }
+        
+    }
     
     // a function to tell change the background image when loading the app AND when deleting a cell results in no tours left
     func checkStateOfScreen(){
