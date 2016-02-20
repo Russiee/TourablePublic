@@ -16,6 +16,11 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.hobbyte.touringandroid.internet.ServerAPI;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class DownloadActivity extends Activity {
     private static final String TAG = "DownloadActivity";
 
@@ -33,10 +38,31 @@ public class DownloadActivity extends Activity {
     private Button downloadImagesButton;
     private Button downloadVideoButton;
 
+    private JSONObject tourJSON;
+    private String keyID;
+    private String tourID;
+    private String expiresAt;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_download);
+
+        SharedPreferences prefs = getSharedPreferences(
+                getString(R.string.preference_file_key),
+                Context.MODE_PRIVATE
+        );
+
+        keyID = prefs.getString(getString(R.string.prefs_current_key), null);
+        tourID = prefs.getString(getString(R.string.prefs_current_tour), null);
+        expiresAt = prefs.getString(getString(R.string.prefs_current_expiry), null);
+
+        // temporary hack because KCL-1010 points to a non-existent tour ID
+        if (keyID.equals("49L6FrRwe4")) {
+            tourID = "DnPRFaSYEk";
+        }
+
+        new FetchTourJSON().execute();
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         bottomTextView = (TextView) findViewById(R.id.bottomText);
@@ -53,7 +79,7 @@ public class DownloadActivity extends Activity {
             @Override
             public void onClick(View v) {
                 String param = IMAGES;
-                downloadTourMediaClass k = new downloadTourMediaClass();
+                DownloadTourMediaClass k = new DownloadTourMediaClass();
                 k.execute(param);
                 changeUiAfterSelection("");
             }
@@ -63,19 +89,31 @@ public class DownloadActivity extends Activity {
             @Override
             public void onClick(View v) {
                 String param = VIDEO;
-                downloadTourMediaClass k = new downloadTourMediaClass();
+                DownloadTourMediaClass k = new DownloadTourMediaClass();
                 k.execute(param);
                 changeUiAfterSelection(" & video");
             }
         });
 
         setDownloadSizeLabels();
+    }
 
-        SharedPreferences prefs = getApplicationContext().getSharedPreferences(
-                getString(R.string.preference_file_key),
-                Context.MODE_PRIVATE
-        );
-        Log.d(TAG, "Current tour: " + prefs.getString(getString(R.string.prefs_current_tour), "none"));
+    private void loadTourDescription() {
+
+
+
+
+        TextView txtTitle = (TextView) findViewById(R.id.txtTourTitle);
+        TextView txtDescription = (TextView) findViewById(R.id.txtTourDescription);
+
+        try {
+            txtTitle.setText(tourJSON.getString("title"));
+            txtDescription.setText(tourJSON.getString("description"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+            txtTitle.setText("Error");
+            txtDescription.setText("Error");
+        }
     }
 
     /**
@@ -149,18 +187,18 @@ public class DownloadActivity extends Activity {
     /**
      * Asynchronously downloads the media of the tour
      */
-    private class downloadTourMediaClass extends AsyncTask<String, Void, Boolean> {
+    private class DownloadTourMediaClass extends AsyncTask<String, Void, Boolean> {
 
         @Override
         protected Boolean doInBackground(String... params) {
 
             //when we want to load images only
-            if (params[0] == IMAGES) {
+            if (params[0].equals(IMAGES)) {
 
                 //TODO make this work
 
                 //when we want to load images and video
-            } else if (params[0] == VIDEO) {
+            } else if (params[0].equals(VIDEO)) {
 
                 //TODO make this work
             } else return false;
@@ -173,9 +211,22 @@ public class DownloadActivity extends Activity {
 
             //moveToTourActivity(); //TODO uncomment this when it actually starts a tour
 
-            //removes activity from stack users stack so when they press back from a tour tehy go back to the main menu
+            // removes activity from users stack so when they press back from a tour they go back
+            // to the main menu
             DownloadActivity.this.finish();
         }
     }
 
+    private class FetchTourJSON extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            tourJSON = ServerAPI.getTourJSON(tourID);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            loadTourDescription();
+        }
+    }
 }

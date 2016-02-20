@@ -28,7 +28,8 @@ public class ServerAPI {
 
     //    private static final String keyValidationURL = "https://192.168.56.1:3000/api/v1/key/verify/";
     private static final String keyValidationURL = "https://touring-api.herokuapp.com/api/v1/key/verify/";
-    private static final String tourBundleURL = "https://touring-api.herokuapp.com/api/v1/tour/";
+    private static final String tourURL = "https://touring-api.herokuapp.com/api/v1/tour/";
+    private static final String tourBundleURL = "https://touring-api.herokuapp.com/api/v1/tour/"; // TODO: this needs to change to ...v1/bundle/
     private static final String sectionURL = "https://touring-api.herokuapp.com/api/v1/section/";
     private static final String poiURL = "https://touring-api.herokuapp.com/api/v1/poi/";
 
@@ -61,7 +62,6 @@ public class ServerAPI {
             in.close();
             connection.disconnect();
 
-
             if (response == 200) {
                 Log.d(TAG, "Valid key: " + tourKey);
                 JSONObject json = (JSONObject) new JSONArray(jsonString.toString()).get(0);
@@ -78,6 +78,50 @@ public class ServerAPI {
         } catch (Exception e) {
             e.printStackTrace();
             Log.e(TAG, "Something went wrong verifying key!");
+        }
+        return null;
+    }
+
+    /**
+     * Fetches JSON from the server representing a tour, for a provided tour ID.
+     *
+     * @param tourID an ID corresponding to a tour
+     * @return the JSON response if the tour ID exists; null otherwise
+     */
+    public static JSONObject getTourJSON(String tourID) {
+        try {
+            URL url = new URL(tourURL + tourID);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setDoInput(true);
+            connection.connect();
+
+            int response = connection.getResponseCode();
+
+            StringBuilder jsonString = new StringBuilder("");
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String line = in.readLine();
+
+            while (line != null) {
+                jsonString.append(line);
+                line = in.readLine();
+            }
+
+            in.close();
+            connection.disconnect();
+
+            if (response == 200) {
+                JSONObject json = new JSONObject(jsonString.toString());
+                Log.d(TAG, "Returning JSON for tour: " + json.getString("title"));
+                return json;
+            } else {
+                Log.d(TAG, "Could not find tour for ID = " + tourID);
+            }
+
+        } catch (JSONException jex) {
+            jex.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }

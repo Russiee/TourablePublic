@@ -9,43 +9,57 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.hobbyte.touringandroid.DownloadActivity">
 
+    <TextView
+        android:id="@+id/txtTourTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/txtTourDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtTourTitle"
+        android:layout_centerHorizontal="true"/>
+
     <LinearLayout
+        android:id="@+id/CenterLayout"
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/CenterLayout"
         android:baselineAligned="false"
         android:layout_above="@+id/bottomText"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="44dp">
 
         <LinearLayout
+            android:id="@+id/imageOptionLayout"
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imageOptionLayout"
             android:layout_weight="1">
 
             <Button
+                android:id="@+id/imageOptionButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/download_option_image"
-                android:id="@+id/imageOptionButton"
                 android:textColor="#ffffff" />
 
             <TextView
+                android:id="@+id/imageOptionCaptionEditText"
                 android:layout_width="fill_parent"
                 android:layout_height="40dp"
                 android:text="@string/download_option_image_label"
-                android:id="@+id/imageOptionCaptionEditText"
                 android:layout_gravity="center"
                 android:textAlignment="center" />
 
             <TextView
+                android:id="@+id/imageOptionSizeEditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="size"
-                android:id="@+id/imageOptionSizeEditText"
                 android:layout_gravity="center_horizontal" />
 
         </LinearLayout>
@@ -56,49 +70,49 @@
             android:layout_weight="1" />
 
         <LinearLayout
+            android:id="@+id/videoOptionLayout"
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/videoOptionLayout"
             android:layout_weight="1">
 
             <Button
+                android:id="@+id/videoOptionButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/download_option_video"
-                android:id="@+id/videoOptionButton"
                 android:textColor="#ffffff" />
 
             <TextView
+                android:id="@+id/videoOptionCaptionEditText"
                 android:layout_width="fill_parent"
                 android:layout_height="40dp"
                 android:text="@string/download_option_video_label"
-                android:id="@+id/videoOptionCaptionEditText"
                 android:layout_gravity="center"
                 android:textAlignment="center" />
 
             <TextView
+                android:id="@+id/videoOptionSizeEditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="size"
-                android:id="@+id/videoOptionSizeEditText"
                 android:layout_gravity="center_horizontal" />
         </LinearLayout>
 
     </LinearLayout>
 
     <ProgressBar
+        android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/progressBar"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:visibility="invisible" />
 
     <TextView
+        android:id="@+id/bottomText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/bottomText"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 
