@@ -12,28 +12,22 @@ class pointOfInterest {
     var createdAt: String
     var description: String
     var objectId: String
+    var post: NSArray
+    var section: NSDictionary
+    var title: String
+    var updatedAt: String
     
-    init(objectId: String, description: String, createdAt: String){
+    init(objectId: String, description: String, createdAt: String, post: NSArray, section: NSDictionary, title: String, updatedAt: String){
         self.objectId = objectId
         self.description = description
         self.createdAt = createdAt
+        self.post = post
+        self.section = section
+        self.title = title
+        self.updatedAt = updatedAt
+        
     }
     
-    var post: NSDictionary{
-        get{
-            return self.post
-        }
-        set{
-            self.post = newValue
-        }
-    }
     
-    var section: NSDictionary{
-        get{
-            return self.section
-        }
-        set{
-            self.section = newValue
-        }
-    }
+    
 }
