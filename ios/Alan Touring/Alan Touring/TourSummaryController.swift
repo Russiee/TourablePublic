@@ -44,7 +44,7 @@ class TourSummaryController: UIViewController {
 
         // Create a new variable to store the instance of PlayerTableViewController
         let destinationVC = segue.destinationViewController as! TourSectionsController
-        destinationVC.programVar = setup["objectId"] as! String
+        destinationVC.superTableId = setup["objectId"] as! String
     }
 }
 

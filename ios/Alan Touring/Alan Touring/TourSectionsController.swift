@@ -13,12 +13,13 @@ class TourSectionsController: UITableViewController {
     
     
     var models = [String: String]()
-    var programVar = ""
+    var superTableId = ""
+    var keys = [String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.clearsSelectionOnViewWillAppear = false
-       let tour = tourDataParser.init().getTourSection(programVar)
+       let tour = tourDataParser.init().getTourSection(superTableId)
     
       let subsectionArray = tour.getSubSections();
         var tourTitles = [String: String]()
@@ -32,6 +33,7 @@ class TourSectionsController: UITableViewController {
             
         }
       models = tourTitles
+        keys = Array(models.keys)
         
         checkStateOfScreen()
     }
@@ -67,19 +69,16 @@ class TourSectionsController: UITableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier("tableCell2", forIndexPath: indexPath)
         
         // Configure the cell...
-        let keys = Array(models.keys)
+        keys = Array(models.keys)
         
         cell.textLabel?.text = keys[indexPath.row] 
         return cell
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if let cell = tableView.cellForRowAtIndexPath(indexPath) {
-            cell.addSubview(UITableView(frame: CGRectMake(10, 0, cell.contentView.bounds.size.width, 3)))
-        }
-        
+        self.performSegueWithIdentifier("showNextPage", sender: self)
     }
-    
+      
     // a function to tell change the background image when loading the app AND when deleting a cell results in no tours left
     func checkStateOfScreen(){
         if models.count == 0 {
@@ -98,6 +97,17 @@ class TourSectionsController: UITableViewController {
             
         }
         
+    }
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if (segue.identifier == "showNextPage") {
+            let destinationVC = segue.destinationViewController as! TourSectionsController
+            let selectedRow = self.tableView.indexPathForSelectedRow!.row
+
+            let title = keys[selectedRow]
+            let objectId = models[title]
+            
+            destinationVC.superTableId = objectId!
+        }
     }
    
     }
