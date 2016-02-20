@@ -25,6 +25,9 @@ import com.hobbyte.touringandroid.helpers.TourDBContract;
 import com.hobbyte.touringandroid.helpers.TourDBManager;
 import com.hobbyte.touringandroid.internet.ServerAPI;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -278,17 +281,41 @@ public class StartActivity extends Activity {
         protected Boolean doInBackground(String... params) {
             String key = params[0];
 
-            String tourId = ServerAPI.checkKeyValidity(key);
+            JSONObject keyJSON = ServerAPI.checkKeyValidity(key);
 
-            // if a valid tourId is returned, store it in SharedPreferences so that the key can
-            // be used elsewhere in the app
-            if (tourId != null) {
+            // if the server returns JSON, extract needed details
+            if (keyJSON != null) {
+                String tourID;
+                String keyID;
+                String keyExpiryDate;
+
+                try {
+                    tourID = keyJSON.getJSONObject("tour").getString("objectId");
+                    keyID = keyJSON.getString("objectId");
+                    keyExpiryDate = keyJSON.getString("expiresAt");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    tourID = null;
+                    keyID = null;
+                    keyExpiryDate = null;
+                }
+
                 SharedPreferences prefs = getApplicationContext().getSharedPreferences(
                         getString(R.string.preference_file_key),
                         Context.MODE_PRIVATE);
 
+                /*
+                The JSON returned above is purely for the key. It contains several key pieces of
+                information:
+                    - keyID used to create a folder for storing tour media
+                    - tourID used to fetch the tour bundle
+                    - expiresAt needs to be stored in the local DB
+                All other info comes from the tour/bundle json, which will be saved on the device.
+                 */
                 SharedPreferences.Editor editor = prefs.edit();
-                editor.putString(getString(R.string.prefs_current_tour), tourId);
+                editor.putString(getString(R.string.prefs_current_tour), tourID);
+                editor.putString(getString(R.string.prefs_current_key), keyID);
+                editor.putString(getString(R.string.prefs_current_expiry), keyExpiryDate);
                 editor.apply();
                 return true;
             }

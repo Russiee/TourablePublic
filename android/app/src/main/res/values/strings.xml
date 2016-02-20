@@ -9,6 +9,8 @@
     <string name="preference_file_key">com.hobbyte.touringandroid.PREF_FILE_KEY</string>
     <string name="prefs_is_new_install">KEY_FRESH</string>
     <string name="prefs_current_tour">CURRENT_TOUR_ID</string>
+    <string name="prefs_current_key">CURRENT_KEY_ID</string>
+    <string name="prefs_current_expiry">CURRENT_KEY_EXPIRATION</string>
 
     <string name="start_activity_enter_key">Enter a tour key:</string>
     <string name="submit_key_button_text">Submit</string>

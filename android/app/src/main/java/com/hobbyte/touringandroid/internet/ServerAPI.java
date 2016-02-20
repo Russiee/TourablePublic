@@ -10,6 +10,7 @@ import com.hobbyte.touringandroid.SubSection;
 import com.hobbyte.touringandroid.Tour;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -33,12 +34,12 @@ public class ServerAPI {
 
     /**
      * Asks the server if a provided Tour Key is a real, valid key. If it is, return the
-     * corresponding tour ID.
+     * JSON response from the server.
      *
      * @param tourKey a key for a tour
-     * @return true if the key exists on the server
+     * @return the JSON response if the key was valid; null otherwise
      */
-    public static String checkKeyValidity(String tourKey) {
+    public static JSONObject checkKeyValidity(String tourKey) {
         try {
             URL url = new URL(keyValidationURL + tourKey);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -66,17 +67,19 @@ public class ServerAPI {
                 JSONObject json = (JSONObject) new JSONArray(jsonString.toString()).get(0);
                 String tourID = json.getJSONObject("tour").getString("objectId");
                 Log.d(TAG, "Fetched tourId: " + tourID);
-                return tourID;
+                return json;
             } else {
                 Log.d(TAG, "Invalid key: " + tourKey);
                 return null;
             }
-
+        } catch (JSONException jex) {
+            jex.printStackTrace();
+            Log.e(TAG, "Something went wrong with the JSON!");
         } catch (Exception e) {
             e.printStackTrace();
             Log.e(TAG, "Something went wrong verifying key!");
-            return null;
         }
+        return null;
     }
 
     /**
