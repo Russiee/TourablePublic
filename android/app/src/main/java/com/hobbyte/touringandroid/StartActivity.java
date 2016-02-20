@@ -54,7 +54,6 @@ public class StartActivity extends Activity {
 
         // make the directory for tour media and set the "first install" flag to false
         if (isFreshInstall) {
-            FileManager.makeTourDir(this);
             SharedPreferences.Editor editor = prefs.edit();
             editor.putBoolean(getString(R.string.prefs_is_new_install), false);
             editor.apply();
