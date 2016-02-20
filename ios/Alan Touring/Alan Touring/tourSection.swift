@@ -7,16 +7,25 @@
 //
 
 import Foundation
-
+//Class reprisenting a subsection in the tour. Repsonsible for triggering the
+//download of its contents
 class tourSection{
+    //Unique id of section
     var sectionId: String
+    //Section description
     var description: String
+    //DateTime of creation
     var createdAt: String
+    //Supersection pointer for the section. will be empty for the top level
     var superSection: NSDictionary
+    //All subsection pointers
     var subSections: NSArray
+    //All point of interest pointers
     var pointsOfInterest: NSArray
+    //Title of section
     var title: NSString
     
+    //Constructor
     init(sectionId: String, description: String, createdAt: String, superSection: NSDictionary, subSections:NSArray, pointsOfInterest:NSArray, title:NSString){
         self.sectionId = sectionId
         self.description = description
@@ -26,10 +35,11 @@ class tourSection{
         self.pointsOfInterest = pointsOfInterest
         self.title = title
 
-       // self.debugDataPass()
+
     }
     
     //Recursivley create all other required objects
+    //Should only be called once, externally
     
     func triggerRecursion(){
        // print("recursion on \(sectionId) called")
@@ -42,7 +52,15 @@ class tourSection{
             brp.initateConnection(objectId)
         }
         
+        for poi in pointsOfInterest{
+            //Dont move this, for god sake.
+            let poic = POIConnector.init()
+            let objectId = poi["objectId"] as! String
+            poic.initateConnection(objectId)
+        }
+        
     }
+    //Prints tour section object for debugging
     func debugDataPass(){
         print("--------")
         print(sectionId)
@@ -55,6 +73,8 @@ class tourSection{
         print("--------")
        
     }
+    
+    //Endless getters for tour section properties
     
     func getSectionId() -> String{
         return self.sectionId

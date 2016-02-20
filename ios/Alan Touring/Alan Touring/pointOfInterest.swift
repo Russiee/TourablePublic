@@ -9,31 +9,62 @@
 import Foundation
 
 class pointOfInterest {
+    //DateTime item was created at
     var createdAt: String
+    //Point of interest description
     var description: String
+    //Unique objectId
     var objectId: String
+    //Actual point of interest contents
+    var post: NSArray
+    //the section the point of interest belongs to.
+    var section: NSDictionary
+    //Title of the point of interest
+    var title: String
+    //Last time update was made to the poi
+    var updatedAt: String
     
-    init(objectId: String, description: String, createdAt: String){
+    init(objectId: String, description: String, createdAt: String, post: NSArray, section: NSDictionary, title: String, updatedAt: String){
         self.objectId = objectId
         self.description = description
         self.createdAt = createdAt
+        self.post = post
+        self.section = section
+        self.title = title
+        self.updatedAt = updatedAt
+        
     }
     
-    var post: NSDictionary{
-        get{
-            return self.post
-        }
-        set{
-            self.post = newValue
-        }
+    //Endless getters fro poi properties
+    
+    func getCreatedAt() ->String{
+        return self.createdAt
+    }
+
+    func getDescription() ->String{
+        return self.description
+    }
+
+    func getObjectId() ->String{
+        return self.objectId
+    }
+
+    func getPost() ->NSArray{
+        return self.post
+    }
+
+    func getSection() ->NSDictionary{
+        return self.section
+    }
+
+    func getTitle() ->String{
+        return self.title
+    }
+
+    func getUpdatedAt() ->String{
+        return self.updatedAt
     }
     
-    var section: NSDictionary{
-        get{
-            return self.section
-        }
-        set{
-            self.section = newValue
-        }
-    }
+    
+    
 }

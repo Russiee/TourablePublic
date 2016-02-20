@@ -10,6 +10,7 @@ import Foundation
 
 class tourDataParser{
     
+  
     init(){
         
     }
