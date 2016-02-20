@@ -102,9 +102,9 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
         //Storing Meta Data so we can access it for other use
         _ = TourIdParser().addTourMetaData(JSONData)
         self.triggerValidKeyNotification()
+        //TODO: sort this
         //This will be the objectId taken from the key verification route.
-        
-        _ = bundleRouteConnector.init().startConnection("m1dUFsZ1gt")
+        _ = bundleRouteConnector.init().initateConnection("m1dUFsZ1gt")
     }
     
     

@@ -7,14 +7,15 @@
 //
 
 import Foundation
-
+//Handles API connectivity for points of interest. As these are handled differently to 
+//tour sections
 class POIConnector: NSObject, NSURLConnectionDelegate{
     
     lazy var data = NSMutableData()
     var urlPath: String = ""
     
     //Makes the connection to the API
-    func startConnection( objectID: String){
+   private func startConnection( objectID: String){
         
         
         let resetData = NSMutableData()
@@ -32,23 +33,25 @@ class POIConnector: NSObject, NSURLConnectionDelegate{
         connection.start()
     }
     
-    
-    func connection(connection: NSURLConnection!, didReceiveData data: NSData!){
+    //Stores the data into the data var
+   private func connection(connection: NSURLConnection!, didReceiveData data: NSData!){
         //Storing the data for use
         self.data.appendData(data)
     }
     
+    //Initiates the connection
     func initateConnection(objectId: String){
         startConnection(objectId)
     }
     
-    func connectionDidFinishLoading(connection: NSURLConnection!) {
+    //Deals with the data after the data has been completely downloaded
+   private func connectionDidFinishLoading(connection: NSURLConnection!) {
         
         do {
             
             let jsonResult: NSDictionary = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
             
-            self.storeMetadataJson(jsonResult)
+            self.storeJSON(jsonResult)
         }
         catch let err as NSError{
             print(urlPath+"    ERROR HERE")
@@ -59,7 +62,7 @@ class POIConnector: NSObject, NSURLConnectionDelegate{
         
     }
     
-    func storeMetadataJson(JSONData: NSDictionary){
+    func storeJSON(JSONData: NSDictionary){
         
         POIParser.init().savePOI(JSONData)
         //print(JSONData)
