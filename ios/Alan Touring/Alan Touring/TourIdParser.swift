@@ -10,34 +10,47 @@ import Foundation
 
 let TableUpdateNotificationKey = "tableAddWasComplete"
 
-public class tourIdParser {
-
-    var API = ApiConnector.init()
+public class TourIdParser {
     
-    
-    public init(){
-        //If the app is launched for the first time, a new empty array is created for the 
-        //tour ids.
-        if(NSUserDefaults.standardUserDefaults().stringArrayForKey("Array")==nil){
-            let newArray = [AnyObject]()
-            self.saveArray(newArray)
+    //making the TourIdParser a singleton to parse all tours from the API
+    //in order to access TourIdParser methods call TourIdParser.shardInstance.METHOD()
+    class var sharedInstance: TourIdParser {
+        struct Static {
+            static var onceToken: dispatch_once_t = 0
+            static var instance: TourIdParser? = nil
         }
+        dispatch_once(&Static.onceToken) {
+            Static.instance = TourIdParser()
+            
+        }
+        return Static.instance!
     }
+
+    var API = ApiConnector()
     
-   public func deleteTourIdAtRow(row:Int){
-        var newArray : [AnyObject] = NSUserDefaults.standardUserDefaults().objectForKey("Array")! as AnyObject as! [AnyObject]
+    
+    
+    func deleteTourIdAtRow(row: Int) {
+        //remove from "Array"
+        var newArray : [AnyObject] = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! [AnyObject]
         NSUserDefaults.standardUserDefaults().removeObjectForKey(newArray[row] as! String)
+        
+        //remove from Meta Data
+        NSUserDefaults.standardUserDefaults().removeObjectForKey(newArray[row] as! String)
+        NSUserDefaults.standardUserDefaults().synchronize()
+        
+        
         newArray.removeAtIndex(row)
         saveArray(newArray)
+        
     }
    
     
     //Adds a new tourId to the array
-    public func updateArray(tourId: String){
+     func updateArray(tourId: String){
         //Duplicates the array, creating a mutable version that the new tourId can be added to.
         var newArray : [AnyObject] = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! NSMutableArray as [AnyObject]
         newArray.append(tourId)
-        print("Update Array called now saving changes")
         saveArray(newArray)
     }
     
@@ -50,8 +63,6 @@ public class tourIdParser {
         NSUserDefaults.standardUserDefaults().setObject(newArray, forKey: "Array")
         //Commits changes to memory, required for iOS 7 and below.
         NSUserDefaults.standardUserDefaults().synchronize()
-        NSUserDefaults.standardUserDefaults().synchronize()
-
         notify()
     }
     
@@ -61,12 +72,18 @@ public class tourIdParser {
 
         let keys = ["code","createdAt","expiresAt","objectId","tour","updatedAt"]
         var dict = metadata.dictionaryWithValuesForKeys(keys)
+        //TODO: this is a hack to match the KCL-1010 tourID to the mock tour data for testing.
+        //This WILL CAUSE BUGS when working with toursIDs that have actual tours acociated with them
+        
+        dict["objectId"] = "m1dUFsZ1gt"
         let tourCode = dict["code"]!
 
         let metadataDict = dict as NSDictionary
+        
         NSUserDefaults.standardUserDefaults().setObject(metadataDict, forKey: tourCode[0] as! String)
         NSUserDefaults.standardUserDefaults().synchronize()
-        print("here")
+
+        
         self.updateArray(tourCode[0] as! String)
         
         NSNotificationCenter.defaultCenter().addObserver(
@@ -79,12 +96,12 @@ public class tourIdParser {
     
     //Gets the dictonary from the cache with the tour code passed to it
     func getTourMetadata(tourCode: String) -> Dictionary<String,AnyObject>{
-       return NSUserDefaults.standardUserDefaults().objectForKey(tourCode) as! Dictionary<String,AnyObject>
+        return NSUserDefaults.standardUserDefaults().objectForKey(tourCode) as! [String : AnyObject]
     }
     //Notifies observers that the table of tour Ids has been updated.
     func notify() {
         NSNotificationCenter.defaultCenter().postNotificationName(TableUpdateNotificationKey, object: self)
-        print("notify called")
+
     }
     
     //method for getting tourIds that have been added for checking the table updates.

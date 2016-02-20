@@ -19,17 +19,30 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
     
     //Makes the connection to the API
     func startConnection(var tourId: String){
-        let resetData = NSMutableData()
-        //Reseting data to blank with every new connection
-        data = resetData
-        tourId = cleanTourId(tourId)
-        //The path to where the Tour Data is stored
-        urlPath = "https://touring-api.herokuapp.com/api/v1/key/verify/" + tourId
+                let resetData = NSMutableData()
+                //Reseting data to blank with every new connection
+                data = resetData
+                tourId = cleanTourId(tourId)
+                //The path to where the Tour Data is stored
+               urlPath = "https://touring-api.herokuapp.com/api/v1/key/verify/" + tourId
+
+                //Standard URLConnection method
+        do {
+            let request: NSURLRequest = NSURLRequest(URL: NSURL(string: urlPath)!)
+            let connection: NSURLConnection = NSURLConnection(request: request, delegate: self, startImmediately: false)!
+            connection.start()
+        }
+        catch let err as NSError{
+            //Need to let user know if the tourID they entered was faulty here
+            print(err.description)
+            self.triggerInvalidKeyNotification()
+        }
+        catch _ as NSCocoaError{
+            
+            self.triggerInvalidKeyNotification()
+        }
+        //change to URLSession
         
-        //Standard URLConnection method
-        let request: NSURLRequest = NSURLRequest(URL: NSURL(string: urlPath)!)
-        let connection: NSURLConnection = NSURLConnection(request: request, delegate: self, startImmediately: true)!
-        connection.start()
     }
     
     
@@ -47,7 +60,7 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
         do {
             let jsonResult: NSArray = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as! NSArray
 
-            self.storeJson(jsonResult)
+            self.storeMetadataJson(jsonResult)
         }
         catch let err as NSError{
             //Need to let user know if the tourID they entered was faulty here
@@ -65,7 +78,7 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
             object: nil)
         func notify() {
             NSNotificationCenter.defaultCenter().postNotificationName(invalidIdNotificationKey, object: self)
-            print("invalid key notify called")
+
         }
         notify()
     }
@@ -85,18 +98,22 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
     }
     
     //Takes the metadata and passes it to the tourIdParser.
-    func storeJson(JSONData: NSArray){
+    func storeMetadataJson(JSONData: NSArray){
         //Storing Meta Data so we can access it for other use
-        _ = tourIdParser.init().addTourMetaData(JSONData)
+        _ = TourIdParser().addTourMetaData(JSONData)
         self.triggerValidKeyNotification()
+        //This will be the objectId taken from the key verification route.
+        
+        _ = bundleRouteConnector.init().startConnection("m1dUFsZ1gt")
     }
+    
     
     // remove the heading and trailing spaces
     func cleanTourId(tourId: String) -> String {
 
         let trimmedTourId = tourId.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-
-        if trimmedTourId.containsString(" ") {
+        
+        if trimmedTourId.containsString(" ") || trimmedTourId.containsString("/")||trimmedTourId.containsString("\"")||trimmedTourId.containsString("\\"){
             print("the tour id ou input must not contain whitespaces.")
             return ""
         }

@@ -11,6 +11,7 @@ import UIKit
 class addNewTourViewController: UIViewController, UIAlertViewDelegate {
 
     var tourID: String = ""
+    var tourIndex: Int?
     
     @IBOutlet weak var busyWheel: UIActivityIndicatorView!
     @IBOutlet weak var withVideoButton: UIButton!
@@ -18,16 +19,33 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
     @IBOutlet weak var tourInformationLabel: UILabel!
     
     
+    
     override func viewDidLoad() {
-        print("view summary was loaded")
+
         //Adds the observers for a valid or invalid key input completion message from ApiController
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedInvalid", name: invalidIdNotificationKey, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedValid", name: validIdNotificationKey, object: nil)
        //Starts busy wheel animation and hides the other items in the view.
         self.busyWheel.startAnimating()
         self.hideButtonsForBusyWheel(true)
+        
+        let newCancelButton = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "cancelDownload")
+        self.navigationItem.setLeftBarButtonItem(newCancelButton, animated: false)
 
     }
+    
+    //a method to allow the user to cancel the data download and return to the main table view
+    func cancelDownload() {
+
+        //delete the metaData and data stored in "Array"
+
+        TourIdParser.sharedInstance.deleteTourIdAtRow(tourIndex!)
+        
+        //unwind segue back to the main tableview
+        self.dismissViewControllerAnimated(true, completion: nil)
+        
+    }
+    
     
     //Will be used to confirm downloads of video for the tour
     @IBAction func withVideoButton(sender: AnyObject) {
@@ -54,14 +72,15 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
         alert.show()
         
         //Closes the view and returns user to the mainTableview if key was invalid.
-        print("tour summary was notified")
-        performSegueWithIdentifier("Cancel", sender: self)
+
+        performSegueWithIdentifier("cancel", sender: self)
     }
     
     //Called if the tourId if valid. Stops the busy wheel and shows the download settings.
     func NotifiedValid(){
         self.busyWheel.stopAnimating()
         self.hideButtonsForBusyWheel(false)
+
     }
     
     //Method for hiding all other items in the view besides teh busy wheel. 
