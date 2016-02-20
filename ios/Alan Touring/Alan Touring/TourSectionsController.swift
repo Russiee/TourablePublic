@@ -76,9 +76,34 @@ class TourSectionsController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        self.performSegueWithIdentifier("showNextPage", sender: self)
+        //CODE TO GO TO THE NEXT LEVEL OF TOUR OR DISPLAY POINT OF INTEREST
+        let row = tableView.indexPathForSelectedRow!.row
+        let RowTitle = keys[row]
+        print(RowTitle+" id found")
+        let objectForSegue = models[RowTitle]
+        print(objectForSegue!+" object ID to seg to")
+        let tourSections = tourDataParser.init().getTourSection(superTableId).getSubSections()
+        let tourPOIS = tourDataParser.init().getTourSection(superTableId).getPointsOfInterest()
+        print(tourPOIS.count)
+        print("now here")
+
+        for poi in tourPOIS{
+            print("test2")
+            if (poi["objectId"] as! String) == objectForSegue{
+                self.performSegueWithIdentifier("pointOfInterestSegue", sender: self)
+                break
+            }
+        }
+
+        for subsection in tourSections{
+            if (subsection["objectId"] as! String) == objectForSegue{
+                print("test1")
+                self.performSegueWithIdentifier("showNextPage", sender: self)
+                break
+            }
+        }
     }
-    
+
     // a function to tell change the background image when loading the app AND when deleting a cell results in no tours left
     func checkStateOfScreen(){
         if models.count == 0 {

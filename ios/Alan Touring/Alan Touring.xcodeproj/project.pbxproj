@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7A77D8EA1C78DC3A007A3995 /* PointOfInterestCellViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A77D8E91C78DC3A007A3995 /* PointOfInterestCellViewController.swift */; };
 		E536DCBF1C6510FD00A7B2FC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E536DCBE1C6510FC00A7B2FC /* AppDelegate.swift */; };
 		E536DCC11C6510FD00A7B2FC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E536DCC01C6510FD00A7B2FC /* ViewController.swift */; };
 		E536DCC41C6510FD00A7B2FC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E536DCC21C6510FD00A7B2FC /* Main.storyboard */; };
@@ -48,6 +49,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7A77D8E91C78DC3A007A3995 /* PointOfInterestCellViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointOfInterestCellViewController.swift; sourceTree = "<group>"; };
 		E536DCBB1C6510FC00A7B2FC /* Alan Touring.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Alan Touring.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E536DCBE1C6510FC00A7B2FC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E536DCC01C6510FD00A7B2FC /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 				E536DCBE1C6510FC00A7B2FC /* AppDelegate.swift */,
 				E536DCC01C6510FD00A7B2FC /* ViewController.swift */,
 				E536DCC21C6510FD00A7B2FC /* Main.storyboard */,
+				7A77D8E91C78DC3A007A3995 /* PointOfInterestCellViewController.swift */,
 				FAD1B1531C6BAEB400CA5327 /* TourSummaryController.swift */,
 				E536DCC81C6510FD00A7B2FC /* Assets.xcassets */,
 				E536DCCA1C6510FD00A7B2FC /* LaunchScreen.storyboard */,
@@ -323,6 +326,7 @@
 				E536DCC11C6510FD00A7B2FC /* ViewController.swift in Sources */,
 				E536DCBF1C6510FD00A7B2FC /* AppDelegate.swift in Sources */,
 				FA4D0F5F1C6A4D08007D79E3 /* TourIdParser.swift in Sources */,
+				7A77D8EA1C78DC3A007A3995 /* PointOfInterestCellViewController.swift in Sources */,
 				FA0A51721C7747B400E4F733 /* tourSection.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
