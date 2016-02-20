@@ -43,7 +43,7 @@ class tourDataParser{
     }
     
     func getTourSection(objectId: String)-> tourSection{
-      
+      print(objectId)
         let data = NSUserDefaults.standardUserDefaults().objectForKey(objectId) as! NSDictionary
         return createNewTour(data)
         
