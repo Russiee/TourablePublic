@@ -113,7 +113,7 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
 
         let trimmedTourId = tourId.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
         
-        if trimmedTourId.containsString(" ") || trimmedTourId.containsString("/")||trimmedTourId.containsString("\""){
+        if trimmedTourId.containsString(" ") || trimmedTourId.containsString("/")||trimmedTourId.containsString("\"")||trimmedTourId.containsString("\\"){
             print("the tour id ou input must not contain whitespaces.")
             return ""
         }
