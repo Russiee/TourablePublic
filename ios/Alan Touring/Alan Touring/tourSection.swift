@@ -42,6 +42,13 @@ class tourSection{
             brp.initateConnection(objectId)
         }
         
+        for poi in pointsOfInterest{
+            //Dont move this, for god sake.
+            let poic = POIConnector.init()
+            let objectId = poi["objectId"] as! String
+            poic.initateConnection(objectId)
+        }
+        
     }
     func debugDataPass(){
         print("--------")
