@@ -78,11 +78,11 @@ class TourSectionsController: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         self.performSegueWithIdentifier("showNextPage", sender: self)
     }
-      
+    
     // a function to tell change the background image when loading the app AND when deleting a cell results in no tours left
     func checkStateOfScreen(){
         if models.count == 0 {
-            let  empty_state_image = UIImage(named: "empty_tv_placeholder")
+            let  empty_state_image = UIImage(named: "empty_ts_placeholder")
             let empty_state_label = UIImageView(image: empty_state_image)
             empty_state_label.contentMode = .ScaleAspectFit
             
