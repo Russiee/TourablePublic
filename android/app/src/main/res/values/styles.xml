@@ -9,4 +9,9 @@
         <item name="android:colorButtonNormal">#2196f3</item>
     </style>
 
+    <!-- DownloadActivity tour title-->
+    <style name="TourTitle" parent="android:Theme.Material.Light">
+        <item name="android:textSize">20sp</item>
+    </style>
+
 </resources>
