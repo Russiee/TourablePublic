@@ -203,38 +203,15 @@ public class StartActivity extends Activity {
         textKey.setText("");
 
         Intent intent = new Intent(this, DownloadActivity.class);
+        intent.putExtra(DownloadActivity.IS_NEW_TOUR, true);
         startActivity(intent);
     }
 
     private void goToTour(final String tourId) {
-        // TODO: this queries the api for tour data but should be looking at the file system
-        ArrayList<SubSection> subsectionList = new ArrayList<SubSection>();
-
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                tour = ServerAPI.allocateTourSections(tourId);
-            }
-        });
-
-        t.start();
-
-        try {
-            t.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        subsectionList = tour.getSubSections();
-
-        // temporary measure
-        if (subsectionList != null) {
-            Intent intent = new Intent(this, TourActivity.class);
-            intent.putExtra(TourActivity.EXTRA_MESSAGE_SUB, subsectionList);
-            startActivity(intent);
-        } else {
-            Log.w(TAG, "Tour subsectionlist was null!");
-        }
+        Intent intent = new Intent(this, TourActivity.class);
+        intent.putExtra(DownloadActivity.IS_NEW_TOUR, false);
+        intent.putExtra(DownloadActivity.KEY_ID, tourId);
+        startActivity(intent);
     }
 
     /**
