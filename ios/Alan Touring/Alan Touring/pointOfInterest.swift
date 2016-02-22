@@ -32,7 +32,24 @@ class pointOfInterest {
         self.section = section
         self.title = title
         self.updatedAt = updatedAt
+        print("POI "+self.objectId)
         
+    }
+    
+    func downloadContent(){
+        let imghd = imageHandler.init()
+        var urlsToDownload = [String]()
+        
+        for item in post{
+            if var url: String? = item["url"] as? String{
+                if  url != nil{
+                print(url)
+                    
+                urlsToDownload.append(url!)
+                }
+            }
+        }
+        imghd.downloadImageSet(urlsToDownload)
     }
     
     //Endless getters fro poi properties
