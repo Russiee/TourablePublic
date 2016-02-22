@@ -39,7 +39,7 @@ class tourDataParser{
         NSUserDefaults.standardUserDefaults().synchronize()
         //Makes sure that all sections are recursivley downloaded.
         
-        _ = createNewTour(data).triggerRecursion()
+        createNewTour(data).triggerRecursion()
     }
     
     func getTourSection(objectId: String)-> tourSection{

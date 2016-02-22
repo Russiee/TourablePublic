@@ -9,8 +9,7 @@
 import Foundation
 
 class POIParser{
-    
-    
+
     //creates and returns a pointOfInterest object from the JSON passed to it
     private func createNewPOI(data: NSDictionary)-> pointOfInterest {
         //Create and return the POI
@@ -22,7 +21,7 @@ class POIParser{
                 title: data["title"] as! String,
                 updatedAt: data["updatedAt"] as! String)
     }
-    
+
     //Saves the JSON to the cache
     func savePOI(data: NSDictionary) {
         //Get the unique object id used as key for the cache
@@ -32,9 +31,10 @@ class POIParser{
         //Commits changes to memory, required for iOS 7 and below.
         NSUserDefaults.standardUserDefaults().synchronize()
         //triggers the saving of images to the cache
+        print("POIParser: savePOI")
         self.createNewPOI(data).downloadContent()
     }
-    
+
     //Retrives the JSON from the cache and returns a POI object created from it
     func getTourSection(objectId: String)-> pointOfInterest{
         print(objectId)
@@ -44,9 +44,9 @@ class POIParser{
         return createNewPOI(data)
         
     }
-    
+
     func deletePOI(){
         //this will be complicated, so will do it later
     }
-    
+
 }

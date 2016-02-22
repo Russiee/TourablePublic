@@ -1,4 +1,3 @@
-//
 //  imageHandler.swift
 //  Alan Touring
 //
@@ -8,10 +7,12 @@
 
 import Foundation
 import UIKit
+
 private let fileManager = NSFileManager.defaultManager()
+
 class imageHandler {
 
-    init(){
+    init() {
         if NSUserDefaults.standardUserDefaults().objectForKey("imageKeys") == nil{
             let dictonary = Dictionary<String,String>()
             NSUserDefaults.standardUserDefaults().setObject(dictonary, forKey: "imageKeys")
@@ -32,25 +33,6 @@ class imageHandler {
             completion(data: data, response: response, error: error)
             }.resume()
     }
-    
-    func downloadImage(url: String){
-        let actualURL = NSURL(string: url)
-        print("Download Started")
-        print("lastPathComponent: " + (actualURL!.lastPathComponent ?? ""))
-        getDataFromUrl(actualURL!) { (data, response, error)  in
-            dispatch_async(dispatch_get_main_queue()) { () -> Void in
-                guard let data = data where error == nil else {
-                    return
-                }
-                print(response?.suggestedFilename ?? "")
-                print("Download Finished")
-                let image = UIImage(data: data)
-                self.saveImage(image!, name: url)
-                //HERE SHOULD SEND THE NOTIFICATION
-            }
-        }
-    }
-
 
     func getDocumentsURL() -> NSURL {
         let documentsURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0]
@@ -62,10 +44,9 @@ class imageHandler {
         return fileURL.path!
     }
 
-    func saveImage (image: UIImage, name: String ) -> Bool{
+    func saveImage(image: UIImage, name: String ) -> Bool{
     
         let fileName1 = String(name.hash)
-    
         //let fileName2 = fileName1.substringToIndex(fileName1.endIndex.advancedBy(-6))
     
         //self.addUrlToFileNameMap(name, fileName: fileName1)
@@ -75,7 +56,7 @@ class imageHandler {
         let jpgImageData = UIImageJPEGRepresentation(image, 1.0)
     
         let result = jpgImageData!.writeToFile(path, atomically: true)
-        print(result)
+        print("if true, saved image: \(result)")
         return result
     }
 
@@ -94,14 +75,37 @@ class imageHandler {
         return image
     }
 
-
+    //called just once in pointOfInterest.swift
     func downloadImageSet(urls: [String]){
         for url in urls{
-            self.downloadImage(url)
+            let actualURL = NSURL(string: url)
+            print("Download Started")
+            print("lastPathComponent: " + (actualURL!.lastPathComponent ?? ""))
+            
+            getDataFromUrl(actualURL!) { (data, response, error)  in
+                dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                    guard let data = data where error == nil else {
+                        return
+                    }
+                    print(response?.suggestedFilename ?? "")
+                    print("Download Finished")
+                    let image = UIImage(data: data)
+                    self.saveImage(image!, name: url)
+                    //HOW TO GET HERE THE FINAL DOWNLOADED IMAGE
+                }
+            }
         }
     }
+
+    
+    // method to add to queue, property of static class.
+    // point of interest put shit in the queue
+    // NSNotification Center Observable 
+    // 
     
     
+    
+
 //    func addUrlToFileNameMap(url: String, fileName: String){
 //       var dict = NSUserDefaults.standardUserDefaults().objectForKey("imageKeys") as! Dictionary<String,String>
 //        dict[url] = fileName

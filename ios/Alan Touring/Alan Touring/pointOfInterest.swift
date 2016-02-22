@@ -35,8 +35,8 @@ class pointOfInterest {
         print("POI "+self.objectId)
         
     }
-    
-    func downloadContent(){
+
+    func downloadContent() {
         let imghd = imageHandler.init()
         var urlsToDownload = [String]()
         
@@ -47,11 +47,16 @@ class pointOfInterest {
                     urlsToDownload.append(url!)
                 }
             }
+            
+            if item["post"] as? String == post[post.count - 1]["post"] as? String
+            {
+                print("last item")
+            }
         }
         imghd.downloadImageSet(urlsToDownload)
     }
-    
-    
+
+
     //Endless getters fro poi properties
     func getCreatedAt() ->String{
         return self.createdAt

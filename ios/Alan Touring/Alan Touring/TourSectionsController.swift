@@ -58,8 +58,7 @@ class TourSectionsController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
     
-   
-    
+
     // MARK: - Table view data source
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -115,7 +114,7 @@ class TourSectionsController: UITableViewController {
     }
 
     // a function to tell change the background image when loading the app AND when deleting a cell results in no tours left
-    func checkStateOfScreen(){
+    func checkStateOfScreen() {
         if models.count == 0 {
             let  empty_state_image = UIImage(named: "empty_ts_placeholder")
             let empty_state_label = UIImageView(image: empty_state_image)
@@ -128,11 +127,10 @@ class TourSectionsController: UITableViewController {
         } else {
             tableView.backgroundView = nil
             tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
-
-            
         }
         
     }
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         let title = keys[self.tableView.indexPathForSelectedRow!.row]
         let objectId = models[title]
@@ -142,7 +140,7 @@ class TourSectionsController: UITableViewController {
           
             
             newViewController.superTableId = objectId!
-        }else if(segue.identifier == "PointOfInterestSegue"){
+        } else if(segue.identifier == "PointOfInterestSegue"){
             let newViewController = segue.destinationViewController as! pointOfInterestController
             
             newViewController.poiID = objectId!
@@ -150,7 +148,7 @@ class TourSectionsController: UITableViewController {
         }
     }
    
-    }
+}
     
     
     
