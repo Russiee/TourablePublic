@@ -1,11 +1,18 @@
 package com.hobbyte.touringandroid.helpers;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 /**
  * A class with several static methods for managing the app's internal storage.
@@ -38,6 +45,27 @@ public class FileManager {
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public static void saveImage(Context context, String keyID, String urlString) {
+        try {
+            URL url = new URL(urlString);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.connect();
+
+            BufferedInputStream bis = new BufferedInputStream(connection.getInputStream());
+            Bitmap bitmap = BitmapFactory.decodeStream(bis);
+
+            connection.disconnect();
+
+            File file = new File(context.getFilesDir(), "poop.jpg");
+            FileOutputStream fos = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

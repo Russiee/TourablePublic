@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.hobbyte.touringandroid.helpers.BackAwareEditText;
+import com.hobbyte.touringandroid.helpers.FileManager;
 import com.hobbyte.touringandroid.helpers.TourDBContract;
 import com.hobbyte.touringandroid.helpers.TourDBManager;
 import com.hobbyte.touringandroid.internet.ServerAPI;
@@ -105,6 +106,7 @@ public class StartActivity extends Activity {
         });
 
         loadPreviousTours();
+        new PoopTask().execute("http://i.imgur.com/sJJ06P6.jpg");
     }
 
     @Override
@@ -354,6 +356,19 @@ public class StartActivity extends Activity {
                 showToast(getString(R.string.msg_invalid_key));
             }
             textKey.setText("");
+        }
+    }
+
+    private class PoopTask extends AsyncTask<String, Void, Void> {
+        @Override
+        protected Void doInBackground(String... params) {
+            FileManager.saveImage(getApplicationContext(), "poop", params[0]);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            Log.d(TAG, "saved the image");
         }
     }
 }
