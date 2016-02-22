@@ -126,6 +126,39 @@ public class ServerAPI {
         return null;
     }
 
+    public static String getBundleString(String tourID) {
+        try {
+            URL url = new URL(tourBundleURL + tourID);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setDoInput(true);
+            connection.connect();
+
+            int response = connection.getResponseCode();
+
+            StringBuilder jsonString = new StringBuilder("");
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String line = in.readLine();
+
+            while (line != null) {
+                jsonString.append(line);
+                line = in.readLine();
+            }
+
+            in.close();
+            connection.disconnect();
+
+            if (response == 200) {
+                return jsonString.toString();
+            } else {
+                Log.d(TAG, "Could not find tour for ID = " + tourID);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     /**
      * Method takes in the Tour ID retrieved by the Key, gets the bundle from the tourId,
      * then retrieves id's of every subsection from this tour url

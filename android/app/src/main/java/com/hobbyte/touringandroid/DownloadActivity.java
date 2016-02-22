@@ -21,6 +21,11 @@ import com.hobbyte.touringandroid.internet.ServerAPI;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class DownloadActivity extends Activity {
     private static final String TAG = "DownloadActivity";
 
@@ -78,9 +83,8 @@ public class DownloadActivity extends Activity {
         downloadImagesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String param = IMAGES;
-                DownloadTourMediaClass k = new DownloadTourMediaClass();
-                k.execute(param);
+                DownloadTourMediaClass k = new DownloadTourMediaClass(IMAGES);
+                k.execute();
                 changeUiAfterSelection("");
             }
         });
@@ -88,9 +92,8 @@ public class DownloadActivity extends Activity {
         downloadVideoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String param = VIDEO;
-                DownloadTourMediaClass k = new DownloadTourMediaClass();
-                k.execute(param);
+                DownloadTourMediaClass k = new DownloadTourMediaClass(VIDEO);
+                k.execute();
                 changeUiAfterSelection(" & video");
             }
         });
@@ -183,23 +186,44 @@ public class DownloadActivity extends Activity {
     /**
      * Asynchronously downloads the media of the tour
      */
-    private class DownloadTourMediaClass extends AsyncTask<String, Void, Boolean> {
+    private class DownloadTourMediaClass extends AsyncTask<Void, Void, Boolean> {
+
+        private String imageOnlyPattern = "http:\\/\\/[\\w\\d\\.\\/]*\\.((jpg)|(jpeg)|(png))";
+        private String allMediaPattern = "http:\\/\\/[\\w\\d\\.\\/]*\\.((jpg)|(jpeg)|(png))";
+
+        private String mode;
+        private List<String> urlList;
+
+        public DownloadTourMediaClass(String mode) {
+            this.mode = mode;
+        }
 
         @Override
-        protected Boolean doInBackground(String... params) {
+        protected void onPreExecute() {
+            // get String representation of bundle
+            String bundle = ServerAPI.getBundleString(tourID);
 
-            //when we want to load images only
-            if (params[0].equals(IMAGES)) {
+            // use pattern matcher to extract all the media URLs we need to save
+            Pattern p;
 
-                //TODO make this work
+            if (mode.equals(IMAGES)) {
+                p = Pattern.compile(imageOnlyPattern);
+            } else {
+                p = Pattern.compile(allMediaPattern);
+            }
 
-                //when we want to load images and video
-            } else if (params[0].equals(VIDEO)) {
+            Matcher matcher = p.matcher(bundle);
+            urlList = new ArrayList<>();
 
-                //TODO make this work
-            } else return false;
+            while (matcher.find()) {
+                urlList.add(matcher.group());
+            }
+        }
 
-            return true;
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            // download and save the files
+            return null;
         }
 
         @Override
