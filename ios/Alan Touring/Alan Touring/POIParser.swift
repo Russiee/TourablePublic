@@ -12,24 +12,19 @@ class POIParser{
     
     
     //creates and returns a pointOfInterest object from the JSON passed to it
-   private func createNewPOI(data: NSDictionary)-> pointOfInterest{
-    
-    //Create and return the POI
+    private func createNewPOI(data: NSDictionary)-> pointOfInterest {
+        //Create and return the POI
         return  pointOfInterest(objectId: data["objectId"] as! String,
-            description: data["description"] as! String,
-            createdAt: data["createdAt"] as! String,
-            post: data["post"] as! NSArray,
-            section: data["section"] as! NSDictionary,
-            title: data["title"] as! String,
-            updatedAt: data["updatedAt"] as! String)
-        
-    
-    
+                description: data["description"] as! String,
+                createdAt: data["createdAt"] as! String,
+                post: data["post"] as! NSArray,
+                section: data["section"] as! NSDictionary,
+                title: data["title"] as! String,
+                updatedAt: data["updatedAt"] as! String)
     }
     
     //Saves the JSON to the cache
-    func savePOI(data: NSDictionary){
-        
+    func savePOI(data: NSDictionary) {
         //Get the unique object id used as key for the cache
         let key = data["objectId"] as! String
         //Save the JSON under the key.
@@ -38,7 +33,6 @@ class POIParser{
         NSUserDefaults.standardUserDefaults().synchronize()
         //triggers the saving of images to the cache
         self.createNewPOI(data).downloadContent()
-  
     }
     
     //Retrives the JSON from the cache and returns a POI object created from it
