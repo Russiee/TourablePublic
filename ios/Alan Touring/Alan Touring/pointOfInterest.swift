@@ -24,7 +24,7 @@ class pointOfInterest {
     //Last time update was made to the poi
     var updatedAt: String
     
-    init(objectId: String, description: String, createdAt: String, post: NSArray, section: NSDictionary, title: String, updatedAt: String){
+    init(objectId: String, description: String, createdAt: String, post: NSArray, section: NSDictionary, title: String, updatedAt: String) {
         self.objectId = objectId
         self.description = description
         self.createdAt = createdAt
@@ -35,25 +35,29 @@ class pointOfInterest {
         print("POI "+self.objectId)
         
     }
-    
-    func downloadContent(){
+
+    func downloadContent() {
         let imghd = imageHandler.init()
         var urlsToDownload = [String]()
         
         for item in post{
-            if var url: String? = item["url"] as? String{
+            if let url: String? = item["url"] as? String{
                 if  url != nil{
-                print(url)
-                    
-                urlsToDownload.append(url!)
+                    print(url)
+                    urlsToDownload.append(url!)
                 }
+            }
+            
+            if item["post"] as? String == post[post.count - 1]["post"] as? String
+            {
+                print("last item")
             }
         }
         imghd.downloadImageSet(urlsToDownload)
     }
-    
+
+
     //Endless getters fro poi properties
-    
     func getCreatedAt() ->String{
         return self.createdAt
     }
@@ -81,7 +85,5 @@ class pointOfInterest {
     func getUpdatedAt() ->String{
         return self.updatedAt
     }
-    
-    
-    
+
 }

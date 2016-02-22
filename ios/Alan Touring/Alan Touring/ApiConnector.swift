@@ -17,16 +17,15 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
     lazy var data = NSMutableData()
     var urlPath: String = ""
     
-    //Makes the connection to the API
-    func startConnection(var tourId: String){
-                let resetData = NSMutableData()
-                //Reseting data to blank with every new connection
-                data = resetData
-                tourId = cleanTourId(tourId)
-                //The path to where the Tour Data is stored
-               urlPath = "https://touring-api.herokuapp.com/api/v1/key/verify/" + tourId
-
-                //Standard URLConnection method
+    func initateConnection(var tourId: String){
+        let resetData = NSMutableData()
+        //Reseting data to blank with every new connection
+        data = resetData
+        tourId = cleanTourId(tourId)
+        //The path to where the Tour Data is stored
+        urlPath = "https://touring-api.herokuapp.com/api/v1/key/verify/" + tourId
+        
+        //Standard URLConnection method
         do {
             let request: NSURLRequest = NSURLRequest(URL: NSURL(string: urlPath)!)
             let connection: NSURLConnection = NSURLConnection(request: request, delegate: self, startImmediately: false)!
@@ -42,17 +41,11 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
             self.triggerInvalidKeyNotification()
         }
         //change to URLSession
-        
     }
-    
     
     func connection(connection: NSURLConnection!, didReceiveData data: NSData!){
         //Storing the data for use
         self.data.appendData(data)
-    }
-    
-    func initateConnection(tourId: String){
-        startConnection(tourId)
     }
     
     func connectionDidFinishLoading(connection: NSURLConnection!) {

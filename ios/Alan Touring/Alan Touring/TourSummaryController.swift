@@ -19,17 +19,19 @@ class TourSummaryController: UIViewController {
     var setup = Dictionary<String, AnyObject>()
     
     @IBOutlet weak var tourTitleLabel: UILabel!
-    
     @IBOutlet weak var UIDescriptionBox: UITextView!
-    
     @IBOutlet weak var TourExpiryLabel: UILabel!
+    @IBOutlet weak var beingTourButton: UIButton!
+    
+    
     
     override func viewWillAppear(animated: Bool) {
         tourIdLabel.text = tourId
         UIDescriptionBox.sizeToFit()
         UIDescriptionBox.layoutIfNeeded()
         UIDescriptionBox.textAlignment = NSTextAlignment.Center
-
+        beingTourButton.enabled = true
+        
         setup = TourIdParser.sharedInstance.getTourMetadata(tourId)
         let objectId = setup["objectId"]!
         let topLayerTourInfo = tourDataParser.init().getTourSection(objectId as! String)
@@ -46,5 +48,13 @@ class TourSummaryController: UIViewController {
         let destinationVC = segue.destinationViewController as! TourSectionsController
         destinationVC.superTableId = setup["objectId"] as! String
     }
+    
+    
+    @IBAction func clickBeginTour(sender: AnyObject) {
+//        beingTourButton.setTitle("Loading Tour", forState: .Normal)
+        beingTourButton.enabled = false
+    }
+    
+    
 }
 
