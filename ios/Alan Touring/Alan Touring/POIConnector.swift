@@ -51,23 +51,4 @@ class POIConnector: NSObject, NSURLConnectionDelegate{
         
         task.resume()
     }
-    
-    //Deals with the data after the data has been completely downloaded
-//   private func connectionDidFinishLoading(connection: NSURLConnection!) {
-//        
-//        do {
-//            print("do things")
-//            let jsonResult: NSDictionary = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
-//            
-//            self.storeJSON(jsonResult)
-//        }
-//        catch let err as NSError{
-//            print(urlPath+"    ERROR HERE")
-//            print(err.description)
-//            
-//            
-//        }
-//        
-//    }
-
 }

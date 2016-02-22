@@ -97,26 +97,4 @@ class imageHandler {
         }
     }
 
-    
-    // method to add to queue, property of static class.
-    // point of interest put shit in the queue
-    // NSNotification Center Observable 
-    // 
-    
-    
-    
-
-//    func addUrlToFileNameMap(url: String, fileName: String){
-//       var dict = NSUserDefaults.standardUserDefaults().objectForKey("imageKeys") as! Dictionary<String,String>
-//        dict[url] = fileName
-//        NSUserDefaults.standardUserDefaults().setObject(dict, forKey: "imageKeys")
-//        NSUserDefaults.standardUserDefaults().synchronize()
-//        
-//        }
-//    
-//    
-//    func getFileNameFromUrl(url: String) -> String{
-//        var dict = NSUserDefaults.standardUserDefaults().objectForKey("imageKeys") as! Dictionary<String,String>
-//        return dict[url]!
-//    }
 }
