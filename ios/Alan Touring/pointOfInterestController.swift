@@ -14,12 +14,12 @@ class pointOfInterestController: UIViewController {
 
     var poiID = ""
     
-    @IBOutlet weak var poiTitleLabel: UILabel!
+
     
-    @IBOutlet weak var testImage: UIImageView!
+
     
     override func viewDidLoad() {
-    testImage.contentMode = .ScaleAspectFit
+//    testImage.contentMode = .ScaleAspectFit
         var images = [UIImage]()
        let poi = POIParser.init().getTourSection(poiID)
         let imgHnd = imageHandler.init()
@@ -35,12 +35,12 @@ class pointOfInterestController: UIViewController {
             }
         }
         
-        poiTitleLabel.text = poi.title
+
         print(poi.getTitle())
         
         
         if !(images.count==0){
-            testImage.image = images[0]
+          
         }
     }
 }
