@@ -38,42 +38,6 @@
         android:layout_marginBottom="44dp">
 
         <LinearLayout
-            android:id="@+id/imageOptionLayout"
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-
-            <Button
-                android:id="@+id/imageOptionButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/download_option_image"
-                android:textColor="#ffffff" />
-
-            <TextView
-                android:id="@+id/imageOptionCaptionEditText"
-                android:layout_width="fill_parent"
-                android:layout_height="40dp"
-                android:text="@string/download_option_image_label"
-                android:layout_gravity="center"
-                android:textAlignment="center" />
-
-            <TextView
-                android:id="@+id/imageOptionSizeEditText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="size"
-                android:layout_gravity="center_horizontal" />
-
-        </LinearLayout>
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
-
-        <LinearLayout
             android:id="@+id/videoOptionLayout"
             android:orientation="vertical"
             android:layout_width="wrap_content"
