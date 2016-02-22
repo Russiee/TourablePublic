@@ -129,26 +129,12 @@
 		E536DCBD1C6510FC00A7B2FC /* Alan Touring */ = {
 			isa = PBXGroup;
 			children = (
-				FA0A51751C774CD900E4F733 /* tourObjects */,
-				FA4D0F5E1C6A4D08007D79E3 /* TourIdParser.swift */,
-				E536DCBE1C6510FC00A7B2FC /* AppDelegate.swift */,
-				E536DCC01C6510FD00A7B2FC /* ViewController.swift */,
-				FA2BB2951C78F1A200D784E8 /* pointOfInterestController.swift */,
-				E536DCC21C6510FD00A7B2FC /* Main.storyboard */,
-				FAD1B1531C6BAEB400CA5327 /* TourSummaryController.swift */,
-				E536DCC81C6510FD00A7B2FC /* Assets.xcassets */,
-				E536DCCA1C6510FD00A7B2FC /* LaunchScreen.storyboard */,
+				FA2164941C7B48EF0056FF02 /* View */,
+				FA2164931C7B48A10056FF02 /* Connectivity */,
+				FA2164921C7B482B0056FF02 /* Controller */,
+				FA0A51751C774CD900E4F733 /* Model */,
 				E536DCCD1C6510FD00A7B2FC /* Info.plist */,
 				E536DCC51C6510FD00A7B2FC /* Alan_Touring.xcdatamodeld */,
-				FA9803281C666195001D23E2 /* MainTableTableViewController.swift */,
-				FA4EBABF1C68CC1100E6E601 /* AddNewTourViewController.swift */,
-				FAB049181C6E34BF00679C10 /* ApiConnector.swift */,
-				FA0A516F1C772AAD00E4F733 /* bundleRouteConnector.swift */,
-				FA0A51731C77482D00E4F733 /* tourDataParser.swift */,
-				FA0A517A1C775C3700E4F733 /* TourSectionsController.swift */,
-				FAE5F69C1C789D2500346321 /* POIConnector.swift */,
-				FAE5F69E1C789D4000346321 /* POIParser.swift */,
-				FA2BB2971C78F46500D784E8 /* imageHandler.swift */,
 			);
 			path = "Alan Touring";
 			sourceTree = "<group>";
@@ -172,13 +158,51 @@
 			path = "Alan TouringUITests";
 			sourceTree = "<group>";
 		};
-		FA0A51751C774CD900E4F733 /* tourObjects */ = {
+		FA0A51751C774CD900E4F733 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				FAE5F69E1C789D4000346321 /* POIParser.swift */,
+				FA0A51731C77482D00E4F733 /* tourDataParser.swift */,
 				FA0A51711C7747B400E4F733 /* tourSection.swift */,
 				FA0A51761C774CEC00E4F733 /* pointOfInterest.swift */,
+				FA4D0F5E1C6A4D08007D79E3 /* TourIdParser.swift */,
 			);
-			name = tourObjects;
+			name = Model;
+			sourceTree = "<group>";
+		};
+		FA2164921C7B482B0056FF02 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				FA0A517A1C775C3700E4F733 /* TourSectionsController.swift */,
+				FA4EBABF1C68CC1100E6E601 /* AddNewTourViewController.swift */,
+				FA9803281C666195001D23E2 /* MainTableTableViewController.swift */,
+				FAD1B1531C6BAEB400CA5327 /* TourSummaryController.swift */,
+				FA2BB2951C78F1A200D784E8 /* pointOfInterestController.swift */,
+				E536DCC01C6510FD00A7B2FC /* ViewController.swift */,
+				E536DCBE1C6510FC00A7B2FC /* AppDelegate.swift */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		FA2164931C7B48A10056FF02 /* Connectivity */ = {
+			isa = PBXGroup;
+			children = (
+				FAB049181C6E34BF00679C10 /* ApiConnector.swift */,
+				FA0A516F1C772AAD00E4F733 /* bundleRouteConnector.swift */,
+				FAE5F69C1C789D2500346321 /* POIConnector.swift */,
+				FA2BB2971C78F46500D784E8 /* imageHandler.swift */,
+			);
+			name = Connectivity;
+			sourceTree = "<group>";
+		};
+		FA2164941C7B48EF0056FF02 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				E536DCCA1C6510FD00A7B2FC /* LaunchScreen.storyboard */,
+				E536DCC21C6510FD00A7B2FC /* Main.storyboard */,
+				E536DCC81C6510FD00A7B2FC /* Assets.xcassets */,
+			);
+			name = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
