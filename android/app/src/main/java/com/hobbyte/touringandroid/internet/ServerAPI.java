@@ -26,12 +26,14 @@ import java.util.ArrayList;
 public class ServerAPI {
     private static final String TAG = "ServerAPI";
 
-    //    private static final String keyValidationURL = "https://192.168.56.1:3000/api/v1/key/verify/";
-    private static final String keyValidationURL = "https://touring-api.herokuapp.com/api/v1/key/verify/";
-    private static final String tourURL = "https://touring-api.herokuapp.com/api/v1/tour/";
-    private static final String tourBundleURL = "https://touring-api.herokuapp.com/api/v1/tour/"; // TODO: this needs to change to ...v1/bundle/
-    private static final String sectionURL = "https://touring-api.herokuapp.com/api/v1/section/";
-    private static final String poiURL = "https://touring-api.herokuapp.com/api/v1/poi/";
+    //    private static final String KEY_VALIDATION = "https://192.168.56.1:3000/api/v1/key/verify/";
+    private static final String BASE_URl = "https://touring-api.herokuapp.com/api/v1";
+    public static final String KEY_VALIDATION = "/key/verify/";
+    public static final String TOUR = "/tour/";
+    public static final String BUNDLE = "/bundle/"; // TODO: this needs to change to ...v1/bundle/
+    public static final String SECTION = "/section/";
+    public static final String POI = "/poi/";
+
 
     /**
      * Asks the server if a provided Tour Key is a real, valid key. If it is, return the
@@ -42,7 +44,7 @@ public class ServerAPI {
      */
     public static JSONObject checkKeyValidity(String tourKey) {
         try {
-            URL url = new URL(keyValidationURL + tourKey);
+            URL url = new URL(BASE_URl + KEY_VALIDATION + tourKey);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setDoInput(true);
@@ -85,12 +87,12 @@ public class ServerAPI {
     /**
      * Fetches JSON from the server representing a tour, for a provided tour ID.
      *
-     * @param tourID an ID corresponding to a tour
+     * @param ID an ID corresponding to a tour
      * @return the JSON response if the tour ID exists; null otherwise
      */
-    public static JSONObject getTourJSON(String tourID) {
+    public static JSONObject getJSON(String ID, String TYPE) {
         try {
-            URL url = new URL(tourURL + tourID);
+            URL url = new URL(BASE_URl + TYPE + ID);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setDoInput(true);
@@ -115,7 +117,7 @@ public class ServerAPI {
                 Log.d(TAG, "Returning JSON for tour: " + json.getString("title"));
                 return json;
             } else {
-                Log.d(TAG, "Could not find tour for ID = " + tourID);
+                Log.d(TAG, "Could not find tour for ID = " + ID);
             }
 
         } catch (JSONException jex) {
@@ -167,7 +169,7 @@ public class ServerAPI {
      */
     public static Tour allocateTourSections(String bundle) {
         try {
-            URL url = new URL(tourBundleURL + bundle);
+            URL url = new URL(BASE_URl + BUNDLE + bundle);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setDoInput(true);
@@ -228,7 +230,7 @@ public class ServerAPI {
      */
     public static SubSection allocateSectionPOIs(String section) {
         try {
-            URL url = new URL(sectionURL + section);
+            URL url = new URL(BASE_URl + SECTION + section);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setDoInput(true);
@@ -308,7 +310,7 @@ public class ServerAPI {
      */
     public static PointOfInterest allocatePOIs(String poi) {
         try {
-            URL url = new URL(poiURL + poi);
+            URL url = new URL(BASE_URl + POI + poi);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setDoInput(true);

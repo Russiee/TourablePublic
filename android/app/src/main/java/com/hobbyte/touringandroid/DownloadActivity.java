@@ -10,7 +10,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StatFs;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -199,30 +198,13 @@ public class DownloadActivity extends Activity {
         }
 
         @Override
-        protected void onPreExecute() {
+        protected Boolean doInBackground(Void... params) {
+            // download and save the files
             // get String representation of bundle
             String bundle = ServerAPI.getBundleString(tourID);
 
-            // use pattern matcher to extract all the media URLs we need to save
-            Pattern p;
-
-            if (mode.equals(IMAGES)) {
-                p = Pattern.compile(imageOnlyPattern);
-            } else {
-                p = Pattern.compile(allMediaPattern);
-            }
-
-            Matcher matcher = p.matcher(bundle);
-            urlList = new ArrayList<>();
-
-            while (matcher.find()) {
-                urlList.add(matcher.group());
-            }
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // download and save the files
+            SaveTourJSON saveTourJSON = new SaveTourJSON(keyID);
+            saveTourJSON.saveTour(tourJSON, SaveTourJSON.WITH_VIDEO);
             return null;
         }
 
@@ -233,14 +215,14 @@ public class DownloadActivity extends Activity {
 
             // removes activity from users stack so when they press back from a tour they go back
             // to the main menu
-            DownloadActivity.this.finish();
+            //DownloadActivity.this.finish();
         }
     }
 
     private class FetchTourJSON extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
-            tourJSON = ServerAPI.getTourJSON(tourID);
+            tourJSON = ServerAPI.getJSON(tourID, ServerAPI.TOUR);
             return null;
         }
 

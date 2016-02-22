@@ -28,11 +28,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 public class StartActivity extends Activity {
     private static final String TAG = "StartActivity";
+
+    public static Context CONTEXT;
 
     private static boolean FADE_IN = true;
     private static boolean FADE_OUT = false;
@@ -45,6 +46,7 @@ public class StartActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+        CONTEXT = getApplicationContext();
 
         SharedPreferences prefs = this.getSharedPreferences(
                 getString(R.string.preference_file_key),
@@ -116,6 +118,10 @@ public class StartActivity extends Activity {
         //need this so if user switches app and come back, the input fields do not show
         hideInput();
         super.onPause();
+    }
+
+    public static Context getContext() {
+        return CONTEXT;
     }
 
     /**
