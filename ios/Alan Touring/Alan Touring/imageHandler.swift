@@ -64,11 +64,14 @@ func fileInDocumentsDirectory(filename: String) -> String {
 }
 
 func saveImage (image: UIImage, name: String ) -> Bool{
-    let fileName1 = NSDate().timeIntervalSince1970.description
-    let fileName2 = fileName1.substringToIndex(fileName1.endIndex.advancedBy(-6))
+    
+    let fileName1 = String(name.hash)
+    
+    //let fileName2 = fileName1.substringToIndex(fileName1.endIndex.advancedBy(-6))
 
-    self.addUrlToFileNameMap(name, fileName: fileName2)
-    let path = fileInDocumentsDirectory(fileName2)
+    //self.addUrlToFileNameMap(name, fileName: fileName1)
+    let path = fileInDocumentsDirectory(fileName1)
+    
     //let pngImageData = UIImagePNGRepresentation(image)
     let jpgImageData = UIImageJPEGRepresentation(image, 1.0)
     
@@ -80,7 +83,9 @@ func saveImage (image: UIImage, name: String ) -> Bool{
 
 func loadImageFromPath(name: String) -> UIImage? {
     
-    let fileName = self.getFileNameFromUrl(name)
+    
+    //let fileName = self.getFileNameFromUrl(name)
+    let fileName = String(name.hash)
     
     let path = fileInDocumentsDirectory(fileName)
     
@@ -105,19 +110,19 @@ func loadImageFromPath(name: String) -> UIImage? {
         }
     }
     
-    func addUrlToFileNameMap(url: String, fileName: String){
-       var dict = NSUserDefaults.standardUserDefaults().objectForKey("imageKeys") as! Dictionary<String,String>
-        dict[url] = fileName
-        NSUserDefaults.standardUserDefaults().setObject(dict, forKey: "imageKeys")
-        NSUserDefaults.standardUserDefaults().synchronize()
-        
-        }
-    
-    
-    func getFileNameFromUrl(url: String) -> String{
-        var dict = NSUserDefaults.standardUserDefaults().objectForKey("imageKeys") as! Dictionary<String,String>
-        return dict[url]!
-    }
+//    func addUrlToFileNameMap(url: String, fileName: String){
+//       var dict = NSUserDefaults.standardUserDefaults().objectForKey("imageKeys") as! Dictionary<String,String>
+//        dict[url] = fileName
+//        NSUserDefaults.standardUserDefaults().setObject(dict, forKey: "imageKeys")
+//        NSUserDefaults.standardUserDefaults().synchronize()
+//        
+//        }
+//    
+//    
+//    func getFileNameFromUrl(url: String) -> String{
+//        var dict = NSUserDefaults.standardUserDefaults().objectForKey("imageKeys") as! Dictionary<String,String>
+//        return dict[url]!
+//    }
     
     
     

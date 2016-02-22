@@ -36,7 +36,7 @@ class TourSectionsController: UITableViewController {
         }
         let poip = POIParser.init()
         for poiPointer in poiArray{
-            
+            print(" TOUR POINTER \( poiPointer["objectId"] as? String)!)")
             let poiData = poip.getTourSection((poiPointer["objectId"] as? String)!)
             tourTitles[poiData.title as String] = poiData.objectId
             }
