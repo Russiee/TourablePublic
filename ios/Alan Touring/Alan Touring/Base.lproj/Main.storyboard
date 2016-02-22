@@ -93,6 +93,7 @@
                                 <rect key="frame" x="263" y="337" width="74" height="30"/>
                                 <state key="normal" title="Begin Tour"/>
                                 <connections>
+                                    <action selector="clickBeginTour:" destination="uSc-BO-M9N" eventType="touchUpInside" id="LwR-5d-CB2"/>
                                     <segue destination="YdX-AY-UmE" kind="show" identifier="goToTourSections" id="d1o-YK-Yz6"/>
                                 </connections>
                             </button>
@@ -143,6 +144,7 @@
                     <connections>
                         <outlet property="TourExpiryLabel" destination="2bn-5B-Wlz" id="Mkc-s6-zp3"/>
                         <outlet property="UIDescriptionBox" destination="mTv-Im-kld" id="EA5-28-fsl"/>
+                        <outlet property="beingTourButton" destination="6DD-cZ-3vf" id="i5z-lH-2ax"/>
                         <outlet property="tourIdLabel" destination="ZPW-QH-duZ" id="Atn-Co-ZJv"/>
                         <outlet property="tourTitleLabel" destination="3ug-OU-y0T" id="zf9-GK-Vbc"/>
                     </connections>
