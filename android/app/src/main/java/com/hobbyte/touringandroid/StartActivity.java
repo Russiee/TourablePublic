@@ -203,14 +203,12 @@ public class StartActivity extends Activity {
         textKey.setText("");
 
         Intent intent = new Intent(this, DownloadActivity.class);
-        intent.putExtra(DownloadActivity.IS_NEW_TOUR, true);
         startActivity(intent);
     }
 
     private void goToTour(final String tourId) {
-        Intent intent = new Intent(this, TourActivity.class);
-        intent.putExtra(DownloadActivity.IS_NEW_TOUR, false);
-        intent.putExtra(DownloadActivity.KEY_ID, tourId);
+        Intent intent = new Intent(this, SummaryActivity.class);
+        intent.putExtra(SummaryActivity.KEY_ID, tourId);
         startActivity(intent);
     }
 

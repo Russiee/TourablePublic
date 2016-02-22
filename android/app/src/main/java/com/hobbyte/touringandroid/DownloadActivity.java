@@ -24,13 +24,8 @@ import org.json.JSONObject;
 public class DownloadActivity extends Activity {
     private static final String TAG = "DownloadActivity";
 
-    public static final String IS_NEW_TOUR = "is_new_tour";
-    public static final String KEY_ID = "key_id";
-
     private static String IMAGES = "images";
     private static String VIDEO = "video";
-
-    private boolean isNewTour;
 
     private ProgressBar progressBar;
     private TextView bottomTextView;
@@ -53,29 +48,21 @@ public class DownloadActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_download);
 
-        Intent intent = getIntent();
-        isNewTour = intent.getBooleanExtra(IS_NEW_TOUR, false);
+        SharedPreferences prefs = getSharedPreferences(
+                getString(R.string.preference_file_key),
+                Context.MODE_PRIVATE
+        );
 
-        if (isNewTour) {
-            SharedPreferences prefs = getSharedPreferences(
-                    getString(R.string.preference_file_key),
-                    Context.MODE_PRIVATE
-            );
+        keyID = prefs.getString(getString(R.string.prefs_current_key), null);
+        tourID = prefs.getString(getString(R.string.prefs_current_tour), null);
+        expiresAt = prefs.getString(getString(R.string.prefs_current_expiry), null);
 
-            keyID = prefs.getString(getString(R.string.prefs_current_key), null);
-            tourID = prefs.getString(getString(R.string.prefs_current_tour), null);
-            expiresAt = prefs.getString(getString(R.string.prefs_current_expiry), null);
-
-            // temporary hack because KCL-1010 points to a non-existent tour ID
-            if (keyID.equals("49L6FrRwe4")) {
-                tourID = "DnPRFaSYEk";
-            }
-
-            new FetchTourJSON().execute();
-        } else {
-            keyID = intent.getStringExtra(KEY_ID);
+        // temporary hack because KCL-1010 points to a non-existent tour ID
+        if (keyID.equals("49L6FrRwe4")) {
+            tourID = "DnPRFaSYEk";
         }
 
+        new FetchTourJSON().execute();
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         bottomTextView = (TextView) findViewById(R.id.bottomText);
@@ -112,10 +99,6 @@ public class DownloadActivity extends Activity {
     }
 
     private void loadTourDescription() {
-
-
-
-
         TextView txtTitle = (TextView) findViewById(R.id.txtTourTitle);
         TextView txtDescription = (TextView) findViewById(R.id.txtTourDescription);
 
