@@ -197,7 +197,7 @@ public class DownloadActivity extends Activity {
         public DownloadTourMediaClass(String mode) {
             this.mode = mode;
         }
-
+        
         @Override
         protected Boolean doInBackground(Void... params) {
             // download and save the files
