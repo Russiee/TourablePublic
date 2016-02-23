@@ -83,8 +83,8 @@ public class DownloadActivity extends Activity {
         downloadImagesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DownloadTourMediaClass k = new DownloadTourMediaClass(IMAGES);
-                k.execute();
+                DownloadTourMediaClass k = new DownloadTourMediaClass();
+                k.execute(IMAGES);
                 changeUiAfterSelection("");
             }
         });
@@ -92,8 +92,8 @@ public class DownloadActivity extends Activity {
         downloadVideoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DownloadTourMediaClass k = new DownloadTourMediaClass(VIDEO);
-                k.execute();
+                DownloadTourMediaClass k = new DownloadTourMediaClass();
+                k.execute(VIDEO);
                 changeUiAfterSelection(" & video");
             }
         });
@@ -190,13 +190,6 @@ public class DownloadActivity extends Activity {
 
         private String imageOnlyPattern = "http:\\/\\/[\\w\\d\\.\\/]*\\.(jpe?g|png)";
         private String allMediaPattern = "http:\\/\\/[\\w\\d\\.\\/]*\\.(jpe?g|png)"; // TODO
-
-        private String mode;
-        private List<String> urlList;
-
-        public DownloadTourMediaClass(String mode) {
-            this.mode = mode;
-        }
 
         @Override
         protected Boolean doInBackground(String... params) {
