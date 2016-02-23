@@ -186,7 +186,7 @@ public class DownloadActivity extends Activity {
     /**
      * Asynchronously downloads the media of the tour
      */
-    private class DownloadTourMediaClass extends AsyncTask<Void, Void, Boolean> {
+    private class DownloadTourMediaClass extends AsyncTask<String, Void, Boolean> {
 
         private String imageOnlyPattern = "http:\\/\\/[\\w\\d\\.\\/]*\\.(jpe?g|png)";
         private String allMediaPattern = "http:\\/\\/[\\w\\d\\.\\/]*\\.(jpe?g|png)"; // TODO
@@ -197,16 +197,21 @@ public class DownloadActivity extends Activity {
         public DownloadTourMediaClass(String mode) {
             this.mode = mode;
         }
-        
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // download and save the files
-            // get String representation of bundle
-            String bundle = ServerAPI.getBundleString(tourID);
 
+        @Override
+        protected Boolean doInBackground(String... params) {
             SaveTourJSON saveTourJSON = new SaveTourJSON(keyID);
-            saveTourJSON.saveTour(tourJSON, SaveTourJSON.WITH_VIDEO);
-            return null;
+
+            //when we want to load images only
+            if (params[0].equals(IMAGES)) {
+                saveTourJSON.saveTour(tourJSON, false);
+
+            } else if (params[0].equals(VIDEO)) {
+                //when we want to load images and video
+                saveTourJSON.saveTour(tourJSON, true);
+            } else return false;
+
+            return true;
         }
 
         @Override
