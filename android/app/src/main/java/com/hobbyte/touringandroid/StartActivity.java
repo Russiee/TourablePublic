@@ -61,9 +61,9 @@ public class StartActivity extends Activity {
                 false);
         db.close();*/
 
-//        TourDBManager dbHelper = new TourDBManager(this);
-//        SQLiteDatabase db = dbHelper.getWritableDatabase();
-//        dbHelper.deleteTour(db, "49L6FrRwe4"); db.close();
+        TourDBManager dbHelper = new TourDBManager(this);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        dbHelper.deleteTour(db, "49L6FrRwe4"); db.close();
 
         //get references for animations
         keyEntryLayout = (LinearLayout) findViewById(R.id.keyEntryLayout);

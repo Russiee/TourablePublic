@@ -20,6 +20,8 @@ public class PoiContentAdapter extends ArrayAdapter {
 
     private ListViewItem[] items;
 
+    private String keyID;
+
     @Override
     public int getViewTypeCount() {
         return 2;
@@ -30,8 +32,9 @@ public class PoiContentAdapter extends ArrayAdapter {
         return items[position].getType();
     }
 
-    public PoiContentAdapter(Context context, ListViewItem[] content) {
+    public PoiContentAdapter(Context context, ListViewItem[] content, String keyID) {
         super(context, 0, content);
+        this.keyID = keyID;
         items = content;
     }
 
@@ -56,7 +59,8 @@ public class PoiContentAdapter extends ArrayAdapter {
         }
             if (listViewItemType == IMG) {
                 ImageView imageView = (ImageView) view.findViewById(R.id.poiContentImageView);
-                new LoadImageFromURL(imageView, getContext()).execute(listViewItem.getText()); //Load image in a separate thread
+                System.out.println(keyID);
+                new LoadImageFromURL(imageView, StartActivity.getContext()).execute(listViewItem.getText(), keyID); //Load image in a separate thread
                 return view;
             } else {
                 TextView contentView = (TextView) view.findViewById(R.id.poiContentTextView);

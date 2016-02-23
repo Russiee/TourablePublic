@@ -143,21 +143,22 @@ public class ServerAPI {
 
             int response = connection.getResponseCode();
 
-            StringBuilder jsonString = new StringBuilder("");
-            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String line = in.readLine();
-
-            while (line != null) {
-                jsonString.append(line);
-                line = in.readLine();
-            }
-
-            in.close();
-            connection.disconnect();
-
             if (response == 200) {
+                StringBuilder jsonString = new StringBuilder("");
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String line = in.readLine();
+
+                while (line != null) {
+                    jsonString.append(line);
+                    line = in.readLine();
+                }
+
+                in.close();
+                connection.disconnect();
+
                 return jsonString.toString();
             } else {
+                connection.disconnect();
                 Log.d(TAG, "Could not find tour for ID = " + tourID);
             }
         } catch (Exception e) {

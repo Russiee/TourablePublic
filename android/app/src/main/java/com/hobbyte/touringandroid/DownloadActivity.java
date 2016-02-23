@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.hobbyte.touringandroid.helpers.FileManager;
 import com.hobbyte.touringandroid.internet.ServerAPI;
 
 import org.json.JSONException;
@@ -179,7 +180,8 @@ public class DownloadActivity extends Activity {
     protected void moveToTourActivity() {
 
         //TODO need to pass tour data in here
-        Intent intent = new Intent(this, TourActivity.class);
+        Intent intent = new Intent(this, SummaryActivity.class);
+        intent.putExtra(SummaryActivity.KEY_ID, keyID);
         startActivity(intent);
     }
 
@@ -193,6 +195,7 @@ public class DownloadActivity extends Activity {
 
         @Override
         protected Boolean doInBackground(String... params) {
+            String bundle = ServerAPI.getBundleString(tourID);
             SaveTourJSON saveTourJSON = new SaveTourJSON(keyID);
 
             //when we want to load images only
@@ -210,9 +213,8 @@ public class DownloadActivity extends Activity {
         @Override
         protected void onPostExecute(Boolean isValid) {
 
-            Log.i(TAG, "fnished downloading");
-            //moveToTourActivity(); //TODO uncomment this when it actually starts a tour
-
+            Log.i(TAG, "finished downloading");
+            moveToTourActivity(); //TODO uncomment this when it actually starts a tour
             // removes activity from users stack so when they press back from a tour they go back
             // to the main menu
             //DownloadActivity.this.finish();

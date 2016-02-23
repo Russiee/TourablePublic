@@ -39,12 +39,26 @@ public class FileManager {
 
         // temporary
         try {
-            JSONObject tourJSON = new JSONObject();
-            tourJSON.put("title", "Test Tour Title");
-            tourJSON.put("description", "The best damn tour you'll ever experience. It blew my socks off");
-            return tourJSON;
+            File tourFolder = new File(StartActivity.getContext().getFilesDir(), keyID);
+            File tourJson = new File(tourFolder, "tour");
+
+            StringBuilder text = new StringBuilder();
+            BufferedReader in = new BufferedReader(new FileReader(tourJson));
+            String line;
+
+            while((line = in.readLine()) != null) {
+                text.append(line);
+                text.append("\n");
+            }
+            in.close();
+            JSONObject json = new JSONObject(text.toString());
+
+            return json;
         } catch (JSONException e) {
             e.printStackTrace();
+            return null;
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
             return null;
         }
     }
@@ -64,6 +78,10 @@ public class FileManager {
             File iDFolder = new File(tourFolder, object);
             File objectJson = new File(iDFolder, objectId);
 
+            if(!objectJson.exists()) {
+                return null;
+            }
+
             StringBuilder text = new StringBuilder();
             BufferedReader in = new BufferedReader(new FileReader(objectJson));
             String line;
@@ -76,6 +94,7 @@ public class FileManager {
             JSONObject json = new JSONObject(text.toString());
             return json;
         } catch (IOException e) {
+            System.out.println("Error opening file...");
             e.printStackTrace();
             return null;
         } catch (JSONException jex) {

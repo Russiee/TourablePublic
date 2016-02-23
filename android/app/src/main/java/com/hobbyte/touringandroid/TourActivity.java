@@ -35,6 +35,8 @@ public class TourActivity extends Activity {
     public final static String EXTRA_MESSAGE_POI = "SEND_POI";
 
     private ListView listView;
+
+    private static String keyID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,8 +51,10 @@ public class TourActivity extends Activity {
         //Initialises final ListView
         listView = (ListView) findViewById(R.id.subsectionListView);
         Intent intent = getIntent();
+        keyID = intent.getStringExtra(SummaryActivity.KEY_ID);
         //Determines whether intent contains ArrayList of Subsections or Points of Interest
         if((ArrayList<SubSection>) intent.getSerializableExtra(TourActivity.EXTRA_MESSAGE_SUB) != null) { //Checks for ArrayList of Subsections
+
             openSubsections((ArrayList<SubSection>) intent.getSerializableExtra(TourActivity.EXTRA_MESSAGE_SUB));
         } else {
             //Retrieves list of Points of Interest from Intent
@@ -78,8 +82,10 @@ public class TourActivity extends Activity {
                 Intent intent = new Intent(TourActivity.this, TourActivity.class);
                 if (subSection.isHasPOI()) { //If Subsection contains POIs within - Creates new intent with
                     intent.putExtra(EXTRA_MESSAGE_POI, subSection.getPOIs());
+                    intent.putExtra(SummaryActivity.KEY_ID, keyID);
                 } else {
-                    intent.putExtra(EXTRA_MESSAGE_SUB, subSection.getListOfSub()); //Todo: Change getPOIs to new method containing subsections
+                    intent.putExtra(EXTRA_MESSAGE_SUB, subSection.getListOfSub());
+                    intent.putExtra(SummaryActivity.KEY_ID, keyID);
                 }
                 startActivity(intent);
             }
@@ -98,6 +104,8 @@ public class TourActivity extends Activity {
                 PointOfInterest poi = (PointOfInterest) parent.getItemAtPosition(position);
                 Intent intent = new Intent(TourActivity.this, PointOfInterestActivity.class);
                 intent.putExtra(EXTRA_MESSAGE_FINAL, poi);
+                intent.putExtra(SummaryActivity.KEY_ID, keyID);
+                System.out.println(keyID);
                 startActivity(intent);
             }
         });

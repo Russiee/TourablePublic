@@ -2,6 +2,7 @@ package com.hobbyte.touringandroid;
 
 import android.util.Log;
 
+import com.hobbyte.touringandroid.helpers.FileManager;
 import com.hobbyte.touringandroid.internet.ServerAPI;
 
 import org.json.JSONArray;
@@ -26,9 +27,12 @@ public class SaveTourJSON {
     private File imageFolder;
     private File videoFolder;
 
+    private String keyID;
+
 
     public SaveTourJSON(String keyID) {
         this.tourFolder = makeDirectories(keyID);
+        this.keyID = keyID;
     }
 
     /**
@@ -77,6 +81,7 @@ public class SaveTourJSON {
      */
     public void saveTour(JSONObject json, boolean withVideo) {
 
+        WITH_VIDEO = withVideo;
         File tourFile = new File(tourFolder, "tour");
         try {
             FileWriter fw = new FileWriter(tourFile);
@@ -180,6 +185,7 @@ public class SaveTourJSON {
                         saveFile(poisFolder, poiJSON);
 
                         //TODO get link to image & video and save
+                        FileManager.saveImage(StartActivity.getContext(), keyID, poiJSON.getJSONArray("post").getJSONObject(2).getString("url"));
                     }
                 }
             }

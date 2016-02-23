@@ -18,6 +18,7 @@ import java.util.ArrayList;
 public class PointOfInterestActivity extends Activity {
 
     private ListView listView;
+    private static String keyID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +35,8 @@ public class PointOfInterestActivity extends Activity {
         listView = (ListView) findViewById(R.id.poiListView);
 
         Intent intent = getIntent();
+        keyID = intent.getStringExtra(SummaryActivity.KEY_ID);
+        System.out.println(keyID);
         PointOfInterest poi = (PointOfInterest) intent.getSerializableExtra(TourActivity.EXTRA_MESSAGE_FINAL);
 
         ArrayList<String> content = poi.getContent();
@@ -44,7 +47,7 @@ public class PointOfInterestActivity extends Activity {
         //Separate data from point of interest class into text and a URL Website
         for (int i = 0; i < content.size(); i++) {
             String info = content.get(i);
-            if (info.contains("http")) {
+            if (info.contains(".jpg")) {
                 items[i] = new ListViewItem(info, PoiContentAdapter.IMG);
                 url = info;
             } else {
@@ -52,7 +55,7 @@ public class PointOfInterestActivity extends Activity {
             }
         }
 
-        PoiContentAdapter adapter = new PoiContentAdapter(this, items);
+        PoiContentAdapter adapter = new PoiContentAdapter(this, items, keyID);
         listView.setAdapter(adapter);
     }
 }

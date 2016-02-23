@@ -14,6 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -53,6 +54,7 @@ public class SummaryActivity extends Activity {
         // start tour
         Intent intent = new Intent(this, TourActivity.class);
         intent.putExtra(TourActivity.EXTRA_MESSAGE_SUB, tour.getSubSections());
+        intent.putExtra(SummaryActivity.KEY_ID, keyID);
         startActivity(intent);
     }
 
@@ -89,12 +91,17 @@ public class SummaryActivity extends Activity {
             JSONArray jsonArr = json.getJSONArray("sections");
             for (int i = 0; i < jsonArr.length(); i++) {
                 String objectId = jsonArr.getJSONObject(i).getString("objectId");
-                SubSection sub = allocateSectionPOIs(FileManager.getObjectJSON(keyID, "section", objectId, context));
-                if(sub != null) {
+                JSONObject jobj = FileManager.getObjectJSON(keyID, "section", objectId, context);
+                if (jobj == null) {
+                    continue;
+                } else {
+                SubSection sub = allocateSectionPOIs(jobj);
+                if (sub != null) {
                     subList.add(sub);
                 } else {
                     continue;
                 }
+            }
             }
             Log.d(TAG, "Created tour!");
             return new Tour(keyID, name, description, subList);
@@ -115,33 +122,48 @@ public class SummaryActivity extends Activity {
      */
     public SubSection allocateSectionPOIs(JSONObject json) {
         try {
-
             String name;
             String description;
+
             ArrayList<PointOfInterest> poiList = new ArrayList<PointOfInterest>();
             ArrayList<SubSection> subList = new ArrayList<SubSection>();
 
             Log.d(TAG, "Valid section");
             name = json.getString("title");
             description = json.getString("description");
+
             if(json.getJSONArray("subsections").length() == 0) {
+
                 JSONArray jsonArr = json.getJSONArray("pois");
+
+                System.out.println(jsonArr.toString());
                 //TODO: Get rid once api fixed
+
                 for (int i = 0; i < jsonArr.length(); i++) {
-                    if(!jsonArr.getString(0).contains(":")) {
+
+                    if (!jsonArr.getString(0).contains(":")) {
                         return null;
                     }
+                    System.out.println(jsonArr.length());
                     String objectId = jsonArr.getJSONObject(i).getString("objectId");
-
-                    PointOfInterest poi = allocatePOIs(FileManager.getObjectJSON(keyID, "poi", objectId, this));
-                    if (poi != null) {
-                        poiList.add(poi);
-                    } else {
+                    System.out.println(objectId);
+                    JSONObject jobj = FileManager.getObjectJSON(keyID, "poi", objectId, this);
+                    if(jobj == null) {
                         continue;
+                    } else {
+                        PointOfInterest poi = allocatePOIs(jobj);
+                        if (poi != null) {
+                            poiList.add(poi);
+                        } else {
+                            System.out.println(objectId + "is null");
+                            continue;
+                        }
                     }
                 }
                 return new SubSection(name, description, poiList);
+
             } else {
+
                 JSONArray jsonArr = json.getJSONArray("subsections");
                 for (int i = 0; i < jsonArr.length(); i++) {
                     if(!jsonArr.getString(0).contains(":")) {

@@ -9,6 +9,7 @@ import android.view.Display;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import java.io.File;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -28,20 +29,21 @@ public class LoadImageFromURL extends AsyncTask<String, Void, Bitmap> {
 
     @Override
     protected Bitmap doInBackground(String... params) {
-        String urlDisplay = params[0];
+        String imgPath = params[0];
+        String keyID = params[1];
         Bitmap bm = null;
-        try {
-            InputStream is = new java.net.URL(urlDisplay).openStream();
-            bm = BitmapFactory.decodeStream(is);
-        } catch (Exception e) {
-            e.printStackTrace();
+        File file = new File(context.getApplicationContext().getFilesDir(), String.format("%s/image/%s", keyID, imgPath));
+        System.out.println(file.getAbsolutePath().toString());
+        if(file.exists()) {
+            bm = BitmapFactory.decodeFile(file.getAbsolutePath());
+            System.out.println("DOES EXIST!");
         }
         return bm;
     }
 
     @Override
     protected void onPostExecute(Bitmap result) {
-        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        DisplayMetrics metrics = context.getApplicationContext().getResources().getDisplayMetrics();
         int height = metrics.heightPixels / 2;
         int width = metrics.widthPixels;
         result = Bitmap.createScaledBitmap(result, height, width, true);
