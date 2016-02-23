@@ -141,7 +141,7 @@ class TourSectionsController: UITableViewController {
             
             newViewController.superTableId = objectId!
         } else if(segue.identifier == "PointOfInterestSegue"){
-            let newViewController = segue.destinationViewController as! pointOfInterestController
+            let newViewController = segue.destinationViewController as! PointViewController
             
             newViewController.poiID = objectId!
             
