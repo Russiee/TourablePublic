@@ -69,7 +69,7 @@ public class FileManager {
 
             if (m.matches()) {
                 String img = m.group(1);
-                File file = new File(context.getFilesDir(), String.format("%s/images/%s", keyID, img));
+                File file = new File(context.getFilesDir(), String.format("%s/image/%s", keyID, img));
                 FileOutputStream fos = new FileOutputStream(file);
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
                 fos.close();
