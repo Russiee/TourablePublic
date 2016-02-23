@@ -49,7 +49,6 @@ public class TourActivity extends Activity {
         //Initialises final ListView
         listView = (ListView) findViewById(R.id.subsectionListView);
         Intent intent = getIntent();
-        /*
         //Determines whether intent contains ArrayList of Subsections or Points of Interest
         if((ArrayList<SubSection>) intent.getSerializableExtra(TourActivity.EXTRA_MESSAGE_SUB) != null) { //Checks for ArrayList of Subsections
             openSubsections((ArrayList<SubSection>) intent.getSerializableExtra(TourActivity.EXTRA_MESSAGE_SUB));
@@ -57,7 +56,7 @@ public class TourActivity extends Activity {
             //Retrieves list of Points of Interest from Intent
             ArrayList<PointOfInterest> poiList = (ArrayList<PointOfInterest>) intent.getSerializableExtra(TourActivity.EXTRA_MESSAGE_POI);
             openPOIs(poiList);
-        } */
+        }
     }
 
     private void openSubsections(ArrayList<SubSection> sub) {

@@ -28,6 +28,7 @@ public class SummaryActivity extends Activity {
 
     private Pattern p;
     private Context context;
+    private Tour tour;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +42,7 @@ public class SummaryActivity extends Activity {
         Thread thread = new Thread() {
             @Override
             public void run() {
-                    allocateTourSections(FileManager.getTourJSON(keyID), context);
+                    tour = allocateTourSections(FileManager.getTourJSON(keyID), context);
             }
         };
         thread.start();
@@ -51,7 +52,7 @@ public class SummaryActivity extends Activity {
     public void openTourActivity(View v) {
         // start tour
         Intent intent = new Intent(this, TourActivity.class);
-        intent.putExtra(SummaryActivity.KEY_ID, keyID);
+        intent.putExtra(TourActivity.EXTRA_MESSAGE_SUB, tour.getSubSections());
         startActivity(intent);
     }
 
