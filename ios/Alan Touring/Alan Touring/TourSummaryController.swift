@@ -45,8 +45,10 @@ class TourSummaryController: UIViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
 
         // Create a new variable to store the instance of PlayerTableViewController
+        if segue.identifier == "goToTourSections"{
         let destinationVC = segue.destinationViewController as! TourSectionsController
         destinationVC.superTableId = setup["objectId"] as! String
+        }
     }
     
     
