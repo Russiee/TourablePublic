@@ -20,8 +20,6 @@ public class SaveTourJSON {
     public static boolean JUST_IMAGES = false;
     public static boolean WITH_VIDEO = true;
 
-    private String keyID;
-
     private File tourFolder;
     private File sectionsFolder;
     private File poisFolder;
@@ -30,7 +28,6 @@ public class SaveTourJSON {
 
 
     public SaveTourJSON(String keyID) {
-        this.keyID = keyID;
         this.tourFolder = makeDirectories(keyID);
     }
 
@@ -42,27 +39,32 @@ public class SaveTourJSON {
      */
     private File makeDirectories(String keyID) {
 
+        boolean foldersCreatedSuccessfully = true;
+
         //create folder in ...com.hobbyte.touring/files/
         tourFolder = new File(StartActivity.getContext().getFilesDir(), keyID);
-        tourFolder.mkdir();
+        foldersCreatedSuccessfully = foldersCreatedSuccessfully && tourFolder.mkdir();
 
         //...com.hobbyte.touring/files/keyID/section
-        sectionsFolder = new File(tourFolder, "sections");
-        sectionsFolder.mkdir();
+        sectionsFolder = new File(tourFolder, "section");
+        foldersCreatedSuccessfully = foldersCreatedSuccessfully && sectionsFolder.mkdir();
 
         //...com.hobbyte.touring/files/keyID/pois
-        poisFolder = new File(tourFolder, "pois");
-        poisFolder.mkdir();
+        poisFolder = new File(tourFolder, "poi");
+        foldersCreatedSuccessfully = foldersCreatedSuccessfully && poisFolder.mkdir();
 
         //...com.hobbyte.touring/files/keyID/image
         imageFolder = new File(tourFolder, "image");
-        imageFolder.mkdir();
+        foldersCreatedSuccessfully = foldersCreatedSuccessfully && imageFolder.mkdir();
 
         //...com.hobbyte.touring/files/keyID/video
         videoFolder = new File(tourFolder, "video");
-        videoFolder.mkdir();
+        foldersCreatedSuccessfully = foldersCreatedSuccessfully && videoFolder.mkdir();
 
-        Log.i(TAG, "directories made successfully");
+        //logging
+        if (foldersCreatedSuccessfully) Log.i(TAG, "folders created successfully");
+        else Log.e(TAG, "error with creating folders");
+
         return tourFolder;
 
     }
@@ -129,47 +131,70 @@ public class SaveTourJSON {
         }
     }
 
+    /**
+     * Saves the subsection jsons. This is a recursive method
+     *
+     * @param section the subsection to save
+     */
     private void saveSubSectionsAndPois(JSONObject section) {
 
+        //open and save sections
         try {
 
             JSONArray subsectionsArray = section.getJSONArray("subsections");
+
             //if the array does actually contain objects.
-            //this if statement can be removed when the api work
             if (subsectionsArray.length() != 0 && subsectionsArray.getString(0).contains(":")) {
+
                 //loop over all subsections
                 for (int i = 0; i < subsectionsArray.length(); i++) {
+
                     JSONObject currentSection = subsectionsArray.getJSONObject(i);
                     JSONObject sectionJSON = ServerAPI.getJSON(currentSection.getString("objectId"), ServerAPI.SECTION);
                     if (sectionJSON != null) {
+
                         saveFile(sectionsFolder, sectionJSON);
                         saveSubSectionsAndPois(sectionJSON);
                     }
                 }
             }
+        } catch (org.json.JSONException e) {
+            e.printStackTrace();
+        }
+
+        //open and save pois
+        try {
 
             JSONArray poisArray = section.getJSONArray("pois");
             //if the array does actually contain objects.
             //this if statement can be removed when the api work
             if (poisArray.length() != 0 && poisArray.getString(0).contains(":")) {
+
                 //loop over all pois
-                for (int i = 0; i < subsectionsArray.length(); i++) {
+                for (int i = 0; i < poisArray.length(); i++) {
+
                     JSONObject currentPoi = poisArray.getJSONObject(i);
                     JSONObject poiJSON = ServerAPI.getJSON(currentPoi.getString("objectId"), ServerAPI.POI);
                     if (poiJSON != null) {
+
                         saveFile(poisFolder, poiJSON);
+
+                        //TODO get link to image & video and save
                     }
                 }
             }
-
-
         } catch (org.json.JSONException e) {
             e.printStackTrace();
         }
-
     }
 
 
+    /**
+     * Saves a jsonobject to file
+     *
+     * @param folderToSaveIn the folder to save the json in
+     * @param jsonToSave
+     */
     private void saveFile(File folderToSaveIn, JSONObject jsonToSave) {
 
         try {

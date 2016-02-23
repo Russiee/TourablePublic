@@ -135,7 +135,7 @@ public class ServerAPI {
 
     public static String getBundleString(String tourID) {
         try {
-            URL url = new URL(tourBundleURL + tourID);
+            URL url = new URL(BASE_URl + BUNDLE + tourID);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setDoInput(true);
