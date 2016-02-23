@@ -49,31 +49,6 @@ public class StartActivity extends Activity {
         setContentView(R.layout.activity_start);
         CONTEXT = getApplicationContext();
 
-        SharedPreferences prefs = this.getSharedPreferences(
-                getString(R.string.preference_file_key),
-                Context.MODE_PRIVATE);
-        boolean isFreshInstall = prefs.getBoolean(getString(R.string.prefs_is_new_install), true);
-
-        // make the directory for tour media and set the "first install" flag to false
-        /*if (isFreshInstall) {
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putBoolean(getString(R.string.prefs_is_new_install), false);
-            editor.apply();
-
-            // this is a temporary measure to get a previous tour
-            TourDBManager dbHelper = new TourDBManager(this);
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
-            dbHelper.putRow(db,
-                    "49L6FrRwe4",
-                    "DnPRFaSYEk",
-                    "Ultimate Flat Tour",
-                    "2016-02-12T15:51:17.125Z",
-                    "2016-02-12T15:51:17.125Z",
-                    "2016-02-25T00:39:31.000Z",
-                    false);
-            db.close();
-        }*/
-
         /*TourDBManager dbHelper = new TourDBManager(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         dbHelper.putRow(db,
