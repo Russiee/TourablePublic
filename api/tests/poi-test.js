@@ -8,6 +8,7 @@ var poi = require('../routes/poi.js');
 describe('POI tests', function() {
 var objID;
 var url = 'http://touring-api.herokuapp.com/';
+this.timeout(10000);
 
 // this is referencing the Alex's Room Section  
 it('should correctly add a POI ', function(done) {

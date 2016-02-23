@@ -1,13 +1,14 @@
 var should = require('should'); 
 var assert = require('assert');
 var request = require('supertest');
-var poi = require('../routes/poi.js');
+var poi = require('../routes/section.js');
 
 
 
 describe('Section tests', function() {
 var objID;
 var url = 'http://touring-api.herokuapp.com/';
+this.timeout(10000);
 
 it('should correctly add a section', function(done) {
     var section  = {
@@ -42,7 +43,7 @@ it('should correctly add a section', function(done) {
 
 
 
-it('should correctly get the added POI', function(done){
+it('should correctly get the added section', function(done){
 request(url)
     .get('api/v1/section/'+objID)
     .expect('Content-Type', /json/)
@@ -60,7 +61,7 @@ request(url)
 
 
 
-it('should correctly update the existing POI ', function(done) {
+it('should correctly update the existing section ', function(done) {
    var section2  = {
     "tour":  {
       "__type": "Pointer",

@@ -8,6 +8,7 @@ var poi = require('../routes/organization.js');
 describe('Organization tests', function() {
 var objID;
 var url = 'http://touring-api.herokuapp.com/';
+this.timeout(10000);
 
 it('should correctly add an organization', function(done) {
     var organizaton  = {
