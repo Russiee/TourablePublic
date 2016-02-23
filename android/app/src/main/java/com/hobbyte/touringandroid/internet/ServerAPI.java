@@ -167,6 +167,7 @@ public class ServerAPI {
     }
 
     /**
+<<<<<<< f61285fbf54de0909fe8dcfa916fc68bdd206fa6
      * Method takes in the Tour ID retrieved by the Key, gets the bundle from the tourId,
      * then retrieves id's of every subsection from this tour url
      *
@@ -213,7 +214,7 @@ public class ServerAPI {
                 }
                 Log.d(TAG, "Fetched tourId:");
                 in.close();
-                return new Tour(name, description, subList);
+                return new Tour("key", name, description, subList);
             } else {
                 connection.disconnect();
                 Log.d(TAG, "Invalid bundle: " + bundle);
@@ -387,6 +388,8 @@ public class ServerAPI {
     }
 
     /**
+=======
+>>>>>>> AND-16-Load JSON - Should "HOPEFULLY" successfully load and allocate into activities...hopefully
      * Checks if the phone currently has an internet connection, whether it's data or wifi.
      * <p/>
      * Taken from the Android

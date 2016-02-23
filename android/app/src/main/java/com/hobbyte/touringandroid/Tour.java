@@ -1,25 +1,41 @@
 package com.hobbyte.touringandroid;
 
+import android.content.Context;
+import android.util.Log;
+
+import com.hobbyte.touringandroid.helpers.FileManager;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Nikita on 08/02/2016.
  */
 public class Tour {
+
+    private String keyID;
     private String name;
     private String description;
     private ArrayList<SubSection> listOfSubSections;
 
     /**
      * Create a tour based on specific subsections already defined
-     * @param name of tour
+     *
+     * @param name        of tour
      * @param subsections to be added
      */
-    public Tour(String name, String description, ArrayList<SubSection> subsections) {
+    public Tour(String keyId, String name, String description, ArrayList<SubSection> subsections) {
+
+        this.keyID = keyId;
         this.name = name;
         this.description = description;
         listOfSubSections = new ArrayList<SubSection>();
-        for(SubSection s: subsections) {
+        for (SubSection s : subsections) {
             listOfSubSections.add(s);
         }
     }
@@ -36,6 +52,7 @@ public class Tour {
 
     /**
      * Add subsections to tour if needed
+     *
      * @param sub subsections to be added
      */
     public void addSubSection(SubSection sub) {
@@ -44,6 +61,7 @@ public class Tour {
 
     /**
      * Retrieve ArrayList of Subsections within this tour
+     *
      * @return ArrayList
      */
     public ArrayList<SubSection> getSubSections() {

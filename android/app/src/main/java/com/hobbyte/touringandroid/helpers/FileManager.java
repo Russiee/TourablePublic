@@ -4,13 +4,18 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.hobbyte.touringandroid.StartActivity;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.regex.Matcher;
@@ -44,6 +49,40 @@ public class FileManager {
         }
     }
 
+    /**
+     * Loads a saved JSON File for a given Tours Section or POI
+     * @param keyID the tour key used to download the tour
+     * @param object the level of section, Section or Point Of Interest
+     * @param objectId The id of the object whose JSON to retrieve
+     * @param context The context of the calling activity
+     * @return JSONObject for the Level of Section required
+     */
+    public static JSONObject getObjectJSON(String keyID, String object, String objectId, Context context) {
+
+        try {
+            File tourFolder = new File(context.getFilesDir(), keyID);
+            File iDFolder = new File(tourFolder, object);
+            File objectJson = new File(iDFolder, objectId);
+
+            StringBuilder text = new StringBuilder();
+            BufferedReader in = new BufferedReader(new FileReader(objectJson));
+            String line;
+
+            while((line = in.readLine()) != null) {
+                text.append(line);
+                text.append("\n");
+            }
+            in.close();
+            JSONObject json = new JSONObject(text.toString());
+            return json;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        } catch (JSONException jex) {
+            jex.printStackTrace();
+            return null;
+        }
+    }
     /**
      * Saves an image given by a URL to the device.
      * <p>

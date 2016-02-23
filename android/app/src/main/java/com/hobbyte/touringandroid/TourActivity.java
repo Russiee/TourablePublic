@@ -1,20 +1,35 @@
 package com.hobbyte.touringandroid;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.hobbyte.touringandroid.helpers.FileManager;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TourActivity extends Activity {
 
     //Depending on intent name, sends either arraylist of subsections, or of points of interest
 
+    private static final String TAG = "TourActivity";
     public final static String EXTRA_MESSAGE_FINAL = "SEND_FINAL_POI";
     public final static String EXTRA_MESSAGE_SUB = "SEND_SUBSECTIONS";
     public final static String EXTRA_MESSAGE_POI = "SEND_POI";
@@ -34,7 +49,7 @@ public class TourActivity extends Activity {
         //Initialises final ListView
         listView = (ListView) findViewById(R.id.subsectionListView);
         Intent intent = getIntent();
-
+        /*
         //Determines whether intent contains ArrayList of Subsections or Points of Interest
         if((ArrayList<SubSection>) intent.getSerializableExtra(TourActivity.EXTRA_MESSAGE_SUB) != null) { //Checks for ArrayList of Subsections
             openSubsections((ArrayList<SubSection>) intent.getSerializableExtra(TourActivity.EXTRA_MESSAGE_SUB));
@@ -42,7 +57,7 @@ public class TourActivity extends Activity {
             //Retrieves list of Points of Interest from Intent
             ArrayList<PointOfInterest> poiList = (ArrayList<PointOfInterest>) intent.getSerializableExtra(TourActivity.EXTRA_MESSAGE_POI);
             openPOIs(poiList);
-        }
+        } */
     }
 
     private void openSubsections(ArrayList<SubSection> sub) {
@@ -88,5 +103,4 @@ public class TourActivity extends Activity {
             }
         });
     }
-
 }
