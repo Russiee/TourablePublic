@@ -17,7 +17,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * A class with several static methods for managing the app's internal storage.
+ * A class with static methods for doing IO with the device's internal storage.
  */
 public class FileManager {
 
@@ -25,17 +25,11 @@ public class FileManager {
     public static final String IMG_NAME = "https?:\\/\\/[\\w\\.\\/]*\\/(\\w*\\.(jpe?g|png))";
 
     /**
-     * This is an action which only has to be performed after a fresh install of the app.
-     * It creates a directory in which all tour media will be stored.
+     * Loads a saved tour JSON file for a given tour.
      *
-     * @param context the starting activity
+     * @param keyID the tour key used to download the tour
+     * @return a JSONObject of the top-level tour
      */
-    public static void makeTourDir(Context context) {
-        // TODO: get rid of this
-        File file = new File(context.getFilesDir(), TOUR_DIR);
-        file.mkdir();
-    }
-
     public static JSONObject getTourJSON(String keyID) {
         // load saved JSON into JSON object and return it
 

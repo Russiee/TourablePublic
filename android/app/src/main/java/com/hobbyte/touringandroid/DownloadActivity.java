@@ -187,8 +187,8 @@ public class DownloadActivity extends Activity {
      */
     private class DownloadTourMediaClass extends AsyncTask<Void, Void, Boolean> {
 
-        private String imageOnlyPattern = "http:\\/\\/[\\w\\d\\.\\/]*\\.((jpg)|(jpeg)|(png))";
-        private String allMediaPattern = "http:\\/\\/[\\w\\d\\.\\/]*\\.((jpg)|(jpeg)|(png))";
+        private String imageOnlyPattern = "http:\\/\\/[\\w\\d\\.\\/]*\\.(jpe?g|png)";
+        private String allMediaPattern = "http:\\/\\/[\\w\\d\\.\\/]*\\.(jpe?g|png)"; // TODO
 
         private String mode;
         private List<String> urlList;
