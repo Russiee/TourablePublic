@@ -46,6 +46,8 @@ public class FileManager {
 
     /**
      * Saves an image given by a URL to the device.
+     * <p>
+     * This method MUST NOT be called from within the main thread.
      *
      * @param context the calling Activity
      * @param keyID a tour key ID
