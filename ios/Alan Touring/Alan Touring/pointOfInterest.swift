@@ -35,6 +35,8 @@ class pointOfInterest {
         print("POI "+self.objectId)
         
     }
+    
+    
 
     func downloadContent() {
         let imghd = imageHandler.init()
