@@ -13,6 +13,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A class with several static methods for managing the app's internal storage.
@@ -20,6 +22,7 @@ import java.net.URL;
 public class FileManager {
 
     public static final String TOUR_DIR = "tourData";
+    public static final String IMG_NAME = "https?:\\/\\/[\\w\\.\\/]*\\/(\\w*\\.(jpe?g|png))";
 
     /**
      * This is an action which only has to be performed after a fresh install of the app.
@@ -48,22 +51,35 @@ public class FileManager {
         }
     }
 
+    /**
+     * Saves an image given by a URL to the device.
+     *
+     * @param context the calling Activity
+     * @param keyID a tour key ID
+     * @param urlString a URL to an image file
+     */
     public static void saveImage(Context context, String keyID, String urlString) {
         try {
             URL url = new URL(urlString);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.connect();
 
+            // download image into a bitmap
             BufferedInputStream bis = new BufferedInputStream(connection.getInputStream());
             Bitmap bitmap = BitmapFactory.decodeStream(bis);
 
             connection.disconnect();
 
-            File file = new File(context.getFilesDir(), "poop.jpg");
-            FileOutputStream fos = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-            fos.close();
+            // extract image file name and save it on device
+            Matcher m = Pattern.compile(IMG_NAME).matcher(urlString);
 
+            if (m.matches()) {
+                String img = m.group(1);
+                File file = new File(context.getFilesDir(), String.format("%s/images/%s", keyID, img));
+                FileOutputStream fos = new FileOutputStream(file);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
+                fos.close();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
