@@ -21,7 +21,6 @@ import java.util.regex.Pattern;
  */
 public class FileManager {
 
-    public static final String TOUR_DIR = "tourData";
     public static final String IMG_NAME = "https?:\\/\\/[\\w\\.\\/]*\\/(\\w*\\.(jpe?g|png))";
 
     /**
@@ -53,29 +52,42 @@ public class FileManager {
      * @param urlString a URL to an image file
      */
     public static void saveImage(Context context, String keyID, String urlString) {
+        HttpURLConnection connection = null;
+        Bitmap bitmap = null;
+
         try {
             URL url = new URL(urlString);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection = (HttpURLConnection) url.openConnection();
             connection.connect();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
+        if (connection != null) {
             // download image into a bitmap
-            BufferedInputStream bis = new BufferedInputStream(connection.getInputStream());
-            Bitmap bitmap = BitmapFactory.decodeStream(bis);
+            try (BufferedInputStream bis = new BufferedInputStream(connection.getInputStream())) {
+                bitmap = BitmapFactory.decodeStream(bis);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                connection.disconnect();
+            }
+        }
 
-            connection.disconnect();
-
+        if (bitmap != null) {
             // extract image file name and save it on device
             Matcher m = Pattern.compile(IMG_NAME).matcher(urlString);
 
             if (m.matches()) {
                 String img = m.group(1);
                 File file = new File(context.getFilesDir(), String.format("%s/image/%s", keyID, img));
-                FileOutputStream fos = new FileOutputStream(file);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
-                fos.close();
+
+                try (FileOutputStream fos = new FileOutputStream(file)) {
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }
