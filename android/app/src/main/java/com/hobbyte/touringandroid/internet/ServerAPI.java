@@ -100,24 +100,29 @@ public class ServerAPI {
 
             int response = connection.getResponseCode();
 
-            StringBuilder jsonString = new StringBuilder("");
-            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String line = in.readLine();
-
-            while (line != null) {
-                jsonString.append(line);
-                line = in.readLine();
-            }
-
-            in.close();
-            connection.disconnect();
-
             if (response == 200) {
+
+                StringBuilder jsonString = new StringBuilder("");
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String line = in.readLine();
+
+                while (line != null) {
+
+                    jsonString.append(line);
+                    line = in.readLine();
+                }
+
+                in.close();
+
                 JSONObject json = new JSONObject(jsonString.toString());
                 Log.d(TAG, "Returning JSON for tour: " + json.getString("title"));
+                connection.disconnect();
+
                 return json;
+
             } else {
                 Log.d(TAG, "Could not find tour for ID = " + ID);
+                connection.disconnect();
             }
 
         } catch (JSONException jex) {
@@ -164,6 +169,7 @@ public class ServerAPI {
     /**
      * Method takes in the Tour ID retrieved by the Key, gets the bundle from the tourId,
      * then retrieves id's of every subsection from this tour url
+     *
      * @param bundle
      * @return
      */
@@ -199,7 +205,7 @@ public class ServerAPI {
                 //JSONArray jsonA = jobj.getJSONArray("subsections");
                 for (int i = 0; i < jsonArr.length(); i++) {
                     SubSection sub = allocateSectionPOIs(jsonArr.getJSONObject(i).getString("objectId"));
-                    if(sub != null) {
+                    if (sub != null) {
                         subList.add(sub);
                     } else {
                         continue;
@@ -225,6 +231,7 @@ public class ServerAPI {
      * Method takes in a subsection id identified in the previous method,
      * opens a connection to the url of said subsection id,
      * then retrieves id's of Points of Interest and opens a method to them, creating a subsection
+     *
      * @param section
      * @return Subsection
      */
@@ -258,11 +265,11 @@ public class ServerAPI {
                 JSONObject json = new JSONObject(jsonString.toString());
                 name = json.getString("title");
                 description = json.getString("description");
-                if(json.getJSONArray("subsections").length() == 0) {
+                if (json.getJSONArray("subsections").length() == 0) {
                     JSONArray jsonArr = json.getJSONArray("pois");
 
                     for (int i = 0; i < jsonArr.length(); i++) {
-                        if(!jsonArr.getString(0).contains(":")) {
+                        if (!jsonArr.getString(0).contains(":")) {
                             return null;
                         }
                         PointOfInterest poi = allocatePOIs(jsonArr.getJSONObject(i).getString("objectId"));
@@ -276,7 +283,7 @@ public class ServerAPI {
                 } else {
                     JSONArray jsonArr = json.getJSONArray("subsections");
                     for (int i = 0; i < jsonArr.length(); i++) {
-                        if(!jsonArr.getString(0).contains(":")) {
+                        if (!jsonArr.getString(0).contains(":")) {
                             return null;
                         }
                         SubSection sub = allocateSectionPOIs(jsonArr.getJSONObject(i).getString("objectId"));
@@ -305,6 +312,7 @@ public class ServerAPI {
     /**
      * Retrieves information regarding the POI of the POI id passed to the constructor
      * Creates point of interest from this and passes back to caller
+     *
      * @param poi
      * @return PointOfInterest
      */
@@ -380,7 +388,7 @@ public class ServerAPI {
 
     /**
      * Checks if the phone currently has an internet connection, whether it's data or wifi.
-     *
+     * <p/>
      * Taken from the Android
      * <a href="https://developer.android.com/training/monitoring-device-state/connectivity-monitoring.html">training guides.</a>
      *
@@ -389,7 +397,7 @@ public class ServerAPI {
      */
     public static boolean checkConnection(Context context) {
         ConnectivityManager cm =
-                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 

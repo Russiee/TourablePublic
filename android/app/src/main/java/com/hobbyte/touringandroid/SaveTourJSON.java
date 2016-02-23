@@ -36,6 +36,7 @@ public class SaveTourJSON {
 
     /**
      * Creates the folders that the app will store the tour data in
+     *
      * @param keyID the keyID of the tour. This is the unique identifier of the tour.
      * @return the parent tourFolder. This name is the same as the keyID of the tour.
      */
@@ -61,13 +62,15 @@ public class SaveTourJSON {
         videoFolder = new File(tourFolder, "video");
         videoFolder.mkdir();
 
+        Log.i(TAG, "directories made successfully");
         return tourFolder;
 
     }
 
     /**
      * Save the tour to the device
-     * @param json the tourJSON of the tour. This is the overview of the entire tour.
+     *
+     * @param json      the tourJSON of the tour. This is the overview of the entire tour.
      * @param withVideo true if the video should be downloaded, false if only images
      */
     public void saveTour(JSONObject json, boolean withVideo) {
@@ -78,69 +81,110 @@ public class SaveTourJSON {
             fw.write(json.toString());
             fw.close();
 
-            recurseIntoAPI(json.getJSONArray("sections"));
-        }
-        catch (IOException e) {
+            saveTopLevelTourSections(json.getJSONArray("sections"));
+        } catch (IOException e) {
             e.printStackTrace();
-        }
-        catch (org.json.JSONException e) {
+        } catch (org.json.JSONException e) {
             e.printStackTrace();
         }
     }
 
     /**
-     *
-     * @param array
+     * @param array the array representing the "sections" part of the tourJSON
      */
-    private void recurseIntoAPI(JSONArray array) {
+    private void saveTopLevelTourSections(JSONArray array) {
 
         try {
 
-            Log.i(TAG,"length: " +  array.length());
+            //loop over all section objects within tourJSON
             for (int i = 0; i < array.length(); i++) {
-                //this gets the current 3 value sections of the tourJSON
+
+                //this gets one of the sections of the tourJSON
                 JSONObject currentSection = array.getJSONObject(i);
-                Log.i(TAG, currentSection.toString());
 
                 //get the type of the section
-                String type = currentSection.getString("className");
+                String className = currentSection.getString("className");
                 String sectionId = currentSection.getString("objectId");
 
-                if (type.equals("Section")) {
+                //should be if API remains constant
+                if (className.equals("Section")) {
 
+                    //get json object of each top level section
                     JSONObject jsonObject = ServerAPI.getJSON(sectionId, ServerAPI.SECTION);
-                    saveFile(sectionsFolder, jsonObject);
 
-                    //recurse
-
-                } else if (type.equals("POI")) {
-
-                    JSONObject jsonObject = ServerAPI.getJSON(sectionId, ServerAPI.POI);
-                    saveFile(poisFolder, jsonObject);
+                    if (jsonObject != null) {
+                        //save it
+                        saveFile(sectionsFolder, jsonObject);
+                        //save all subsections of this top level section
+                        saveSubSectionsAndPois(jsonObject);
+                    }
 
                 } else {
-                    Log.e(TAG, "section className \"" + type + "\" not expected");
+                    //API retured a JSON structure that this code is not familiar with
+                    Log.e(TAG, "section className \"" + className + "\" not expected");
                 }
-
             }
         } catch (org.json.JSONException e) {
             e.printStackTrace();
-
         }
     }
+
+    private void saveSubSectionsAndPois(JSONObject section) {
+
+        try {
+
+            JSONArray subsectionsArray = section.getJSONArray("subsections");
+            //if the array does actually contain objects.
+            //this if statement can be removed when the api work
+            if (subsectionsArray.length() != 0 && subsectionsArray.getString(0).contains(":")) {
+                //loop over all subsections
+                for (int i = 0; i < subsectionsArray.length(); i++) {
+                    JSONObject currentSection = subsectionsArray.getJSONObject(i);
+                    JSONObject sectionJSON = ServerAPI.getJSON(currentSection.getString("objectId"), ServerAPI.SECTION);
+                    if (sectionJSON != null) {
+                        saveFile(sectionsFolder, sectionJSON);
+                        saveSubSectionsAndPois(sectionJSON);
+                    }
+                }
+            }
+
+            JSONArray poisArray = section.getJSONArray("pois");
+            //if the array does actually contain objects.
+            //this if statement can be removed when the api work
+            if (poisArray.length() != 0 && poisArray.getString(0).contains(":")) {
+                //loop over all pois
+                for (int i = 0; i < subsectionsArray.length(); i++) {
+                    JSONObject currentPoi = poisArray.getJSONObject(i);
+                    JSONObject poiJSON = ServerAPI.getJSON(currentPoi.getString("objectId"), ServerAPI.POI);
+                    if (poiJSON != null) {
+                        saveFile(poisFolder, poiJSON);
+                    }
+                }
+            }
+
+
+        } catch (org.json.JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
     private void saveFile(File folderToSaveIn, JSONObject jsonToSave) {
 
         try {
-            File file = new File(folderToSaveIn, jsonToSave.getString("objectID"));
+            File file = new File(folderToSaveIn, jsonToSave.getString("objectId"));
             FileWriter fw = new FileWriter(file);
             fw.write(jsonToSave.toString());
-        }
-        catch (org.json.JSONException e) {
+            fw.close();
+        } catch (org.json.JSONException e) {
             e.printStackTrace();
-        }
-        catch (IOException e) {
+            Log.e(TAG, jsonToSave.toString());
+
+        } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+
         }
 
 

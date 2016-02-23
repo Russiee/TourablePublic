@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StatFs;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -211,6 +212,7 @@ public class DownloadActivity extends Activity {
         @Override
         protected void onPostExecute(Boolean isValid) {
 
+            Log.i(TAG, "fnished downloading");
             //moveToTourActivity(); //TODO uncomment this when it actually starts a tour
 
             // removes activity from users stack so when they press back from a tour they go back
