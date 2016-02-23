@@ -121,7 +121,7 @@ public class DownloadActivity extends Activity {
      */
     private void setDownloadSizeLabels() {
 
-        long videoDownloadSizeBytes = 9223372036854775807L; //TODO do server stuff instead
+        long videoDownloadSizeBytes = 4234234; //TODO do server stuff instead
         long imageDownloadSizeBytes = 1024; //TODO do server stuff instead
         long freeSpaceInBytes = getFreeStorageSpaceInBytes();
 

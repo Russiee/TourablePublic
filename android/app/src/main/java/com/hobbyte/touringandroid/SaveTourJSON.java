@@ -43,23 +43,23 @@ public class SaveTourJSON {
 
         //create folder in ...com.hobbyte.touring/files/
         tourFolder = new File(StartActivity.getContext().getFilesDir(), keyID);
-        foldersCreatedSuccessfully = foldersCreatedSuccessfully && tourFolder.mkdir();
+        foldersCreatedSuccessfully = foldersCreatedSuccessfully & tourFolder.mkdir();
 
         //...com.hobbyte.touring/files/keyID/section
         sectionsFolder = new File(tourFolder, "section");
-        foldersCreatedSuccessfully = foldersCreatedSuccessfully && sectionsFolder.mkdir();
+        foldersCreatedSuccessfully = foldersCreatedSuccessfully & sectionsFolder.mkdir();
 
         //...com.hobbyte.touring/files/keyID/pois
         poisFolder = new File(tourFolder, "poi");
-        foldersCreatedSuccessfully = foldersCreatedSuccessfully && poisFolder.mkdir();
+        foldersCreatedSuccessfully = foldersCreatedSuccessfully & poisFolder.mkdir();
 
         //...com.hobbyte.touring/files/keyID/image
         imageFolder = new File(tourFolder, "image");
-        foldersCreatedSuccessfully = foldersCreatedSuccessfully && imageFolder.mkdir();
+        foldersCreatedSuccessfully = foldersCreatedSuccessfully & imageFolder.mkdir();
 
         //...com.hobbyte.touring/files/keyID/video
         videoFolder = new File(tourFolder, "video");
-        foldersCreatedSuccessfully = foldersCreatedSuccessfully && videoFolder.mkdir();
+        foldersCreatedSuccessfully = foldersCreatedSuccessfully & videoFolder.mkdir();
 
         //logging
         if (foldersCreatedSuccessfully) Log.i(TAG, "folders created successfully");

@@ -121,7 +121,7 @@ public class ServerAPI {
                 return json;
 
             } else {
-                Log.d(TAG, "Could not find tour for ID = " + ID);
+                Log.d(TAG, "Could not find " + TYPE + " with ID = " + ID);
                 connection.disconnect();
             }
 
