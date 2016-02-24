@@ -52,7 +52,7 @@ var tour = {
 			"description": "",
 			"title": "",
 			"admin": "",
-			"isPublic": ""
+			"isPublic": false
 		};
 
 		var validInput = validate.validateInput(data, expectedInput);
@@ -81,7 +81,7 @@ var tour = {
 			"description": "",
 			"title": "",
 			"admin": "",
-			"isPublic": ""
+			"isPublic": false
 		};
 
 		var validInput = validate.validateInput(data, expectedInput);
