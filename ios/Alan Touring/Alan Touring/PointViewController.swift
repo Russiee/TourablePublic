@@ -21,45 +21,13 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
         scrollView.delegate = self
         
        let pointToDisplay = POIParser().getTourSection(poiID)
+        
         self.createSubviews(pointToDisplay.post)
-        
-        
-//        let image1 = imageHandler().loadImageFromPath("http://i.imgur.com/THSPZUv.jpg")
-//        let width = UIScreen.mainScreen().bounds.size.width
-//        let height = UIScreen.mainScreen().bounds.size.height
-//     
-//        
-//        let view1 = UIImageView(frame: CGRectMake(0, 0, width, height/2))
-//        let view2 = UIImageView(frame: CGRectMake(0, view1.frame.height + 5, width, height/2))
-//        
-//        scrollView.contentSize = CGSizeMake(self.view.frame.size.width, height)
-//        
-//        
-//        
-//        createSubviews(pointToDisplay.post)
-//    
-//        
-//        view2.image = image1
-//        view1.image = image1
-//        
-//        view1.backgroundColor = UIColor.blackColor()
-//        view2.backgroundColor = UIColor.blackColor()
-//        
-//        view1.contentMode = .ScaleAspectFit
-//        view2.contentMode = .ScaleAspectFit
-//        
-//        view1.setNeedsDisplay()
-//        view2.setNeedsDisplay()
-//
-//        scrollView.addSubview(view1)
-//        scrollView.addSubview(view2)
 
     }
     
     func createSubviews(post: NSArray){
-        
-        
-        
+ 
         let width = UIScreen.mainScreen().bounds.size.width
         let height = UIScreen.mainScreen().bounds.size.height
         
