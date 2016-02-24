@@ -68,24 +68,27 @@ public class TourIdParser {
     
     //Adds the metadata passed to it into the cache, after turning it into a dictonary that can be retrieved 
     // from the cache with its tour Id code
-    func addTourMetaData(metadata: NSArray){
+    func addTourMetaData(metadata: NSDictionary){
 
-        let keys = ["code","createdAt","expiresAt","objectId","tour","updatedAt"]
-        var dict = metadata.dictionaryWithValuesForKeys(keys)
+        //let keys = ["code","createdAt","expiresAt","objectId","tour","updatedAt"]
+        var dict = metadata
+        var tourDict = metadata["tour"]
         //TODO: this is a hack to match the KCL-1010 tourID to the mock tour data for testing.
         //This WILL CAUSE BUGS when working with toursIDs that have actual tours acociated with them
         
-        dict["objectId"] = "m1dUFsZ1gt"
+        //dict["objectId"] = objectId
         let tourCode = dict["code"]!
+        print(tourCode)
 
-        let metadataDict = dict as NSDictionary
+        //let metadataDict = dict as NSDictionary
         
-        NSUserDefaults.standardUserDefaults().setObject(metadataDict, forKey: tourCode[0] as! String)
+        NSUserDefaults.standardUserDefaults().setObject(tourDict, forKey: tourCode as! String)
         NSUserDefaults.standardUserDefaults().synchronize()
 
         
-        self.updateArray(tourCode[0] as! String)
-        
+        self.updateArray(tourCode as! String)
+        //Give objectId of tour as param
+         _ = bundleRouteConnector.init().initateConnection(tourDict!["objectId"] as! String)
         NSNotificationCenter.defaultCenter().addObserver(
             self,
             selector: "TableChanged:",
