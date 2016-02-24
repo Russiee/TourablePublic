@@ -51,8 +51,8 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
     func connectionDidFinishLoading(connection: NSURLConnection!) {
    
         do {
-            let jsonResult: NSArray = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as! NSArray
-
+            let jsonResult: NSDictionary = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
+          //  print(jsonResult)
             self.storeMetadataJson(jsonResult)
         }
         catch let err as NSError{
@@ -91,13 +91,16 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
     }
     
     //Takes the metadata and passes it to the tourIdParser.
-    func storeMetadataJson(JSONData: NSArray){
+    func storeMetadataJson(JSONData: NSDictionary){
+      //  print(JSONData)
         //Storing Meta Data so we can access it for other use
-        _ = TourIdParser().addTourMetaData(JSONData)
-        self.triggerValidKeyNotification()
+       
         //TODO: sort this
         //This will be the objectId taken from the key verification route.
-        _ = bundleRouteConnector.init().initateConnection("m1dUFsZ1gt")
+
+        _ = TourIdParser().addTourMetaData(JSONData)
+        self.triggerValidKeyNotification()
+       
     }
     
     
