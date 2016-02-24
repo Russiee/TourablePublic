@@ -44,7 +44,7 @@ var admin = {
 		});
 	},
 
-	   POST: function(req, res) {
+	POST: function(req, res) {
 		console.log("POST ADMIN:",req.body);
 		var data = req.body;
 
