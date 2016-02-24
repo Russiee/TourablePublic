@@ -73,18 +73,6 @@ var key = {
 					} else {
 						createKey(parseData, function(result) {
 							if (result.status !== 500) {
-								var query = new Parse.Query(Tour);
-								query.equalTo("objectId", result.get("tour").objectId);
-								query.find({
-									success: function(results) {
-										results[0].add("keys", result);
-										results[0].save();
-									},
-									error: function(error) {
-										console.log("Failed to retrieve admins");
-										console.log(error);
-									}
-								});
 								res.status(201).send(result);
 							}
 							else

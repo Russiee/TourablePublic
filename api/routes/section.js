@@ -62,35 +62,6 @@ var section = {
 		} else {
 			createSection(parseData, function(result) {
 				if (result.status !== 500 && result.status !== 400) {
-					if (result.toJSON().superSection.objectId === null) {
-						var query = new Parse.Query(Tour);
-						query.equalTo("objectId", result.toJSON().tour.objectId);
-						query.find({
-							success: function(results) {
-								results[0].add("sections", result);
-								results[0].save();
-							},
-							error: function(error) {
-								console.log("Failed to retrieve tour");
-								console.log(error);
-							}
-						});
-					} else {
-						var query = new Parse.Query(Section);
-						query.equalTo("objectId", result.toJSON().superSection.objectId);
-						query.find({
-							success: function(results) {
-								results[0].add("subsections", result);
-								results[0].save();
-							},
-							error: function(error) {
-								console.log("Failed to retrieve tour");
-								console.log(error);
-							}
-						});
-
-					}
-
 					res.status(201).send(result);
 				}
 				else

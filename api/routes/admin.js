@@ -66,19 +66,6 @@ var admin = {
 			createAdmin(parseData, function(result) {
 				console.log("callback");
 				if (result.status !== 500) {
-					//TODO check if superadmin
-					var query = new Parse.Query(Organization);
-					query.equalTo("objectId", result.get("organization").objectId);
-					query.find({
-						success: function(results) {
-							results[0].add("admins", result);
-							results[0].save();
-						},
-						error: function(error) {
-							console.log("Failed to retrieve admins");
-							console.log(error);
-						}
-					});
 					res.status(201).send(result);
 				}
 				else {

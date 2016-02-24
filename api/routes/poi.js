@@ -63,18 +63,6 @@ var poi = {
 		} else {
 			createPOI(parseData, function(result) {
 				if (result.status !== 500) {
-					var query = new Parse.Query(Section);
-					query.equalTo("objectId", result.get("section").objectId);
-					query.find({
-						success: function(results) {
-							results[0].add("pois", result);
-							results[0].save();
-						},
-						error: function(error) {
-							console.log("Failed to retrieve section");
-							console.log(error);
-						}
-					});
 					res.status(201).send(result);
 				}
 				else
