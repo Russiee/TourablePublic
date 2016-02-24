@@ -165,7 +165,7 @@ var key = {
 			success: function(results) {
 				console.log(results.length + " keys retrieved");
 				if (results.length === 1)
-					res.status(200).send(results);
+					res.status(200).send(results[0]);
 				else if (results.length === 0)
 					res.sendStatus(404);
 				else
