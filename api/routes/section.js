@@ -50,9 +50,7 @@ var section = {
 			"title": "",
 			"description": "",
 			"tour": "",
-			"superSection": "",
-			"subsections": [],
-			"pois": []
+			"superSection": ""
 		};
 
 		var validInput = validate.validateInput(data, expectedInput);
@@ -110,9 +108,7 @@ var section = {
 			"title": "",
 			"description": "",
 			"tour": "",
-			"superSection": "",
-			"subsections": [],
-			"pois": []
+			"superSection": ""
 		};
 
 		var validInput = validate.validateInput(data, expectedInput);

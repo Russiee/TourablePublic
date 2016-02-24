@@ -52,8 +52,6 @@ var tour = {
 			"description": "",
 			"title": "",
 			"admin": "",
-			"sections": [],
-			"keys": [],
 			"isPublic": ""
 		};
 
@@ -102,8 +100,6 @@ var tour = {
 			"description": "",
 			"title": "",
 			"admin": "",
-			"sections": [],
-			"keys": [],
 			"isPublic": ""
 		};
 

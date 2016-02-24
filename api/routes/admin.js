@@ -53,7 +53,6 @@ var admin = {
 			"email": "",
 			"password": "",
 			"organization": "",
-			"tours": [],
 			"isSuper": ""
 		};
 
@@ -99,7 +98,6 @@ var admin = {
 			"username": "",
 			"email": "",
 			"organization": "",
-			"tours": [],
 			"isSuper": ""
 		};
 
