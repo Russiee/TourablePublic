@@ -53,7 +53,7 @@ var admin = {
 			"email": "",
 			"password": "",
 			"organization": "",
-			"isSuper": "false"
+			"isSuper": false
 		};
 
 		var validInput = validate.validateInput(data, expectedInput);
