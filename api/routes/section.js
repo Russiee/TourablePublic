@@ -149,18 +149,19 @@ function createSection (data, callback) {
 	var tourID = data.tour;
 	var superSectionID = data.superSection;
 
-	if (tourID.length !== 0 && data.superSection.length !== 0) {
+	delete data.tour;
+	delete data.superSection;
+
+	if (!tourID || tourID.length < 1) {
 		callback({status: 400, data: {"error": "Cannot attach to a tour AND supersection, pick one."}});
 	} else {
-		delete data.tour;
-		delete data.superSection;
 
-		if (tourID.length !== 0) {
-			section.set("tour",  {"__type":"Pointer","className":"Tour","objectId":tourID});
-			section.set("superSection",  {"__type":"Pointer","className":"Section","objectId":null});
-		} else if (superSectionID.length !== 0) {
-			section.set("tour",  {"__type":"Pointer","className":"Tour","objectId":null});
+		section.set("tour",  {"__type":"Pointer","className":"Tour","objectId":tourID});
+
+		if (superSectionID.length !== 0) {
 			section.set("superSection",  {"__type":"Pointer","className":"Section","objectId":superSectionID});
+		} else {
+			section.set("superSection",  {"__type":"Pointer","className":"Section","objectId":null});
 		}
 
 		section.save(data, {
