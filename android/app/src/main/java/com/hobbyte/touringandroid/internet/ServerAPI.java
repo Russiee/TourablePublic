@@ -66,7 +66,7 @@ public class ServerAPI {
 
             if (response == 200) {
                 Log.d(TAG, "Valid key: " + tourKey);
-                JSONObject json = (JSONObject) new JSONArray(jsonString.toString()).get(0);
+                JSONObject json = new JSONObject(jsonString.toString());
                 String tourID = json.getJSONObject("tour").getString("objectId");
                 Log.d(TAG, "Fetched tourId: " + tourID);
                 return json;
