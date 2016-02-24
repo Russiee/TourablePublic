@@ -20,10 +20,10 @@ import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.hobbyte.touringandroid.helpers.BackAwareEditText;
-import com.hobbyte.touringandroid.helpers.FileManager;
 import com.hobbyte.touringandroid.helpers.TourDBContract;
 import com.hobbyte.touringandroid.helpers.TourDBManager;
 import com.hobbyte.touringandroid.internet.ServerAPI;
+import com.hobbyte.touringandroid.io.DeleteTourTask;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -61,9 +61,11 @@ public class StartActivity extends Activity {
                 false);
         db.close();*/
 
-        TourDBManager dbHelper = new TourDBManager(this);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        dbHelper.deleteTour(db, "49L6FrRwe4"); db.close();
+//        TourDBManager dbHelper = new TourDBManager(this);
+//        SQLiteDatabase db = dbHelper.getWritableDatabase();
+//        dbHelper.deleteTour(db, "49L6FrRwe4"); db.close();
+
+//        new DeleteTourTask().execute(getFilesDir(), "49L6FrRwe4");
 
         //get references for animations
         keyEntryLayout = (LinearLayout) findViewById(R.id.keyEntryLayout);
