@@ -53,7 +53,7 @@ var admin = {
 			"email": "",
 			"password": "",
 			"organization": "",
-			"isSuper": ""
+			"isSuper": "false"
 		};
 
 		var validInput = validate.validateInput(data, expectedInput);
@@ -85,7 +85,7 @@ var admin = {
 			"username": "",
 			"email": "",
 			"organization": "",
-			"isSuper": ""
+			"isSuper": false
 		};
 
 		var validInput = validate.validateInput(data, expectedInput);
