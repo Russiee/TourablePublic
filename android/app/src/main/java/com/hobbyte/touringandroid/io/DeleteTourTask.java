@@ -12,6 +12,7 @@ import java.io.File;
  * <li>2) the key ID</li>
  * </ul>
  */
+// TODO: make this a private class once this class is in the same folder as FileManager
 public class DeleteTourTask extends AsyncTask<Object, Void, Void> {
     private static final String TAG = "DeleteTourTask";
 
@@ -22,7 +23,7 @@ public class DeleteTourTask extends AsyncTask<Object, Void, Void> {
                 (String) params[1]  // key ID
         );
 
-        if (tourDir.isDirectory() && tourDir.exists()) {
+        if (tourDir.exists() && tourDir.isDirectory()) {
             Log.d(TAG, "About to start deleting files");
 
             int fileCount = 0;
@@ -39,15 +40,15 @@ public class DeleteTourTask extends AsyncTask<Object, Void, Void> {
             for (String d : dirs) {
                 File dir = new File(tourDir, d);
 
-                if (dir.isDirectory()) {
+                if (dir.exists() && dir.isDirectory()) {
                     for (File f : dir.listFiles()) {
                         f.delete();
                         fileCount++;
                     }
-                }
 
-                dir.delete();
-                dirCount++;
+                    dir.delete();
+                    dirCount++;
+                }
             }
 
             tourDir.delete();

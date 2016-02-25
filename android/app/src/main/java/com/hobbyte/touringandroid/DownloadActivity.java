@@ -63,11 +63,6 @@ public class DownloadActivity extends Activity {
         tourID = prefs.getString(getString(R.string.prefs_current_tour), null);
         expiresAt = prefs.getString(getString(R.string.prefs_current_expiry), null);
 
-        // temporary hack because KCL-1010 points to a non-existent tour ID
-        if (keyID.equals("49L6FrRwe4")) {
-            tourID = "DnPRFaSYEk";
-        }
-
         new FetchTourJSON().execute();
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);

@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import com.hobbyte.touringandroid.StartActivity;
+import com.hobbyte.touringandroid.io.DeleteTourTask;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -148,5 +149,16 @@ public class FileManager {
                 }
             }
         }
+    }
+
+    /**
+     * Deletes all files associated with a tour.
+     *
+     * @param context the calling Activity
+     * @param keyID the key ID for a specific tour
+     */
+    public static void deleteTourFiles(Context context, String keyID) {
+        DeleteTourTask task = new DeleteTourTask();
+        task.execute(context.getFilesDir(), keyID);
     }
 }
