@@ -3,7 +3,6 @@ package com.hobbyte.touringandroid.internet;
 import android.util.Log;
 
 import com.hobbyte.touringandroid.io.FileManager;
-import com.hobbyte.touringandroid.internet.ServerAPI;
 import com.hobbyte.touringandroid.ui.activity.StartActivity;
 
 import org.json.JSONArray;
@@ -44,27 +43,25 @@ public class SaveTourJSON {
      */
     private File makeDirectories(String keyID) {
 
-        boolean foldersCreatedSuccessfully = true;
-
         //create folder in ...com.hobbyte.touring/files/
         tourFolder = new File(StartActivity.getContext().getFilesDir(), keyID);
-        foldersCreatedSuccessfully = foldersCreatedSuccessfully & tourFolder.mkdir();
+        boolean foldersCreatedSuccessfully = tourFolder.mkdir();
 
         //...com.hobbyte.touring/files/keyID/section
         sectionsFolder = new File(tourFolder, "section");
-        foldersCreatedSuccessfully = foldersCreatedSuccessfully & sectionsFolder.mkdir();
+        foldersCreatedSuccessfully = sectionsFolder.mkdir() && foldersCreatedSuccessfully;
 
         //...com.hobbyte.touring/files/keyID/pois
         poisFolder = new File(tourFolder, "poi");
-        foldersCreatedSuccessfully = foldersCreatedSuccessfully & poisFolder.mkdir();
+        foldersCreatedSuccessfully = poisFolder.mkdir() && foldersCreatedSuccessfully;
 
         //...com.hobbyte.touring/files/keyID/image
         imageFolder = new File(tourFolder, "image");
-        foldersCreatedSuccessfully = foldersCreatedSuccessfully & imageFolder.mkdir();
+        foldersCreatedSuccessfully = imageFolder.mkdir() && foldersCreatedSuccessfully;
 
         //...com.hobbyte.touring/files/keyID/video
         videoFolder = new File(tourFolder, "video");
-        foldersCreatedSuccessfully = foldersCreatedSuccessfully & videoFolder.mkdir();
+        foldersCreatedSuccessfully = videoFolder.mkdir() && foldersCreatedSuccessfully;
 
         //logging
         if (foldersCreatedSuccessfully) Log.i(TAG, "folders created successfully");
@@ -94,6 +91,7 @@ public class SaveTourJSON {
             e.printStackTrace();
         } catch (org.json.JSONException e) {
             e.printStackTrace();
+            Log.e(TAG, json.toString());
         }
     }
 
@@ -200,7 +198,7 @@ public class SaveTourJSON {
      * Saves a jsonobject to file
      *
      * @param folderToSaveIn the folder to save the json in
-     * @param jsonToSave
+     * @param jsonToSave     the json to save
      */
     private void saveFile(File folderToSaveIn, JSONObject jsonToSave) {
 
@@ -215,8 +213,6 @@ public class SaveTourJSON {
 
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-
         }
 
 

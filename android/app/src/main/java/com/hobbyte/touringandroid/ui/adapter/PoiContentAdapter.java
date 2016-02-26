@@ -14,7 +14,7 @@ import com.hobbyte.touringandroid.R;
 import com.hobbyte.touringandroid.ui.activity.StartActivity;
 
 /**
- * Created by Nikita on 15/02/2016.
+ * @author Nikita
  */
 public class PoiContentAdapter extends ArrayAdapter {
 
@@ -46,7 +46,7 @@ public class PoiContentAdapter extends ArrayAdapter {
      * @param position Position of item in the ItemList
      * @param view View
      * @param parent ParentView
-     * @return
+     * @return the view in question
      */
     @Override
     public View getView(int position, View view, ViewGroup parent) {

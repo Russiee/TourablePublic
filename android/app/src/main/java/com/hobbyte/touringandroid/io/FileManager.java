@@ -50,9 +50,8 @@ public class FileManager {
                 text.append("\n");
             }
             in.close();
-            JSONObject json = new JSONObject(text.toString());
+            return new JSONObject(text.toString());
 
-            return json;
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
@@ -90,8 +89,9 @@ public class FileManager {
                 text.append("\n");
             }
             in.close();
-            JSONObject json = new JSONObject(text.toString());
-            return json;
+
+            return new JSONObject(text.toString());
+
         } catch (IOException e) {
             System.out.println("Error opening file...");
             e.printStackTrace();

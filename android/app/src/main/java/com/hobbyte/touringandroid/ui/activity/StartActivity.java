@@ -20,11 +20,10 @@ import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.hobbyte.touringandroid.R;
-import com.hobbyte.touringandroid.tourdata.Tour;
-import com.hobbyte.touringandroid.ui.BackAwareEditText;
+import com.hobbyte.touringandroid.internet.ServerAPI;
 import com.hobbyte.touringandroid.io.TourDBContract;
 import com.hobbyte.touringandroid.io.TourDBManager;
-import com.hobbyte.touringandroid.internet.ServerAPI;
+import com.hobbyte.touringandroid.ui.BackAwareEditText;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,7 +33,7 @@ import java.util.Date;
 
 /**
  * @author Jonathan
- * @autho Max
+ * @author Max
  * @author Nikita
  *
  * The opening actiivty of the app.
@@ -43,7 +42,6 @@ import java.util.Date;
 public class StartActivity extends Activity {
     private static final String TAG = "StartActivity";
 
-    // so
     public static Context CONTEXT;
 
     //for animations
@@ -53,7 +51,6 @@ public class StartActivity extends Activity {
     private LinearLayout keyEntryLayout;
     private LinearLayout previousToursLayout;
     private BackAwareEditText textKey;
-    private Tour tour;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -223,9 +220,6 @@ public class StartActivity extends Activity {
      * download options for the tour media.
      */
     private void goToTourDownload() {
-        // TODO: this currently goes to a new tour activity, but needs to go to the download screen
-
-        String tourKey = textKey.getText().toString();
         textKey.setText("");
 
         Intent intent = new Intent(this, DownloadActivity.class);
@@ -259,7 +253,6 @@ public class StartActivity extends Activity {
      * If the key is valid, take the user to the next activity.
      */
     private class KeyCheckTask extends AsyncTask<String, Void, Boolean> {
-        private static final String TAG = "KeyCheckTask";
 
         @Override
         protected Boolean doInBackground(String... params) {

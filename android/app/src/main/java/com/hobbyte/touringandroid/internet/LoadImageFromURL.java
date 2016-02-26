@@ -28,7 +28,7 @@ public class LoadImageFromURL extends AsyncTask<String, Void, Bitmap> {
         String keyID = params[1];
         Bitmap bm = null;
         File file = new File(context.getApplicationContext().getFilesDir(), String.format("%s/image/%s", keyID, imgPath));
-        System.out.println(file.getAbsolutePath().toString());
+
         if(file.exists()) {
             bm = BitmapFactory.decodeFile(file.getAbsolutePath());
             System.out.println("DOES EXIST!");
@@ -41,7 +41,7 @@ public class LoadImageFromURL extends AsyncTask<String, Void, Bitmap> {
         DisplayMetrics metrics = context.getApplicationContext().getResources().getDisplayMetrics();
         int height = metrics.heightPixels / 2;
         int width = metrics.widthPixels;
-        result = Bitmap.createScaledBitmap(result, height, width, true);
+        result = Bitmap.createScaledBitmap(result, width, height, true);
         imageView.setImageBitmap(result);
     }
 }

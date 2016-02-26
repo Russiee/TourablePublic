@@ -181,9 +181,6 @@ public class DownloadActivity extends Activity {
      */
     private class DownloadTourMediaClass extends AsyncTask<String, Void, Boolean> {
         
-        private String imageOnlyPattern = "http:\\/\\/[\\w\\d\\.\\/]*\\.(jpe?g|png)";
-        private String allMediaPattern = "http:\\/\\/[\\w\\d\\.\\/]*\\.(jpe?g|png)"; // TODO
-
         @Override
         protected Boolean doInBackground(String... params) {
             String bundle = ServerAPI.getBundleString(tourID);
