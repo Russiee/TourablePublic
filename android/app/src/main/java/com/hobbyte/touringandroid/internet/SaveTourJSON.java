@@ -1,9 +1,10 @@
-package com.hobbyte.touringandroid;
+package com.hobbyte.touringandroid.internet;
 
 import android.util.Log;
 
-import com.hobbyte.touringandroid.helpers.FileManager;
+import com.hobbyte.touringandroid.io.FileManager;
 import com.hobbyte.touringandroid.internet.ServerAPI;
+import com.hobbyte.touringandroid.ui.activity.StartActivity;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

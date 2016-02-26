@@ -1,4 +1,4 @@
-package com.hobbyte.touringandroid;
+package com.hobbyte.touringandroid.ui.activity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,13 +8,16 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.hobbyte.touringandroid.helpers.FileManager;
+import com.hobbyte.touringandroid.tourdata.PointOfInterest;
+import com.hobbyte.touringandroid.R;
+import com.hobbyte.touringandroid.tourdata.SubSection;
+import com.hobbyte.touringandroid.tourdata.Tour;
+import com.hobbyte.touringandroid.io.FileManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

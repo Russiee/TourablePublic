@@ -1,29 +1,19 @@
-package com.hobbyte.touringandroid;
+package com.hobbyte.touringandroid.ui.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 
-import com.hobbyte.touringandroid.helpers.FileManager;
+import com.hobbyte.touringandroid.tourdata.PointOfInterest;
+import com.hobbyte.touringandroid.ui.adapter.PointOfInterestAdapter;
+import com.hobbyte.touringandroid.R;
+import com.hobbyte.touringandroid.tourdata.SubSection;
+import com.hobbyte.touringandroid.ui.adapter.SubSectionAdapter;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class TourActivity extends Activity {
 

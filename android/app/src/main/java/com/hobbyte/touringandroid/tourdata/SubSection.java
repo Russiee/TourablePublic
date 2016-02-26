@@ -1,4 +1,4 @@
-package com.hobbyte.touringandroid;
+package com.hobbyte.touringandroid.tourdata;
 
 import java.io.Serializable;
 import java.util.ArrayList;

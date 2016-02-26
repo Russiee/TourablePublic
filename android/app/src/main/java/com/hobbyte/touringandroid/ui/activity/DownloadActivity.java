@@ -1,4 +1,4 @@
-package com.hobbyte.touringandroid;
+package com.hobbyte.touringandroid.ui.activity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -16,6 +16,8 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.hobbyte.touringandroid.R;
+import com.hobbyte.touringandroid.internet.SaveTourJSON;
 import com.hobbyte.touringandroid.internet.ServerAPI;
 
 import org.json.JSONException;
@@ -178,7 +180,7 @@ public class DownloadActivity extends Activity {
      * Asynchronously downloads the media of the tour
      */
     private class DownloadTourMediaClass extends AsyncTask<String, Void, Boolean> {
-
+        
         private String imageOnlyPattern = "http:\\/\\/[\\w\\d\\.\\/]*\\.(jpe?g|png)";
         private String allMediaPattern = "http:\\/\\/[\\w\\d\\.\\/]*\\.(jpe?g|png)"; // TODO
 
@@ -206,7 +208,7 @@ public class DownloadActivity extends Activity {
             moveToTourActivity(); //TODO uncomment this when it actually starts a tour
             // removes activity from users stack so when they press back from a tour they go back
             // to the main menu
-            DownloadActivity.this.finish();
+            //DownloadActivity.this.finish();
         }
     }
 

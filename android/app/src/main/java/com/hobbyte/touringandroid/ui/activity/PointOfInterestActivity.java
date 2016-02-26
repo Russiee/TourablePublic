@@ -1,14 +1,14 @@
-package com.hobbyte.touringandroid;
+package com.hobbyte.touringandroid.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+
+import com.hobbyte.touringandroid.tourdata.ListViewItem;
+import com.hobbyte.touringandroid.ui.adapter.PoiContentAdapter;
+import com.hobbyte.touringandroid.tourdata.PointOfInterest;
+import com.hobbyte.touringandroid.R;
 
 import java.util.ArrayList;
 

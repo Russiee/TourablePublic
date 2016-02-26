@@ -1,4 +1,4 @@
-package com.hobbyte.touringandroid.helpers;
+package com.hobbyte.touringandroid.io;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.hobbyte.touringandroid.helpers.TourDBContract.TourList;
+import com.hobbyte.touringandroid.io.TourDBContract.TourList;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

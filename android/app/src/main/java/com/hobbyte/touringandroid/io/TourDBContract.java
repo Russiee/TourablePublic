@@ -1,4 +1,4 @@
-package com.hobbyte.touringandroid.helpers;
+package com.hobbyte.touringandroid.io;
 
 import android.provider.BaseColumns;
 

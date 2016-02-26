@@ -1,4 +1,4 @@
-package com.hobbyte.touringandroid;
+package com.hobbyte.touringandroid.ui.activity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -19,12 +19,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
-import com.hobbyte.touringandroid.helpers.BackAwareEditText;
-import com.hobbyte.touringandroid.helpers.FileManager;
-import com.hobbyte.touringandroid.helpers.TourDBContract;
-import com.hobbyte.touringandroid.helpers.TourDBManager;
+import com.hobbyte.touringandroid.R;
+import com.hobbyte.touringandroid.tourdata.Tour;
+import com.hobbyte.touringandroid.ui.BackAwareEditText;
+import com.hobbyte.touringandroid.io.TourDBContract;
+import com.hobbyte.touringandroid.io.TourDBManager;
 import com.hobbyte.touringandroid.internet.ServerAPI;
-import com.hobbyte.touringandroid.io.DeleteTourTask;
 
 import org.json.JSONException;
 import org.json.JSONObject;

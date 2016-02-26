@@ -1,11 +1,10 @@
-package com.hobbyte.touringandroid.helpers;
+package com.hobbyte.touringandroid.io;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import com.hobbyte.touringandroid.StartActivity;
-import com.hobbyte.touringandroid.io.DeleteTourTask;
+import com.hobbyte.touringandroid.ui.activity.StartActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;

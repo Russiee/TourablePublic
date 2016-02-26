@@ -1,4 +1,4 @@
-package com.hobbyte.touringandroid;
+package com.hobbyte.touringandroid.tourdata;
 
 /**
  * Created by Nikita on 15/02/2016.

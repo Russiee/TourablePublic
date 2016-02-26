@@ -1,4 +1,4 @@
-package com.hobbyte.touringandroid;
+package com.hobbyte.touringandroid.ui.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,25 +7,28 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.hobbyte.touringandroid.R;
+import com.hobbyte.touringandroid.tourdata.SubSection;
+
 import java.util.ArrayList;
 
 /**
  * Created by Nikita on 09/02/2016.
  */
-public class PointOfInterestAdapter extends ArrayAdapter<PointOfInterest> {
+public class SubSectionAdapter extends ArrayAdapter<SubSection> {
 
-    public PointOfInterestAdapter(Context context, ArrayList<PointOfInterest> pois) {
-        super(context, 0, pois);
+    public SubSectionAdapter(Context context, ArrayList<SubSection> subsections) {
+        super(context, 0, subsections);
     }
 
     @Override
     public View getView(int position, View view, ViewGroup parent) {
-        PointOfInterest selected = getItem(position);
+        SubSection selected = getItem(position);
         if (view == null) {
             view = LayoutInflater.from(getContext()).inflate(R.layout.subsections, parent, false);
         }
         TextView subsectionView = (TextView) view.findViewById(R.id.SubSectionTextView);
-        subsectionView.setText(selected.getName());
+        subsectionView.setText(selected.toString());
         return view;
     }
 }

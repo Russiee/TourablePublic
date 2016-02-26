@@ -1,11 +1,11 @@
-package com.hobbyte.touringandroid.helpers;
+package com.hobbyte.touringandroid.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.widget.EditText;
 
-import com.hobbyte.touringandroid.StartActivity;
+import com.hobbyte.touringandroid.ui.activity.StartActivity;
 
 /**
  * @author Jonathan

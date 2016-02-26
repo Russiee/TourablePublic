@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:animateLayoutChanges="true"
-    tools:context="com.hobbyte.touringandroid.StartActivity"
+    tools:context=".ui.activity.StartActivity"
     android:background="@color/backgroundPlum">
 
     <LinearLayout
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <com.hobbyte.touringandroid.helpers.BackAwareEditText
+            <com.hobbyte.touringandroid.ui.BackAwareEditText
                 android:id="@+id/textEnterTour"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

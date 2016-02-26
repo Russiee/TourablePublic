@@ -1,17 +1,6 @@
-package com.hobbyte.touringandroid;
-
-import android.content.Context;
-import android.util.Log;
-
-import com.hobbyte.touringandroid.helpers.FileManager;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+package com.hobbyte.touringandroid.tourdata;
 
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by Nikita on 08/02/2016.

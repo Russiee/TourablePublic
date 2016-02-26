@@ -1,4 +1,4 @@
-package com.hobbyte.touringandroid;
+package com.hobbyte.touringandroid.ui.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,7 +8,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import com.hobbyte.touringandroid.tourdata.ListViewItem;
+import com.hobbyte.touringandroid.internet.LoadImageFromURL;
+import com.hobbyte.touringandroid.R;
+import com.hobbyte.touringandroid.ui.activity.StartActivity;
 
 /**
  * Created by Nikita on 15/02/2016.

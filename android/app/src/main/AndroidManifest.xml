@@ -13,7 +13,7 @@
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".StartActivity">
+        <activity android:name=".ui.activity.StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -21,23 +21,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".TourActivity"
+            android:name=".ui.activity.TourActivity"
             android:label="@string/title_activity_tour"/>
         <activity
-            android:name=".PointOfInterestActivity"
+            android:name=".ui.activity.PointOfInterestActivity"
             android:label="@string/title_activity_pointofinterest"/>
         <activity
-            android:name=".DownloadActivity"
-            android:label="@string/title_activity_download"
-            android:parentActivityName=".StartActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.hobbyte.touringandroid.StartActivity"/>
-        </activity>
-        <activity
-            android:name=".SummaryActivity"
+            android:name=".ui.activity.SummaryActivity"
             android:label="@string/title_activity_summary"
-            android:parentActivityName=".StartActivity"/>
+            android:parentActivityName=".ui.activity.StartActivity"/>
+        <activity
+            android:name=".ui.activity.DownloadActivity"
+            android:label="@string/title_activity_download"
+            android:parentActivityName=".ui.activity.StartActivity"/>
     </application>
 
 </manifest>

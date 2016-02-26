@@ -5,11 +5,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
-import com.hobbyte.touringandroid.PointOfInterest;
-import com.hobbyte.touringandroid.SubSection;
-import com.hobbyte.touringandroid.Tour;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -17,7 +12,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 
 /**
  * This class provides some static methods for sending requests to the server and processing
