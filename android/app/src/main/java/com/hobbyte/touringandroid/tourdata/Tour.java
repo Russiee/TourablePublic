@@ -3,7 +3,9 @@ package com.hobbyte.touringandroid.tourdata;
 import java.util.ArrayList;
 
 /**
- * Created by Nikita on 08/02/2016.
+ * @author Nikita
+ *
+ * Holds all data about a tour
  */
 public class Tour {
 

@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import java.io.File;
 
 /**
- * Created by Nikita on 15/02/2016.
+ * @author Nikita
  */
 public class LoadImageFromURL extends AsyncTask<String, Void, Bitmap> {
 

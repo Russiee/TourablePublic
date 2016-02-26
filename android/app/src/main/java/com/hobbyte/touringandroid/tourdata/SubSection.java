@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * Created by Nikita on 08/02/2016.
+ * @author Nikita
  */
 public class SubSection implements Serializable {
 

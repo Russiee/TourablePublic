@@ -32,13 +32,24 @@ import org.json.JSONObject;
 import java.text.DateFormat;
 import java.util.Date;
 
+/**
+ * @author Jonathan
+ * @autho Max
+ * @author Nikita
+ *
+ * The opening actiivty of the app.
+ * Displays previously downloaded tours and provides functionality to add new tours.
+ */
 public class StartActivity extends Activity {
     private static final String TAG = "StartActivity";
 
+    // so
     public static Context CONTEXT;
 
+    //for animations
     private static boolean FADE_IN = true;
     private static boolean FADE_OUT = false;
+
     private LinearLayout keyEntryLayout;
     private LinearLayout previousToursLayout;
     private BackAwareEditText textKey;
@@ -49,24 +60,6 @@ public class StartActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
         CONTEXT = getApplicationContext();
-
-        /*TourDBManager dbHelper = new TourDBManager(this);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        dbHelper.putRow(db,
-                "49L6FrRwe4",
-                "DnPRFaSYEk",
-                "Ultimate Flat Tour",
-                "2016-02-12T15:51:17.125Z",
-                "2016-02-12T15:51:17.125Z",
-                "2016-02-25T00:39:31.000Z",
-                false);
-        db.close();*/
-
-//        TourDBManager dbHelper = new TourDBManager(this);
-//        SQLiteDatabase db = dbHelper.getWritableDatabase();
-//        dbHelper.deleteTour(db, "49L6FrRwe4"); db.close();
-
-//        FileManager.deleteTourFiles(this, "49L6FrRwe4");
 
         //get references for animations
         keyEntryLayout = (LinearLayout) findViewById(R.id.keyEntryLayout);
@@ -87,12 +80,6 @@ public class StartActivity extends Activity {
     }
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
-        Log.d(TAG, "onRestart() called");
-    }
-
-    @Override
     protected void onPause() {
         //need this so if user switches app and come back, the input fields do not show
         hideInput();
@@ -101,6 +88,69 @@ public class StartActivity extends Activity {
 
     public static Context getContext() {
         return CONTEXT;
+    }
+
+    /**
+     * If the user has tours saved to the device, show their names and expiry information.
+     */
+    private void loadPreviousTours() {
+        TourDBManager dbHelper = new TourDBManager(this);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        LinearLayout layout = (LinearLayout) findViewById(R.id.previousToursLayout);
+
+        if (dbHelper.dbIsEmpty(db)) {
+            // no tours saved, so show the empty text
+            View noToursText = getLayoutInflater().inflate(R.layout.text_no_tours, layout, false);
+            layout.addView(noToursText);
+        } else {
+            // fetches a cursor pointing at the first row in the db
+            Cursor c = dbHelper.getTours(db);
+
+            Log.d(TAG, DatabaseUtils.dumpCursorToString(c));
+
+            DateFormat df = DateFormat.getDateInstance();
+
+            while (c.moveToNext()) {
+                // for each tour, add an item with tour name and expiry date
+                View tourItem = getLayoutInflater().inflate(R.layout.text_tour_item, layout, false);
+
+                TextView tourName = (TextView) tourItem.findViewById(R.id.textTourName);
+                TextView expiryDate = (TextView) tourItem.findViewById(R.id.textTourExpiry);
+
+                String name = c.getString(c.getColumnIndex(TourDBContract.TourList.COL_TOUR_NAME));
+                long expiryTime = c.getLong(c.getColumnIndex(TourDBContract.TourList.COL_DATE_EXPIRES_ON));
+                String expiryText = df.format(new Date(expiryTime));
+                final String keyID = c.getString(c.getColumnIndex(TourDBContract.TourList.COL_TOUR_ID)); // TODO: this should be changed to COL_KEY_ID
+
+                tourName.setText(name);
+                expiryDate.setText(expiryText);
+                layout.addView(tourItem);
+
+                tourItem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        goToTour(keyID);
+                    }
+                });
+            }
+
+            c.close();
+
+        }
+
+        db.close();
+
+    }
+
+
+    /**
+     * Hides the input box, shows the existing tours table
+     */
+    public void hideInput() {
+        fade(keyEntryLayout, FADE_OUT);
+        fade(previousToursLayout, FADE_IN);
+        textKey.clearFocus();
     }
 
     /**
@@ -114,15 +164,6 @@ public class StartActivity extends Activity {
         fade(previousToursLayout, FADE_OUT);
 
         showKeyboard();
-    }
-
-    /**
-     * Hides the input box, shows the existing tours table
-     */
-    public void hideInput() {
-        fade(keyEntryLayout, FADE_OUT);
-        fade(previousToursLayout, FADE_IN);
-        textKey.clearFocus();
     }
 
     /**
@@ -191,64 +232,16 @@ public class StartActivity extends Activity {
         startActivity(intent);
     }
 
+    /**
+     * Moves the app to the summary acitivity, ready to start the tour
+     * @param tourId tour to start
+     */
     private void goToTour(final String tourId) {
         Intent intent = new Intent(this, SummaryActivity.class);
         intent.putExtra(SummaryActivity.KEY_ID, tourId);
         startActivity(intent);
     }
 
-    /**
-     * If the user has tours saved to the device, show their names and expiry information.
-     */
-    private void loadPreviousTours() {
-        TourDBManager dbHelper = new TourDBManager(this);
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-        LinearLayout layout = (LinearLayout) findViewById(R.id.previousToursLayout);
-
-        if (dbHelper.dbIsEmpty(db)) {
-            // no tours saved, so show the empty text
-            View noToursText = getLayoutInflater().inflate(R.layout.text_no_tours, layout, false);
-            layout.addView(noToursText);
-        } else {
-            // fetches a cursor pointing at the first row in the db
-            Cursor c = dbHelper.getTours(db);
-
-            Log.d(TAG, DatabaseUtils.dumpCursorToString(c));
-
-            DateFormat df = DateFormat.getDateInstance();
-
-            while (c.moveToNext()) {
-                // for each tour, add an item with tour name and expiry date
-                View tourItem = getLayoutInflater().inflate(R.layout.text_tour_item, layout, false);
-
-                TextView tourName = (TextView) tourItem.findViewById(R.id.textTourName);
-                TextView expiryDate = (TextView) tourItem.findViewById(R.id.textTourExpiry);
-
-                String name = c.getString(c.getColumnIndex(TourDBContract.TourList.COL_TOUR_NAME));
-                long expiryTime = c.getLong(c.getColumnIndex(TourDBContract.TourList.COL_DATE_EXPIRES_ON));
-                String expiryText = df.format(new Date(expiryTime));
-                final String keyID = c.getString(c.getColumnIndex(TourDBContract.TourList.COL_TOUR_ID)); // TODO: this should be changed to COL_KEY_ID
-
-                tourName.setText(name);
-                expiryDate.setText(expiryText);
-                layout.addView(tourItem);
-
-                tourItem.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        goToTour(keyID);
-                    }
-                });
-            }
-
-            c.close();
-
-        }
-
-        db.close();
-
-    }
 
     /**
      * Shows a Toast message at the bottom of the screen.
