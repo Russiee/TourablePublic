@@ -16,16 +16,10 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.hobbyte.touringandroid.helpers.FileManager;
 import com.hobbyte.touringandroid.internet.ServerAPI;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class DownloadActivity extends Activity {
     private static final String TAG = "DownloadActivity";
@@ -212,7 +206,7 @@ public class DownloadActivity extends Activity {
             moveToTourActivity(); //TODO uncomment this when it actually starts a tour
             // removes activity from users stack so when they press back from a tour they go back
             // to the main menu
-            //DownloadActivity.this.finish();
+            DownloadActivity.this.finish();
         }
     }
 
