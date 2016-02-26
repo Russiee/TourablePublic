@@ -6,13 +6,8 @@ import android.util.Log;
 import java.io.File;
 
 /**
- * Asynchronous task that deletes all files and directories for a given tour.
- * <p>
- * `execute()` takes two parameters: <ul><li>1) the File returned by context.getFilesDir()</li>
- * <li>2) the key ID</li>
- * </ul>
+ * AsyncTask class for deleting a tour folder
  */
-// TODO: make this a private class once this class is in the same folder as FileManager
 public class DeleteTourTask extends AsyncTask<Object, Void, Void> {
     private static final String TAG = "DeleteTourTask";
 
@@ -35,7 +30,7 @@ public class DeleteTourTask extends AsyncTask<Object, Void, Void> {
             new File(tourDir, "tour").delete();
             fileCount++;
 
-            String[] dirs = {"section", "poi", "image", "video"};
+            String[] dirs = {"image", "video"};
 
             for (String d : dirs) {
                 File dir = new File(tourDir, d);

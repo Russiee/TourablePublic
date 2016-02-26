@@ -20,13 +20,12 @@ import java.net.URL;
 public class ServerAPI {
     private static final String TAG = "ServerAPI";
 
-    //    private static final String KEY_VALIDATION = "https://192.168.56.1:3000/api/v1/key/verify/";
     private static final String BASE_URl = "https://touring-api.herokuapp.com/api/v1";
     public static final String KEY_VALIDATION = "/key/verify/";
+    public static final String KEY = "/key/";
+    public static final String BUNDLE = "/bundle/";
     public static final String TOUR = "/tour/";
-    public static final String BUNDLE = "/bundle/"; // TODO: this needs to change to ...v1/bundle/
-    public static final String SECTION = "/section/";
-    public static final String POI = "/poi/";
+
 
 
     /**
