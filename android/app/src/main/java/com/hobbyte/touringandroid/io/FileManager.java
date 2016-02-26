@@ -14,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -24,28 +25,32 @@ import java.util.regex.Pattern;
  * A class with static methods for doing IO with the device's internal storage.
  */
 public class FileManager {
+    private static final String TAG = "FileManager";
 
     public static final String IMG_NAME = "https?:\\/\\/[\\w\\.\\/]*\\/(\\w*\\.(jpe?g|png))";
 
-    /**
-     * Loads a saved tour JSON file for a given tour.
-     *
-     * @param keyID the tour key used to download the tour
-     * @return a JSONObject of the top-level tour
-     */
-    public static JSONObject getTourJSON(String keyID) {
-        // load saved JSON into JSON object and return it
+    public static final String TOUR_JSON = "tour";
+    public static final String BUNDLE_JSON = "bundle";
 
-        // temporary
+
+    /**
+     * Loads a json from the tour directory
+     *
+     * @param keyID    the keyID of the tour
+     * @param filename the name of the file to be loaded
+     * @return a JSON preresentaion of the file
+     */
+    public static JSONObject getJSON(String keyID, String filename) {
+
         try {
             File tourFolder = new File(StartActivity.getContext().getFilesDir(), keyID);
-            File tourJson = new File(tourFolder, "tour");
+            File tourJson = new File(tourFolder, filename);
 
             StringBuilder text = new StringBuilder();
             BufferedReader in = new BufferedReader(new FileReader(tourJson));
             String line;
 
-            while((line = in.readLine()) != null) {
+            while ((line = in.readLine()) != null) {
                 text.append(line);
                 text.append("\n");
             }
@@ -62,55 +67,39 @@ public class FileManager {
     }
 
     /**
-     * Loads a saved JSON File for a given Tours Section or POI
-     * @param keyID the tour key used to download the tour
-     * @param object the level of section, Section or Point Of Interest
-     * @param objectId The id of the object whose JSON to retrieve
-     * @param context The context of the calling activity
-     * @return JSONObject for the Level of Section required
+     * Saves a JSONObject to the local storage
+     *
+     * @param keyID      keyID of the tour
+     * @param jsonObject the object to store
+     * @param filename   the name of this JSON. BUNDLE_JSON or TOUR_JSON
      */
-    public static JSONObject getObjectJSON(String keyID, String object, String objectId, Context context) {
+    public static void saveJSON(String keyID, JSONObject jsonObject, String filename) {
+
+        File tourFolder = new File(StartActivity.getContext().getFilesDir(), keyID);
+        File tourFile = new File(tourFolder, filename);
 
         try {
-            File tourFolder = new File(context.getFilesDir(), keyID);
-            File iDFolder = new File(tourFolder, object);
-            File objectJson = new File(iDFolder, objectId);
 
-            if(!objectJson.exists()) {
-                return null;
-            }
-
-            StringBuilder text = new StringBuilder();
-            BufferedReader in = new BufferedReader(new FileReader(objectJson));
-            String line;
-
-            while((line = in.readLine()) != null) {
-                text.append(line);
-                text.append("\n");
-            }
-            in.close();
-
-            return new JSONObject(text.toString());
+            FileWriter fw = new FileWriter(tourFile);
+            fw.write(jsonObject.toString());
+            fw.close();
 
         } catch (IOException e) {
-            System.out.println("Error opening file...");
             e.printStackTrace();
-            return null;
-        } catch (JSONException jex) {
-            jex.printStackTrace();
-            return null;
         }
     }
+
+
     /**
      * Saves an image given by a URL to the device.
-     * <p>
+     * <p/>
      * This method MUST NOT be called from within the main thread.
      *
-     * @param context the calling Activity
-     * @param keyID a tour key ID
+     * @param keyID     a tour key ID
      * @param urlString a URL to an image file
      */
-    public static void saveImage(Context context, String keyID, String urlString) {
+    public static void saveImage(String keyID, String urlString) {
+        Context context = StartActivity.getContext();
         HttpURLConnection connection = null;
         Bitmap bitmap = null;
 
@@ -151,13 +140,34 @@ public class FileManager {
     }
 
     /**
+     * Saves an video given by a URL to the device.
+     * <p/>
+     * This method MUST NOT be called from within the main thread.
+     *
+     * @param keyID     a tour key ID
+     * @param urlString a URL to an video file
+     */
+    public static void saveVideo(String keyID, String urlString) {
+        //TODO
+    }
+
+    /**
      * Deletes all files associated with a tour.
      *
      * @param context the calling Activity
-     * @param keyID the key ID for a specific tour
+     * @param keyID   the key ID for a specific tour
      */
     public static void deleteTourFiles(Context context, String keyID) {
         DeleteTourTask task = new DeleteTourTask();
         task.execute(context.getFilesDir(), keyID);
     }
+
+    /**
+     * Asynchronous task that deletes all files and directories for a given tour.
+     * <p/>
+     * `execute()` takes two parameters: <ul><li>1) the File returned by context.getFilesDir()</li>
+     * <li>2) the key ID</li>
+     * </ul>
+     */
+
 }
