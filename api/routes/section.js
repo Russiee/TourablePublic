@@ -50,7 +50,8 @@ var section = {
 			"title": "",
 			"description": "",
 			"tour": "",
-			"superSection": ""
+			"superSection": "",
+			"depth": 0
 		};
 
 		var validInput = validate.validateInput(data, expectedInput);
@@ -79,7 +80,8 @@ var section = {
 			"title": "",
 			"description": "",
 			"tour": "",
-			"superSection": ""
+			"superSection": "",
+			"depth": 0
 		};
 
 		var validInput = validate.validateInput(data, expectedInput);
