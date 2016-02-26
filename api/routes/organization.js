@@ -49,8 +49,6 @@ var organization = {
 		var expectedInput = {
 			"key": "",
 			"name": "",
-			"superAdmins": [],
-			"admins": [],
 			"color": "",
 			"logo": ""
 		};
@@ -79,8 +77,6 @@ var organization = {
 		var expectedInput = {
 			key: "",
 			name: "",
-			superAdmins: [],
-			admins: [],
 			color: "",
 			logo: ""
 		};

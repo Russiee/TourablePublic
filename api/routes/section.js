@@ -51,8 +51,7 @@ var section = {
 			"description": "",
 			"tour": "",
 			"superSection": "",
-			"subsections": [],
-			"pois": []
+			"depth": 0
 		};
 
 		var validInput = validate.validateInput(data, expectedInput);
@@ -64,35 +63,6 @@ var section = {
 		} else {
 			createSection(parseData, function(result) {
 				if (result.status !== 500 && result.status !== 400) {
-					if (result.toJSON().superSection.objectId === null) {
-						var query = new Parse.Query(Tour);
-						query.equalTo("objectId", result.toJSON().tour.objectId);
-						query.find({
-							success: function(results) {
-								results[0].add("sections", result);
-								results[0].save();
-							},
-							error: function(error) {
-								console.log("Failed to retrieve tour");
-								console.log(error);
-							}
-						});
-					} else {
-						var query = new Parse.Query(Section);
-						query.equalTo("objectId", result.toJSON().superSection.objectId);
-						query.find({
-							success: function(results) {
-								results[0].add("subsections", result);
-								results[0].save();
-							},
-							error: function(error) {
-								console.log("Failed to retrieve tour");
-								console.log(error);
-							}
-						});
-
-					}
-
 					res.status(201).send(result);
 				}
 				else
@@ -111,8 +81,7 @@ var section = {
 			"description": "",
 			"tour": "",
 			"superSection": "",
-			"subsections": [],
-			"pois": []
+			"depth": 0
 		};
 
 		var validInput = validate.validateInput(data, expectedInput);
@@ -182,18 +151,19 @@ function createSection (data, callback) {
 	var tourID = data.tour;
 	var superSectionID = data.superSection;
 
-	if (tourID.length !== 0 && data.superSection.length !== 0) {
+	delete data.tour;
+	delete data.superSection;
+
+	if (!tourID || tourID.length < 1) {
 		callback({status: 400, data: {"error": "Cannot attach to a tour AND supersection, pick one."}});
 	} else {
-		delete data.tour;
-		delete data.superSection;
 
-		if (tourID.length !== 0) {
-			section.set("tour",  {"__type":"Pointer","className":"Tour","objectId":tourID});
-			section.set("superSection",  {"__type":"Pointer","className":"Section","objectId":null});
-		} else if (superSectionID.length !== 0) {
-			section.set("tour",  {"__type":"Pointer","className":"Tour","objectId":null});
+		section.set("tour",  {"__type":"Pointer","className":"Tour","objectId":tourID});
+
+		if (superSectionID.length !== 0) {
 			section.set("superSection",  {"__type":"Pointer","className":"Section","objectId":superSectionID});
+		} else {
+			section.set("superSection",  {"__type":"Pointer","className":"Section","objectId":null});
 		}
 
 		section.save(data, {

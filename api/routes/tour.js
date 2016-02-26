@@ -52,9 +52,7 @@ var tour = {
 			"description": "",
 			"title": "",
 			"admin": "",
-			"sections": [],
-			"keys": [],
-			"isPublic": ""
+			"isPublic": false
 		};
 
 		var validInput = validate.validateInput(data, expectedInput);
@@ -66,25 +64,6 @@ var tour = {
 		} else {
 			createTour(parseData, function(result) {
 				if (result.status !== 500) {
-					//TODO check if superadmin
-					var query = new Parse.Query(Admin);
-					query.equalTo("objectId", result.get("admin").objectId);
-					query.find({
-						success: function(results) {
-							Parse.Cloud.run('addTour', { username: results[0].getUsername(), tour: {"__type":"Pointer","className":"Admin","objectId": result.id} }, {
-								success: function(status) {
-									console.log(status);
-								},
-								error: function(error) {
-									console.log(error);
-								}
-							});
-						},
-						error: function(error) {
-							console.log("Failed to retrieve admins");
-							console.log(error);
-						}
-					});
 					res.status(201).send(result);
 				}
 				else
@@ -102,9 +81,7 @@ var tour = {
 			"description": "",
 			"title": "",
 			"admin": "",
-			"sections": [],
-			"keys": [],
-			"isPublic": ""
+			"isPublic": false
 		};
 
 		var validInput = validate.validateInput(data, expectedInput);

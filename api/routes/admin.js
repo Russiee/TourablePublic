@@ -44,7 +44,7 @@ var admin = {
 		});
 	},
 
-	   POST: function(req, res) {
+	POST: function(req, res) {
 		console.log("POST ADMIN:",req.body);
 		var data = req.body;
 
@@ -53,8 +53,7 @@ var admin = {
 			"email": "",
 			"password": "",
 			"organization": "",
-			"tours": [],
-			"isSuper": ""
+			"isSuper": false
 		};
 
 		var validInput = validate.validateInput(data, expectedInput);
@@ -67,19 +66,6 @@ var admin = {
 			createAdmin(parseData, function(result) {
 				console.log("callback");
 				if (result.status !== 500) {
-					//TODO check if superadmin
-					var query = new Parse.Query(Organization);
-					query.equalTo("objectId", result.get("organization").objectId);
-					query.find({
-						success: function(results) {
-							results[0].add("admins", result);
-							results[0].save();
-						},
-						error: function(error) {
-							console.log("Failed to retrieve admins");
-							console.log(error);
-						}
-					});
 					res.status(201).send(result);
 				}
 				else {
@@ -99,8 +85,7 @@ var admin = {
 			"username": "",
 			"email": "",
 			"organization": "",
-			"tours": [],
-			"isSuper": ""
+			"isSuper": false
 		};
 
 		var validInput = validate.validateInput(data, expectedInput);
