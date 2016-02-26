@@ -73,12 +73,13 @@ public class TourIdParser {
         //let keys = ["code","createdAt","expiresAt","objectId","tour","updatedAt"]
         var dict = metadata
         var tourDict = metadata["tour"]
+        print("metadata for tour as follows: \(tourDict)")
         //TODO: this is a hack to match the KCL-1010 tourID to the mock tour data for testing.
         //This WILL CAUSE BUGS when working with toursIDs that have actual tours acociated with them
         
         //dict["objectId"] = objectId
         let tourCode = dict["code"]!
-        print(tourCode)
+        
 
         //let metadataDict = dict as NSDictionary
         
@@ -99,6 +100,7 @@ public class TourIdParser {
     
     //Gets the dictonary from the cache with the tour code passed to it
     func getTourMetadata(tourCode: String) -> Dictionary<String,AnyObject>{
+
         return NSUserDefaults.standardUserDefaults().objectForKey(tourCode) as! [String : AnyObject]
     }
     //Notifies observers that the table of tour Ids has been updated.
