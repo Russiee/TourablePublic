@@ -8,14 +8,26 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.hobbyte.touringandroid.StartActivity"
-    android:animateLayoutChanges="true">
+    android:animateLayoutChanges="true"
+    tools:context=".ui.activity.StartActivity"
+    android:background="@color/backgroundPlum">
+
+    <LinearLayout
+        android:id="@+id/previousToursLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/previous_tour_padding_top"
+        android:layout_alignParentStart="true">
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/keyEntryLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
+
         android:layout_centerVertical="true"
         android:orientation="vertical"
         android:visibility="invisible">
@@ -32,17 +44,18 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <com.hobbyte.touringandroid.helpers.BackAwareEditText
+            <com.hobbyte.touringandroid.ui.BackAwareEditText
                 android:id="@+id/textEnterTour"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
                 android:inputType="text"
-                />
+                android:layout_gravity="bottom"
+                android:textColor="#ffffff" />
 
             <Button
                 android:id="@+id/buttonSubmitKey"
+                android:textColor="#ffffff"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="checkTourKey"
@@ -51,18 +64,6 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/previousToursLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/fab"
-        android:layout_alignParentStart="true"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:paddingTop="@dimen/previous_tour_padding_top"
-        android:layout_alignParentTop="true">
-
-    </LinearLayout>
 
     <com.github.clans.fab.FloatingActionButton
         android:id="@+id/fab"

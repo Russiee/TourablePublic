@@ -4,6 +4,6 @@
     android:id="@+id/SubSectionTextView"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="Testing">
+    android:textColor="#ffffff">
 
 </TextView>

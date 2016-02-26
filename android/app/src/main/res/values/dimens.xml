@@ -3,5 +3,16 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <!-- StartActivity dimensions -->
     <dimen name="previous_tour_padding_top">50dp</dimen>
+
+    <!-- DownloadActivity dimensions -->
+    <dimen name="tour_title_padding_top">50dp</dimen>
+    <dimen name="tour_desc_padding_top">50dp</dimen>
+
+    <!-- SummaryActivity dimensions-->
+    <dimen name="start_button_LR_margins">60dp</dimen>
+    <dimen name="start_button_TB_margins">10dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

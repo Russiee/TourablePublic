@@ -1,17 +1,19 @@
-package com.hobbyte.touringandroid;
+package com.hobbyte.touringandroid.tourdata;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * Created by Nikita on 08/02/2016.
+ * @author Nikita
  */
 public class SubSection implements Serializable {
 
     //Todo: Implement method for adding subsections as arraylist instead of POIs
     //Serializable implemented for easy of transfer via Intents
     private ArrayList<PointOfInterest> listOfPOI;
+    private ArrayList<SubSection> listOfSub;
     private String name;
+    private String description;
     private boolean hasPOI; //To check whether this has subsections nested within or if it ends with a POI
 
     /**
@@ -19,13 +21,18 @@ public class SubSection implements Serializable {
      * @param name of subsection
      * @param poi PointsOfInterest contained within subsection
      */
-    public SubSection(String name, PointOfInterest... poi) {
+    public SubSection(String name, String description, ArrayList<PointOfInterest> poi) {
         this.name = name;
+        this.description = description;
         this.hasPOI = true;
-        listOfPOI = new ArrayList<PointOfInterest>();
-        for(PointOfInterest p: poi) {
-            listOfPOI.add(p);
-        }
+        listOfPOI = poi;
+    }
+
+    public SubSection(String name, String description, Boolean bool, ArrayList<SubSection> sub) {
+        this.name = name;
+        this.description = description;
+        this.hasPOI = bool;
+        listOfSub = sub;
     }
 
     /**
@@ -33,6 +40,7 @@ public class SubSection implements Serializable {
      */
     public SubSection() {
         this.name = "Temp Subsection Name";
+        this.description = "Temp Subsection Description";
         this.hasPOI = true;
         listOfPOI = new ArrayList<PointOfInterest>();
         listOfPOI.add(new PointOfInterest());
@@ -74,4 +82,6 @@ public class SubSection implements Serializable {
     public boolean isHasPOI() {
         return hasPOI;
     }
+
+    public ArrayList<SubSection> getListOfSub() { return listOfSub; }
 }
