@@ -1,5 +1,6 @@
 package com.hobbyte.touringandroid.io;
 
+import android.content.Context;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -54,8 +55,10 @@ public class BundleSaver extends Thread {
     private String bundle;
     private String keyID;
     private JSONObject json;
+    private Context context;
 
-    public BundleSaver(String bundleString, String keyid) {
+    public BundleSaver(Context c, String bundleString, String keyid) {
+        context = c;
         bundle = bundleString;
         keyID = keyid;
     }
@@ -87,7 +90,7 @@ public class BundleSaver extends Thread {
                 buildBundle(sections.getJSONObject(i));
             }
 
-            FileManager.saveJSON(json, keyID, "bundle");
+            FileManager.saveJSON(context, json, keyID, "bundle");
 
         } catch (JSONException je) {
             je.printStackTrace();
@@ -184,7 +187,7 @@ public class BundleSaver extends Thread {
                 o.put("title", poi.getString("title"));
                 array.put(i, o);
 
-                FileManager.saveJSON(poi, keyID, String.format("poi/%s", id));
+                FileManager.saveJSON(context, poi, keyID, String.format("poi/%s", id));
             }
 
             return array;
