@@ -30,22 +30,30 @@ public class TourBuilder extends Thread {
     public void run() {
         try {
 
+            //get info
             JSONObject key = ServerAPI.getJSON(keyID, ServerAPI.KEY);
             JSONObject tourJSON = key.getJSONObject("tour");
             JSONObject bundle = ServerAPI.getJSON(tourJSON.getString("objectId"), ServerAPI.BUNDLE);
 
+            //set info
             String name = bundle.getString("title");
             String description = bundle.getString("description");
             ArrayList<SubSection> subSections = getSubSectionArrayListFromJSONArray(bundle.getJSONArray("sections"));
 
+            //open tour activity from the summary activity
             callBackActivity.openTourActivity(new Tour(keyID, name, description, subSections));
 
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.i(TAG, "Something went wring creating tour");
+            Log.i(TAG, "Something went wrong creating tour");
         }
     }
 
+    /**
+     * Make an array list of subsections from a json array of subsections
+     * @param array the JSON array to parse
+     * @return the arrayList containing all subsections
+     */
     private ArrayList<SubSection> getSubSectionArrayListFromJSONArray(JSONArray array) {
         try {
 
@@ -68,6 +76,11 @@ public class TourBuilder extends Thread {
         }
     }
 
+    /**
+     * Creates a subsection object frmo a json object subsection
+     * @param thisSubSection the subsection to convert
+     * @return the subsection converted
+     */
     private SubSection generateSubSectionObjectFromJSON(JSONObject thisSubSection) {
         try {
 
