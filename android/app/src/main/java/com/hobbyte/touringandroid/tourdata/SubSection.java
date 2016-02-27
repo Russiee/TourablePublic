@@ -21,18 +21,13 @@ public class SubSection implements Serializable {
      * @param name of subsection
      * @param poi PointsOfInterest contained within subsection
      */
-    public SubSection(String name, String description, ArrayList<PointOfInterest> poi) {
+    public SubSection(String name, String description, ArrayList<PointOfInterest> poi,
+                      ArrayList<SubSection> sub) {
         this.name = name;
         this.description = description;
-        this.hasPOI = true;
-        listOfPOI = poi;
-    }
-
-    public SubSection(String name, String description, Boolean bool, ArrayList<SubSection> sub) {
-        this.name = name;
-        this.description = description;
-        this.hasPOI = bool;
-        listOfSub = sub;
+        this.hasPOI = poi.size() > 0;
+        this.listOfPOI = poi;
+        this.listOfSub = sub;
     }
 
     /**
