@@ -97,16 +97,27 @@ public class FileManager {
     }
 
     /**
-     * Saves a JSONObject to the local storage
+     * Saves a JSONObject to the local (internal) storage, using StartActivity's application context.
      *
      * @param keyID      keyID of the tour
      * @param jsonObject the object to store
      * @param filename   the name of this JSON. BUNDLE_JSON or TOUR_JSON
      */
     public static void saveJSON(JSONObject jsonObject, String keyID, String filename) {
+        saveJSON(StartActivity.getContext(), jsonObject, keyID, filename);
+    }
+
+    /**
+     * Saves a JSONObject to the local (internal) storage.
+     *
+     * @param keyID      keyID of the tour
+     * @param jsonObject the object to store
+     * @param filename   the name of this JSON. BUNDLE_JSON or TOUR_JSON
+     */
+    public static void saveJSON(Context context, JSONObject jsonObject, String keyID, String filename) {
         Log.d(TAG, "Saving " + filename);
 
-        File tourFolder = new File(StartActivity.getContext().getFilesDir(), keyID);
+        File tourFolder = new File(context.getFilesDir(), keyID);
         File tourFile = new File(tourFolder, filename);
 
         try (FileWriter fw = new FileWriter(tourFile)){

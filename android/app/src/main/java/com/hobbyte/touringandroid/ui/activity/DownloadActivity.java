@@ -195,7 +195,7 @@ public class DownloadActivity extends Activity {
 
             FileManager.makeTourDirectories(getApplicationContext(), keyID);
 
-            BundleSaver bundleSaver = new BundleSaver(bundleString, keyID);
+            BundleSaver bundleSaver = new BundleSaver(getApplicationContext(), bundleString, keyID);
             bundleSaver.start();
 
             /*SaveTourJSON saveTourJSON = new SaveTourJSON(keyID);
