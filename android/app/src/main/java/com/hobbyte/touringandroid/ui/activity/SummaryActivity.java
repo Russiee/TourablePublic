@@ -31,7 +31,7 @@ public class SummaryActivity extends Activity {
         keyID = intent.getStringExtra(KEY_ID);
         p = Pattern.compile("https?:\\/\\/[\\w\\.\\/]*\\/(\\w*\\.(jpe?g|png))");
 
-        TourBuilder tb = new TourBuilder(keyID, getApplicationContext(), this);
+        TourBuilder tb = new TourBuilder(keyID, this);
         tb.start();
 
         loadTourDescription();

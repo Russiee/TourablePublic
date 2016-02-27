@@ -1,6 +1,5 @@
 package com.hobbyte.touringandroid.tourdata;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.hobbyte.touringandroid.internet.ServerAPI;
@@ -21,7 +20,7 @@ public class TourBuilder extends Thread {
     private String keyID;
     SummaryActivity callBackActivity;
 
-    public TourBuilder(String keyID, Context context, SummaryActivity callBack) {
+    public TourBuilder(String keyID, SummaryActivity callBack) {
         this.keyID = keyID;
         this.callBackActivity = callBack;
     }
