@@ -162,12 +162,6 @@ public class FileManager {
         task.execute(context.getFilesDir(), keyID);
     }
 
-    /**
-     * Asynchronous task that deletes all files and directories for a given tour.
-     * <p/>
-     * `execute()` takes two parameters: <ul><li>1) the File returned by context.getFilesDir()</li>
-     * <li>2) the key ID</li>
-     * </ul>
-     */
+
 
 }
