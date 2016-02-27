@@ -26,12 +26,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class DownloadActivity extends Activity {
     private static final String TAG = "DownloadActivity";
 
-    private static String IMAGES = "images";
-    private static String VIDEO = "video";
+    private static int IMAGES = 0;
+    private static int VIDEO = 1;
 
     private ProgressBar progressBar;
     private TextView bottomTextView;
@@ -183,31 +186,45 @@ public class DownloadActivity extends Activity {
     /**
      * Asynchronously downloads the media of the tour
      */
-    private class DownloadTourMediaClass extends AsyncTask<String, Void, Boolean> {
+    private class DownloadTourMediaClass extends AsyncTask<Integer, Void, Boolean> {
 
         private HashSet<String> mediaURLs;
         private String imageOnlyPattern = "https?:\\/\\/[\\w\\d\\.\\/]*\\.(jpe?g|png)";
         private String allMediaPattern = "https?:\\/\\/[\\w\\d\\.\\/]*\\.(jpe?g|png|mp4)";
 
         @Override
-        protected Boolean doInBackground(String... params) {
+        protected Boolean doInBackground(Integer... params) {
             String bundleString = ServerAPI.getBundleString(tourID);
 
-            FileManager.makeTourDirectories(getApplicationContext(), keyID);
+            // use pattern matcher to extract all media URLs
+            Pattern p = null;
 
+            if (params[0] == IMAGES) {
+                p = Pattern.compile(imageOnlyPattern);
+            } else if (params[0] == VIDEO) {
+                p = Pattern.compile(allMediaPattern);
+            }
+
+            Matcher matcher = p.matcher(bundleString);
+            mediaURLs = new HashSet<String>();
+
+            while (matcher.find()) {
+                mediaURLs.add(matcher.group());
+            }
+
+            // on a separate thread, save the bundle and POI JSON
+            FileManager.makeTourDirectories(getApplicationContext(), keyID);
             BundleSaver bundleSaver = new BundleSaver(getApplicationContext(), bundleString, keyID);
             bundleSaver.start();
 
-            /*SaveTourJSON saveTourJSON = new SaveTourJSON(keyID);
+            float total = (float) mediaURLs.size();
+            float count = 0.0f;
 
-            //when we want to load images only
-            if (params[0].equals(IMAGES)) {
-                saveTourJSON.saveTour(tourJSON, false);
-
-            } else if (params[0].equals(VIDEO)) {
-                //when we want to load images and video
-                saveTourJSON.saveTour(tourJSON, true);
-            } else return false;*/
+            // save media to device
+            for (Iterator<String> i = mediaURLs.iterator(); i.hasNext(); ) {
+                FileManager.saveImage(getApplicationContext(), keyID, i.next());
+                Log.d(TAG, String.format("Loading %.2f%% complete", (++count / total)));
+            }
 
             return false;
         }
