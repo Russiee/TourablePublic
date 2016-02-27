@@ -3,6 +3,7 @@ package com.hobbyte.touringandroid.io;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import com.hobbyte.touringandroid.ui.activity.StartActivity;
 
@@ -67,28 +68,54 @@ public class FileManager {
     }
 
     /**
+     * Creates the folders that the app will store the tour data in
+     *
+     * @param keyID the keyID of the tour. This is the unique identifier of the tour.
+     */
+    public static void makeTourDirectories(Context context, String keyID) {
+
+        //...com.hobbyte.touring/files/
+        File tourFolder = new File(StartActivity.getContext().getFilesDir(), keyID);
+        boolean foldersCreatedSuccessfully = tourFolder.mkdir();
+
+        //...com.hobbyte.touring/files/keyID/poi/
+        File poiFolder = new File(tourFolder, "poi");
+        foldersCreatedSuccessfully = poiFolder.mkdir() && foldersCreatedSuccessfully;
+
+        //...com.hobbyte.touring/files/keyID/image/
+        File imageFolder = new File(tourFolder, "image");
+        foldersCreatedSuccessfully = imageFolder.mkdir() && foldersCreatedSuccessfully;
+
+        //...com.hobbyte.touring/files/keyID/video/
+        File videoFolder = new File(tourFolder, "video");
+        foldersCreatedSuccessfully = videoFolder.mkdir() && foldersCreatedSuccessfully;
+
+        //logging
+        if (foldersCreatedSuccessfully) Log.i(TAG, "folders created successfully");
+        else Log.e(TAG, "error creating folders");
+
+    }
+
+    /**
      * Saves a JSONObject to the local storage
      *
      * @param keyID      keyID of the tour
      * @param jsonObject the object to store
      * @param filename   the name of this JSON. BUNDLE_JSON or TOUR_JSON
      */
-    public static void saveJSON(String keyID, JSONObject jsonObject, String filename) {
+    public static void saveJSON(JSONObject jsonObject, String keyID, String filename) {
+        Log.d(TAG, "Saving " + filename);
 
         File tourFolder = new File(StartActivity.getContext().getFilesDir(), keyID);
         File tourFile = new File(tourFolder, filename);
 
-        try {
-
-            FileWriter fw = new FileWriter(tourFile);
+        try (FileWriter fw = new FileWriter(tourFile)){
             fw.write(jsonObject.toString());
-            fw.close();
-
         } catch (IOException e) {
+            Log.w(TAG, "Something went wrong when saving " + filename);
             e.printStackTrace();
         }
     }
-
 
     /**
      * Saves an image given by a URL to the device.

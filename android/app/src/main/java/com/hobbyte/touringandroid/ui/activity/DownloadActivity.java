@@ -19,9 +19,13 @@ import android.widget.TextView;
 import com.hobbyte.touringandroid.R;
 import com.hobbyte.touringandroid.internet.SaveTourJSON;
 import com.hobbyte.touringandroid.internet.ServerAPI;
+import com.hobbyte.touringandroid.io.BundleSaver;
+import com.hobbyte.touringandroid.io.FileManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashSet;
 
 public class DownloadActivity extends Activity {
     private static final String TAG = "DownloadActivity";
@@ -180,11 +184,21 @@ public class DownloadActivity extends Activity {
      * Asynchronously downloads the media of the tour
      */
     private class DownloadTourMediaClass extends AsyncTask<String, Void, Boolean> {
-        
+
+        private HashSet<String> mediaURLs;
+        private String imageOnlyPattern = "https?:\\/\\/[\\w\\d\\.\\/]*\\.(jpe?g|png)";
+        private String allMediaPattern = "https?:\\/\\/[\\w\\d\\.\\/]*\\.(jpe?g|png|mp4)";
+
         @Override
         protected Boolean doInBackground(String... params) {
-            String bundle = ServerAPI.getBundleString(tourID);
-            SaveTourJSON saveTourJSON = new SaveTourJSON(keyID);
+            String bundleString = ServerAPI.getBundleString(tourID);
+
+            FileManager.makeTourDirectories(getApplicationContext(), keyID);
+
+            BundleSaver bundleSaver = new BundleSaver(bundleString, keyID);
+            bundleSaver.start();
+
+            /*SaveTourJSON saveTourJSON = new SaveTourJSON(keyID);
 
             //when we want to load images only
             if (params[0].equals(IMAGES)) {
@@ -193,16 +207,19 @@ public class DownloadActivity extends Activity {
             } else if (params[0].equals(VIDEO)) {
                 //when we want to load images and video
                 saveTourJSON.saveTour(tourJSON, true);
-            } else return false;
+            } else return false;*/
 
-            return true;
+            return false;
         }
 
         @Override
         protected void onPostExecute(Boolean isValid) {
 
             Log.i(TAG, "finished downloading");
-            moveToTourActivity(); //TODO uncomment this when it actually starts a tour
+
+            if (isValid) {
+                moveToTourActivity(); //TODO uncomment this when it actually starts a tour
+            }
             // removes activity from users stack so when they press back from a tour they go back
             // to the main menu
             //DownloadActivity.this.finish();
