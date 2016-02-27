@@ -136,8 +136,7 @@ public class FileManager {
      * @param keyID     a tour key ID
      * @param urlString a URL to an image file
      */
-    public static void saveImage(String keyID, String urlString) {
-        Context context = StartActivity.getContext();
+    public static void saveImage(Context context, String keyID, String urlString) {
         HttpURLConnection connection = null;
         Bitmap bitmap = null;
 
