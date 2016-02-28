@@ -34,7 +34,10 @@ public class DeleteTourTask extends AsyncTask<Object, Void, Void> {
             new File(tourDir, "tour").delete();
             fileCount++;
 
-            String[] dirs = {"image", "video"};
+            new File(tourDir, "bundle").delete();
+            fileCount++;
+
+            String[] dirs = {"poi", "image", "video"};
 
             for (String d : dirs) {
                 File dir = new File(tourDir, d);

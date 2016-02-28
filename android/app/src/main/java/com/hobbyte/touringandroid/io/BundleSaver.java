@@ -74,12 +74,30 @@ public class BundleSaver extends Thread {
             JSONArray sections = bundleTemp.getJSONArray("sections");
             int depthZeroCount = bundleTemp.getJSONArray("sections").length();
 
+            JSONObject tourRoot = new JSONObject();
+
             // if the tour has only one section at depth = 0, use that as the root of the tour
             if (depthZeroCount == 1) {
-                json.put("root", sections.getJSONObject(0).getString("objectId"));
+                tourRoot.put("objectId", sections.getJSONObject(0).getString("objectId"));
             } else {
-                json.put("root", bundleTemp.getString("objectId"));
+                tourRoot.put("objectId", "tour");
+                JSONArray topSections = new JSONArray();
+
+                for (int i = 0; i < depthZeroCount; ++i) {
+                    String objectId = sections.getJSONObject(i).getString("objectId");
+                    topSections.put(i, objectId);
+//                    JSONObject o = new JSONObject();
+//                    o.put("objectId", sections.getJSONObject(i).getString("objectId"));
+//                    o.put("title", sections.getJSONObject(i).getString("title"));
+//
+//                    topSections.put(i, o);
+                }
+
+                tourRoot.put("subsections", topSections);
+                tourRoot.put("title", bundleTemp.getString("title"));
             }
+
+            json.put("root", tourRoot);
 
             // don't need bundleTemp or the String anymore; set them to null to conserve memory
             bundleTemp = null;
@@ -154,11 +172,15 @@ public class BundleSaver extends Thread {
 
             for (int i = 0; i < bundleArray.length(); ++i) {
                 JSONObject subsection = bundleArray.getJSONObject(i);
-                JSONObject o = new JSONObject();
+
+                String objectId = subsection.getString("objectId");
+                array.put(i, objectId);
+
+                /*JSONObject o = new JSONObject();
 
                 o.put("objectId", subsection.getString("objectId"));
                 o.put("title", subsection.getString("title"));
-                array.put(i, o);
+                array.put(i, o);*/
             }
 
             return array;
