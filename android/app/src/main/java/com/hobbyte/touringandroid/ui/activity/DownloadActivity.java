@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import com.hobbyte.touringandroid.internet.SaveTourJSON;
 import com.hobbyte.touringandroid.internet.ServerAPI;
 import com.hobbyte.touringandroid.io.BundleSaver;
 import com.hobbyte.touringandroid.io.FileManager;
+import com.hobbyte.touringandroid.io.TourDBManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,6 +53,7 @@ public class DownloadActivity extends Activity {
     private String keyID;
     private String tourID;
     private String expiresAt;
+    private boolean hasVideo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,7 +172,7 @@ public class DownloadActivity extends Activity {
         downloadVideoButton.setEnabled(false);
 
         progressBar.setVisibility(View.VISIBLE);
-        bottomTextView.setText(getResources().getString(R.string.download_activity_label) + stuff + "...");
+        bottomTextView.setText(getResources().getString(R.string.download_activity_label));
     }
 
     /**
@@ -184,9 +187,36 @@ public class DownloadActivity extends Activity {
     }
 
     /**
+     * Creates a enw entry in the local db for a newly downloaded tour.
+     */
+    private void addTourToDB() {
+        TourDBManager dbHelper = new TourDBManager(getApplicationContext());
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        String name = "empty";
+        String createdAt = "";
+        String updatedAt = "";
+
+
+        try {
+            name = tourJSON.getString("title");
+            createdAt = tourJSON.getString("createdAt");
+            updatedAt = tourJSON.getString("updatedAt");
+        } catch (JSONException je) {
+            je.printStackTrace();
+        }
+
+        dbHelper.putRow(
+                db, keyID, tourID,
+                name, createdAt, updatedAt,
+                expiresAt, hasVideo
+        );
+    }
+
+    /**
      * Asynchronously downloads the media of the tour
      */
-    private class DownloadTourMediaClass extends AsyncTask<Integer, Void, Boolean> {
+    private class DownloadTourMediaClass extends AsyncTask<Integer, Float, Boolean> {
 
         private HashSet<String> mediaURLs;
         private String imageOnlyPattern = "https?:\\/\\/[\\w\\d\\.\\/]*\\.(jpe?g|png)";
@@ -201,8 +231,10 @@ public class DownloadActivity extends Activity {
 
             if (params[0] == IMAGES) {
                 p = Pattern.compile(imageOnlyPattern);
+                hasVideo = false;
             } else if (params[0] == VIDEO) {
                 p = Pattern.compile(allMediaPattern);
+                hasVideo = true;
             }
 
             Matcher matcher = p.matcher(bundleString);
@@ -219,14 +251,24 @@ public class DownloadActivity extends Activity {
 
             float total = (float) mediaURLs.size();
             float count = 0.0f;
+            boolean success = false;
 
             // save media to device
             for (Iterator<String> i = mediaURLs.iterator(); i.hasNext(); ) {
-                FileManager.saveImage(getApplicationContext(), keyID, i.next());
-                Log.d(TAG, String.format("Loading %.2f%% complete", (++count / total)));
+                success = FileManager.saveImage(getApplicationContext(), keyID, i.next());
+                publishProgress(++count / total);
             }
 
-            return false;
+            return success;
+        }
+
+        @Override
+        protected void onProgressUpdate(Float... values) {
+            float progress = values[0] * 100;
+            bottomTextView.setText(String.format("%s%.1f%%",
+                    getString(R.string.download_activity_label),
+                    progress)
+            );
         }
 
         @Override
@@ -235,6 +277,7 @@ public class DownloadActivity extends Activity {
             Log.i(TAG, "finished downloading");
 
             if (isValid) {
+                addTourToDB();
                 moveToTourActivity(); //TODO uncomment this when it actually starts a tour
             }
             // removes activity from users stack so when they press back from a tour they go back

@@ -135,8 +135,9 @@ public class FileManager {
      *
      * @param keyID     a tour key ID
      * @param urlString a URL to an image file
+     * @return true if the file was saved successfully
      */
-    public static void saveImage(Context context, String keyID, String urlString) {
+    public static boolean saveImage(Context context, String keyID, String urlString) {
         HttpURLConnection connection = null;
         Bitmap bitmap = null;
 
@@ -146,6 +147,7 @@ public class FileManager {
             connection.connect();
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
 
         if (connection != null) {
@@ -154,6 +156,7 @@ public class FileManager {
                 bitmap = BitmapFactory.decodeStream(bis);
             } catch (Exception e) {
                 e.printStackTrace();
+                return false;
             } finally {
                 connection.disconnect();
             }
@@ -171,9 +174,12 @@ public class FileManager {
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
                 } catch (Exception e) {
                     e.printStackTrace();
+                    return false;
                 }
             }
         }
+
+        return true;
     }
 
     /**

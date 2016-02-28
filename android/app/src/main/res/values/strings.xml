@@ -23,7 +23,7 @@
     <string name="download_option_video">Download with Video</string>
     <string name="download_option_image_label">Videos streamed over network when needed.</string>
     <string name="download_option_video_label">Videos viewable without internet connection.</string>
-    <string name="download_activity_label">"Downloading images"</string>
+    <string name="download_activity_label">"Downloading images&#8230; "</string>
     <string name="download_activity_not_enough_space">Not enough space</string>
 
     <string name="summary_activity_start_tour">Open tour</string>
