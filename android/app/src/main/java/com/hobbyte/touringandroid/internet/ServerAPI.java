@@ -45,19 +45,19 @@ public class ServerAPI {
 
             int response = connection.getResponseCode();
 
-            StringBuilder jsonString = new StringBuilder("");
-            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String line = in.readLine();
-
-            while (line != null) {
-                jsonString.append(line);
-                line = in.readLine();
-            }
-
-            in.close();
-            connection.disconnect();
-
             if (response == 200) {
+                StringBuilder jsonString = new StringBuilder("");
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String line = in.readLine();
+
+                while (line != null) {
+                    jsonString.append(line);
+                    line = in.readLine();
+                }
+
+                in.close();
+                connection.disconnect();
+
                 Log.d(TAG, "Valid key: " + tourKey);
                 JSONObject json = new JSONObject(jsonString.toString());
                 String tourID = json.getJSONObject("tour").getString("objectId");
@@ -65,6 +65,7 @@ public class ServerAPI {
                 return json;
             } else {
                 Log.d(TAG, "Invalid key: " + tourKey);
+                connection.disconnect();
                 return null;
             }
         } catch (JSONException jex) {

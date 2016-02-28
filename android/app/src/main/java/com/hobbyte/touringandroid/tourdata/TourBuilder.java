@@ -2,14 +2,9 @@ package com.hobbyte.touringandroid.tourdata;
 
 import android.util.Log;
 
-import com.hobbyte.touringandroid.internet.ServerAPI;
-import com.hobbyte.touringandroid.ui.activity.SummaryActivity;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 /**
  * @author Jonathan
@@ -17,109 +12,107 @@ import java.util.ArrayList;
 public class TourBuilder extends Thread {
     private static final String TAG = "TourBuilder";
 
-    private String keyID;
-    SummaryActivity callBackActivity;
+    private JSONObject bundle;
+    private SubSection root = null;
 
-    public TourBuilder(String keyID, SummaryActivity callBack) {
-        this.keyID = keyID;
-        this.callBackActivity = callBack;
+    public TourBuilder(JSONObject bundle) {
+        this.bundle = bundle;
     }
 
     @Override
     public void run() {
         try {
+            JSONObject rootJSON = bundle.getJSONObject("root");
+            String rootID = rootJSON.getString("objectId");
 
-            //get info
-            JSONObject key = ServerAPI.getJSON(keyID, ServerAPI.KEY);
-            JSONObject tourJSON = key.getJSONObject("tour");
-            JSONObject bundle = ServerAPI.getJSON(tourJSON.getString("objectId"), ServerAPI.BUNDLE);
-
-            //set info
-            String name = bundle.getString("title");
-            String description = bundle.getString("description");
-            ArrayList<SubSection> subSections = getSubSectionArrayListFromJSONArray(bundle.getJSONArray("sections"));
-
-            //open tour activity from the summary activity
-            callBackActivity.openTourActivity(new Tour(keyID, name, description, subSections));
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Log.i(TAG, "Something went wrong creating tour");
-        }
-    }
-
-    /**
-     * Make an array list of subsections from a json array of subsections
-     * @param array the JSON array to parse
-     * @return the arrayList containing all subsections
-     */
-    private ArrayList<SubSection> getSubSectionArrayListFromJSONArray(JSONArray array) {
-        try {
-
-            //for all subsection objects within this json array
-            ArrayList<SubSection> subSectionList = new ArrayList<>();
-            for (int i = 0; i < array.length(); i++) {
-
-                //get the json object, create a java object from it and add it to the list
-                JSONObject currentSubSection = array.getJSONObject(i);
-                subSectionList.add(generateSubSectionObjectFromJSON(currentSubSection));
+            if (!rootID.equals("tour")) {
+                rootJSON = bundle.getJSONObject(rootID);
             }
 
-            //send it back
-            return subSectionList;
+            root = new SubSection(rootJSON.getString("title"), null);
 
-        } catch (JSONException e) {
+            if (rootJSON.has("pois")) {
+                addPOIs(root, rootJSON);
+            }
+
+            JSONArray subsectionIDs = rootJSON.getJSONArray("subsections");
+            int length = subsectionIDs.length();
+            root.initSubSections(length);
+
+            for (int i = 0; i < length; ++i) {
+                parseSections(root, subsectionIDs.getString(i), i);
+            }
+
+        } catch (JSONException je) {
+            je.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
-            Log.e(TAG, "error creating subsection list");
-            return null;
         }
     }
 
-    /**
-     * Creates a subsection object frmo a json object subsection
-     * @param thisSubSection the subsection to convert
-     * @return the subsection converted
-     */
-    private SubSection generateSubSectionObjectFromJSON(JSONObject thisSubSection) {
+    private void parseSections(SubSection section, String subsectionID, int i) {
         try {
+            JSONObject subsectionJSON = bundle.getJSONObject(subsectionID);
 
-            //get info about this section
-            String name = thisSubSection.getString("title");
-            String description = thisSubSection.getString("descriptions");
-            ArrayList<PointOfInterest> poiArrayList = new ArrayList<>();
+            String title = subsectionJSON.getString("title");
+            SubSection subsection = new SubSection(title, section);
+            section.addSubSection(subsection, i);
 
-            //create a list for all subsections of this section
-            ArrayList<SubSection> thisSubSectionsSubSectionsList =
-                    getSubSectionArrayListFromJSONArray(thisSubSection.getJSONArray("subsections"));
+            if (subsectionJSON.has("pois")) {
+                addPOIs(subsection, subsectionJSON);
+                /*JSONArray pois = subsectionJSON.getJSONArray("pois");
+                int length = pois.length();
 
-            //create a list of all pois that belong in this section
-            JSONArray poiJSONArray = thisSubSection.getJSONArray("pois");
-            if (poiJSONArray.length() > 0) {
+                subsection.initPOIs(length);
 
-                for (int i = 0; i < poiJSONArray.length(); i++) {
-                    //convert poi json into a java object
-                    JSONObject currentPoiJSONObject = poiJSONArray.getJSONObject(i);
-                    poiArrayList.add(generatePointOfInterestFromJSONObject(currentPoiJSONObject));
+                for (int j = 0; j < length; ++j) {
+                    PointOfInterest poi = new PointOfInterest(
+                            subsection,
+                            pois.getJSONObject(j).getString("title"),
+                            pois.getJSONObject(j).getString("objectId")
+                    );
+                    subsection.addPOI(poi, j);
+                }*/
+            }
+
+            if (subsectionJSON.has("subsections")) {
+                JSONArray subSectionIDs = subsectionJSON.getJSONArray("subsections");
+                int length = subSectionIDs.length();
+
+                subsection.initSubSections(length);
+
+                for (int j = 0; j < length; ++j) {
+                    parseSections(subsection, subSectionIDs.getString(j), j);
                 }
             }
-
-            //return the new subsection object
-            return new SubSection(name, description, poiArrayList, thisSubSectionsSubSectionsList);
-
-        } catch (JSONException e) {
+        } catch (JSONException je) {
+            je.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
-            Log.e(TAG, "error creating subsection");
-            return new SubSection("Error", "There was an error creating this section", null, null);
         }
-
     }
 
-    private PointOfInterest generatePointOfInterestFromJSONObject(JSONObject json) {
+    private void addPOIs(SubSection section, JSONObject sectionJSON) {
+        try {
+            JSONArray pois = sectionJSON.getJSONArray("pois");
+            int length = pois.length();
 
-        //TODO create a poi javaobject from poi jsonobject
+            section.initPOIs(length);
 
-        return null;
+            for (int j = 0; j < length; ++j) {
+                PointOfInterest poi = new PointOfInterest(
+                        section,
+                        pois.getJSONObject(j).getString("title"),
+                        pois.getJSONObject(j).getString("objectId")
+                );
+                section.addPOI(poi, j);
+            }
+        } catch (JSONException je) {
+            Log.w(TAG, "Something went wrong when adding POIs to SubSection" + section.getTitle());
+        }
     }
 
-
+    public SubSection getRoot() {
+        return root;
+    }
 }

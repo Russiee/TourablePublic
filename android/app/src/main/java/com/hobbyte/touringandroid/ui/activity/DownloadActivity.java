@@ -181,8 +181,8 @@ public class DownloadActivity extends Activity {
     protected void moveToTourActivity() {
 
         //TODO need to pass tour data in here
-        Intent intent = new Intent(this, SummaryActivity.class);
-        intent.putExtra(SummaryActivity.KEY_ID, keyID);
+        Intent intent = new Intent(this, TourActivity.class);
+        intent.putExtra(TourActivity.INTENT_KEY_ID, keyID);
         startActivity(intent);
     }
 
@@ -211,6 +211,7 @@ public class DownloadActivity extends Activity {
                 name, createdAt, updatedAt,
                 expiresAt, hasVideo
         );
+        db.close();
     }
 
     /**
@@ -245,7 +246,7 @@ public class DownloadActivity extends Activity {
             }
 
             // on a separate thread, save the bundle and POI JSON
-            FileManager.makeTourDirectories(getApplicationContext(), keyID);
+            Log.d(TAG, "About to start bundle saver");
             BundleSaver bundleSaver = new BundleSaver(getApplicationContext(), bundleString, keyID);
             bundleSaver.start();
 
@@ -277,7 +278,7 @@ public class DownloadActivity extends Activity {
             Log.i(TAG, "finished downloading");
 
             if (isValid) {
-                addTourToDB();
+//                addTourToDB();
                 moveToTourActivity(); //TODO uncomment this when it actually starts a tour
             }
             // removes activity from users stack so when they press back from a tour they go back
@@ -290,6 +291,8 @@ public class DownloadActivity extends Activity {
         @Override
         protected Void doInBackground(Void... params) {
             tourJSON = ServerAPI.getJSON(tourID, ServerAPI.TOUR);
+            FileManager.makeTourDirectories(getApplicationContext(), keyID);
+            FileManager.saveJSON(getApplicationContext(), tourJSON, keyID, "tour");
             return null;
         }
 

@@ -35,16 +35,27 @@ public class FileManager {
 
 
     /**
-     * Loads a json from the tour directory
+     * Loads a json from the tour directory, using StartActivity's application context.
      *
      * @param keyID    the keyID of the tour
      * @param filename the name of the file to be loaded
      * @return a JSON preresentaion of the file
      */
     public static JSONObject getJSON(String keyID, String filename) {
+        return getJSON(StartActivity.getContext(), keyID, filename);
+    }
+
+    /**
+     * Loads a json from the tour directory.
+     *
+     * @param keyID    the keyID of the tour
+     * @param filename the name of the file to be loaded
+     * @return a JSON preresentaion of the file
+     */
+    public static JSONObject getJSON(Context context, String keyID, String filename) {
 
         try {
-            File tourFolder = new File(StartActivity.getContext().getFilesDir(), keyID);
+            File tourFolder = new File(context.getFilesDir(), keyID);
             File tourJson = new File(tourFolder, filename);
 
             StringBuilder text = new StringBuilder();
@@ -138,6 +149,7 @@ public class FileManager {
      * @return true if the file was saved successfully
      */
     public static boolean saveImage(Context context, String keyID, String urlString) {
+        Log.d(TAG, "Preparing to download image at " + urlString);
         HttpURLConnection connection = null;
         Bitmap bitmap = null;
 

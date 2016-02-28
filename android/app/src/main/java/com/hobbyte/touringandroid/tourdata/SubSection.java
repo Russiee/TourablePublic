@@ -1,82 +1,50 @@
 package com.hobbyte.touringandroid.tourdata;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-
 /**
  * @author Nikita
  */
-public class SubSection implements Serializable {
-
-    //Todo: Implement method for adding subsections as arraylist instead of POIs
-    //Serializable implemented for easy of transfer via Intents
-    private ArrayList<PointOfInterest> listOfPOI;
-    private ArrayList<SubSection> listOfSub;
-    private String name;
-    private String description;
-    private boolean hasPOI; //To check whether this has subsections nested within or if it ends with a POI
-
-    /**
-     * Create subsection with arraylist of points of interest contained within and its name
-     * @param name of subsection
-     * @param poi PointsOfInterest contained within subsection
-     */
-    public SubSection(String name, String description, ArrayList<PointOfInterest> poi,
-                      ArrayList<SubSection> sub) {
-        this.name = name;
-        this.description = description;
-        this.hasPOI = poi.size() > 0;
-        this.listOfPOI = poi;
-        this.listOfSub = sub;
+public class SubSection {
+    
+    private final String title;
+    private final SubSection parent;
+    
+    private SubSection[] subSections = null;
+    private PointOfInterest[] POIs = null;
+    
+    public SubSection(String title, SubSection parent) {
+        this.title = title;
+        this.parent = parent;
     }
-
-    /**
-     * Very rough guideline for checking if subsection is created
-     */
-    public SubSection() {
-        this.name = "Temp Subsection Name";
-        this.description = "Temp Subsection Description";
-        this.hasPOI = true;
-        listOfPOI = new ArrayList<PointOfInterest>();
-        listOfPOI.add(new PointOfInterest());
+    
+    public void addSubSection(SubSection subSection, int i) {
+        subSections[i] = subSection;
     }
-
-    /**
-     * Add a point of interest to the subsection
-     * @param poi to be added
-     */
-    public void addPointOfInterest(PointOfInterest poi) {
-        listOfPOI.add(poi);
+    
+    public void addPOI(PointOfInterest poi, int i) {
+        POIs[i] = poi;
     }
-
-    /**
-     * Return arraylist of points of interest
-     * @return
-     */
-    public ArrayList<PointOfInterest> getPOIs() {
-        return listOfPOI;
+    
+    public void initSubSections(int length) {
+        subSections = new SubSection[length];
     }
-
-    /**
-     * Return a specific point of interest based on index
-     * @param index of point of interest to be returned
-     * @return point of interest
-     */
-    public PointOfInterest getPointOfInterest(int index) {
-        return listOfPOI.get(index);
+    
+    public void initPOIs(int length) {
+        POIs = new PointOfInterest[length];
     }
-
-    public String toString() {
-        return name;
+    
+    public String getTitle() {
+        return title;
     }
-
-    /**
-     * Check whether Subsection has nested subsections within or if it contains POI (So is a final end)
-     * @return
-     */
-    public boolean isHasPOI() {
-        return hasPOI;
+    
+    public SubSection getParent() {
+        return parent;
     }
-
-    public ArrayList<SubSection> getListOfSub() { return listOfSub; }
+    
+    public SubSection[] getSubSections() {
+        return subSections;
+    }
+    
+    public PointOfInterest[] getPOIs() {
+        return POIs;
+    }
 }

@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.github.clans.fab.FloatingActionButton;
 import com.hobbyte.touringandroid.R;
 import com.hobbyte.touringandroid.internet.ServerAPI;
+import com.hobbyte.touringandroid.io.FileManager;
 import com.hobbyte.touringandroid.io.TourDBContract;
 import com.hobbyte.touringandroid.io.TourDBManager;
 import com.hobbyte.touringandroid.ui.BackAwareEditText;
@@ -63,6 +64,8 @@ public class StartActivity extends Activity {
         previousToursLayout = (LinearLayout) findViewById(R.id.previousToursLayout);
         textKey = (BackAwareEditText) findViewById(R.id.textEnterTour);
         textKey.setCallBackClass(this);
+
+//        FileManager.deleteTourFiles(getApplicationContext(), "APd4HhtBm9");
 
         //make the FAB do something
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
