@@ -46,6 +46,7 @@ class TourSectionsController: UITableViewController {
         keys = Array(models.keys)
         
         checkStateOfScreen()
+        
     }
     
     //to check if should be emptry screen when cancelling a tour download

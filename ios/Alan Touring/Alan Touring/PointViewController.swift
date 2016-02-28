@@ -1,3 +1,4 @@
+
 //
 //  PointViewController.swift
 //  Alan Touring
@@ -17,14 +18,35 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let toolbar: UIToolbar = UIToolbar()
+        toolbar.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44)
+        //toolbar.barStyle = UIBarStyle.BlackTranslucent
+        let items = [UIBarButtonItem(title: "Previous", style: .Plain , target: self, action: "previousPOI") , UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil) ,UIBarButtonItem(title: "Next", style: .Plain , target: self, action: "nextPOI")]
+        toolbar.setItems(items, animated: true)
+        self.view.addSubview(toolbar)
 
         scrollView.delegate = self
+        scrollView.contentSize = CGSize(width: self.view.frame.size.width, height: self.view.frame.size.height)
+//        scrollView.contentInset = UIEdgeInsetsMake(0.00, 0.00, 44.0, 0.00)
+//        scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(0.00, 0.00, 44.0, 0.00)
         
        let pointToDisplay = POIParser().getTourSection(poiID)
         
         self.createSubviews(pointToDisplay.post)
 
     }
+    
+    func previousPOI(){
+        //add method to display previous POI in tour
+        print("previous POI will be shown next")
+    }
+    
+    func nextPOI(){
+        //add method to display next POI in tour
+        print("next POI will be shown next")
+    }
+    
     
     func createSubviews(post: NSArray){
  

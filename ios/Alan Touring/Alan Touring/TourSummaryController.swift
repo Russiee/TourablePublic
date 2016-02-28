@@ -42,6 +42,9 @@ class TourSummaryController: UIViewController {
         let data = setup["objectId"]
         TourExpiryLabel.text = (data as! String)
         
+        self.navigationController?.setToolbarHidden(true, animated: false)
+        
+        
     }
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
 
