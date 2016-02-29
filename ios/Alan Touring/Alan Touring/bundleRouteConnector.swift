@@ -16,12 +16,11 @@ class bundleRouteConnector: NSObject, NSURLConnectionDelegate{
         data = resetData
 
         //The path to where the Tour Data is stored
-
         let urlPath = "https://touring-api.herokuapp.com/api/v1/bundle/"+objectID
         let request = NSURLRequest(URL: NSURL(string: urlPath)!)
         let config = NSURLSessionConfiguration.defaultSessionConfiguration()
         let session = NSURLSession(configuration: config)
-
+        
         let task = session.dataTaskWithRequest(request) { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
             self.data.appendData(data!)
             do {
@@ -38,7 +37,7 @@ class bundleRouteConnector: NSObject, NSURLConnectionDelegate{
         }
         task.resume()
     }
-    
+    //Used to store the data. Called seperately because of the aysnchonus nature of the request
     private func connection(connection: NSURLConnection!, didReceiveData data: NSData!){
         //Storing the data for use
         self.data.appendData(data)
