@@ -7,6 +7,9 @@ class bundleRouteConnector: NSObject, NSURLConnectionDelegate{
 
     lazy var data = NSMutableData()
     //var urlPath: String = ""
+    var jsonResultFromAPI: NSDictionary!
+
+    override init() { }
 
     //Makes the connection to the API
     func startConnection( objectID: String){
@@ -15,23 +18,19 @@ class bundleRouteConnector: NSObject, NSURLConnectionDelegate{
         data = resetData
 
         //The path to where the Tour Data is stored
-        let urlPath = "https://touring-api.herokuapp.com/api/v1/bundle/"+objectID
+        let urlPath = "https://touring-api.herokuapp.com/api/v1/bundle/" + objectID
         let request = NSURLRequest(URL: NSURL(string: urlPath)!)
         let config = NSURLSessionConfiguration.defaultSessionConfiguration()
         let session = NSURLSession(configuration: config)
-        
+
         let task = session.dataTaskWithRequest(request) { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
             self.data.appendData(data!)
             do {
-                let jsonResult: NSDictionary = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
-                
-                print("BUNDLE DOWNLOAD COMPLETE")
-                tourDataParser().saveNewTour(jsonResult)
+                self.jsonResultFromAPI = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
             }
             catch let err as NSError{
                 //Need to let user know if the tourID they entered was faulty here
                 print(err.description)
-                
             }
         }
         task.resume()
@@ -42,4 +41,8 @@ class bundleRouteConnector: NSObject, NSURLConnectionDelegate{
         self.data.appendData(data)
     }
     
+    // called to retrieve the data returned by the API
+    func getJSONResult() -> NSDictionary {
+        return jsonResultFromAPI
+    }
 }

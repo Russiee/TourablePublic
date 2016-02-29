@@ -67,14 +67,20 @@ public class TourIdParser {
 
         let tourDict = metadata["tour"]
         let tourCode = metadata["code"]!
-    
+
         NSUserDefaults.standardUserDefaults().setObject(tourDict, forKey: tourCode as! String)
         NSUserDefaults.standardUserDefaults().synchronize()
 
         self.updateArray(tourCode as! String)
+
+        let bundleRoute = bundleRouteConnector();
         //Give objectId of tour as param
-         _ = bundleRouteConnector().startConnection(tourDict!["objectId"] as! String)
-        
+        bundleRoute.startConnection(tourDict!["objectId"] as! String)
+        print(bundleRoute.getJSONResult())
+
+        //this comes from the initialised of bundle Connector
+        tourDataParser().saveNewTour(bundleRoute.getJSONResult())
+
         NSNotificationCenter.defaultCenter().addObserver(
             self,
             selector: "TableChanged:",
@@ -82,17 +88,17 @@ public class TourIdParser {
             object: nil
         )
     }
-    
+
     //Gets the dictonary from the cache with the tour code passed to it
     func getTourMetadata(tourCode: String) -> Dictionary<String,AnyObject> {
         return NSUserDefaults.standardUserDefaults().objectForKey(tourCode) as! [String : AnyObject]
     }
-    
+
     //Notifies observers that the table of tour Ids has been updated.
     func notify() {
         NSNotificationCenter.defaultCenter().postNotificationName(TableUpdateNotificationKey, object: self)
     }
-    
+
     //method for getting tourIds that have been added for checking the table updates.
     public func getAllTours() -> NSMutableArray {
         return NSUserDefaults.standardUserDefaults().objectForKey("Array") as! NSMutableArray
