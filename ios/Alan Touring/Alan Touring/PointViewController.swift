@@ -1,3 +1,4 @@
+
 //
 //  PointViewController.swift
 //  Alan Touring
@@ -13,18 +14,71 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
 
     @IBOutlet weak var scrollView: UIScrollView!
     var poiID = ""
+    var superSectionID = ""
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("__________________________________________")
+        print(superSectionID)
+        
+        //adding a tool bar with two buttons for the previous and next POI in the tour
+        let toolbar: UIToolbar = UIToolbar()
+        toolbar.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44)
+        //toolbar.barStyle = UIBarStyle.BlackTranslucent
+        let items = [UIBarButtonItem(title: "Previous", style: .Plain , target: self, action: "previousPOI") , UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil) ,UIBarButtonItem(title: "Next", style: .Plain , target: self, action: "nextPOI")]
+        toolbar.setItems(items, animated: true)
+        self.view.addSubview(toolbar)
 
         scrollView.delegate = self
+        scrollView.contentSize = CGSize(width: self.view.frame.size.width, height: self.view.frame.size.height)
+//        scrollView.contentInset = UIEdgeInsetsMake(0.00, 0.00, 44.0, 0.00)
+//        scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(0.00, 0.00, 44.0, 0.00)
         
        let pointToDisplay = POIParser().getTourSection(poiID)
         
         self.createSubviews(pointToDisplay.post)
 
     }
+    
+    func previousPOI(){
+        let superSection = tourDataParser().getTourSection(superSectionID)
+        
+        let poiArray = superSection.getPointsOfInterest()
+        var Z = poiArray.count - 1
+        
+        while(poiID != (poiArray[Z])["objectId"] as! String){
+            Z--
+        }
+        poiID = (poiArray[Z + 1])["objectId"] as! String
+        let subViews = scrollView.subviews
+        for views in subViews{
+            views.removeFromSuperview()
+        }
+        viewDidLoad()
+    }
+    
+    func nextPOI(){
+        let superSection = tourDataParser().getTourSection(superSectionID)
+        
+        let poiArray = superSection.getPointsOfInterest()
+        var Z = poiArray.count - 1
+        
+        while(poiID != (poiArray[Z])["objectId"] as! String){
+            Z--
+        }
+        poiID = (poiArray[Z - 1])["objectId"] as! String
+        let subViews = scrollView.subviews
+        for views in subViews{
+            views.removeFromSuperview()
+        }
+        viewDidLoad()
+        
+        
+        
+        
+    }
+    
     
     func createSubviews(post: NSArray){
  
