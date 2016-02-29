@@ -69,24 +69,14 @@ public class TourIdParser {
     //Adds the metadata passed to it into the cache, after turning it into a dictonary that can be retrieved 
     // from the cache with its tour Id code
     func addTourMetaData(metadata: NSDictionary){
-
-        //let keys = ["code","createdAt","expiresAt","objectId","tour","updatedAt"]
         var dict = metadata
         var tourDict = metadata["tour"]
-        print("metadata for tour as follows: \(tourDict)")
-        //TODO: this is a hack to match the KCL-1010 tourID to the mock tour data for testing.
-        //This WILL CAUSE BUGS when working with toursIDs that have actual tours acociated with them
         
-        //dict["objectId"] = objectId
         let tourCode = dict["code"]!
-        
-
-        //let metadataDict = dict as NSDictionary
-        
+    
         NSUserDefaults.standardUserDefaults().setObject(tourDict, forKey: tourCode as! String)
         NSUserDefaults.standardUserDefaults().synchronize()
 
-        
         self.updateArray(tourCode as! String)
         //Give objectId of tour as param
          _ = bundleRouteConnector.init().initateConnection(tourDict!["objectId"] as! String)

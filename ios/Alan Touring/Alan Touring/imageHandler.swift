@@ -83,8 +83,6 @@ class imageHandler {
     func downloadImageSet(urls: [String]){
         for url in urls{
             let actualURL = NSURL(string: url)
-            print("Download Started")
-            print("lastPathComponent: " + (actualURL!.lastPathComponent ?? ""))
             
             getDataFromUrl(actualURL!) { (data, response, error)  in
                 dispatch_async(dispatch_get_main_queue()) { () -> Void in
@@ -92,7 +90,7 @@ class imageHandler {
                         return
                     }
                     print(response?.suggestedFilename ?? "")
-                    print("Download Finished")
+                    
                     let image = UIImage(data: data)
                     self.saveImage(image!, name: url)
                     //HOW TO GET HERE THE FINAL DOWNLOADED IMAGE

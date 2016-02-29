@@ -19,8 +19,6 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("__________________________________________")
-        print(superSectionID)
         
         //adding a tool bar with two buttons for the previous and next POI in the tour
         let toolbar: UIToolbar = UIToolbar()
@@ -90,8 +88,6 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
         var viewArray = [UIView]()
         var headerArray = [UIView]()
         for row in post{
-
-        //print(row)
         
         var types = Array((row as! NSDictionary).allKeys)
         if types[0] as! String == "type"{
@@ -105,11 +101,11 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
                     let label = UILabel(frame: view1.bounds)
                     label.font = label.font.fontWithSize(30)
                     label.text = (row["content"] as! String)
-                    print(label.text)
+                    
                     label.textAlignment = NSTextAlignment.Center
                     label.center = view1.center
                     view1.addSubview(label)
-                       print("header at \(totalHeight)")
+
                     totalHeight = totalHeight + (view1.frame.height)
                   
                     viewArray.append(view1)
@@ -126,11 +122,11 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
                     let label = UILabel(frame: view2.bounds)
                     label.font = label.font.fontWithSize(30)
                     label.text = (row["content"] as! String)
-                    print(label.text)
+
                     label.textAlignment = NSTextAlignment.Center
                     label.center = view2.center
                     view2.addSubview(label)
-                    print("header at \(totalHeight)")
+
                     totalHeight = totalHeight + (view2.frame.height) + offset
                     
                     viewArray.append(view2)
@@ -141,10 +137,10 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
                     view2.userInteractionEnabled = true
                     scrollView.addSubview(view2)
                 }
-                print("ADDED HEADER \(row["content"])")
+
             case "body":
                 if viewArray.count == 0{
-                    print("ADDING BODY AS FIRST ITEM")
+
                     let chars: CGFloat = CGFloat((row["content"] as! String).characters.count)
                     let lines: CGFloat = chars/30
                     let view1 = UIView(frame: CGRectMake(0, 0, width, 25 * lines))
@@ -152,11 +148,11 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
                     label.text = (row["content"] as! String)
                     //label.lineBreakMode = .ByWordWrapping // or NSLineBreakMode.ByWordWrapping
                     label.numberOfLines = 0
-                    print(label.text)
+
                     label.textAlignment = NSTextAlignment.Center
                     label.center = view1.center
                     view1.addSubview(label)
-                     print("Putting body at\(totalHeight)")
+
                     totalHeight = totalHeight + (view1.frame.height)
                    
                     viewArray.append(view1)
@@ -168,9 +164,9 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
             }else{
                 //for all subsequent images
                 //Set the position of the image to start at the bottom of the last image + offset
-                    print("ADDING BODY AS SECOND ITEM")
+
                     let offset = offset + 5
-                    print(viewArray.count)
+
                     //TODO FIND A METHOD TO DO THIS BETTER
                     let chars: CGFloat = CGFloat((row["content"] as! String).characters.count)
                     let lines: CGFloat = chars/30
@@ -179,11 +175,11 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
                     label.text = (row["content"] as! String)
                    // label.lineBreakMode = .ByWordWrapping // or NSLineBreakMode.ByWordWrapping
                     label.numberOfLines = 0
-                    print(label.text)
+
                     label.textAlignment = NSTextAlignment.Center
                     label.center = view2.center
                     view2.addSubview(label)
-                    print("putting body at \(totalHeight)")
+
                     totalHeight = totalHeight + (view2.frame.height) + offset
                     
                     viewArray.append(view2)
@@ -193,15 +189,13 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
                     view2.setNeedsDisplay()
 
                     scrollView.addSubview(view2)
-                    print("ADDED BODY \(row["content"])")
+
                 }
             default :
                 print("THIS CAN NEVER HAPPEN")
                 
             }
                 }else {
-                    //Found an image
-                    print("found url: \(row["url"])")
             
                     var img: UIImage?
             
@@ -214,7 +208,7 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
            
                 if viewArray.count == 0{
                     //If the first item is an image
-                    print("putting image at point \(totalHeight + offset)")
+
                     let imageView1 = UIImageView(frame: CGRectMake(0, 0, width, height/2))
                     totalHeight = totalHeight + (imageView1.frame.height)
                     viewArray.append(imageView1)
@@ -224,11 +218,10 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
                 scrollView.addSubview(imageView1)
                 }else{
                     //CLEAN
-                    print("adding image as second item")
+
                     //for all subsequent images
                     //Set the position of the image to start at the bottom of the last image + offset
                     let offset = offset + 5
-                    print("putting image at point \(totalHeight + offset)")
                 
                     let imageView2 = UIImageView(frame: CGRectMake(0, totalHeight + offset, width, height/2))
                     totalHeight = totalHeight + imageView2.frame.height + offset

@@ -32,8 +32,7 @@ class pointOfInterest {
         self.section = section
         self.title = title
         self.updatedAt = updatedAt
-        print("POI "+self.objectId)
-        
+
     }
     
     
@@ -45,14 +44,8 @@ class pointOfInterest {
         for item in post{
             if let url: String? = item["url"] as? String{
                 if  url != nil{
-                    print(url)
                     urlsToDownload.append(url!)
                 }
-            }
-            
-            if item["post"] as? String == post[post.count - 1]["post"] as? String
-            {
-                print("last item")
             }
         }
         imghd.downloadImageSet(urlsToDownload)

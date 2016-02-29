@@ -52,7 +52,6 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
    
         do {
             let jsonResult: NSDictionary = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
-          //  print(jsonResult)
             self.storeMetadataJson(jsonResult)
         }
         catch let err as NSError{
@@ -92,7 +91,6 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
     
     //Takes the metadata and passes it to the tourIdParser.
     func storeMetadataJson(JSONData: NSDictionary){
-      //  print(JSONData)
         //Storing Meta Data so we can access it for other use
        
         //TODO: sort this

@@ -22,9 +22,7 @@ class tourDataParser{
     if let pois = data["pois"]{
         poisToAdd = pois as! [NSArray]
     }
-    print(data)
     let keys = data.allKeys as! [String]
-    print(keys)
     if keys.contains("subsections") {
     
     let realSubs = data["subsections"]
@@ -64,23 +62,18 @@ class tourDataParser{
     
     
     func saveTourSection(data: NSDictionary){
-       
         let key = data["objectId"] as! String
-        print(key)
         NSUserDefaults.standardUserDefaults().setObject(data, forKey: key)
         //Commits changes to memory, required for iOS 7 and below.
         NSUserDefaults.standardUserDefaults().synchronize()
         //Makes sure that all sections are recursivley downloaded.
         
-      createNewTour(data).downloadPOIcontent()
-        
+        createNewTour(data).downloadPOIcontent()
     }
     
     func getTourSection(objectId: String)-> tourSection{
-      print(objectId+" FUCK THIS")
         let data = NSUserDefaults.standardUserDefaults().objectForKey(objectId) as! NSDictionary
         return createNewTour(data)
-        
     }
     
     

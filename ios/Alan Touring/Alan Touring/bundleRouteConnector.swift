@@ -10,7 +10,6 @@ class bundleRouteConnector: NSObject, NSURLConnectionDelegate{
 
     //Makes the connection to the API
     private func startConnection( objectID: String){
-        print("got here")
 
         let resetData = NSMutableData()
         //Reseting data to blank with every new connection
@@ -19,7 +18,6 @@ class bundleRouteConnector: NSObject, NSURLConnectionDelegate{
         //The path to where the Tour Data is stored
 
         urlPath = "https://touring-api.herokuapp.com/api/v1/bundle/"+objectID
-        print(urlPath)
         //Standard URLConnection method
         //        let request: NSURLRequest = NSURLRequest(URL: NSURL(string: urlPath)!)
         //

@@ -36,24 +36,7 @@ class tourSection{
 
 
     }
-    
-    //Recursivley create all other required objects
-    //Should only be called once, externally
-    
-    func triggerRecursion(){
-       // print("recursion on \(sectionId) called")
-        
-        for section in subsections{
-            let brp = bundleRouteConnector.init()
 
-            let objectId = section["objectId"] as! String
-            
-            brp.initateConnection(objectId)
-        }
-        
-      
-        
-    }
     
     func downloadPOIcontent(){
         
