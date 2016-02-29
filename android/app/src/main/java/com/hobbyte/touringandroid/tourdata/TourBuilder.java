@@ -29,18 +29,19 @@ public class TourBuilder extends Thread {
                 rootJSON = bundle.getJSONObject(rootID);
             }
 
-            root = new SubSection(rootJSON.getString("title"), null);
+            root = new SubSection(null, rootJSON.getString("title"), rootID);
 
-            if (rootJSON.has("pois")) {
-                addPOIs(root, rootJSON);
-            }
 
             JSONArray subsectionIDs = rootJSON.getJSONArray("subsections");
             int length = subsectionIDs.length();
-            root.initSubSections(length);
+//            root.initSubSections(length);
 
             for (int i = 0; i < length; ++i) {
                 parseSections(root, subsectionIDs.getString(i), i);
+            }
+
+            if (rootJSON.has("pois")) {
+                addPOIs(root, rootJSON);
             }
 
         } catch (JSONException je) {
@@ -55,35 +56,24 @@ public class TourBuilder extends Thread {
             JSONObject subsectionJSON = bundle.getJSONObject(subsectionID);
 
             String title = subsectionJSON.getString("title");
-            SubSection subsection = new SubSection(title, section);
-            section.addSubSection(subsection, i);
+            SubSection subsection = new SubSection(section, title, subsectionID);
+//            section.addSubSection(subsection, i);
+            section.addItem(subsection);
 
-            if (subsectionJSON.has("pois")) {
-                addPOIs(subsection, subsectionJSON);
-                /*JSONArray pois = subsectionJSON.getJSONArray("pois");
-                int length = pois.length();
-
-                subsection.initPOIs(length);
-
-                for (int j = 0; j < length; ++j) {
-                    PointOfInterest poi = new PointOfInterest(
-                            subsection,
-                            pois.getJSONObject(j).getString("title"),
-                            pois.getJSONObject(j).getString("objectId")
-                    );
-                    subsection.addPOI(poi, j);
-                }*/
-            }
 
             if (subsectionJSON.has("subsections")) {
                 JSONArray subSectionIDs = subsectionJSON.getJSONArray("subsections");
                 int length = subSectionIDs.length();
 
-                subsection.initSubSections(length);
+//                subsection.initSubSections(length);
 
                 for (int j = 0; j < length; ++j) {
                     parseSections(subsection, subSectionIDs.getString(j), j);
                 }
+            }
+
+            if (subsectionJSON.has("pois")) {
+                addPOIs(subsection, subsectionJSON);
             }
         } catch (JSONException je) {
             je.printStackTrace();
@@ -97,7 +87,7 @@ public class TourBuilder extends Thread {
             JSONArray pois = sectionJSON.getJSONArray("pois");
             int length = pois.length();
 
-            section.initPOIs(length);
+//            section.initPOIs(length);
 
             for (int j = 0; j < length; ++j) {
                 PointOfInterest poi = new PointOfInterest(
@@ -105,7 +95,8 @@ public class TourBuilder extends Thread {
                         pois.getJSONObject(j).getString("title"),
                         pois.getJSONObject(j).getString("objectId")
                 );
-                section.addPOI(poi, j);
+//                section.addPOI(poi, j);
+                section.addItem(poi);
             }
         } catch (JSONException je) {
             Log.w(TAG, "Something went wrong when adding POIs to SubSection" + section.getTitle());
