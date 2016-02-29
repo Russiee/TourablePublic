@@ -35,8 +35,7 @@ class bundleRouteConnector: NSObject, NSURLConnectionDelegate{
             do {
                 let jsonResult: NSDictionary = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
                 print("BUNDLE DOWNLOAD COMPLETE")
-
-                 tourDataParser().saveNewTour(jsonResult)
+                tourDataParser().saveNewTour(jsonResult)
             }
             catch let err as NSError{
                 //Need to let user know if the tourID they entered was faulty here
@@ -45,8 +44,6 @@ class bundleRouteConnector: NSObject, NSURLConnectionDelegate{
             }
         }
         task.resume()
-
-
     }
     
     
@@ -58,28 +55,5 @@ class bundleRouteConnector: NSObject, NSURLConnectionDelegate{
     func initateConnection(objectId: String){
         startConnection(objectId)
     }
-    
-    //KEEP FOR NOW (SHOULD HANDLE 'SAVING TOUR' AFTER DOWNLOAD). KEEP IN CASE CONNECTION BREAKS AGAIN
-    //handles data after connection is complete.
-    //    private func connectionDidFinishLoading(connection: NSURLConnection!) {
-    //
-    //        do {
-    //
-    //            let jsonResult: NSDictionary = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
-    //
-    //            self.storeTourJSON(jsonResult)
-    //        }
-    //        catch let err as NSError{
-    //            //Need to let user know if the tourID they entered was faulty here
-    //
-    //            print(err.description)
-    //
-    //
-    //        }
-    
-    //    }
-    
-    
-    
     
 }

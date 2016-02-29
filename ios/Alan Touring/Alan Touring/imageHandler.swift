@@ -60,19 +60,23 @@ class imageHandler {
         return result
     }
 
-    func loadImageFromPath(name: String) -> UIImage? {
+    func loadImageFromPath(name: String?) -> UIImage? {
         //let fileName = self.getFileNameFromUrl(name)
-        let fileName = String(name.hash)
-        let path = fileInDocumentsDirectory(fileName)
-        let image = UIImage(contentsOfFile: path)
-    
-        if image == nil {
-            print("missing image at: \(path)")
-        } else {
-            // this is just for you to see the path in case you want to go to the directory, using Finder.
-            print("Loading image from path: \(path)")
+        if name == nil{
+            return nil
+        }else{
+            let fileName = String(name!.hash)
+            let path = fileInDocumentsDirectory(fileName)
+            let image = UIImage(contentsOfFile: path)
+            
+            if image == nil {
+                print("missing image at: \(path)")
+            } else {
+                // this is just for you to see the path in case you want to go to the directory, using Finder.
+                print("Loading image from path: \(path)")
+            }
+            return image
         }
-        return image
     }
 
     //called just once in pointOfInterest.swift

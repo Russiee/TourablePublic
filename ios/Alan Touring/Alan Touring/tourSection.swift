@@ -32,12 +32,7 @@ class tourSection{
         self.pointsOfInterest = pointsOfInterest
         self.title = title
         
-        for poi in pointsOfInterest{
-            //Dont move this, for god sake.
-            let poic = POIConnector.init()
-            let objectId = poi["objectId"] as! String
-            poic.initateConnection(objectId)
-        }
+     
 
 
     }
@@ -57,6 +52,17 @@ class tourSection{
         }
         
       
+        
+    }
+    
+    func downloadPOIcontent(){
+        
+        for poi in pointsOfInterest{
+            //Dont move this, for god sake.
+            let poic = POIConnector.init()
+            let objectId = poi["objectId"] as! String
+            poic.initateConnection(objectId)
+        }
         
     }
     //Prints tour section object for debugging

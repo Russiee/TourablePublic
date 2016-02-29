@@ -72,7 +72,8 @@ class tourDataParser{
         NSUserDefaults.standardUserDefaults().synchronize()
         //Makes sure that all sections are recursivley downloaded.
         
-      createNewTour(data)
+      createNewTour(data).downloadPOIcontent()
+        
     }
     
     func getTourSection(objectId: String)-> tourSection{
@@ -106,19 +107,15 @@ class tourDataParser{
             }else  if let NextLevelSubsections = section["sections"]{
                 if NextLevelSubsections != nil{
                     self.saveSubsections(NextLevelSubsections as! NSArray)
-                    
                 }
             }
             
             self.saveTourSection(section as! NSDictionary)
         }
-        
-        
     }
     
     func deleteTourSection(){
         //this will be complicated, so will do it later
     }
-    
     
 }

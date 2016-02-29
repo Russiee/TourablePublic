@@ -199,43 +199,48 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
                 print("THIS CAN NEVER HAPPEN")
                 
             }
-        }else {
-            //Found an image
-            print("found url: \(row["url"])")
+                }else {
+                    //Found an image
+                    print("found url: \(row["url"])")
             
-            let img = imageHandler().loadImageFromPath(row["url"] as! String)
+                    var img: UIImage?
             
-            if viewArray.count == 0{
-                //If the first item is an image
-                print("putting image at point \(totalHeight + offset)")
-                let imageView1 = UIImageView(frame: CGRectMake(0, 0, width, height/2))
-                totalHeight = totalHeight + (imageView1.frame.height)
-                viewArray.append(imageView1)
-                imageView1.image = img
-                imageView1.contentMode = .ScaleAspectFit
-                imageView1.setNeedsDisplay()
+                    if let imageAtRow : String? = row["url"] as? String{
+                       img = imageHandler().loadImageFromPath(imageAtRow)
+                    
+                    } else {
+                        img = UIImage()
+                    }
+           
+                if viewArray.count == 0{
+                    //If the first item is an image
+                    print("putting image at point \(totalHeight + offset)")
+                    let imageView1 = UIImageView(frame: CGRectMake(0, 0, width, height/2))
+                    totalHeight = totalHeight + (imageView1.frame.height)
+                    viewArray.append(imageView1)
+                    imageView1.image = img
+                    imageView1.contentMode = .ScaleAspectFit
+                    imageView1.setNeedsDisplay()
                 scrollView.addSubview(imageView1)
-            }else{
-                //CLEAN
-                print("adding image as second item")
-                //for all subsequent images
-                //Set the position of the image to start at the bottom of the last image + offset
-                let offset = offset + 5
-                print("putting image at point \(totalHeight + offset)")
+                }else{
+                    //CLEAN
+                    print("adding image as second item")
+                    //for all subsequent images
+                    //Set the position of the image to start at the bottom of the last image + offset
+                    let offset = offset + 5
+                    print("putting image at point \(totalHeight + offset)")
                 
-                let imageView2 = UIImageView(frame: CGRectMake(0, totalHeight + offset, width, height/2))
-                totalHeight = totalHeight + imageView2.frame.height + offset
-                viewArray.append(imageView2)
-                imageView2.image = img
-                imageView2.contentMode = .ScaleAspectFit
-                imageView2.setNeedsDisplay()
+                    let imageView2 = UIImageView(frame: CGRectMake(0, totalHeight + offset, width, height/2))
+                    totalHeight = totalHeight + imageView2.frame.height + offset
+                    viewArray.append(imageView2)
+                    imageView2.image = img
+                    imageView2.contentMode = .ScaleAspectFit
+                    imageView2.setNeedsDisplay()
+                
+                    scrollView.addSubview(imageView2)
+                }
 
-                scrollView.addSubview(imageView2)
             }
-
-            
-            
-        }
         
         }
         
