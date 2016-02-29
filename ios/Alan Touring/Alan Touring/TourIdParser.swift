@@ -35,10 +35,9 @@ public class TourIdParser {
         var newArray : [AnyObject] = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! [AnyObject]
         NSUserDefaults.standardUserDefaults().removeObjectForKey(newArray[row] as! String)
         
-        //remove from Meta Data
+        //remove from Metadata
         NSUserDefaults.standardUserDefaults().removeObjectForKey(newArray[row] as! String)
         NSUserDefaults.standardUserDefaults().synchronize()
-        
         
         newArray.removeAtIndex(row)
         saveArray(newArray)
@@ -68,17 +67,17 @@ public class TourIdParser {
     //Adds the metadata passed to it into the cache, after turning it into a dictonary that can be retrieved 
     // from the cache with its tour Id code
     func addTourMetaData(metadata: NSDictionary){
-        var dict = metadata
-        var tourDict = metadata["tour"]
-        
-        let tourCode = dict["code"]!
+
+        let tourDict = metadata["tour"]
+        let tourCode = metadata["code"]!
     
         NSUserDefaults.standardUserDefaults().setObject(tourDict, forKey: tourCode as! String)
         NSUserDefaults.standardUserDefaults().synchronize()
 
         self.updateArray(tourCode as! String)
         //Give objectId of tour as param
-         _ = bundleRouteConnector.init().initateConnection(tourDict!["objectId"] as! String)
+         _ = bundleRouteConnector().startConnection(tourDict!["objectId"] as! String)
+        
         NSNotificationCenter.defaultCenter().addObserver(
             self,
             selector: "TableChanged:",
