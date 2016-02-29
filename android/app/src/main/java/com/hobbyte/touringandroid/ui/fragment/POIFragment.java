@@ -72,13 +72,14 @@ public class POIFragment extends ListFragment {
                     getActivity().getApplicationContext(),
                     keyID, String.format("poi/%s", objectID)
             );
+            ListViewItem[] listItems = null;
 
             try {
                 JSONArray post = poiJSON.getJSONArray("post");
                 // drop first "Head" item?
 
                 // TODO: all of this can go in a different class
-                ListViewItem[] listItems = new ListViewItem[post.length()];
+                listItems = new ListViewItem[post.length()];
                 Pattern p = Pattern.compile(FileManager.IMG_NAME);
 
                 for (int i = 0; i < post.length(); ++i) {
@@ -103,15 +104,18 @@ public class POIFragment extends ListFragment {
                     listItems[i] = new ListViewItem(text, type);
                 }
 
+
+            } catch (JSONException je) {
+                je.printStackTrace();
+            }
+
+            if (listItems != null) {
                 PoiContentAdapter adapter = new PoiContentAdapter(
                         getActivity().getApplicationContext(),
                         listItems, keyID
                 );
 
                 setListAdapter(adapter);
-
-            } catch (JSONException je) {
-                je.printStackTrace();
             }
         }
     }

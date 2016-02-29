@@ -1,6 +1,7 @@
 package com.hobbyte.touringandroid.ui.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,8 @@ import java.util.ArrayList;
  * Created by max on 29/02/16.
  */
 public class TourItemAdapter extends ArrayAdapter<TourItem> {
+    private static final String TAG = "TourItemAdapter";
+
     public TourItemAdapter(Context context, ArrayList<TourItem> items) {
         super(context, 0, items);
     }
@@ -23,6 +26,8 @@ public class TourItemAdapter extends ArrayAdapter<TourItem> {
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         TourItem selected = getItem(position);
+
+        Log.d(TAG, "getView() on position " + position);
 
         if (view == null) {
             view = LayoutInflater.from(getContext()).inflate(R.layout.subsections, parent, false);
