@@ -32,7 +32,6 @@ class pointOfInterest {
         self.section = section
         self.title = title
         self.updatedAt = updatedAt
-
     }
     
     

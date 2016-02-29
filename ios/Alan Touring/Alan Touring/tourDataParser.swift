@@ -14,7 +14,7 @@ class tourDataParser{
     init(){ }
     
     private func createNewTour(data: NSDictionary) ->tourSection{
-        
+
         //pois might not exist, for example if it is the highest level
         var poisToAdd = [NSArray]()
         if let pois = data["pois"]{
@@ -22,10 +22,9 @@ class tourDataParser{
         }
         let keys = data.allKeys as! [String]
         if keys.contains("subsections") {
-            
+
             let realSubs = data["subsections"]
-            
-            
+
             let toplevelTour = tourSection.init(sectionId: data["objectId"] as! String,
                 description: data["description"] as! String,
                 createdAt: data["createdAt"] as! String,
@@ -56,7 +55,7 @@ class tourDataParser{
         }
         
     }
-    
+
     func saveTourSection(data: NSDictionary){
         let key = data["objectId"] as! String
         NSUserDefaults.standardUserDefaults().setObject(data, forKey: key)
@@ -71,7 +70,7 @@ class tourDataParser{
         let data = NSUserDefaults.standardUserDefaults().objectForKey(objectId) as! NSDictionary
         return createNewTour(data)
     }
-    
+
     func saveNewTour(data: NSDictionary){
         saveTourSection(data)
         //Saves the top level tour which maps to the key stored in the metadata.
