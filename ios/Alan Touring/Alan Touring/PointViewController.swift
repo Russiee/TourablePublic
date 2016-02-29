@@ -83,7 +83,7 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
         let width = UIScreen.mainScreen().bounds.size.width
         let height = UIScreen.mainScreen().bounds.size.height
         
-        var offset: CGFloat = 5
+        let offset: CGFloat = 5
         var totalHeight: CGFloat = 0
         var viewArray = [UIView]()
         var headerArray = [UIView]()

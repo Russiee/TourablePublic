@@ -42,7 +42,7 @@ class POIConnector: NSObject, NSURLConnectionDelegate{
                 //SAVE JSON
                 POIParser.init().savePOI(jsonResult)
             }
-            catch let err as NSError{
+            catch _ as NSError{
                 //Need to let user know if the tourID they entered was faulty here
                 print("POIConnector: there was an error parsing a poi")
             }
