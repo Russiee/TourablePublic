@@ -17,7 +17,7 @@ import java.util.ArrayList;
  */
 public class PointOfInterestAdapter extends ArrayAdapter<PointOfInterest> {
 
-    public PointOfInterestAdapter(Context context, ArrayList<PointOfInterest> pois) {
+    public PointOfInterestAdapter(Context context, PointOfInterest[] pois) {
         super(context, 0, pois);
     }
 
@@ -28,7 +28,7 @@ public class PointOfInterestAdapter extends ArrayAdapter<PointOfInterest> {
             view = LayoutInflater.from(getContext()).inflate(R.layout.subsections, parent, false);
         }
         TextView subsectionView = (TextView) view.findViewById(R.id.SubSectionTextView);
-        subsectionView.setText(selected.getName());
+        subsectionView.setText(selected.getTitle());
         return view;
     }
 }

@@ -32,7 +32,7 @@ public class PointOfInterestActivity extends Activity {
      */
     private void loadInformation() {
 
-        listView = (ListView) findViewById(R.id.poiListView);
+        /*listView = (ListView) findViewById(R.id.poiListView);
 
         Intent intent = getIntent();
         keyID = intent.getStringExtra(SummaryActivity.KEY_ID);
@@ -56,6 +56,6 @@ public class PointOfInterestActivity extends Activity {
         }
 
         PoiContentAdapter adapter = new PoiContentAdapter(this, items, keyID);
-        listView.setAdapter(adapter);
+        listView.setAdapter(adapter);*/
     }
 }

@@ -10,14 +10,12 @@ import android.widget.TextView;
 import com.hobbyte.touringandroid.R;
 import com.hobbyte.touringandroid.tourdata.SubSection;
 
-import java.util.ArrayList;
-
 /**
- * Created by Nikita on 09/02/2016.
+ * Adapter which tells a ListView how SubSections should be displayed in the app.
  */
 public class SubSectionAdapter extends ArrayAdapter<SubSection> {
 
-    public SubSectionAdapter(Context context, ArrayList<SubSection> subsections) {
+    public SubSectionAdapter(Context context, SubSection[] subsections) {
         super(context, 0, subsections);
     }
 
@@ -28,7 +26,7 @@ public class SubSectionAdapter extends ArrayAdapter<SubSection> {
             view = LayoutInflater.from(getContext()).inflate(R.layout.subsections, parent, false);
         }
         TextView subsectionView = (TextView) view.findViewById(R.id.SubSectionTextView);
-        subsectionView.setText(selected.toString());
+        subsectionView.setText(selected.getTitle());
         return view;
     }
 }
