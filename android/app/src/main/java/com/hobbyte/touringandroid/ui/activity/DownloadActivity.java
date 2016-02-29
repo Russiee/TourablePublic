@@ -179,10 +179,17 @@ public class DownloadActivity extends Activity {
      * Opens the tour activty witha  tour
      */
     protected void moveToTourActivity() {
+        String title;
+        try {
+            title = tourJSON.getString("title");
+        } catch (JSONException e) {
+            e.printStackTrace();
+            title = "Tour";
+        }
 
-        //TODO need to pass tour data in here
         Intent intent = new Intent(this, TourActivity.class);
         intent.putExtra(TourActivity.INTENT_KEY_ID, keyID);
+        intent.putExtra(TourActivity.INTENT_TITLE, title);
         startActivity(intent);
     }
 
@@ -278,8 +285,8 @@ public class DownloadActivity extends Activity {
             Log.i(TAG, "finished downloading");
 
             if (isValid) {
-//                addTourToDB();
-                moveToTourActivity(); //TODO uncomment this when it actually starts a tour
+                addTourToDB();
+                moveToTourActivity();
             }
             // removes activity from users stack so when they press back from a tour they go back
             // to the main menu
@@ -292,7 +299,7 @@ public class DownloadActivity extends Activity {
         protected Void doInBackground(Void... params) {
             tourJSON = ServerAPI.getJSON(tourID, ServerAPI.TOUR);
             FileManager.makeTourDirectories(getApplicationContext(), keyID);
-            FileManager.saveJSON(getApplicationContext(), tourJSON, keyID, "tour");
+            FileManager.saveJSON(getApplicationContext(), tourJSON, keyID, FileManager.TOUR_JSON);
             return null;
         }
 

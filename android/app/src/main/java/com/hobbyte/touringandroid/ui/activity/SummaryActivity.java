@@ -3,6 +3,7 @@ package com.hobbyte.touringandroid.ui.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import com.hobbyte.touringandroid.R;
@@ -16,9 +17,11 @@ import java.util.regex.Pattern;
 
 public class SummaryActivity extends Activity {
 
-    public static final String KEY_ID = "keyID";
     private static final String TAG = "SummaryActivity";
+    public static final String KEY_ID = "keyID";
+
     private String keyID;
+    private String title;
 
     private Pattern p;
 
@@ -37,22 +40,22 @@ public class SummaryActivity extends Activity {
         loadTourDescription();
     }
 
-    public void openTourActivity(Tour tour) {
-        // start tour
+    public void openTourActivity(View v) {
         Intent intent = new Intent(this, TourActivity.class);
-        intent.putExtra(TourActivity.EXTRA_MESSAGE_SUB, tour.getSubSections());
-        intent.putExtra(SummaryActivity.KEY_ID, keyID);
+        intent.putExtra(TourActivity.INTENT_KEY_ID, keyID);
+        intent.putExtra(TourActivity.INTENT_TITLE, title);
         startActivity(intent);
     }
 
     private void loadTourDescription() {
-        JSONObject tourJSON = FileManager.getJSON(keyID, FileManager.TOUR_JSON);
+        JSONObject tourJSON = FileManager.getJSON(getApplicationContext(), keyID, FileManager.TOUR_JSON);
 
         TextView txtTitle = (TextView) findViewById(R.id.txtTourTitle);
         TextView txtDescription = (TextView) findViewById(R.id.txtTourDescription);
 
         try {
-            txtTitle.setText(tourJSON.getString("title"));
+            title = tourJSON.getString("title");
+            txtTitle.setText(title);
             txtDescription.setText(tourJSON.getString("description"));
         } catch (Exception e) {
             e.printStackTrace();

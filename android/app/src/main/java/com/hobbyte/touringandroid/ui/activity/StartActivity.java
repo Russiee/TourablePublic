@@ -66,6 +66,9 @@ public class StartActivity extends Activity {
         textKey.setCallBackClass(this);
 
 //        FileManager.deleteTourFiles(getApplicationContext(), "APd4HhtBm9");
+//        TourDBManager dbHelper = new TourDBManager(getApplicationContext());
+//        SQLiteDatabase db = dbHelper.getWritableDatabase();
+//        dbHelper.deleteTour(db, "APd4HhtBm9");
 
         //make the FAB do something
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -121,10 +124,10 @@ public class StartActivity extends Activity {
                 String name = c.getString(c.getColumnIndex(TourDBContract.TourList.COL_TOUR_NAME));
                 long expiryTime = c.getLong(c.getColumnIndex(TourDBContract.TourList.COL_DATE_EXPIRES_ON));
                 String expiryText = df.format(new Date(expiryTime));
-                final String keyID = c.getString(c.getColumnIndex(TourDBContract.TourList.COL_TOUR_ID)); // TODO: this should be changed to COL_KEY_ID
+                final String keyID = c.getString(c.getColumnIndex(TourDBContract.TourList.COL_KEY_ID));
 
                 tourName.setText(name);
-                expiryDate.setText(expiryText);
+                expiryDate.setText(String.format("Expires %s", expiryText));
                 layout.addView(tourItem);
 
                 tourItem.setOnClickListener(new View.OnClickListener() {

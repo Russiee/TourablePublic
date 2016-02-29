@@ -53,7 +53,7 @@ public class FileManager {
      * @return a JSON preresentaion of the file
      */
     public static JSONObject getJSON(Context context, String keyID, String filename) {
-
+        Log.d(TAG, "Loading JSON from " + filename);
         try {
             File tourFolder = new File(context.getFilesDir(), keyID);
             File tourJson = new File(tourFolder, filename);
