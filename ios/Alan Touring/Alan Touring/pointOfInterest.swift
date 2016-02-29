@@ -39,7 +39,7 @@ class pointOfInterest {
     func downloadContent() {
         var urlsToDownload = [String]()
         
-        for item in post{
+        for item in post {
             if let url: String? = item["url"] as? String{
                 if  url != nil{
                     urlsToDownload.append(url!)

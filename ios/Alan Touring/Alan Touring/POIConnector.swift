@@ -9,7 +9,7 @@
 import Foundation
 //Handles API connectivity for points of interest. As these are handled differently to 
 //tour sections
-class POIConnector: NSObject, NSURLConnectionDelegate{
+class POIConnector: NSObject, NSURLConnectionDelegate {
     
     lazy var data = NSMutableData()
     var urlPath: String = ""

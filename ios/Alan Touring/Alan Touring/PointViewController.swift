@@ -39,10 +39,13 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
 
     }
     
+    // navigate to previous POI
     func previousPOI(){
         let superSection = tourDataParser().getTourSection(superSectionID)
         
         let poiArray = superSection.getPointsOfInterest()
+        
+        // pointer in reverse order
         var Z = poiArray.count - 1
         
         while(poiID != (poiArray[Z])["objectId"] as! String){
@@ -56,6 +59,7 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
         viewDidLoad()
     }
     
+    // navigate to next POI
     func nextPOI(){
         let superSection = tourDataParser().getTourSection(superSectionID)
         
@@ -83,7 +87,7 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
         let width = UIScreen.mainScreen().bounds.size.width
         let height = UIScreen.mainScreen().bounds.size.height
         
-        var offset: CGFloat = 5
+        let offset: CGFloat = 5
         var totalHeight: CGFloat = 0
         var viewArray = [UIView]()
         var headerArray = [UIView]()

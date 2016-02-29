@@ -9,8 +9,7 @@ class bundleRouteConnector: NSObject, NSURLConnectionDelegate{
     var urlPath: String = ""
 
     //Makes the connection to the API
-    private func startConnection( objectID: String){
-
+    func initateConnection( objectID: String){
         let resetData = NSMutableData()
         //Reseting data to blank with every new connection
         data = resetData
@@ -44,14 +43,9 @@ class bundleRouteConnector: NSObject, NSURLConnectionDelegate{
         task.resume()
     }
     
-    
     private func connection(connection: NSURLConnection!, didReceiveData data: NSData!){
         //Storing the data for use
         self.data.appendData(data)
-    }
-    
-    func initateConnection(objectId: String){
-        startConnection(objectId)
     }
     
 }

@@ -28,8 +28,6 @@ public class TourIdParser {
 
     var API = ApiConnector()
     
-    
-    
     func deleteTourIdAtRow(row: Int) {
         //remove from "Array"
         var newArray : [AnyObject] = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! [AnyObject]
@@ -42,7 +40,6 @@ public class TourIdParser {
         
         newArray.removeAtIndex(row)
         saveArray(newArray)
-        
     }
    
     
@@ -79,6 +76,7 @@ public class TourIdParser {
         self.updateArray(tourCode as! String)
         //Give objectId of tour as param
          _ = bundleRouteConnector.init().initateConnection(tourDict!["objectId"] as! String)
+        
         NSNotificationCenter.defaultCenter().addObserver(
             self,
             selector: "TableChanged:",
@@ -91,6 +89,7 @@ public class TourIdParser {
     func getTourMetadata(tourCode: String) -> Dictionary<String,AnyObject> {
         return NSUserDefaults.standardUserDefaults().objectForKey(tourCode) as! [String : AnyObject]
     }
+    
     //Notifies observers that the table of tour Ids has been updated.
     func notify() {
         NSNotificationCenter.defaultCenter().postNotificationName(TableUpdateNotificationKey, object: self)
