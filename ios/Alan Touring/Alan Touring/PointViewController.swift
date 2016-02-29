@@ -14,11 +14,15 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
 
     @IBOutlet weak var scrollView: UIScrollView!
     var poiID = ""
+    var superSectionID = ""
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("__________________________________________")
+        print(superSectionID)
         
+        //adding a tool bar with two buttons for the previous and next POI in the tour
         let toolbar: UIToolbar = UIToolbar()
         toolbar.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44)
         //toolbar.barStyle = UIBarStyle.BlackTranslucent
@@ -38,13 +42,41 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
     }
     
     func previousPOI(){
-        //add method to display previous POI in tour
-        print("previous POI will be shown next")
+        let superSection = tourDataParser().getTourSection(superSectionID)
+        
+        let poiArray = superSection.getPointsOfInterest()
+        var Z = poiArray.count - 1
+        
+        while(poiID != (poiArray[Z])["objectId"] as! String){
+            Z--
+        }
+        poiID = (poiArray[Z + 1])["objectId"] as! String
+        let subViews = scrollView.subviews
+        for views in subViews{
+            views.removeFromSuperview()
+        }
+        viewDidLoad()
     }
     
     func nextPOI(){
-        //add method to display next POI in tour
-        print("next POI will be shown next")
+        let superSection = tourDataParser().getTourSection(superSectionID)
+        
+        let poiArray = superSection.getPointsOfInterest()
+        var Z = poiArray.count - 1
+        
+        while(poiID != (poiArray[Z])["objectId"] as! String){
+            Z--
+        }
+        poiID = (poiArray[Z - 1])["objectId"] as! String
+        let subViews = scrollView.subviews
+        for views in subViews{
+            views.removeFromSuperview()
+        }
+        viewDidLoad()
+        
+        
+        
+        
     }
     
     
