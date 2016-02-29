@@ -37,7 +37,7 @@ class POIParser{
 
     //Retrives the JSON from the cache and returns a POI object created from it
     func getTourSection(objectId: String)-> pointOfInterest{
-        print(objectId)
+
         //Get the JSON
         let data = NSUserDefaults.standardUserDefaults().objectForKey(objectId) as! NSDictionary
         //Create a poi object

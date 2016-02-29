@@ -51,7 +51,7 @@ class imageHandler {
     
         //self.addUrlToFileNameMap(name, fileName: fileName1)
         let path = fileInDocumentsDirectory(fileName1)
-    
+        //TODO when profiling, this was found to be extremely heavy, so we should look at putting this in an async
         //let pngImageData = UIImagePNGRepresentation(image)
         let jpgImageData = UIImageJPEGRepresentation(image, 1.0)
     

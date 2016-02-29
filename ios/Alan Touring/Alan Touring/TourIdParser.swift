@@ -68,24 +68,28 @@ public class TourIdParser {
     
     //Adds the metadata passed to it into the cache, after turning it into a dictonary that can be retrieved 
     // from the cache with its tour Id code
-    func addTourMetaData(metadata: NSArray){
+    func addTourMetaData(metadata: NSDictionary){
 
-        let keys = ["code","createdAt","expiresAt","objectId","tour","updatedAt"]
-        var dict = metadata.dictionaryWithValuesForKeys(keys)
+        //let keys = ["code","createdAt","expiresAt","objectId","tour","updatedAt"]
+        var dict = metadata
+        var tourDict = metadata["tour"]
+        print("metadata for tour as follows: \(tourDict)")
         //TODO: this is a hack to match the KCL-1010 tourID to the mock tour data for testing.
         //This WILL CAUSE BUGS when working with toursIDs that have actual tours acociated with them
         
-        dict["objectId"] = "m1dUFsZ1gt"
+        //dict["objectId"] = objectId
         let tourCode = dict["code"]!
-
-        let metadataDict = dict as NSDictionary
         
-        NSUserDefaults.standardUserDefaults().setObject(metadataDict, forKey: tourCode[0] as! String)
+
+        //let metadataDict = dict as NSDictionary
+        
+        NSUserDefaults.standardUserDefaults().setObject(tourDict, forKey: tourCode as! String)
         NSUserDefaults.standardUserDefaults().synchronize()
 
         
-        self.updateArray(tourCode[0] as! String)
-        
+        self.updateArray(tourCode as! String)
+        //Give objectId of tour as param
+         _ = bundleRouteConnector.init().initateConnection(tourDict!["objectId"] as! String)
         NSNotificationCenter.defaultCenter().addObserver(
             self,
             selector: "TableChanged:",
@@ -96,6 +100,7 @@ public class TourIdParser {
     
     //Gets the dictonary from the cache with the tour code passed to it
     func getTourMetadata(tourCode: String) -> Dictionary<String,AnyObject>{
+
         return NSUserDefaults.standardUserDefaults().objectForKey(tourCode) as! [String : AnyObject]
     }
     //Notifies observers that the table of tour Ids has been updated.

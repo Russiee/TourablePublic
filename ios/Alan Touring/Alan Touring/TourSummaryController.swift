@@ -15,7 +15,7 @@ class TourSummaryController: UIViewController {
     var tourId = ""
     var tourObjectId = ""
     var tourIndex: Int!
-    let objectId = ""
+    var objectId = ""
     var setup = Dictionary<String, AnyObject>()
     
     @IBOutlet weak var tourTitleLabel: UILabel!
@@ -33,20 +33,28 @@ class TourSummaryController: UIViewController {
         beingTourButton.enabled = true
         
         setup = TourIdParser.sharedInstance.getTourMetadata(tourId)
-        let objectId = setup["objectId"]!
-        let topLayerTourInfo = tourDataParser.init().getTourSection(objectId as! String)
+        objectId = setup["objectId"] as! String
+        print("trying to get tour from ID: \(objectId)")
+        let topLayerTourInfo = tourDataParser.init().getTourSection(objectId )
         tourTitleLabel.text = topLayerTourInfo.title as String
         UIDescriptionBox.text = topLayerTourInfo.description
-        print(objectId)
-        let data = setup["expiresAt"]![0]
+        print("SETUP: \(setup)")
+        let data = setup["objectId"]
         TourExpiryLabel.text = (data as! String)
+        
+        self.navigationController?.setToolbarHidden(true, animated: false)
+        
         
     }
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
 
         // Create a new variable to store the instance of PlayerTableViewController
+        if segue.identifier == "goToTourSections"{
         let destinationVC = segue.destinationViewController as! TourSectionsController
-        destinationVC.superTableId = setup["objectId"] as! String
+            let topLayerTourInfo = tourDataParser.init().getTourSection(objectId)
+            print(topLayerTourInfo.subsections)
+        destinationVC.superTableId = topLayerTourInfo.sectionId 
+        }
     }
     
     

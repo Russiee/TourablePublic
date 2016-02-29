@@ -10,7 +10,7 @@ class bundleRouteConnector: NSObject, NSURLConnectionDelegate{
 
     //Makes the connection to the API
     private func startConnection( objectID: String){
-
+        print("got here")
 
         let resetData = NSMutableData()
         //Reseting data to blank with every new connection
@@ -18,7 +18,8 @@ class bundleRouteConnector: NSObject, NSURLConnectionDelegate{
 
         //The path to where the Tour Data is stored
 
-        urlPath = "https://touring-api.herokuapp.com/api/v1/section/"+objectID
+        urlPath = "https://touring-api.herokuapp.com/api/v1/bundle/"+objectID
+        print(urlPath)
         //Standard URLConnection method
         //        let request: NSURLRequest = NSURLRequest(URL: NSURL(string: urlPath)!)
         //
@@ -33,13 +34,14 @@ class bundleRouteConnector: NSObject, NSURLConnectionDelegate{
             self.data.appendData(data!)
             do {
                 let jsonResult: NSDictionary = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
+                print("BUNDLE DOWNLOAD COMPLETE")
 
-                self.storeTourJSON(jsonResult)
+                 tourDataParser().saveNewTour(jsonResult)
             }
             catch let err as NSError{
                 //Need to let user know if the tourID they entered was faulty here
                 print(err.description)
-
+                
             }
         }
         task.resume()
@@ -77,14 +79,6 @@ class bundleRouteConnector: NSObject, NSURLConnectionDelegate{
     
     //    }
     
-    //Takes the metadata and passes it to the tourIdParser.
-    func storeTourJSON(JSONData: NSDictionary){
-        //Storing Meta Data so we can access it for other use
-        
-        tourDataParser.init().saveTourSection(JSONData)
-        //print(JSONData)
-        
-    }
     
     
     

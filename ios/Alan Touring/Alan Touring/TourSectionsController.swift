@@ -14,6 +14,7 @@ class TourSectionsController: UITableViewController {
     
     var models = [String: String]()
     var superTableId = ""
+    var poiArray = []
     var keys = [String]()
     
     
@@ -23,7 +24,8 @@ class TourSectionsController: UITableViewController {
         let tour = tourDataParser.init().getTourSection(superTableId)
     
         let subsectionArray = tour.getSubSections()
-        let poiArray = tour.getPointsOfInterest()
+        
+        poiArray = tour.getPointsOfInterest()
         var tourTitles = [String: String]()
         
         let tdp = tourDataParser.init()
@@ -36,16 +38,17 @@ class TourSectionsController: UITableViewController {
         }
         let poip = POIParser.init()
         for poiPointer in poiArray{
-            print(" TOUR POINTER \( poiPointer["objectId"] as? String)!)")
             let poiData = poip.getTourSection((poiPointer["objectId"] as? String)!)
             tourTitles[poiData.title as String] = poiData.objectId
             }
         
         
         models = tourTitles
+
         keys = Array(models.keys)
         
         checkStateOfScreen()
+        
     }
     
     //to check if should be emptry screen when cancelling a tour download
@@ -88,16 +91,15 @@ class TourSectionsController: UITableViewController {
         //CODE TO GO TO THE NEXT LEVEL OF TOUR OR DISPLAY POINT OF INTEREST
         let row = tableView.indexPathForSelectedRow!.row
         let RowTitle = keys[row]
-        print(RowTitle+" id found")
+
         let objectForSegue = models[RowTitle]
-        print(objectForSegue!+" object ID to seg to")
+
         let tourSections = tourDataParser.init().getTourSection(superTableId).getSubSections()
         let tourPOIS = tourDataParser.init().getTourSection(superTableId).getPointsOfInterest()
-        print(tourPOIS.count)
-        print("now here")
+
 
         for poi in tourPOIS{
-            print("test2")
+
             if (poi["objectId"] as! String) == objectForSegue{
                 self.performSegueWithIdentifier("PointOfInterestSegue", sender: self)
                 break
@@ -106,7 +108,7 @@ class TourSectionsController: UITableViewController {
 
         for subsection in tourSections{
             if (subsection["objectId"] as! String) == objectForSegue{
-                print("test1")
+
                 self.performSegueWithIdentifier("showNextPage", sender: self)
                 break
             }
@@ -134,6 +136,7 @@ class TourSectionsController: UITableViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         let title = keys[self.tableView.indexPathForSelectedRow!.row]
         let objectId = models[title]
+
         
         if (segue.identifier == "showNextPage") {
             let newViewController = segue.destinationViewController as! TourSectionsController
@@ -141,9 +144,10 @@ class TourSectionsController: UITableViewController {
             
             newViewController.superTableId = objectId!
         } else if(segue.identifier == "PointOfInterestSegue"){
-            let newViewController = segue.destinationViewController as! pointOfInterestController
+            let newViewController = segue.destinationViewController as! PointViewController
             
             newViewController.poiID = objectId!
+            newViewController.superSectionID = superTableId
             
         }
     }

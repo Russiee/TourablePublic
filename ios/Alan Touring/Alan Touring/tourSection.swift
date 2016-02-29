@@ -16,24 +16,28 @@ class tourSection{
     var description: String
     //DateTime of creation
     var createdAt: String
-    //Supersection pointer for the section. will be empty for the top level
-    var superSection: NSDictionary
     //All subsection pointers
-    var subSections: NSArray
+    var subsections: NSArray
     //All point of interest pointers
     var pointsOfInterest: NSArray
     //Title of section
     var title: NSString
     
     //Constructor
-    init(sectionId: String, description: String, createdAt: String, superSection: NSDictionary, subSections:NSArray, pointsOfInterest:NSArray, title:NSString){
+    init(sectionId: String, description: String, createdAt: String, subsections:NSArray, pointsOfInterest:NSArray, title:NSString){
         self.sectionId = sectionId
         self.description = description
         self.createdAt = createdAt
-        self.superSection = superSection
-        self.subSections = subSections
+        self.subsections = subsections
         self.pointsOfInterest = pointsOfInterest
         self.title = title
+        
+        for poi in pointsOfInterest{
+            //Dont move this, for god sake.
+            let poic = POIConnector.init()
+            let objectId = poi["objectId"] as! String
+            poic.initateConnection(objectId)
+        }
 
 
     }
@@ -44,7 +48,7 @@ class tourSection{
     func triggerRecursion(){
        // print("recursion on \(sectionId) called")
         
-        for section in subSections{
+        for section in subsections{
             let brp = bundleRouteConnector.init()
 
             let objectId = section["objectId"] as! String
@@ -52,12 +56,7 @@ class tourSection{
             brp.initateConnection(objectId)
         }
         
-        for poi in pointsOfInterest{
-            //Dont move this, for god sake.
-            let poic = POIConnector.init()
-            let objectId = poi["objectId"] as! String
-            poic.initateConnection(objectId)
-        }
+      
         
     }
     //Prints tour section object for debugging
@@ -66,8 +65,7 @@ class tourSection{
         print(sectionId)
         print(description)
         print(createdAt)
-        print(superSection)
-        print(subSections)
+       
         print(pointsOfInterest)
         print(title)
         print("--------")
@@ -85,11 +83,8 @@ class tourSection{
     func getCreatedAt() -> String{
         return self.createdAt
     }
-    func getSuperSection() -> NSDictionary{
-        return self.superSection
-    }
     func getSubSections() -> NSArray{
-        return self.subSections
+        return self.subsections
         
     }
     func getPointsOfInterest() -> NSArray{
