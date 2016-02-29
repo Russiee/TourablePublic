@@ -55,6 +55,9 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
         ListViewItem listViewItem = items[position];
         int listViewItemType = getItemViewType(position);
 
+        Log.d(TAG, "getView() on position " + position);
+        Log.d(TAG, "text: " + listViewItem.getText());
+
         if (view == null) {
             if (listViewItemType == IMG) {
                 view = LayoutInflater.from(getContext()).inflate(R.layout.poi_image, parent, false);
