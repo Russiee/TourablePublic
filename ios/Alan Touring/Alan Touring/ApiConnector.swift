@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 
+//keys for notifying observers of outcome of the key verification route
 let invalidIdNotificationKey = "InvalidKeyEnteredNotification"
 let validIdNotificationKey = "ValidKeyEnteredNotification"
 
@@ -47,7 +48,7 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
         //Storing the data for use
         self.data.appendData(data)
     }
-    
+    //Completion handler for the key verification route.
     func connectionDidFinishLoading(connection: NSURLConnection!) {
    
         do {
@@ -103,12 +104,14 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
     
     
     // remove the heading and trailing spaces
+    // rejects any tourIds with invalid symbols
     func cleanTourId(tourId: String) -> String {
 
         let trimmedTourId = tourId.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
         
         if trimmedTourId.containsString(" ") || trimmedTourId.containsString("/")||trimmedTourId.containsString("\"")||trimmedTourId.containsString("\\"){
-            print("the tour id ou input must not contain whitespaces.")
+            print("the tour id input must not contain whitespaces.")
+            //not possible to retunr nil so returns blank.
             return ""
         }
         

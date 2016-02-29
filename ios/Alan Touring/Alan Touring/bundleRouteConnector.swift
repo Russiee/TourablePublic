@@ -6,31 +6,25 @@ import UIKit
 class bundleRouteConnector: NSObject, NSURLConnectionDelegate{
 
     lazy var data = NSMutableData()
-    var urlPath: String = ""
+    //var urlPath: String = ""
 
     //Makes the connection to the API
-    func initateConnection( objectID: String){
+    func startConnection( objectID: String){
         let resetData = NSMutableData()
         //Reseting data to blank with every new connection
         data = resetData
 
         //The path to where the Tour Data is stored
-
-        urlPath = "https://touring-api.herokuapp.com/api/v1/bundle/"+objectID
-        //Standard URLConnection method
-        //        let request: NSURLRequest = NSURLRequest(URL: NSURL(string: urlPath)!)
-        //
-        //        //change to URLSession
-        //        let connection: NSURLConnection = NSURLConnection(request: request, delegate: self, startImmediately: false)!
-        //        connection.start()
+        let urlPath = "https://touring-api.herokuapp.com/api/v1/bundle/"+objectID
         let request = NSURLRequest(URL: NSURL(string: urlPath)!)
         let config = NSURLSessionConfiguration.defaultSessionConfiguration()
         let session = NSURLSession(configuration: config)
-
+        
         let task = session.dataTaskWithRequest(request) { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
             self.data.appendData(data!)
             do {
                 let jsonResult: NSDictionary = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
+                
                 print("BUNDLE DOWNLOAD COMPLETE")
                 tourDataParser().saveNewTour(jsonResult)
             }
@@ -42,7 +36,7 @@ class bundleRouteConnector: NSObject, NSURLConnectionDelegate{
         }
         task.resume()
     }
-    
+
     private func connection(connection: NSURLConnection!, didReceiveData data: NSData!){
         //Storing the data for use
         self.data.appendData(data)

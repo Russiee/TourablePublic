@@ -43,9 +43,21 @@ class TourSummaryController: UIViewController {
         TourExpiryLabel.text = (data as! String)
         
         self.navigationController?.setToolbarHidden(true, animated: false)
-        
+         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedDownloading", name: beginDownloadKey, object: nil)
+         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedFinishedDownloading", name: endDownloadKey, object: nil)
         
     }
+    
+    
+    func NotifiedDownloading(){
+        print("download begun")
+    }
+    
+    func NotifiedFinishedDownloading(){
+        print("download finished in here")
+    }
+    
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
 
         // Create a new variable to store the instance of PlayerTableViewController

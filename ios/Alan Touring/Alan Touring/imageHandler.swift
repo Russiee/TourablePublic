@@ -8,9 +8,11 @@
 import Foundation
 import UIKit
 
+let beginDownloadKey = "downloadInProgress"
+let endDownloadKey = "DownloadComplete"
+var countOfImages = 0;
 
-
-class imageHandler {
+class imageHandler: NSObject {
     
     lazy var imagesToDownloadQueue =  Queue<String>()
     
@@ -45,7 +47,31 @@ class imageHandler {
         let fileURL = getDocumentsURL().URLByAppendingPathComponent(filename+".jpg")
         return fileURL.path!
     }
-
+    
+    func triggerDownloadCompleteNotify() {
+        NSNotificationCenter.defaultCenter().addObserver(
+            self,
+            selector: "NotifiedFinishedDownloading",
+            name: "NotifiedFinishedDownloading",
+            object: nil)
+        func notify() {
+            NSNotificationCenter.defaultCenter().postNotificationName(endDownloadKey, object: self)
+            print("image download complete notify called")
+        }
+        notify()
+    }
+    func triggerDownloadBeginNotify() {
+        NSNotificationCenter.defaultCenter().addObserver(
+            self,
+            selector: "NotifiedDownloading:",
+            name: "NotifiedDownloading",
+            object: nil)
+        func notify() {
+            NSNotificationCenter.defaultCenter().postNotificationName(beginDownloadKey, object: self)
+            print("image download notify called")
+        }
+        notify()
+    }
     func saveImage(image: UIImage, name: String ) -> Bool{
     
         let fileName1 = String(name.hash)
@@ -59,6 +85,11 @@ class imageHandler {
     
         let result = jpgImageData!.writeToFile(path, atomically: true)
         print("if true, saved image: \(result)")
+        countOfImages--
+       
+        if countOfImages == 0{
+            triggerDownloadCompleteNotify()
+        }
         return result
     }
 
@@ -80,9 +111,19 @@ class imageHandler {
             return image
         }
     }
+    
+    
+       
 
     //called just once in pointOfInterest.swift
     func downloadImageSet(urls: [String]){
+       
+        if countOfImages == 0{
+            
+        triggerDownloadBeginNotify()
+        }
+        
+        countOfImages = countOfImages + urls.count
         
         for url in urls {
             imagesToDownloadQueue.enqueue(url)
@@ -105,6 +146,7 @@ class imageHandler {
                 }
             }
         }
+
     }
 
 }
