@@ -55,7 +55,6 @@ public class TourIdParser {
     }
     
     
-    
     //saves the copy of the array passed to it persistently and updates working copy kept in this class.
     //Never called outside of this class
     private func saveArray(newArray: AnyObject){
@@ -89,14 +88,12 @@ public class TourIdParser {
     }
     
     //Gets the dictonary from the cache with the tour code passed to it
-    func getTourMetadata(tourCode: String) -> Dictionary<String,AnyObject>{
-
+    func getTourMetadata(tourCode: String) -> Dictionary<String,AnyObject> {
         return NSUserDefaults.standardUserDefaults().objectForKey(tourCode) as! [String : AnyObject]
     }
     //Notifies observers that the table of tour Ids has been updated.
     func notify() {
         NSNotificationCenter.defaultCenter().postNotificationName(TableUpdateNotificationKey, object: self)
-
     }
     
     //method for getting tourIds that have been added for checking the table updates.

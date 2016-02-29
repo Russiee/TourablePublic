@@ -10,53 +10,51 @@ import Foundation
 
 class tourDataParser{
     
-  
-    init(){
+    
+    init(){ }
+    
+    private func createNewTour(data: NSDictionary) ->tourSection{
         
-    }
-    
-   private func createNewTour(data: NSDictionary) ->tourSection{
-    
-    //pois might not exist, for example if it is the highest level
-    var poisToAdd = [NSArray]()
-    if let pois = data["pois"]{
-        poisToAdd = pois as! [NSArray]
-    }
-    let keys = data.allKeys as! [String]
-    if keys.contains("subsections") {
-    
-    let realSubs = data["subsections"]
-    
-    
-        let toplevelTour = tourSection.init(sectionId: data["objectId"] as! String,
-            description: data["description"] as! String,
-            createdAt: data["createdAt"] as! String,
-            subsections: realSubs as! NSArray,
-            pointsOfInterest: poisToAdd,
-            title: data["title"] as! NSString)
-
-       return toplevelTour
-        
-    }else if keys.contains("sections"){
-        let toplevelTour = tourSection.init(sectionId: data["objectId"] as! String,
-            description: data["description"] as! String,
-            createdAt: data["createdAt"] as! String,
-            subsections: data["sections"] as! NSArray,
-            pointsOfInterest: poisToAdd,
-            title: data["title"] as! NSString)
-        
-        return toplevelTour
-    }else{
-        let toplevelTour = tourSection.init(sectionId: data["objectId"] as! String,
-            description: data["description"] as! String,
-            createdAt: data["createdAt"] as! String,
-            subsections: [NSArray](),
-            pointsOfInterest: poisToAdd,
-            title: data["title"] as! NSString)
-        
+        //pois might not exist, for example if it is the highest level
+        var poisToAdd = [NSArray]()
+        if let pois = data["pois"]{
+            poisToAdd = pois as! [NSArray]
+        }
+        let keys = data.allKeys as! [String]
+        if keys.contains("subsections") {
+            
+            let realSubs = data["subsections"]
+            
+            
+            let toplevelTour = tourSection.init(sectionId: data["objectId"] as! String,
+                description: data["description"] as! String,
+                createdAt: data["createdAt"] as! String,
+                subsections: realSubs as! NSArray,
+                pointsOfInterest: poisToAdd,
+                title: data["title"] as! NSString)
+            
             return toplevelTour
-    }
-    
+            
+        }else if keys.contains("sections"){
+            let toplevelTour = tourSection.init(sectionId: data["objectId"] as! String,
+                description: data["description"] as! String,
+                createdAt: data["createdAt"] as! String,
+                subsections: data["sections"] as! NSArray,
+                pointsOfInterest: poisToAdd,
+                title: data["title"] as! NSString)
+            
+            return toplevelTour
+        }else{
+            let toplevelTour = tourSection.init(sectionId: data["objectId"] as! String,
+                description: data["description"] as! String,
+                createdAt: data["createdAt"] as! String,
+                subsections: [NSArray](),
+                pointsOfInterest: poisToAdd,
+                title: data["title"] as! NSString)
+            
+            return toplevelTour
+        }
+        
     }
     
     
@@ -78,7 +76,7 @@ class tourDataParser{
     
     
     func saveNewTour(data: NSDictionary){
-
+        
         
         saveTourSection(data)
         //Saves the top level tour which maps to the key stored in the metadata.
@@ -94,8 +92,8 @@ class tourDataParser{
             
             if let NextLevelSubsections = section["subsections"]{
                 if NextLevelSubsections != nil{
-                self.saveSubsections(NextLevelSubsections as! NSArray)
-
+                    self.saveSubsections(NextLevelSubsections as! NSArray)
+                    
                 }
             }else  if let NextLevelSubsections = section["sections"]{
                 if NextLevelSubsections != nil{

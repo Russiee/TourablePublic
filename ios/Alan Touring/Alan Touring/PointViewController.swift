@@ -200,7 +200,7 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
                     var img: UIImage?
             
                     if let imageAtRow : String? = row["url"] as? String{
-                       img = imageHandler().loadImageFromPath(imageAtRow)
+                       img = imageHandler.sharedInstance.loadImageFromPath(imageAtRow)
                     
                     } else {
                         img = UIImage()

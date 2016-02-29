@@ -36,9 +36,7 @@ class pointOfInterest {
     }
     
     
-
     func downloadContent() {
-        let imghd = imageHandler.init()
         var urlsToDownload = [String]()
         
         for item in post{
@@ -48,7 +46,7 @@ class pointOfInterest {
                 }
             }
         }
-        imghd.downloadImageSet(urlsToDownload)
+        imageHandler.sharedInstance.downloadImageSet(urlsToDownload)
     }
 
 

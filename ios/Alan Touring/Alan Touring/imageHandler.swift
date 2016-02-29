@@ -8,25 +8,27 @@
 import Foundation
 import UIKit
 
-private let fileManager = NSFileManager.defaultManager()
+
 
 class imageHandler {
-
-    init() {
-        if NSUserDefaults.standardUserDefaults().objectForKey("imageKeys") == nil{
-            let dictonary = Dictionary<String,String>()
-            NSUserDefaults.standardUserDefaults().setObject(dictonary, forKey: "imageKeys")
-            NSUserDefaults.standardUserDefaults().synchronize()
-            do {
-                //2
-                try fileManager.createDirectoryAtPath(getDocumentsURL().absoluteString,
-                    withIntermediateDirectories: false, attributes: nil)
-            } catch {
-                print("An Error was generated creating directory")
-            }
-        }
-    }
     
+    lazy var imagesToDownloadQueue =  Queue<String>()
+    
+    //making the TourIdParser a singleton to parse all tours from the API
+    //in order to access TourIdParser methods call TourIdParser.shardInstance.METHOD()
+    class var sharedInstance: imageHandler {
+        struct Static {
+            static var onceToken: dispatch_once_t = 0
+            static var instance: imageHandler? = nil
+        }
+        dispatch_once(&Static.onceToken) {
+            Static.instance = imageHandler()
+            
+        }
+        return Static.instance!
+    }
+
+        
     
     func getDataFromUrl(url:NSURL, completion: ((data: NSData?, response: NSURLResponse?, error: NSError? ) -> Void)) {
         NSURLSession.sharedSession().dataTaskWithURL(url) { (data, response, error) in
@@ -81,9 +83,15 @@ class imageHandler {
 
     //called just once in pointOfInterest.swift
     func downloadImageSet(urls: [String]){
-        for url in urls{
-            let actualURL = NSURL(string: url)
-            
+        
+        for url in urls {
+            imagesToDownloadQueue.enqueue(url)
+        }
+        
+        while !imagesToDownloadQueue.isEmpty() {
+            let imageUrl = imagesToDownloadQueue.dequeue()!
+            let actualURL = NSURL(string: imageUrl )
+        
             getDataFromUrl(actualURL!) { (data, response, error)  in
                 dispatch_async(dispatch_get_main_queue()) { () -> Void in
                     guard let data = data where error == nil else {
@@ -92,7 +100,7 @@ class imageHandler {
                     print(response?.suggestedFilename ?? "")
                     
                     let image = UIImage(data: data)
-                    self.saveImage(image!, name: url)
+                    self.saveImage(image!, name: imageUrl)
                     //HOW TO GET HERE THE FINAL DOWNLOADED IMAGE
                 }
             }

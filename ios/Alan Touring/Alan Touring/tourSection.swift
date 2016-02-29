@@ -7,6 +7,7 @@
 //
 
 import Foundation
+
 //Class reprisenting a subsection in the tour. Repsonsible for triggering the
 //download of its contents
 class tourSection{
@@ -31,23 +32,18 @@ class tourSection{
         self.subsections = subsections
         self.pointsOfInterest = pointsOfInterest
         self.title = title
-        
-     
-
-
     }
 
-    
-    func downloadPOIcontent(){
-        
+    // download the content for all the POI (called when you save a tour section)
+    func downloadPOIcontent() {
         for poi in pointsOfInterest{
             //Dont move this, for god sake.
             let poic = POIConnector.init()
             let objectId = poi["objectId"] as! String
             poic.initateConnection(objectId)
         }
-        
     }
+    
     //Prints tour section object for debugging
     func debugDataPass(){
         print("--------")
@@ -81,8 +77,6 @@ class tourSection{
         
     }
     
-    
-    
-   }
+}
 
 

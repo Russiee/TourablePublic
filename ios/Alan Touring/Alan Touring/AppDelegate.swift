@@ -28,6 +28,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             //Commits changes to memory, required for iOS 7 and below.
             NSUserDefaults.standardUserDefaults().synchronize()
         }
+        let fileManager = NSFileManager.defaultManager()
+        if NSUserDefaults.standardUserDefaults().objectForKey("imageKeys") == nil{
+            let dictonary = Dictionary<String,String>()
+            NSUserDefaults.standardUserDefaults().setObject(dictonary, forKey: "imageKeys")
+            NSUserDefaults.standardUserDefaults().synchronize()
+            do {
+                try fileManager.createDirectoryAtPath(imageHandler.sharedInstance.getDocumentsURL().absoluteString,
+                    withIntermediateDirectories: false, attributes: nil)
+            } catch {
+                print("An Error was generated creating directory")
+            }
+        }
+
         
         return true
     }
