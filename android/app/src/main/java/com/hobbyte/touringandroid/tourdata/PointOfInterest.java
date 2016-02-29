@@ -8,21 +8,21 @@ import android.os.Parcelable;
  * parent SubSection. This class implements Parcelable so that PointOfInterest instances can be
  * passed from TourActivity to a SectionFragment instance.
  */
-public class PointOfInterest implements Parcelable {
+public class PointOfInterest extends TourItem implements Parcelable {
 
     private final String title;
     private final String objectID;
     private final SubSection parent;
 
     public PointOfInterest(SubSection parent, String title, String objectID) {
-        this.parent = parent;
-        this.title = title;
         this.objectID = objectID;
+        this.title = title;
+        this.parent = parent;
     }
 
     public PointOfInterest(Parcel in) {
-        title = in.readString();
         objectID = in.readString();
+        title = in.readString();
         parent = (SubSection) in.readValue(SubSection.class.getClassLoader());
     }
 
@@ -38,6 +38,10 @@ public class PointOfInterest implements Parcelable {
         return parent;
     }
 
+    public int getType() {
+        return TourItem.TYPE_POI;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -45,6 +49,7 @@ public class PointOfInterest implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(objectID);
         dest.writeString(title);
         dest.writeValue(parent);
     }

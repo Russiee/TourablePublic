@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="4dp"
-        android:theme="@android:style/ThemeOverlay.Material.Dark.ActionBar"/>
+        android:theme="@style/ToolbarTheme"/>
 
     <FrameLayout
         android:id="@+id/fragmentContainer"

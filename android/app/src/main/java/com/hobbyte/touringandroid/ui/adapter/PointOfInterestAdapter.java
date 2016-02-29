@@ -28,7 +28,7 @@ public class PointOfInterestAdapter extends ArrayAdapter<PointOfInterest> {
             view = LayoutInflater.from(getContext()).inflate(R.layout.subsections, parent, false);
         }
         TextView subsectionView = (TextView) view.findViewById(R.id.SubSectionTextView);
-        subsectionView.setText(selected.getTitle());
+        subsectionView.setText(String.format("%d: %s", selected.getType(), selected.getTitle()));
         return view;
     }
 }

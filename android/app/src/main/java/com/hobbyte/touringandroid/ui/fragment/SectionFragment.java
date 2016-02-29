@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.ListFragment;
 //import android.support.v4.app.ListFragment;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,8 +12,15 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.hobbyte.touringandroid.R;
+import com.hobbyte.touringandroid.tourdata.PointOfInterest;
 import com.hobbyte.touringandroid.tourdata.SubSection;
+import com.hobbyte.touringandroid.tourdata.TourItem;
+import com.hobbyte.touringandroid.ui.adapter.PointOfInterestAdapter;
 import com.hobbyte.touringandroid.ui.adapter.SubSectionAdapter;
+import com.hobbyte.touringandroid.ui.adapter.TourItemAdapter;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 /**
  * A simple {@link ListFragment} subclass.
@@ -27,9 +33,11 @@ import com.hobbyte.touringandroid.ui.adapter.SubSectionAdapter;
 public class SectionFragment extends ListFragment {
     private static final String TAG = "SectionFragment";
 
-    private static final String SECTION_PARAM = "subsections";
+    private static final String PARAM_SECTIONS = "subsections";
+    private static final String PARAM_POIS = "pois";
+    private static final String PARAM_CONTENTS = "sectionContents";
 
-    private SubSection[] subSections;
+//    private SubSection[] subSections;
 
     private OnFragmentInteractionListener mListener;
 
@@ -43,11 +51,12 @@ public class SectionFragment extends ListFragment {
      *
      * @return A new instance of fragment SectionFragment.
      */
-    public static SectionFragment newInstance(SubSection[] subSections) {
+    public static SectionFragment newInstance(ArrayList<TourItem> items) {
         Log.d(TAG, "newInstance() called");
         SectionFragment fragment = new SectionFragment();
         Bundle args = new Bundle();
-        args.putParcelableArray(SECTION_PARAM, subSections);
+        args.putParcelableArrayList(PARAM_CONTENTS, items);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,9 +65,10 @@ public class SectionFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate() called");
+
         if (getArguments() != null) {
-            subSections = (SubSection[]) getArguments().getParcelableArray(SECTION_PARAM);
-            SubSectionAdapter adapter = new SubSectionAdapter(getActivity().getApplicationContext(), subSections);
+            ArrayList<TourItem> contents = getArguments().getParcelableArrayList(PARAM_CONTENTS);
+            TourItemAdapter adapter = new TourItemAdapter(getActivity().getApplicationContext(), contents);
             setListAdapter(adapter);
         }
     }
