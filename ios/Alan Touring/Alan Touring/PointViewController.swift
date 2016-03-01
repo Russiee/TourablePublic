@@ -9,23 +9,23 @@
 
 import UIKit
 
+import Foundation
+
 class PointViewController: UIViewController, UIScrollViewDelegate {
     
     
     @IBOutlet weak var scrollView: UIScrollView!
     var poiID = ""
     var superSectionID = ""
+    var POIList = NSUserDefaults.standardUserDefaults().objectForKey("POIList")!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
         //adding a tool bar with two buttons for the previous and next POI in the tour
-        let toolbar: UIToolbar = UIToolbar()
-        toolbar.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44)
-        //toolbar.barStyle = UIBarStyle.BlackTranslucent
-        let items = [UIBarButtonItem(title: "Previous", style: .Plain , target: self, action: "previousPOI") , UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil) ,UIBarButtonItem(title: "Next", style: .Plain , target: self, action: "nextPOI")]
-        toolbar.setItems(items, animated: true)
+        let toolbar = createToolBar()
         self.view.addSubview(toolbar)
         
         scrollView.delegate = self
@@ -40,18 +40,39 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
     }
     
     // navigate to previous POI
-    func previousPOI(){
-        let superSection = tourDataParser().getTourSection(superSectionID)
+    
+    func createToolBar() -> UIToolbar{
+        let toolbar: UIToolbar = UIToolbar()
+        toolbar.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44)
         
-        let poiArray = superSection.getPointsOfInterest()
+        if(POIList.indexOfObject(poiID) == 0){
+            let items = [UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil) ,UIBarButtonItem(title: "Next", style: .Plain , target: self, action: "nextPOI")]
+            toolbar.setItems(items, animated: true)
+        }
+        else if(POIList.indexOfObject(poiID) == (POIList.count - 1)){
+            let items = [UIBarButtonItem(title: "Previous", style: .Plain , target: self, action: "previousPOI") , UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)]
+            toolbar.setItems(items, animated: true)
+        }
+        else{
+            let items = [UIBarButtonItem(title: "Previous", style: .Plain , target: self, action: "previousPOI") , UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil) ,UIBarButtonItem(title: "Next", style: .Plain , target: self, action: "nextPOI")]
+            toolbar.setItems(items, animated: true)
+        }
+        
+        return toolbar
+        
+    }
+    func previousPOI(){
+//        let superSection = tourDataParser().getTourSection(superSectionID)
+//        
+//        let poiArray = superSection.getPointsOfInterest()
         
         // pointer in reverse order
-        var Z = poiArray.count - 1
+//        print(POIList)
+//        print(poiID)
+        let Z = POIList.indexOfObject(poiID)
+        //print(Z)
         
-        while(poiID != (poiArray[Z])["objectId"] as! String){
-            Z--
-        }
-        poiID = (poiArray[Z + 1])["objectId"] as! String
+        poiID = (POIList[Z - 1]) as! String
         let subViews = scrollView.subviews
         for views in subViews{
             views.removeFromSuperview()
@@ -61,15 +82,13 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
     
     // navigate to next POI
     func nextPOI(){
-        let superSection = tourDataParser().getTourSection(superSectionID)
         
-        let poiArray = superSection.getPointsOfInterest()
-        var Z = poiArray.count - 1
+//        print(POIList)
+//        print(poiID)
+        let Z = POIList.indexOfObject(poiID)
+        //print(Z)
         
-        while(poiID != (poiArray[Z])["objectId"] as! String){
-            Z--
-        }
-        poiID = (poiArray[Z - 1])["objectId"] as! String
+        poiID = (POIList[Z + 1]) as! String
         let subViews = scrollView.subviews
         for views in subViews{
             views.removeFromSuperview()

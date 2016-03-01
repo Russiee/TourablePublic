@@ -8,7 +8,7 @@ class bundleRouteConnector: NSObject, NSURLConnectionDelegate{
     lazy var data = NSMutableData()
     //var urlPath: String = ""
     var jsonResultFromAPI: NSDictionary!
-    var POIList: Array<String>!
+    var POIList = [String]()
 
     override init() { }
 
@@ -52,7 +52,6 @@ class bundleRouteConnector: NSObject, NSURLConnectionDelegate{
         while(jsonResultFromAPI == nil){
             
         }
-        
         return jsonResultFromAPI
     }
     
@@ -61,28 +60,27 @@ class bundleRouteConnector: NSObject, NSURLConnectionDelegate{
         print("//// have waited for JSON to download////")
         for subsection in section{
             let keys = subsection.allKeys
-            print(keys)
+            //print(keys)
             for value in keys{
                 if value as! String == "pois"{
                     print("poi reached")
-                    //                let POIS = subsection["pois"] as! NSArray
-                    //                for pois in POIS{
-                    //                    POIList.append(pois["objectId"] as! String)
-                    //                    print(pois["objectId"] as! String)
+                        let POIS = subsection["pois"] as! NSArray
+                        for pois in POIS{
+                        POIList.append(pois["objectId"] as! String)
                     }
+                }
                     
-                else if(value as! String == "subsections"){
-//                  print(subsection)
-//                  print("******************************************")
-//                  print(subsection["subsections"])
-                    print(subsection["subsections"])
+                else if((value as! String) == "subsections"){
                     getAllPOIs(subsection["subsections"] as! NSArray)
-                    print("?????? has it gone through?????????")
+                    }
                 }
             }
-            print("______ One Loop of For Loop done _________")
-        }
         print("//// managed to get all the POIS////")
+        print(POIList)
+        }
     
+    func getPOIList() -> [String]{
+        return POIList
     }
+    
 }
