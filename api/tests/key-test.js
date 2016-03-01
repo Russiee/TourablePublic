@@ -1,31 +1,29 @@
 var should = require('should'); 
 var assert = require('assert');
 var request = require('supertest');
-var admin = require('../routes/admin.js');
+var key = require('../routes/key.js');
 
 
 
-var adminTest = {
+var keyTest = {
 
     POST: function(pointerID, url, callback){
-        var admin  = {
-        "organization": ""+pointerID,
-        "username": "Tester Name",
-        "email": "test mail",
-        "isSuper": true
+        var key  = {
+            "code": "KCL-1000",
+			"tour": ""+pointerID,
+			"expiresAt": "20-03-2016"
         };
         request(url)
-       .post('api/v1/admin/')
-       .send(admin)
+       .post('api/v1/key/')
+       .send(key)
 
         .end(function(err, res) {
               if (err) {
                 throw err;
               }
-              res.body.should.have.property("organization");
-              res.body.should.have.property("username");
-              res.body.should.have.property("email");
-              res.body.should.have.property("isSuper");
+              res.body.should.have.property("code");
+              res.body.should.have.property("tour");
+              res.body.should.have.property("expiresAt");
               res.status.should.be.equal(201);
               objID = res.body.objectId;
               callback(objID);
@@ -37,17 +35,15 @@ var adminTest = {
 
     GET1: function(pointerID, url, callback){
         request(url)
-        .get('api/v1/admin/'+pointerID)
+        .get('api/v1/key/'+pointerID)
         .expect('Content-Type', /json/)
         .expect(200 || 304) //Status code
         .end(function(err,res) {
             if (err) {
                 throw err;
             }
-            res.body.username.should.equal('Tester Name');
-            res.body.email.should.equal("test mail");                    
-            res.body.isSuper.should.equal(true);
-            res.body.organization.should.not.equal(null);
+            res.body.code.should.equal('KCL-1000');
+            res.body.expiresAt.should.not.equal(null);
             callback();
         });
     },
@@ -55,28 +51,25 @@ var adminTest = {
 
 
     PUT: function(pointID, pointerID, url, callback){
-       var admin2  =  {
-        "organization": {
+       var key2  =  {
+        "tour": {
           "__type": "Pointer",
-          "className": "Organization",
+          "className": "Tour",
           "objectId": ""+pointID
         },
-        "username": "New Tester Name",
-        "email": "tester mail",
-        "isSuper": true,
+        "code": "KCL-1001",
+        "expiresAt": "21-03-2016",
       };
         request(url)
-        .put('api/v1/admin/'+pointerID)
-        .send(admin2)
+        .put('api/v1/key/'+pointerID)
+        .send(key2)
         .end(function(err, res) {
               if (err) {
                 throw err;
               }
 
-              res.body.should.have.property("organization");
-              res.body.should.have.property("username");
-              res.body.should.have.property("email");
-              res.body.should.have.property("isSuper");
+              res.body.should.have.property("expiresAt");
+              res.body.should.have.property("code");
               res.status.should.be.equal(200);
               callback();
           });
@@ -86,17 +79,16 @@ var adminTest = {
     GET2: function(pointerID, url, callback){
 
         request(url)
-        .get('api/v1/admin/'+pointerID)
+        .get('api/v1/key/'+pointerID)
         .expect('Content-Type', /json/)
         .expect(200 || 304) //Status code
         .end(function(err,res) {
             if (err) {
                 throw err;
             }
-            res.body.username.should.equal('New Tester Name');
-            res.body.email.should.equal("tester mail");                    
-            res.body.isSuper.should.not.equal(null);
-            res.body.organization.should.not.equal(null);
+            res.body.expiresAt.should.not.equal(null);
+            res.body.code.should.equal("KCL-1001");
+            res.body.tour.should.not.equal(null);
             callback();
         });
     },
@@ -107,7 +99,7 @@ var adminTest = {
     DELETE: function(pointerID, url, callback){
 
         request(url)
-        .delete('api/v1/admin/'+pointerID)
+        .delete('api/v1/key/'+pointerID)
         .expect(200) //Status code
         .end(function(err,res) {
             if (err) {
@@ -119,7 +111,7 @@ var adminTest = {
 
     GET3: function(pointerID, url, callback){
         request(url)
-        .get('api/v1/admin/'+pointerID)
+        .get('api/v1/key/'+pointerID)
         .expect(404 || 400) //Status code
         .end(function(err,res) {
             if (err) {
@@ -130,4 +122,4 @@ var adminTest = {
     } 
 }
 
-module.exports = adminTest;
+module.exports =keyTest;
