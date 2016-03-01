@@ -75,15 +75,11 @@ public class TourIdParser {
 
         //Give objectId of tour as param
 
-        bundleRoute.startConnection(tourDict!["objectId"] as! String)
-        //print("///////////////////////////////////")
-        //print(bundleRoute.getJSONResult())
 
         //this comes from the initialised of bundle Connector
-        let MYDAMNDATA = bundleRoute.getJSONResult()
-        tourDataParser().saveNewTour(MYDAMNDATA)
-        bundleRoute.getAllPOIs((MYDAMNDATA["sections"]) as! NSArray)
-        NSNotificationCenter.defaultCenter().addObserver(
+        //let MYDAMNDATA = bundleRoute.getJSONResult()
+//        tourDataParser().saveNewTour(MYDAMNDATA)
+//        bundleRouteConnector().getAllPOIs((MYDAMNDATA["sections"]) as! NSArray)
 
         bundleRouteConnector().startConnection(tourDict!["objectId"] as! String)
 

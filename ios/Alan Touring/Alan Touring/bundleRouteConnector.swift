@@ -30,7 +30,7 @@ class bundleRouteConnector: NSObject, NSURLConnectionDelegate{
                 self.jsonResultFromAPI = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
                 //passing through the array of sections
                 
-                print("---------------------------------")
+                //print("---------------------------------")
                 //print(((self.jsonResultFromAPI["sections"])![0]!)["subsections"])
             }
             catch let err as NSError{
