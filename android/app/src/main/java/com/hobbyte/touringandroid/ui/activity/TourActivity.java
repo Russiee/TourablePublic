@@ -5,10 +5,8 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.ListView;
 import android.support.v7.widget.Toolbar;
 
 import com.hobbyte.touringandroid.io.FileManager;

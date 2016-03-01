@@ -214,11 +214,8 @@ public class FileManager {
      * @param keyID   the key ID for a specific tour
      */
     public static void removeTour(Context context, String keyID) {
-        TourDBManager dbHelper = new TourDBManager(context);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-        dbHelper.deleteTour(db, keyID);
-        db.close();
+        TourDBManager dbHelper = TourDBManager.getInstance(context);
+        dbHelper.deleteTour(keyID);
 
         DeleteTourTask task = new DeleteTourTask();
         task.execute(context.getFilesDir(), keyID);

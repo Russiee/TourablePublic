@@ -22,7 +22,6 @@ public class ServerAPI {
 
     private static final String BASE_URl = "https://touring-api.herokuapp.com/api/v1";
     public static final String KEY_VALIDATION = "/key/verify/";
-    public static final String KEY = "/key/";
     public static final String BUNDLE = "/bundle/";
     public static final String TOUR = "/tour/";
 
