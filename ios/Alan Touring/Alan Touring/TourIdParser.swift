@@ -76,11 +76,13 @@ public class TourIdParser {
         let bundleRoute = bundleRouteConnector();
         //Give objectId of tour as param
         bundleRoute.startConnection(tourDict!["objectId"] as! String)
-        print(bundleRoute.getJSONResult())
+        //print("///////////////////////////////////")
+        //print(bundleRoute.getJSONResult())
 
         //this comes from the initialised of bundle Connector
-        tourDataParser().saveNewTour(bundleRoute.getJSONResult())
-
+        let MYDAMNDATA = bundleRoute.getJSONResult()
+        tourDataParser().saveNewTour(MYDAMNDATA)
+        bundleRoute.getAllPOIs((MYDAMNDATA["sections"]) as! NSArray)
         NSNotificationCenter.defaultCenter().addObserver(
             self,
             selector: "TableChanged:",
