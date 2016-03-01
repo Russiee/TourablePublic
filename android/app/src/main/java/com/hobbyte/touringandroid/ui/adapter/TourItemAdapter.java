@@ -1,7 +1,6 @@
 package com.hobbyte.touringandroid.ui.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,7 @@ import com.hobbyte.touringandroid.tourdata.TourItem;
 import java.util.ArrayList;
 
 /**
- * Created by max on 29/02/16.
+ * Adapter for providing both SubSections and POIs to a ListView in a SectionFragment.
  */
 public class TourItemAdapter extends ArrayAdapter<TourItem> {
     private static final String TAG = "TourItemAdapter";
@@ -26,8 +25,6 @@ public class TourItemAdapter extends ArrayAdapter<TourItem> {
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         TourItem selected = getItem(position);
-
-        Log.d(TAG, "getView() on position " + position);
 
         if (view == null) {
             view = LayoutInflater.from(getContext()).inflate(R.layout.subsections, parent, false);

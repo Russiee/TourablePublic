@@ -15,32 +15,21 @@ import com.hobbyte.touringandroid.tourdata.PointOfInterest;
 import com.hobbyte.touringandroid.tourdata.Tour;
 import com.hobbyte.touringandroid.tourdata.TourBuilder;
 import com.hobbyte.touringandroid.tourdata.TourItem;
-import com.hobbyte.touringandroid.ui.adapter.PointOfInterestAdapter;
 import com.hobbyte.touringandroid.R;
 import com.hobbyte.touringandroid.tourdata.SubSection;
-import com.hobbyte.touringandroid.ui.adapter.SubSectionAdapter;
 import com.hobbyte.touringandroid.ui.fragment.POIFragment;
 import com.hobbyte.touringandroid.ui.fragment.SectionFragment;
 
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class TourActivity extends Activity
-        implements SectionFragment.OnFragmentInteractionListener {
-
-    //Depending on intent name, sends either arraylist of subsections, or of points of interest
+public class TourActivity extends Activity implements SectionFragment.OnFragmentInteractionListener {
 
     private static final String TAG = "TourActivity";
-    public final static String EXTRA_MESSAGE_FINAL = "SEND_FINAL_POI";
-    public final static String EXTRA_MESSAGE_SUB = "SEND_SUBSECTIONS";
-    public final static String EXTRA_MESSAGE_POI = "SEND_POI";
 
     public static final String INTENT_KEY_ID = "intentKeyID";
     public static final String INTENT_TITLE = "intentTitle";
-
-    private ListView listView;
 
     private static String keyID;
 
@@ -65,6 +54,10 @@ public class TourActivity extends Activity
         tbt.execute();
     }
 
+    /**
+     * Temporary method to see if Tour was initialised properly
+     * @param section
+     */
     public void printTour(SubSection section) {
         ArrayList<TourItem> contents = section.getContents();
 
@@ -74,6 +67,24 @@ public class TourActivity extends Activity
             if (t.getType() == TourItem.TYPE_SUBSECTION) {
                 printTour((SubSection) t);
             }
+        }
+    }
+
+    @Override
+    public void onSubSectionClicked(int position) {
+        ArrayList<TourItem> contents = currentSection.getContents();
+
+        for (TourItem t : contents) {
+            Log.d(TAG, String.format("%d %s", t.getType(), t.getTitle()));
+        }
+        TourItem selected = contents.get(position);
+        Log.d(TAG, "clicked on " + selected.getTitle());
+
+        if (selected.getType() == TourItem.TYPE_SUBSECTION) {
+            currentSection = (SubSection) contents.get(position);
+            loadCurrentSection();
+        } else {
+            loadPointOfInterest((PointOfInterest) selected);
         }
     }
 
@@ -98,6 +109,10 @@ public class TourActivity extends Activity
         toolbar.setTitle(currentSection.getTitle());
     }
 
+    /**
+     * Takes the selected POI and creates a ListFragment which shows all the posts in the POI.
+     * @param poi
+     */
     private void loadPointOfInterest(PointOfInterest poi) {
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
@@ -109,25 +124,6 @@ public class TourActivity extends Activity
 
         transaction.commit();
         toolbar.setTitle(poi.getTitle());
-    }
-
-    @Override
-    public void onSubSectionClicked(int position) {
-        ArrayList<TourItem> contents = currentSection.getContents();
-//        SubSection[] subsections = currentSection.getSubSections();
-
-        for (TourItem t : contents) {
-            Log.d(TAG, String.format("%d %s", t.getType(), t.getTitle()));
-        }
-        TourItem selected = contents.get(position);
-        Log.d(TAG, "clicked on " + selected.getTitle());
-
-        if (selected.getType() == TourItem.TYPE_SUBSECTION) {
-            currentSection = (SubSection) contents.get(position);
-            loadCurrentSection();
-        } else {
-            loadPointOfInterest((PointOfInterest) selected);
-        }
     }
 
     private class TourBuilderTask extends AsyncTask<Void, Void, Boolean> {

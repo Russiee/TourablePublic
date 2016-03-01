@@ -17,10 +17,7 @@ public class SubSection extends TourItem implements Parcelable {
     private final SubSection parent;
     private final String objectId;
 
-
     private ArrayList<TourItem> contents = new ArrayList<>();
-//    private SubSection[] subSections = null;
-//    private PointOfInterest[] POIs = null;
     
     public SubSection(SubSection parent, String title, String objectId) {
         this.objectId = objectId;
@@ -34,14 +31,6 @@ public class SubSection extends TourItem implements Parcelable {
         parent = (SubSection) in.readValue(SubSection.class.getClassLoader());
     }
 
-    /*public void addSubSection(SubSection subSection, int i) {
-        subSections[i] = subSection;
-    }
-
-    public void addPOI(PointOfInterest poi, int i) {
-        POIs[i] = poi;
-    }*/
-
     public void addItem(TourItem item) {
         contents.add(item);
     }
@@ -50,14 +39,6 @@ public class SubSection extends TourItem implements Parcelable {
         return contents;
     }
 
-    /*public void initSubSections(int length) {
-        subSections = new SubSection[length];
-    }
-
-    public void initPOIs(int length) {
-        POIs = new PointOfInterest[length];
-    }*/
-
     public String getTitle() {
         return title;
     }
@@ -65,14 +46,6 @@ public class SubSection extends TourItem implements Parcelable {
     public SubSection getParent() {
         return parent;
     }
-
-    /*public SubSection[] getSubSections() {
-        return subSections;
-    }
-
-    public PointOfInterest[] getPOIs() {
-        return POIs;
-    }*/
 
     public int getType() {
         return TourItem.TYPE_SUBSECTION;

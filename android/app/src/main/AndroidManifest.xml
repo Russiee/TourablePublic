@@ -24,9 +24,6 @@
             android:name=".ui.activity.TourActivity"
             android:label="@string/title_activity_tour"/>
         <activity
-            android:name=".ui.activity.PointOfInterestActivity"
-            android:label="@string/title_activity_pointofinterest"/>
-        <activity
             android:name=".ui.activity.SummaryActivity"
             android:label="@string/title_activity_summary"
             android:parentActivityName=".ui.activity.StartActivity"/>

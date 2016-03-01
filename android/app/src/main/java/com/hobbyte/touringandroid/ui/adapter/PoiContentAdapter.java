@@ -1,7 +1,6 @@
 package com.hobbyte.touringandroid.ui.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,9 +54,6 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
         ListViewItem listViewItem = items[position];
         int listViewItemType = getItemViewType(position);
 
-        Log.d(TAG, "getView() on position " + position);
-        Log.d(TAG, "text: " + listViewItem.getText());
-
         if (view == null) {
             if (listViewItemType == IMG) {
                 view = LayoutInflater.from(getContext()).inflate(R.layout.poi_image, parent, false);
@@ -68,7 +64,6 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
 
         if (listViewItemType == IMG) {
             ImageView imageView = (ImageView) view.findViewById(R.id.poiContentImageView);
-            Log.d(TAG, keyID);
             new LoadImageFromURL(imageView, StartActivity.getContext()).execute(listViewItem.getText(), keyID); //Load image in a separate thread
             return view;
         } else {
@@ -76,5 +71,5 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
             contentView.setText(listViewItem.getText() + "\n");
             return view;
         }
-        }
     }
+}
