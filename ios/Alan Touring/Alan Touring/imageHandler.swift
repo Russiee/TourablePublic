@@ -3,7 +3,7 @@
 //
 //  Created by Alex Gubbay on 20/02/2016.
 //  Copyright © 2016 Hobbyte. All rights reserved.
-// with help from: http://stackoverflow.com/questions/24231680/loading-image-from-url
+//  with help from: http://stackoverflow.com/questions/24231680/loading-image-from-url
 
 import Foundation
 import UIKit
@@ -30,8 +30,6 @@ class imageHandler: NSObject {
         return Static.instance!
     }
 
-        
-    
     func getDataFromUrl(url:NSURL, completion: ((data: NSData?, response: NSURLResponse?, error: NSError? ) -> Void)) {
         NSURLSession.sharedSession().dataTaskWithURL(url) { (data, response, error) in
             completion(data: data, response: response, error: error)
@@ -113,8 +111,6 @@ class imageHandler: NSObject {
     }
     
     
-       
-
     //called just once in pointOfInterest.swift
     func downloadImageSet(urls: [String]){
        

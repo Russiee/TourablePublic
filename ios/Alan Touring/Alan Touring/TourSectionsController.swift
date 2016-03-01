@@ -10,39 +10,37 @@ import UIKit
 
 class TourSectionsController: UITableViewController {
 
-    
-    
     var models = [String: String]()
     var superTableId = ""
     var poiArray = []
     var keys = [String]()
-    
-    
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.clearsSelectionOnViewWillAppear = false
         let tour = tourDataParser.init().getTourSection(superTableId)
-    
+
         let subsectionArray = tour.getSubSections()
-        
+
         poiArray = tour.getPointsOfInterest()
         var tourTitles = [String: String]()
-        
+
         let tdp = tourDataParser.init()
         for subsectionPointer in subsectionArray{
             let subsectionData = tdp.getTourSection((subsectionPointer["objectId"] as? String)!)
-           
-           //print("\(subsectionData.title) DATA RECOVERED FROM ID")
+
+            //print("\(subsectionData.title) DATA RECOVERED FROM ID")
             tourTitles[subsectionData.title as String] =  subsectionData.sectionId
-            
+ 
         }
         let poip = POIParser.init()
         for poiPointer in poiArray{
             let poiData = poip.getTourSection((poiPointer["objectId"] as? String)!)
             tourTitles[poiData.title as String] = poiData.objectId
-            }
-        
-        
+        }
+
+
         models = tourTitles
 
         keys = Array(models.keys)
@@ -68,14 +66,14 @@ class TourSectionsController: UITableViewController {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
-    
+
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         
         return models.count
     }
-    
-    
+
+
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("tableCell2", forIndexPath: indexPath)
@@ -99,7 +97,6 @@ class TourSectionsController: UITableViewController {
 
 
         for poi in tourPOIS{
-
             if (poi["objectId"] as! String) == objectForSegue{
                 self.performSegueWithIdentifier("PointOfInterestSegue", sender: self)
                 break
@@ -108,7 +105,6 @@ class TourSectionsController: UITableViewController {
 
         for subsection in tourSections{
             if (subsection["objectId"] as! String) == objectForSegue{
-
                 self.performSegueWithIdentifier("showNextPage", sender: self)
                 break
             }
@@ -121,41 +117,38 @@ class TourSectionsController: UITableViewController {
             let  empty_state_image = UIImage(named: "empty_ts_placeholder")
             let empty_state_label = UIImageView(image: empty_state_image)
             empty_state_label.contentMode = .ScaleAspectFit
-            
+
             // style it as necessary
-            
+
             tableView.backgroundView = empty_state_label
             tableView.separatorStyle = UITableViewCellSeparatorStyle.None
         } else {
             tableView.backgroundView = nil
             tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
         }
-        
+
     }
-    
+
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         let title = keys[self.tableView.indexPathForSelectedRow!.row]
         let objectId = models[title]
 
-        
         if (segue.identifier == "showNextPage") {
             let newViewController = segue.destinationViewController as! TourSectionsController
-          
-            
             newViewController.superTableId = objectId!
-        } else if(segue.identifier == "PointOfInterestSegue"){
+
+        } else if (segue.identifier == "PointOfInterestSegue") {
             let newViewController = segue.destinationViewController as! PointViewController
-            
+
             newViewController.poiID = objectId!
             newViewController.superSectionID = superTableId
-            
+
         }
     }
    
 }
-    
-    
-    
+
+
     /*
     // Override to support conditional editing of the table view.
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {

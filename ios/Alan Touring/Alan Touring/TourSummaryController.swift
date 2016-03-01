@@ -10,21 +10,20 @@ import UIKit
 
 class TourSummaryController: UIViewController {
 
-    
+
     @IBOutlet weak var tourIdLabel: UILabel!
     var tourId = ""
     var tourObjectId = ""
     var tourIndex: Int!
     var objectId = ""
     var setup = Dictionary<String, AnyObject>()
-    
+
     @IBOutlet weak var tourTitleLabel: UILabel!
     @IBOutlet weak var UIDescriptionBox: UITextView!
     @IBOutlet weak var TourExpiryLabel: UILabel!
     @IBOutlet weak var beingTourButton: UIButton!
-    
-    
-    
+
+
     override func viewWillAppear(animated: Bool) {
         tourIdLabel.text = tourId
         UIDescriptionBox.sizeToFit()
@@ -43,11 +42,10 @@ class TourSummaryController: UIViewController {
         TourExpiryLabel.text = (data as! String)
         
         self.navigationController?.setToolbarHidden(true, animated: false)
-         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedDownloading", name: beginDownloadKey, object: nil)
-         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedFinishedDownloading", name: endDownloadKey, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedDownloading", name: beginDownloadKey, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedFinishedDownloading", name: endDownloadKey, object: nil)
         
     }
-    
     
     func NotifiedDownloading(){
         print("download begun")
@@ -57,21 +55,18 @@ class TourSummaryController: UIViewController {
         print("download finished in here")
     }
     
-    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
-
         // Create a new variable to store the instance of PlayerTableViewController
-        if segue.identifier == "goToTourSections"{
-        let destinationVC = segue.destinationViewController as! TourSectionsController
+        if segue.identifier == "goToTourSections" {
+            let destinationVC = segue.destinationViewController as! TourSectionsController
             let topLayerTourInfo = tourDataParser.init().getTourSection(objectId)
             print(topLayerTourInfo.subsections)
-        destinationVC.superTableId = topLayerTourInfo.sectionId 
+            destinationVC.superTableId = topLayerTourInfo.sectionId 
         }
     }
     
-    
     @IBAction func clickBeginTour(sender: AnyObject) {
-//        beingTourButton.setTitle("Loading Tour", forState: .Normal)
+//      beingTourButton.setTitle("Loading Tour", forState: .Normal)
         beingTourButton.enabled = false
     }
     

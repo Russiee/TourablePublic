@@ -11,7 +11,9 @@ import Foundation
 let TableUpdateNotificationKey = "tableAddWasComplete"
 
 public class TourIdParser {
-    
+
+    var API = ApiConnector()
+
     //making the TourIdParser a singleton to parse all tours from the API
     //in order to access TourIdParser methods call TourIdParser.shardInstance.METHOD()
     class var sharedInstance: TourIdParser {
@@ -21,13 +23,11 @@ public class TourIdParser {
         }
         dispatch_once(&Static.onceToken) {
             Static.instance = TourIdParser()
-            
+  
         }
         return Static.instance!
     }
 
-    var API = ApiConnector()
-    
     func deleteTourIdAtRow(row: Int) {
         //remove from "Array"
         var newArray : [AnyObject] = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! [AnyObject]
@@ -43,7 +43,7 @@ public class TourIdParser {
    
     
     //Adds a new tourId to the array
-     func updateArray(tourId: String){
+    func updateArray(tourId: String){
         //Duplicates the array, creating a mutable version that the new tourId can be added to.
         var newArray : [AnyObject] = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! NSMutableArray as [AnyObject]
         newArray.append(tourId)
@@ -73,8 +73,8 @@ public class TourIdParser {
 
         self.updateArray(tourCode as! String)
 
-        let bundleRoute = bundleRouteConnector();
         //Give objectId of tour as param
+
         bundleRoute.startConnection(tourDict!["objectId"] as! String)
         //print("///////////////////////////////////")
         //print(bundleRoute.getJSONResult())
@@ -84,6 +84,11 @@ public class TourIdParser {
         tourDataParser().saveNewTour(MYDAMNDATA)
         bundleRoute.getAllPOIs((MYDAMNDATA["sections"]) as! NSArray)
         NSNotificationCenter.defaultCenter().addObserver(
+
+        bundleRouteConnector().startConnection(tourDict!["objectId"] as! String)
+
+        NSNotificationCenter.defaultCenter().addObserver (
+
             self,
             selector: "TableChanged:",
             name: "TabledDataChanged",
