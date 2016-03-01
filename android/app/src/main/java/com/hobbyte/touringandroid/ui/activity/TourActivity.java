@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ListView;
 import android.support.v7.widget.Toolbar;
@@ -24,7 +25,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class TourActivity extends Activity implements SectionFragment.OnFragmentInteractionListener {
+public class TourActivity extends AppCompatActivity implements SectionFragment.OnFragmentInteractionListener {
 
     private static final String TAG = "TourActivity";
 
@@ -49,6 +50,7 @@ public class TourActivity extends Activity implements SectionFragment.OnFragment
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(title);
+        setSupportActionBar(toolbar);
 
         TourBuilderTask tbt = new TourBuilderTask();
         tbt.execute();

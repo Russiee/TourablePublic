@@ -3,6 +3,7 @@ package com.hobbyte.touringandroid.ui.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
@@ -15,7 +16,7 @@ import org.json.JSONObject;
 
 import java.util.regex.Pattern;
 
-public class SummaryActivity extends Activity {
+public class SummaryActivity extends AppCompatActivity {
 
     private static final String TAG = "SummaryActivity";
     public static final String KEY_ID = "keyID";

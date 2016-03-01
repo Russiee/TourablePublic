@@ -2,27 +2,44 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Material.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="android:windowNoTitle">true</item>
-        <item name="android:windowActionBar">false</item>
-        <item name="android:colorButtonNormal">#2196f3</item>
+        <item name="colorPrimary">#29B6F6</item>
+        <item name="colorPrimaryDark">#01579B</item>
+        <item name="colorAccent">#F44336</item>
+        <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="colorButtonNormal">#fa29B6F6</item>
+        <item name="android:textColor">@color/colorText</item>
+        <item name="android:textAppearance">@color/colorText</item>
+        <item name="android:fontFamily">"sans-serif-thin"</item>
     </style>
 
     <!-- DownloadActivity tour title-->
-    <style name="TourTitle" parent="android:Theme.Material.Light">
+    <style name="TourTitle" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:textSize">20sp</item>
     </style>
 
     <style name="TourActivityTheme" parent="AppTheme">
-        <item name="android:windowActionBar">true</item>
+        <item name="android:textColor">@color/colorText</item>
+        <item name="android:textAppearance">@color/colorText</item>
+        <item name="android:fontFamily">"sans-serif-thin"</item>
     </style>
 
-    <style name="ToolbarTheme" parent="android:Theme.Material.Light">
+    <style name="ToolbarTheme" parent="AppTheme">
         <!-- www.google.com/design/spec/style/color.html -->
-        <item name="android:colorPrimary">#9c27b0</item>
-        <item name="android:colorPrimaryDark">#7b1fa2</item>
-        <item name="android:colorAccent">#b2ff59</item>
+        <item name="android:colorPrimary">#29B6F6</item>
+        <item name="android:colorPrimaryDark">#01579B</item>
+        <item name="android:colorAccent">#F44336</item>
+        <item name="android:textColor">@color/colorText</item>
+        <item name="android:textAppearance">@color/colorText</item>
+        <item name="android:fontFamily">"sans-serif-thin"</item>
+    </style>
+
+    <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">21sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+       <!-- <item name="android:textStyle">bold</item> -->
     </style>
 
 </resources>

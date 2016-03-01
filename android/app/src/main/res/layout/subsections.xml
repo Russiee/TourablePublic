@@ -1,8 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView
+<LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/SubSectionTextView"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:theme="@style/AppTheme">
 
-</TextView>
+    <TextView
+        android:id="@+id/SubSectionTextView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorText"
+        android:textSize="20sp"
+        android:layout_gravity="center_vertical"
+        android:paddingRight="50dp"
+        android:layout_weight="0.9">
+    </TextView>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_keyboard_arrow_right_black_36dp" />
+
+    </LinearLayout>
