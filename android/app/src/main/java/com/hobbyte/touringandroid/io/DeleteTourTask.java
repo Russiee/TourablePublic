@@ -1,18 +1,22 @@
 package com.hobbyte.touringandroid.io;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import java.io.File;
 
 /**
- * Asynchronous task that deletes all files and directories for a given tour.
+ * Package-private {@link AsyncTask} that deletes all files and directories for a given tour.
  * <p/>
  * `execute()` takes two parameters: <ul><li>1) the File returned by context.getFilesDir()</li>
  * <li>2) the key ID</li>
  * </ul>
+ * </p>
+ * There is no need to use this class yourself - use {@link FileManager#removeTour(Context, String)}
+ * instead.
  */
-public class DeleteTourTask extends AsyncTask<Object, Void, Void> {
+class DeleteTourTask extends AsyncTask<Object, Void, Void> {
     private static final String TAG = "DeleteTourTask";
 
     @Override
