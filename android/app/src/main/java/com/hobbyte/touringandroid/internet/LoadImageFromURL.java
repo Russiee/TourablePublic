@@ -46,8 +46,6 @@ public class LoadImageFromURL extends AsyncTask<String, Void, Bitmap> {
         int height = metrics.heightPixels / 2;
         int width = metrics.widthPixels;
 
-        Log.d(TAG, "Putting image in ImageView");
-
         result = Bitmap.createScaledBitmap(result, width, height, true);
         imageView.setImageBitmap(result);
     }

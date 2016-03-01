@@ -12,14 +12,9 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.hobbyte.touringandroid.R;
-import com.hobbyte.touringandroid.tourdata.PointOfInterest;
-import com.hobbyte.touringandroid.tourdata.SubSection;
 import com.hobbyte.touringandroid.tourdata.TourItem;
-import com.hobbyte.touringandroid.ui.adapter.PointOfInterestAdapter;
-import com.hobbyte.touringandroid.ui.adapter.SubSectionAdapter;
 import com.hobbyte.touringandroid.ui.adapter.TourItemAdapter;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**

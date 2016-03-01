@@ -1,10 +1,6 @@
 package com.hobbyte.touringandroid.ui.fragment;
 
-import android.app.Activity;
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-//import android.support.v4.app.Fragment;
 import android.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,8 +35,6 @@ public class POIFragment extends ListFragment {
     private String objectID;
     private JSONObject poiJSON;
 
-//    private OnFragmentInteractionListener mListener;
-
     public POIFragment() {
         // Required empty public constructor
     }
@@ -61,6 +55,12 @@ public class POIFragment extends ListFragment {
         return fragment;
     }
 
+    /**
+     * Loads the JSON for a POI, then iterates through all the items in the "post" JSONArray,
+     * adding them to an Adapter which handles text and images.
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,53 +127,13 @@ public class POIFragment extends ListFragment {
         return inflater.inflate(R.layout.fragment_poi, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    /*public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }*/
-
-    @Override
+    /*@Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        /*if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }*/
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        /*if (activity instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) activity;
-        } else {
-            throw new RuntimeException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }*/
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-//        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    /*public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }*/
 }
