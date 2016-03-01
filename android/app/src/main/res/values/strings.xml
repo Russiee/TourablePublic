@@ -16,7 +16,9 @@
     <string name="start_activity_enter_key">Enter a tour key:</string>
     <string name="submit_key_button_text">Submit</string>
     <string name="no_tours_exist">You don\'t have any existing tours</string>
-
+    <string name="no_tours_click">Press</string>
+    <string name="no_tours_cross">+</string>
+    <string name="no_tours_help">to add a tour!</string>
     <string name="poi_first_text">Current placeholder text</string>
 
     <string name="download_option_image">Download just Images</string>

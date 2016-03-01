@@ -9,6 +9,7 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -40,7 +41,7 @@ import java.util.Date;
  * The opening actiivty of the app.
  * Displays previously downloaded tours and provides functionality to add new tours.
  */
-public class StartActivity extends Activity {
+public class StartActivity extends AppCompatActivity {
     private static final String TAG = "StartActivity";
 
     public static Context CONTEXT;
@@ -64,8 +65,7 @@ public class StartActivity extends Activity {
         previousToursLayout = (LinearLayout) findViewById(R.id.previousToursLayout);
         textKey = (BackAwareEditText) findViewById(R.id.textEnterTour);
         textKey.setCallBackClass(this);
-
-//        FileManager.deleteTourFiles(getApplicationContext(), "APd4HhtBm9");
+//       FileManager.deleteTourFiles(getApplicationContext(), "APd4HhtBm9");
 //        TourDBManager dbHelper = new TourDBManager(getApplicationContext());
 //        SQLiteDatabase db = dbHelper.getWritableDatabase();
 //        dbHelper.deleteTour(db, "APd4HhtBm9");
