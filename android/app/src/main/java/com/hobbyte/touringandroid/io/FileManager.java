@@ -1,6 +1,7 @@
 package com.hobbyte.touringandroid.io;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -212,11 +213,14 @@ public class FileManager {
      * @param context the calling Activity
      * @param keyID   the key ID for a specific tour
      */
-    public static void deleteTourFiles(Context context, String keyID) {
+    public static void removeTour(Context context, String keyID) {
+        TourDBManager dbHelper = new TourDBManager(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        dbHelper.deleteTour(db, keyID);
+        db.close();
+
         DeleteTourTask task = new DeleteTourTask();
         task.execute(context.getFilesDir(), keyID);
     }
-
-
-
 }

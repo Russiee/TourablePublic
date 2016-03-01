@@ -65,7 +65,8 @@ public class StartActivity extends AppCompatActivity {
         previousToursLayout = (LinearLayout) findViewById(R.id.previousToursLayout);
         textKey = (BackAwareEditText) findViewById(R.id.textEnterTour);
         textKey.setCallBackClass(this);
-//       FileManager.deleteTourFiles(getApplicationContext(), "APd4HhtBm9");
+
+//        FileManager.removeTour(getApplicationContext(), "APd4HhtBm9");
 //        TourDBManager dbHelper = new TourDBManager(getApplicationContext());
 //        SQLiteDatabase db = dbHelper.getWritableDatabase();
 //        dbHelper.deleteTour(db, "APd4HhtBm9");
