@@ -14,20 +14,23 @@ import java.util.ArrayList;
 public class SubSection extends TourItem implements Parcelable {
     
     private final String title;
-    private final SubSection parent;
     private final String objectId;
+    private final int numSubSections;
+    private final SubSection parent;
 
     private ArrayList<TourItem> contents = new ArrayList<>();
     
-    public SubSection(SubSection parent, String title, String objectId) {
+    public SubSection(SubSection parent, String title, String objectId, int numSubSections) {
         this.objectId = objectId;
         this.title = title;
         this.parent = parent;
+        this.numSubSections = numSubSections;
     }
 
     public SubSection(Parcel in) {
         objectId = in.readString();
         title = in.readString();
+        numSubSections = in.readInt();
         parent = (SubSection) in.readValue(SubSection.class.getClassLoader());
     }
 
@@ -60,6 +63,7 @@ public class SubSection extends TourItem implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(objectId);
         dest.writeString(title);
+        dest.writeInt(numSubSections);
         dest.writeValue(parent);
     }
 

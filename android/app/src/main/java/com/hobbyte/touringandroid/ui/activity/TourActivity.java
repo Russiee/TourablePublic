@@ -95,6 +95,10 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
         for (TourItem t : contents) {
             Log.d(TAG, String.format("%d %s", t.getType(), t.getTitle()));
 
+            if (t.getType() == TourItem.TYPE_POI) {
+                Log.d(TAG, "Next POI: " + ((PointOfInterest) t).nextPOI());
+            }
+
             if (t.getType() == TourItem.TYPE_SUBSECTION) {
                 printTour((SubSection) t);
             }
