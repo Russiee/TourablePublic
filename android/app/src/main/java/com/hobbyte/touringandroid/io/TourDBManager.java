@@ -1,5 +1,6 @@
 package com.hobbyte.touringandroid.io;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -15,10 +16,18 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Performs all required database operations.
- *
+ * Performs all required database operations. To use, simply call {@link #getInstance(Context)}.
+ * There is no need to worry about readable/writable databases, as this is handled for you.
+ * <p>
+ * The only piece of housekeeping that you <b>MUST</b> do is to call {@link #close()} in
+ * {@link Activity#onPause()} or {@link Activity#onStop()} of any Activity that uses this class.
+ * (And close any {@link Cursor} instances that you use outside of this class, naturally).
+ * <p>
  * Largely taken from the Android
  * <a href="https://developer.android.com/training/basics/data-storage/databases.html">training guides.</a>
+ * Some outside guidance was also had regarding the
+ * <a href="http://www.androiddesignpatterns.com/2012/05/correctly-managing-your-sqlite-database.html">
+ * Singleton pattern</a> that this class uses.
  */
 public class TourDBManager extends SQLiteOpenHelper {
     private static final String TAG = "TourDBManager";
@@ -27,6 +36,9 @@ public class TourDBManager extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "TourData.db";
 
     public static final String dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS";
+
+    private static TourDBManager tdbmInstance;
+    private SQLiteDatabase db;
 
     /*=============================================
         SQL QUERY STRINGS
@@ -58,7 +70,19 @@ public class TourDBManager extends SQLiteOpenHelper {
         DATABASE METHODS
      =============================================*/
 
-    public TourDBManager(Context context) {
+    public static synchronized TourDBManager getInstance(Context context) {
+        if (tdbmInstance == null) {
+            tdbmInstance = new TourDBManager(context.getApplicationContext());
+        }
+
+        return tdbmInstance;
+    }
+
+    /**
+     * Constructor is private to prevent outside instantiation. Use {@link #getInstance(Context)}
+     * instead.
+     */
+    private TourDBManager(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -66,6 +90,8 @@ public class TourDBManager extends SQLiteOpenHelper {
      * Creates the DB using the script above. This method is automatically called the
      * first time the app uses either SQLiteOpenHelper.getReadableDatabase() or
      * SQLiteOpenHelper.getWritableDatabase().
+     * <p>
+     * Don't use it yourself.
      *
      * @param db an SQLite DB instance
      */
@@ -74,24 +100,50 @@ public class TourDBManager extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_TABLE);
     }
 
+    /**
+     * Called when {@link #DATABASE_VERSION} is incremented. Not likely to be used in this case.
+     */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // for now, just start over with fresh db
         db.execSQL(SQL_DELETE_TABLE);
         onCreate(db);
+    }
 
-        Log.w(TAG, "A call to onUpgrade() was made.");
+    /**
+     * Put this at the start of any method that uses the internal {@link SQLiteDatabase} to ensure
+     * that you actually have a connection to the database!
+     *
+     * @param writable true if the app is going to write to the database. (A writable db can also
+     *                 be read from).
+     */
+    private void open(boolean writable) {
+        if (db == null) {
+            if (writable) {
+                db = tdbmInstance.getWritableDatabase();
+            } else {
+                db = tdbmInstance.getReadableDatabase();
+            }
+        } else if (writable && db.isReadOnly()) {
+            super.close();
+            db = tdbmInstance.getWritableDatabase();
+        }
+    }
+
+    @Override
+    public synchronized void close() {
+        db = null;
+        super.close();
     }
 
     /**
      * Fetches every row in the table, ordered by when tours were last access by the user.
      *
-     * @param db an SQLite DB instance
-     * @return a Cursor pointing to the first row of the table
+     * @return a Cursor at position -1
      */
-    public Cursor getTours(SQLiteDatabase db) {
-        Cursor c = db.rawQuery(SQL_GET_TOURS, null);
-        return c;
+    public Cursor getTours() {
+        open(false);
+        return db.rawQuery(SQL_GET_TOURS, null);
     }
 
     /**
@@ -101,7 +153,6 @@ public class TourDBManager extends SQLiteOpenHelper {
      * All the timestamp parameters should be passed in the string form in which the server stores
      * them. They will be converted into, and stored as, milliseconds since Epoch.
      *
-     * @param db an SQLite DB instance
      * @param keyID the objectId of the key used to fetch the tour
      * @param tourID the objectId of the tour itself
      * @param tourName the tour's title
@@ -110,12 +161,9 @@ public class TourDBManager extends SQLiteOpenHelper {
      * @param expiryDate when the tour expires
      * @param hasVideo whether or not the user opted to download the tour with video
      */
-    public void putRow(SQLiteDatabase db, String keyID, String tourID, String tourName,
-                       String creationDate, String updateDate, String expiryDate, boolean hasVideo) {
-        if (db.isReadOnly()) {
-            Log.w(TAG, "Can't write to this DB!!!");
-            return;
-        }
+    public void putRow(String keyID, String tourID, String tourName, String creationDate,
+                       String updateDate, String expiryDate, boolean hasVideo) {
+        open(true);
 
         int video = (hasVideo ? 1 : 0);
         long[] datetimes;
@@ -145,10 +193,11 @@ public class TourDBManager extends SQLiteOpenHelper {
     /**
      * Deletes a row in the db corresponding to a particular tour key.
      *
-     * @param db an SQLite db instance
      * @param keyID the ID of a tour key (not the tour ID itself)
      */
-    public void deleteTour(SQLiteDatabase db, String keyID) {
+    public void deleteTour(String keyID) {
+        open(true);
+
         String where = TourList.COL_KEY_ID + " = ?";
         String[] whereArgs = {keyID};
         int count = db.delete(TourList.TABLE_NAME, where, whereArgs);
@@ -159,10 +208,11 @@ public class TourDBManager extends SQLiteOpenHelper {
      * Deletes a number of rows corresponding to the provided key IDs. Use when removing expired
      * tours.
      *
-     * @param db an SQLite db instance
      * @param keyIDs the ID of a tour key (not the tour ID itself)
      */
-    public void deleteTours(SQLiteDatabase db, String[] keyIDs) {
+    public void deleteTours(String[] keyIDs) {
+        open(true);
+
         String where = String.format(
                 TourList.COL_KEY_ID + " IN (%s)",
                 getPlaceHolders(keyIDs.length)
@@ -176,10 +226,11 @@ public class TourDBManager extends SQLiteOpenHelper {
      * Sets the `lastAccessedOn` field of a tour to be the current time. Should be used when the
      * user selects a tour from the StartActivity.
      *
-     * @param db an SQLite db instance
      * @param keyID the ID of a tour key (not the tour ID itself)
      */
-    public void updateAccessedTime(SQLiteDatabase db, String keyID) {
+    public void updateAccessedTime(String keyID) {
+        open(true);
+
         ContentValues values = new ContentValues();
         values.put(TourList.COL_DATE_LAST_ACCESSED, Calendar.getInstance().getTimeInMillis());
 
@@ -192,10 +243,11 @@ public class TourDBManager extends SQLiteOpenHelper {
     /**
      * Finds the tours which have expired and returns their keys. These tours should be deleted.
      *
-     * @param db an SQLite db instance
      * @return a String array of tour keys which have expired.
      */
-    public String[] getExpiredTours(SQLiteDatabase db) {
+    public String[] getExpiredTours() {
+        open(false);
+
         String[] cols = {TourList.COL_KEY_ID};
         String where = TourList.COL_DATE_EXPIRES_ON + " < ?";
         String[] whereArgs = {String.valueOf(Calendar.getInstance().getTimeInMillis())};
@@ -232,13 +284,14 @@ public class TourDBManager extends SQLiteOpenHelper {
     /**
      * Checks if there are any tours in the database.
      *
-     * @param db an SQLite db instance
      * @return true if the table is empty
      */
-    public boolean dbIsEmpty(SQLiteDatabase db) {
+    public boolean dbIsEmpty() {
+        open(false);
+        SQLiteDatabase db = tdbmInstance.getReadableDatabase();
+
         Cursor c = db.rawQuery(SQL_ROW_COUNT, null);
         c.moveToFirst();
-
         int count = c.getInt(0);
         c.close();
 
@@ -249,11 +302,12 @@ public class TourDBManager extends SQLiteOpenHelper {
      * Checks if a key has already been used (i.e. there is a row for it in the db). Used when the
      * user enters a key, to prevent downloading duplicate tours.
      *
-     * @param db an SQLite db instance
      * @param keyID the ID of a tour key (not the tour ID itself)
      * @return true if the tour exists
      */
-    public boolean doesTourExist(SQLiteDatabase db, String keyID) {
+    public boolean doesTourExist(String keyID) {
+        open(false);
+
         String[] cols = {TourList.COL_KEY_ID};
         String where = TourList.COL_KEY_ID + " = ?";
         String[] whereArgs = {keyID};

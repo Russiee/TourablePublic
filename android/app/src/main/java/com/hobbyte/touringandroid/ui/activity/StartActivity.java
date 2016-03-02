@@ -1,12 +1,10 @@
 package com.hobbyte.touringandroid.ui.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -65,12 +63,10 @@ public class StartActivity extends AppCompatActivity {
         previousToursLayout = (LinearLayout) findViewById(R.id.previousToursLayout);
         textKey = (BackAwareEditText) findViewById(R.id.textEnterTour);
         textKey.setCallBackClass(this);
-//       FileManager.deleteTourFiles(getApplicationContext(), "APd4HhtBm9");
-//        TourDBManager dbHelper = new TourDBManager(getApplicationContext());
-//        SQLiteDatabase db = dbHelper.getWritableDatabase();
-//        dbHelper.deleteTour(db, "APd4HhtBm9");
 
-        //make the FAB do something
+//        FileManager.removeTour(getApplicationContext(), "APd4HhtBm9");
+
+        // make the FAB do something
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,8 +80,12 @@ public class StartActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        //need this so if user switches app and come back, the input fields do not show
+        // need this so if user switches app and come back, the input fields do not show
         hideInput();
+
+        // leaving a database instance open across activities is BAD!!
+        TourDBManager.getInstance(this).close();
+
         super.onPause();
     }
 
@@ -97,18 +97,17 @@ public class StartActivity extends AppCompatActivity {
      * If the user has tours saved to the device, show their names and expiry information.
      */
     private void loadPreviousTours() {
-        TourDBManager dbHelper = new TourDBManager(this);
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        TourDBManager dbHelper = TourDBManager.getInstance(this);
 
         LinearLayout layout = (LinearLayout) findViewById(R.id.previousToursLayout);
 
-        if (dbHelper.dbIsEmpty(db)) {
+        if (dbHelper.dbIsEmpty()) {
             // no tours saved, so show the empty text
             View noToursText = getLayoutInflater().inflate(R.layout.text_no_tours, layout, false);
             layout.addView(noToursText);
         } else {
-            // fetches a cursor pointing at the first row in the db
-            Cursor c = dbHelper.getTours(db);
+            // fetches a cursor at position -1
+            Cursor c = dbHelper.getTours();
 
             Log.d(TAG, DatabaseUtils.dumpCursorToString(c));
 
@@ -139,13 +138,8 @@ public class StartActivity extends AppCompatActivity {
             }
 
             c.close();
-
         }
-
-        db.close();
-
     }
-
 
     /**
      * Hides the input box, shows the existing tours table
@@ -203,10 +197,7 @@ public class StartActivity extends AppCompatActivity {
         String tourKey = textKey.getText().toString();
 
         // check if key has already been used
-        TourDBManager dbHelper = new TourDBManager(this);
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        boolean exists = dbHelper.doesTourExist(db, tourKey);
-        db.close();
+        boolean exists = TourDBManager.getInstance(this).doesTourExist(tourKey);
 
         if (exists) {
             showToast(getString(R.string.msg_tour_exists));
@@ -233,7 +224,7 @@ public class StartActivity extends AppCompatActivity {
     }
 
     /**
-     * Moves the app to the summary acitivity, ready to start the tour
+     * Moves the app to the {@link SummaryActivity}, ready to start the tour
      * @param tourId tour to start
      */
     private void goToTour(final String tourId) {
@@ -284,10 +275,7 @@ public class StartActivity extends AppCompatActivity {
                 }
 
                 // check if key has already been used
-                TourDBManager dbHelper = new TourDBManager(getApplicationContext());
-                SQLiteDatabase db = dbHelper.getReadableDatabase();
-                boolean exists = dbHelper.doesTourExist(db, keyID);
-                db.close();
+                boolean exists = TourDBManager.getInstance(getApplicationContext()).doesTourExist(keyID);
 
                 if (exists) {
                     return null;

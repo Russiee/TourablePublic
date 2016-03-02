@@ -1,11 +1,9 @@
 package com.hobbyte.touringandroid.ui.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,7 +17,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.hobbyte.touringandroid.R;
-import com.hobbyte.touringandroid.internet.SaveTourJSON;
 import com.hobbyte.touringandroid.internet.ServerAPI;
 import com.hobbyte.touringandroid.io.BundleSaver;
 import com.hobbyte.touringandroid.io.FileManager;
@@ -102,6 +99,14 @@ public class DownloadActivity extends AppCompatActivity {
         });
 
         setDownloadSizeLabels();
+    }
+
+    @Override
+    protected void onPause() {
+        // leaving a database instance open across activities is BAD!!
+        TourDBManager.getInstance(this).close();
+
+        super.onPause();
     }
 
     private void loadTourDescription() {
@@ -188,6 +193,20 @@ public class DownloadActivity extends AppCompatActivity {
             title = "Tour";
         }
 
+        // clear shared prefs to avoid complications elsewhere
+        SharedPreferences prefs = getSharedPreferences(
+                getString(R.string.preference_file_key),
+                Context.MODE_PRIVATE
+        );
+
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.remove(getString(R.string.prefs_current_key));
+        editor.remove(getString(R.string.prefs_current_tour));
+        editor.remove(getString(R.string.prefs_current_expiry));
+        editor.commit();
+
+        // move to tour
+        // TODO: move to SummaryActivity instead
         Intent intent = new Intent(this, TourActivity.class);
         intent.putExtra(TourActivity.INTENT_KEY_ID, keyID);
         intent.putExtra(TourActivity.INTENT_TITLE, title);
@@ -198,13 +217,11 @@ public class DownloadActivity extends AppCompatActivity {
      * Creates a enw entry in the local db for a newly downloaded tour.
      */
     private void addTourToDB() {
-        TourDBManager dbHelper = new TourDBManager(getApplicationContext());
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        TourDBManager dbHelper = TourDBManager.getInstance(this);
 
         String name = "empty";
         String createdAt = "";
         String updatedAt = "";
-
 
         try {
             name = tourJSON.getString("title");
@@ -215,11 +232,10 @@ public class DownloadActivity extends AppCompatActivity {
         }
 
         dbHelper.putRow(
-                db, keyID, tourID,
+                keyID, tourID,
                 name, createdAt, updatedAt,
                 expiresAt, hasVideo
         );
-        db.close();
     }
 
     /**
