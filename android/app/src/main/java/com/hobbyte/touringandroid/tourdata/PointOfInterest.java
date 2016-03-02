@@ -12,17 +12,20 @@ public class PointOfInterest extends TourItem implements Parcelable {
 
     private final String title;
     private final String objectID;
+    private final int nextIndex;
     private final SubSection parent;
 
-    public PointOfInterest(SubSection parent, String title, String objectID) {
+    public PointOfInterest(SubSection parent, String title, String objectID, int nextIndex) {
         this.objectID = objectID;
         this.title = title;
+        this.nextIndex = nextIndex;
         this.parent = parent;
     }
 
     public PointOfInterest(Parcel in) {
         objectID = in.readString();
         title = in.readString();
+        nextIndex = in.readInt();
         parent = (SubSection) in.readValue(SubSection.class.getClassLoader());
     }
 
@@ -51,6 +54,7 @@ public class PointOfInterest extends TourItem implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(objectID);
         dest.writeString(title);
+        dest.writeInt(nextIndex);
         dest.writeValue(parent);
     }
 

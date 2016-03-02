@@ -32,7 +32,6 @@ public class TourBuilder extends Thread {
 
             root = new SubSection(null, rootJSON.getString("title"), rootID);
 
-
             JSONArray subsectionIDs = rootJSON.getJSONArray("subsections");
             int length = subsectionIDs.length();
 
@@ -86,13 +85,17 @@ public class TourBuilder extends Thread {
     private void addPOIs(SubSection section, JSONObject sectionJSON) {
         try {
             JSONArray pois = sectionJSON.getJSONArray("pois");
-            int length = pois.length();
+            int length = pois.length() - 1;
 
-            for (int j = 0; j < length; ++j) {
+            for (int j = 0; j <= length; ++j) {
+                // index of next POI in parent subsection's list of POIs
+                int next = (j == length) ? -1 : j + 1;
+
                 PointOfInterest poi = new PointOfInterest(
                         section,
                         pois.getJSONObject(j).getString("title"),
-                        pois.getJSONObject(j).getString("objectId")
+                        pois.getJSONObject(j).getString("objectId"),
+                        next
                 );
                 section.addItem(poi);
             }
