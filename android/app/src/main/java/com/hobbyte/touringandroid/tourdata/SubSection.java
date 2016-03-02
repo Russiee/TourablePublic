@@ -14,21 +14,20 @@ import java.util.ArrayList;
 public class SubSection extends TourItem implements Parcelable {
     
     private final String title;
-    private final String objectId;
     private final int numSubSections;
     private final SubSection parent;
 
     private ArrayList<TourItem> contents = new ArrayList<>();
     
-    public SubSection(SubSection parent, String title, String objectId, int numSubSections) {
-        this.objectId = objectId;
+    public SubSection(SubSection parent, String title, String objectID, int numSubSections) {
+        super(objectID);
         this.title = title;
         this.parent = parent;
         this.numSubSections = numSubSections;
     }
 
     public SubSection(Parcel in) {
-        objectId = in.readString();
+        super(in.readString());
         title = in.readString();
         numSubSections = in.readInt();
         parent = (SubSection) in.readValue(SubSection.class.getClassLoader());
@@ -42,12 +41,20 @@ public class SubSection extends TourItem implements Parcelable {
         return contents;
     }
 
+    protected PointOfInterest nextPOI(int i) {
+        return (PointOfInterest) contents.get(numSubSections + i);
+    }
+
     public String getTitle() {
         return title;
     }
 
     public SubSection getParent() {
         return parent;
+    }
+
+    public String getObjectID() {
+        return objectID;
     }
 
     public int getType() {
@@ -61,7 +68,7 @@ public class SubSection extends TourItem implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(objectId);
+        dest.writeString(objectID);
         dest.writeString(title);
         dest.writeInt(numSubSections);
         dest.writeValue(parent);
@@ -82,6 +89,6 @@ public class SubSection extends TourItem implements Parcelable {
 
     @Override
     public String toString() {
-        return title;
+        return String.format("S: %s (%d)", title, numSubSections);
     }
 }

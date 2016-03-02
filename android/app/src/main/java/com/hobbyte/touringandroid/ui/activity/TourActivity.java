@@ -5,11 +5,9 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.ListView;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
@@ -84,27 +82,6 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
         tbt.execute();
     }
 
-
-    /**
-     * Temporary method to see if Tour was initialised properly
-     * @param section
-     */
-    public void printTour(SubSection section) {
-        ArrayList<TourItem> contents = section.getContents();
-
-        for (TourItem t : contents) {
-            Log.d(TAG, String.format("%d %s", t.getType(), t.getTitle()));
-
-            if (t.getType() == TourItem.TYPE_POI) {
-                Log.d(TAG, "Next POI: " + ((PointOfInterest) t).nextPOI());
-            }
-
-            if (t.getType() == TourItem.TYPE_SUBSECTION) {
-                printTour((SubSection) t);
-            }
-        }
-    }
-
     @Override
     public void onSubSectionClicked(int position) {
         ArrayList<TourItem> contents = currentSection.getContents();
@@ -167,7 +144,6 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
         @Override
         protected Boolean doInBackground(Void... params) {
             bundle = FileManager.getJSON(getApplicationContext(), keyID, "bundle");
-            SubSection root = null;
 
             if (bundle != null) {
                 TourBuilder builder = new TourBuilder(bundle);
@@ -179,13 +155,10 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
                     e.printStackTrace();
                 }
 
-                root = builder.getRoot();
-            }
-
-            if (root != null) {
-                tour = new Tour(root);
+                tour = builder.getTour();
                 currentSection = tour.getRoot();
                 backStack.addLast(currentSection);
+
                 return true;
             }
             return false;
@@ -197,7 +170,8 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
                 Log.d(TAG, "Finished TourBuildTask");
                 bundle = null;
 
-//                printTour(currentSection);
+                tour.printTour(tour.getRoot(), 0);
+
                 loadCurrentSection();
             }
         }

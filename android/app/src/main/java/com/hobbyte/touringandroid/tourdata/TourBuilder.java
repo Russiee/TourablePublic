@@ -113,7 +113,9 @@ public class TourBuilder extends Thread {
      *
      * @return a {@link Tour} instance
      */
-    public SubSection getRoot() {
-        return root;
+    public Tour getTour() {
+        if (root == null) return null;
+
+        return new Tour(root);
     }
 }
