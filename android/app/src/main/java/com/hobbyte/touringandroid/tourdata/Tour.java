@@ -25,6 +25,10 @@ public class Tour {
         return currentSection;
     }
 
+    /**
+     * Debugging method allowing us to visually confirm that the Tour was created properly. Use
+     * depth = 0 if calling this from TourActivity.
+     */
     public void printTour(TourItem item, int depth) {
         if (item.getType() == TourItem.TYPE_SUBSECTION) {
             SubSection s = (SubSection) item;
