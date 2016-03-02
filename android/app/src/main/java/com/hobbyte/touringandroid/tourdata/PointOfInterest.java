@@ -45,6 +45,10 @@ public class PointOfInterest extends TourItem implements Parcelable {
         return TourItem.TYPE_POI;
     }
 
+    public int nextPOI() {
+        return nextIndex;
+    }
+
     @Override
     public int describeContents() {
         return 0;

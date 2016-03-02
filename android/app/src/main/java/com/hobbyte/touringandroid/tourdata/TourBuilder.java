@@ -30,13 +30,13 @@ public class TourBuilder extends Thread {
                 rootJSON = bundle.getJSONObject(rootID);
             }
 
-            root = new SubSection(null, rootJSON.getString("title"), rootID);
-
             JSONArray subsectionIDs = rootJSON.getJSONArray("subsections");
-            int length = subsectionIDs.length();
+            int numSubSections = subsectionIDs.length();
 
-            for (int i = 0; i < length; ++i) {
-                parseSections(root, subsectionIDs.getString(i), i);
+            root = new SubSection(null, rootJSON.getString("title"), rootID, numSubSections);
+
+            for (int i = 0; i < numSubSections; ++i) {
+                parseSections(root, subsectionIDs.getString(i));
             }
 
             if (rootJSON.has("pois")) {
@@ -52,27 +52,30 @@ public class TourBuilder extends Thread {
      * Recursively travel through the bundle JSON, creating {@link SubSection}s and
      * {@link PointOfInterest}s along the way.
      *
-     * @param section the parent {@link SubSection}
+     * @param parent the parent {@link SubSection}
      * @param subsectionID the objectId of the new {@link SubSection} to create
-     * @param i the index of the child in the parent section's list of subsections
      */
-    private void parseSections(SubSection section, String subsectionID, int i) {
+    private void parseSections(SubSection parent, String subsectionID) {
         try {
             JSONObject subsectionJSON = bundle.getJSONObject(subsectionID);
 
             String title = subsectionJSON.getString("title");
-            SubSection subsection = new SubSection(section, title, subsectionID);
-            section.addItem(subsection);
-
+            SubSection subsection;
 
             if (subsectionJSON.has("subsections")) {
                 JSONArray subSectionIDs = subsectionJSON.getJSONArray("subsections");
-                int length = subSectionIDs.length();
+                int numSubSections = subSectionIDs.length();
 
-                for (int j = 0; j < length; ++j) {
-                    parseSections(subsection, subSectionIDs.getString(j), j);
+                subsection = new SubSection(parent, title, subsectionID, numSubSections);
+
+                for (int j = 0; j < numSubSections; ++j) {
+                    parseSections(subsection, subSectionIDs.getString(j));
                 }
+            } else {
+                subsection = new SubSection(parent, title, subsectionID, 0);
             }
+
+            parent.addItem(subsection);
 
             if (subsectionJSON.has("pois")) {
                 addPOIs(subsection, subsectionJSON);
