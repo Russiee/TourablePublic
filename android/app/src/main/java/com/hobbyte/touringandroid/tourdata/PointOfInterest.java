@@ -11,19 +11,18 @@ import android.os.Parcelable;
 public class PointOfInterest extends TourItem implements Parcelable {
 
     private final String title;
-    private final String objectID;
     private final int nextIndex;
     private final SubSection parent;
 
     public PointOfInterest(SubSection parent, String title, String objectID, int nextIndex) {
-        this.objectID = objectID;
+        super(objectID);
         this.title = title;
         this.nextIndex = nextIndex;
         this.parent = parent;
     }
 
     public PointOfInterest(Parcel in) {
-        objectID = in.readString();
+        super(in.readString());
         title = in.readString();
         nextIndex = in.readInt();
         parent = (SubSection) in.readValue(SubSection.class.getClassLoader());
@@ -45,8 +44,10 @@ public class PointOfInterest extends TourItem implements Parcelable {
         return TourItem.TYPE_POI;
     }
 
-    public int nextPOI() {
-        return nextIndex;
+    public PointOfInterest getNextPOI() {
+        if (nextIndex == -1) return null;
+
+        return parent.nextPOI(nextIndex);
     }
 
     @Override
@@ -77,6 +78,6 @@ public class PointOfInterest extends TourItem implements Parcelable {
 
     @Override
     public String toString() {
-        return title;
+        return String.format("P: %s (%d)", title, nextIndex);
     }
 }

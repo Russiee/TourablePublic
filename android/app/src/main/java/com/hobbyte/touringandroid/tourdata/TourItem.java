@@ -12,6 +12,12 @@ public abstract class TourItem implements Parcelable {
     public static final int TYPE_SUBSECTION = 0;
     public static final int TYPE_POI = 1;
 
+    protected final String objectID;
+
+    public TourItem(String objectID) {
+        this.objectID = objectID;
+    }
+
     public abstract String getTitle();
 
     public abstract int getType();
