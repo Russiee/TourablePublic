@@ -26,11 +26,16 @@ public class TourBuilder extends Thread {
             JSONObject rootJSON = bundle.getJSONObject("root");
             String rootID = rootJSON.getString("objectId");
 
+            // if there is only one section at depth 0, BundleSaver maps the root ID to the ID for
+            // that section.
             if (!rootID.equals("tour")) {
                 rootJSON = bundle.getJSONObject(rootID);
             }
 
             JSONArray subsectionIDs = rootJSON.getJSONArray("subsections");
+
+            // because SubSections hold their items as TourItems, we need this number to let
+            // SubSections know how many of their contents are SubSections, as opposed to POIs.
             int numSubSections = subsectionIDs.length();
 
             root = new SubSection(null, rootJSON.getString("title"), rootID, numSubSections);
@@ -85,25 +90,29 @@ public class TourBuilder extends Thread {
         }
     }
 
-    private void addPOIs(SubSection section, JSONObject sectionJSON) {
+    /**
+     * Creates {@link PointOfInterest} objects from JSON and adds them to their parent section.
+     */
+    private void addPOIs(SubSection parent, JSONObject sectionJSON) {
         try {
             JSONArray pois = sectionJSON.getJSONArray("pois");
             int length = pois.length() - 1;
 
             for (int j = 0; j <= length; ++j) {
                 // index of next POI in parent subsection's list of POIs
+                // used in PointOfInterest.getNextPOI()
                 int next = (j == length) ? -1 : j + 1;
 
                 PointOfInterest poi = new PointOfInterest(
-                        section,
+                        parent,
                         pois.getJSONObject(j).getString("title"),
                         pois.getJSONObject(j).getString("objectId"),
                         next
                 );
-                section.addItem(poi);
+                parent.addItem(poi);
             }
         } catch (JSONException je) {
-            Log.w(TAG, "Something went wrong when adding POIs to SubSection" + section.getTitle());
+            Log.w(TAG, "Something went wrong when adding POIs to SubSection" + parent.getTitle());
         }
     }
 
@@ -111,7 +120,8 @@ public class TourBuilder extends Thread {
      * When the Thread has finished executing we need to be able to access the {@link Tour} that
      * was created here.
      *
-     * @return a {@link Tour} instance
+     * @return a {@link Tour} instance made from the root {@link SubSection} that was created in
+     * the thread.
      */
     public Tour getTour() {
         if (root == null) return null;
