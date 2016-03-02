@@ -8,8 +8,10 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.ListView;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 import com.hobbyte.touringandroid.io.FileManager;
 import com.hobbyte.touringandroid.tourdata.PointOfInterest;
@@ -24,6 +26,7 @@ import com.hobbyte.touringandroid.ui.fragment.SectionFragment;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class TourActivity extends AppCompatActivity implements SectionFragment.OnFragmentInteractionListener {
 
@@ -38,6 +41,9 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
 
     private Tour tour;
     private SubSection currentSection;
+    private SubSection previousSection;
+
+    private LinkedList<SubSection> backStack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,13 +54,36 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
         keyID = intent.getStringExtra(INTENT_KEY_ID);
         String title = intent.getStringExtra(INTENT_TITLE);
 
+        //Created my own backstack to save the subsections previously clicked on and added to Toolbar
+        backStack = new LinkedList<>();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(title);
+        toolbar.setNavigationIcon(R.mipmap.ic_keyboard_backspace_white_36dp);
         setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(backStack.size() > 1) {
+                    currentSection = backStack.getLast();
+                    backStack.removeLast();
+                    loadCurrentSection();
+                } else if(backStack.size() == 1) {
+                    Toast.makeText(getApplicationContext(), "Press back again to return to Tour Summary!", Toast.LENGTH_SHORT).show();
+                    backStack.removeLast();
+                } else {
+                        Intent intent = new Intent(v.getContext(), SummaryActivity.class);
+                        intent.putExtra(SummaryActivity.KEY_ID, keyID);
+                        startActivity(intent);
+                    }
+            }
+        });
+
+
 
         TourBuilderTask tbt = new TourBuilderTask();
         tbt.execute();
     }
+
 
     /**
      * Temporary method to see if Tour was initialised properly
@@ -75,7 +104,7 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
     @Override
     public void onSubSectionClicked(int position) {
         ArrayList<TourItem> contents = currentSection.getContents();
-
+        backStack.addLast(currentSection);
         for (TourItem t : contents) {
             Log.d(TAG, String.format("%d %s", t.getType(), t.getTitle()));
         }
@@ -100,7 +129,7 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
 
         SectionFragment fragment = SectionFragment.newInstance(currentSection.getContents());
 
-        if (currentSection == tour.getRoot()) {
+        if (manager.getBackStackEntryCount() < 0) {
             transaction.add(R.id.fragmentContainer, fragment);
         } else {
             transaction.replace(R.id.fragmentContainer, fragment);
@@ -152,6 +181,7 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
             if (root != null) {
                 tour = new Tour(root);
                 currentSection = tour.getRoot();
+                backStack.addLast(currentSection);
                 return true;
             }
             return false;
