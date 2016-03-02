@@ -18,7 +18,6 @@ public class Tour {
         return root;
     }
 
-    // TODO: change how SubSections are made to store a reference to Tour
     public SubSection getCurrentSection() {
         return currentSection;
     }
