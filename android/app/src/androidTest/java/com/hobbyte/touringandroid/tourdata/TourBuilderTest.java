@@ -8,8 +8,11 @@ import org.json.JSONObject;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * Checks both that {@link TourBuilder} creates a {@link Tour} object, and that {@link SubSection}
@@ -24,7 +27,8 @@ import static org.junit.Assert.assertNotNull;
 public class TourBuilderTest {
 
     private JSONObject json;
-    private Tour tour;
+    public Tour tour;
+    SubSection root;
 
     @Before
     public void setup() throws JSONException {
@@ -33,6 +37,7 @@ public class TourBuilderTest {
             TourBuilder builder = new TourBuilder(json);
             builder.run(); // intentionally not doing start()
             tour = builder.getTour();
+            root = tour.getRoot();
         } catch (JSONException e) {
             throw e;
         }
@@ -41,6 +46,48 @@ public class TourBuilderTest {
     @Test
     public void tourMadeProperly() {
         assertNotNull(tour);
+    }
+
+    @Test
+    public void rootFieldsTest() {
+        assertEquals(rootID, root.getObjectID());
+        assertEquals(rootTitle, root.getTitle());
+        assertEquals(3, root.getContents().size());
+    }
+
+    @Test
+    public void correctContentsSize() {
+        SubSection s1 = root.getSubSection(0);
+        SubSection s2 = root.getSubSection(1);
+        SubSection s3 = root.getSubSection(2);
+
+        assertEquals(2, s1.getContents().size());
+        assertEquals(2, s2.getContents().size());
+        assertEquals(3, s3.getContents().size());
+    }
+
+    @Test(expected = ArrayIndexOutOfBoundsException.class)
+    public void badIndexTest() {
+        // retrieves Section 4, which had one subsection and two POIs
+        SubSection section4 = root.getSubSection(0).getSubSection(0);
+        SubSection actuallyAPOI = section4.getSubSection(1);
+    }
+
+    @Test
+    public void poisMadeCorrectly() {
+        SubSection section3 = root.getSubSection(2);
+        PointOfInterest poi3 = section3.getPOI(0);
+        PointOfInterest poi4 = section3.getPOI(1);
+        PointOfInterest poi5 = section3.getPOI(2);
+
+        // basic field checking
+        assertEquals(p4_title, poi4.getTitle());
+        assertEquals(p5_ID, poi5.getObjectID());
+
+        // make sure correct indexes were given to POI constructors
+        assertEquals(poi4, poi3.getNextPOI());
+        assertEquals(poi5, poi4.getNextPOI());
+        assertNull(poi5.getNextPOI());
     }
 
 
@@ -107,7 +154,7 @@ public class TourBuilderTest {
 
     public static final String TEST_JSON =
             "{" +
-                    "\"root\": \"" + rootID + "\"}," +
+                    "\"root\":{\"objectId\":\"" + rootID + "\"}," +
                     "\"" + rootID + "\":{" +
                         "\"title\":\"" + rootTitle + "\"," +
                         "\"description\":\"" + rootDesc + "\"," +
@@ -173,7 +220,4 @@ public class TourBuilderTest {
                             "\"title\":\"" + p11_title +"\"" +
                         "}]" +
                     "}}";
-
-
-
 }
