@@ -50,7 +50,7 @@
                 android:layout_weight="1"
                 android:inputType="text"
                 android:layout_gravity="bottom"
-                android:textColor="#ffffff" />
+                android:textColor="@color/whiteText" />
 
             <Button
                 android:id="@+id/buttonSubmitKey"
