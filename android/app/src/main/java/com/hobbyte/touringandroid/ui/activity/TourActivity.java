@@ -130,6 +130,7 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
             currentSection = (SubSection) contents.get(position);
             loadCurrentSection();
         } else {
+            //If the clicked POI is not in first position in the list, sets the previous POI to the POI before the selected POI
             if((position != 0) && contents.get(position-1).getType() == TourItem.TYPE_POI) {
                 previousPOI = (PointOfInterest) contents.get(position-1);
             }
@@ -258,13 +259,13 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+                invalidateOptionsMenu();
             }
 
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+                invalidateOptionsMenu();
             }
         };
 
@@ -281,6 +282,9 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Sets up the bottom navigation bar for traversing POIs within a section
+     */
     public void setupPoiNavigation() {
         poiNavigation = (RelativeLayout) findViewById(R.id.bottomToolbar);
         leftLayout = (LinearLayout) findViewById(R.id.leftButtonLayout);
@@ -289,7 +293,14 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
         leftPOI = (TextView) findViewById(R.id.leftPOI);
     }
 
+    /**
+     * Sets text for the corresponding POI (Left or Right) if such a POI exists. Otherwise makes the toolbar invisible if POI is solitary.
+     * Also configures onClickListeners to load the selected Point of Interest.
+     * @param poi the current Point of Interest displayed on the screen
+     */
     public void setPoiNavText(PointOfInterest poi) {
+
+        //Checks next Point of Interest, if not null sets layout to visisble and configures onClickListener
         if(poi.getNextPOI() != null) {
             rightPOI.setText(poi.getNextPOI().getTitle());
             rightLayout.setVisibility(View.VISIBLE);
@@ -300,8 +311,9 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
                 }
             });
         } else {
-            rightLayout.setVisibility(View.INVISIBLE);
+            rightLayout.setVisibility(View.INVISIBLE); //Hides layout if next POI is null
         }
+        //Checks previous Point of Interest, if not null and the parents of the current POI and previous POI are equal, sets layout to visible and configures listener
         if(previousPOI != null && previousPOI != poi && previousPOI.getParent() == poi.getParent()) {
             leftPOI.setText(previousPOI.getTitle());
             leftLayout.setVisibility(View.VISIBLE);
@@ -313,6 +325,7 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
         } else {
             leftLayout.setVisibility(View.INVISIBLE);
         }
+        //If POI is solitary, hides the toolbar as it is not needed.
         if(rightLayout.getVisibility() == View.INVISIBLE && leftLayout.getVisibility() == View.INVISIBLE) {
             poiNavigation.setVisibility(View.INVISIBLE);
         }
