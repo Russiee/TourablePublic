@@ -8,4 +8,6 @@
     <color name="tintedBackground">#556D79</color>
     <color name="colorText">#424242</color>
     <color name="whiteBGText">#424242</color>
+    <color name="whiteText">#DE000000</color>
+    <color name="divider">#BFe2e2e2</color>
 </resources>

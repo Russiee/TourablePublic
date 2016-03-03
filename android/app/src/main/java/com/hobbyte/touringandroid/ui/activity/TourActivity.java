@@ -5,10 +5,20 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.support.v7.widget.Toolbar;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hobbyte.touringandroid.io.FileManager;
@@ -37,11 +47,18 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
 
     private Toolbar toolbar;
 
+    private DrawerLayout navLayout;
+    private ListView navList;
+    private ArrayList<TourItem> topLevelContents;
+    private TextView tourName;
+    private ActionBarDrawerToggle navToggle;
+
     private Tour tour;
     private SubSection currentSection;
-    private SubSection previousSection;
 
     private LinkedList<SubSection> backStack;
+
+    private Boolean backtoSummary;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,32 +71,40 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
 
         //Created my own backstack to save the subsections previously clicked on and added to Toolbar
         backStack = new LinkedList<>();
+
+        backtoSummary = false; //Checks whether back has been pressed at Root, and whether warning given to press back again
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(title);
-        toolbar.setNavigationIcon(R.mipmap.ic_keyboard_backspace_white_36dp);
+        toolbar.setNavigationIcon(R.mipmap.ic_menu_white_24dp);
         setSupportActionBar(toolbar);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(backStack.size() > 1) {
-                    currentSection = backStack.getLast();
-                    backStack.removeLast();
-                    loadCurrentSection();
-                } else if(backStack.size() == 1) {
-                    Toast.makeText(getApplicationContext(), "Press back again to return to Tour Summary!", Toast.LENGTH_SHORT).show();
-                    backStack.removeLast();
-                } else {
-                        Intent intent = new Intent(v.getContext(), SummaryActivity.class);
-                        intent.putExtra(SummaryActivity.KEY_ID, keyID);
-                        startActivity(intent);
-                    }
-            }
-        });
-
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         TourBuilderTask tbt = new TourBuilderTask();
         tbt.execute();
+    }
+
+    /**
+     * Listens for a back button press and displays previously opened fragment
+     * Also listens for a back button press at the Root Fragment and signals
+     * that another back button press will return to summary activity
+     */
+    @Override
+    public void onBackPressed() {
+        if(backStack.size() > 1 && !backtoSummary) {
+            currentSection = backStack.getLast();
+            backStack.removeLast();
+            backtoSummary = false;
+            loadCurrentSection();
+        } else if (!backtoSummary) {
+            Toast.makeText(getApplicationContext(), "Please press back again to exit", Toast.LENGTH_SHORT).show();
+            backtoSummary = true;
+        } else if(backtoSummary){
+            Intent intent = new Intent(this, SummaryActivity.class);
+            intent.putExtra(SummaryActivity.KEY_ID, keyID);
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -107,7 +132,7 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
     private void loadCurrentSection() {
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
-
+        backtoSummary = false;
         SectionFragment fragment = SectionFragment.newInstance(currentSection.getContents());
 
         if (manager.getBackStackEntryCount() < 0) {
@@ -158,7 +183,6 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
                 tour = builder.getTour();
                 currentSection = tour.getRoot();
                 backStack.addLast(currentSection);
-
                 return true;
             }
             return false;
@@ -171,9 +195,72 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
                 bundle = null;
 
                 tour.printTour(tour.getRoot(), 0);
-
+                setupNavDrawer();
                 loadCurrentSection();
             }
         }
+    }
+
+    /**
+     * Sets up the navigation drawer with Top-Level sections of the tour
+     */
+    private void setupNavDrawer() {
+        navLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        navList = (ListView) findViewById(R.id.left_drawer);
+        tourName = (TextView) findViewById(R.id.tourNameText);
+
+        tourName.setText(tour.getRoot().getTitle());
+
+        topLevelContents = currentSection.getContents();
+
+        LinearLayout home = (LinearLayout) findViewById(R.id.homeLayout);
+        home.setOnClickListener(new View.OnClickListener() {
+           public void onClick(View v) {
+               Intent intent = new Intent(getApplicationContext(), StartActivity.class);
+               startActivity(intent);
+           }
+        });
+        navList.setAdapter(new ArrayAdapter<>(this, R.layout.nav_drawer_item, topLevelContents));
+
+        navList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                backStack.addLast(currentSection);
+                currentSection = (SubSection) topLevelContents.get(position);
+                loadCurrentSection();
+                navLayout.closeDrawers();
+            }
+        });
+
+        navToggle = new ActionBarDrawerToggle(
+                this,
+                navLayout,
+                toolbar,
+                R.string.drawer_open, R.string.drawer_close) {
+
+            /** Called when a drawer has settled in a completely open state. */
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+
+            /** Called when a drawer has settled in a completely closed state. */
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+        };
+
+        navToggle.setDrawerIndicatorEnabled(true);
+        navLayout.setDrawerListener(navToggle);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        if (navToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
