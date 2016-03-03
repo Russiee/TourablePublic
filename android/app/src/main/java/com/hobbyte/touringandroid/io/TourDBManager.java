@@ -23,6 +23,10 @@ import java.util.Date;
  * {@link Activity#onPause()} or {@link Activity#onStop()} of any Activity that uses this class.
  * (And close any {@link Cursor} instances that you use outside of this class, naturally).
  * <p>
+ * Database operations are not inherently run on separate threads. If you are worried about blocking
+ * the UI thread, make a new one. However, it is not expected that this database will ever contain
+ * so many rows that it will slow the UI thread.
+ * <p>
  * Largely taken from the Android
  * <a href="https://developer.android.com/training/basics/data-storage/databases.html">training guides.</a>
  * Some outside guidance was also had regarding the
