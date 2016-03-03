@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hobbyte.touringandroid.R;
 import com.hobbyte.touringandroid.io.FileManager;
@@ -55,4 +56,9 @@ public class SummaryActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onBackPressed() {
+            Intent intent = new Intent(this, StartActivity.class);
+            startActivity(intent);
+    }
 }
