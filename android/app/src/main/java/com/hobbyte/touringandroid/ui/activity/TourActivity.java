@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +48,12 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
 
     private Toolbar toolbar;
 
+    private RelativeLayout poiNavigation;
+    private LinearLayout rightLayout;
+    private LinearLayout leftLayout;
+    private TextView rightPOI;
+    private TextView leftPOI;
+
     private DrawerLayout navLayout;
     private ListView navList;
     private ArrayList<TourItem> topLevelContents;
@@ -55,6 +62,8 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
 
     private Tour tour;
     private SubSection currentSection;
+    private PointOfInterest previousPOI;
+    private PointOfInterest currentPOI;
 
     private LinkedList<SubSection> backStack;
 
@@ -121,6 +130,9 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
             currentSection = (SubSection) contents.get(position);
             loadCurrentSection();
         } else {
+            if((position != 0) && contents.get(position-1).getType() == TourItem.TYPE_POI) {
+                previousPOI = (PointOfInterest) contents.get(position-1);
+            }
             loadPointOfInterest((PointOfInterest) selected);
         }
     }
@@ -143,6 +155,7 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
         }
 
         transaction.commit();
+        poiNavigation.setVisibility(View.INVISIBLE);
         toolbar.setTitle(currentSection.getTitle());
     }
 
@@ -160,6 +173,9 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
         transaction.addToBackStack(null);
 
         transaction.commit();
+        poiNavigation.setVisibility(View.VISIBLE);
+        setPoiNavText(poi);
+        currentPOI = poi;
         toolbar.setTitle(poi.getTitle());
     }
 
@@ -196,6 +212,7 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
 
                 tour.printTour(tour.getRoot(), 0);
                 setupNavDrawer();
+                setupPoiNavigation();
                 loadCurrentSection();
             }
         }
@@ -262,5 +279,42 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void setupPoiNavigation() {
+        poiNavigation = (RelativeLayout) findViewById(R.id.bottomToolbar);
+        leftLayout = (LinearLayout) findViewById(R.id.leftButtonLayout);
+        rightLayout = (LinearLayout) findViewById(R.id.rightButtonLayout);
+        rightPOI = (TextView) findViewById(R.id.rightPOI);
+        leftPOI = (TextView) findViewById(R.id.leftPOI);
+    }
+
+    public void setPoiNavText(PointOfInterest poi) {
+        if(poi.getNextPOI() != null) {
+            rightPOI.setText(poi.getNextPOI().getTitle());
+            rightLayout.setVisibility(View.VISIBLE);
+            rightLayout.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    previousPOI = currentPOI;
+                    loadPointOfInterest(currentPOI.getNextPOI());
+                }
+            });
+        } else {
+            rightLayout.setVisibility(View.INVISIBLE);
+        }
+        if(previousPOI != null && previousPOI != poi && previousPOI.getParent() == poi.getParent()) {
+            leftPOI.setText(previousPOI.getTitle());
+            leftLayout.setVisibility(View.VISIBLE);
+            leftLayout.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    loadPointOfInterest(previousPOI);
+                }
+            });
+        } else {
+            leftLayout.setVisibility(View.INVISIBLE);
+        }
+        if(rightLayout.getVisibility() == View.INVISIBLE && leftLayout.getVisibility() == View.INVISIBLE) {
+            poiNavigation.setVisibility(View.INVISIBLE);
+        }
     }
 }
