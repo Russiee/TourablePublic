@@ -13,8 +13,7 @@ public class PointOfInterest extends TourItem implements Parcelable {
     private final String title;
     private final SubSection parent;
 
-    /** The index of the following POI in this SubSection's list of POIs. See {@link #getNextPOI()}
-     *  and {@link SubSection#nextPOI(int)}. */
+    /** The index of the following POI in the parent's list of POIs. */
     private final int nextIndex;
 
     public PointOfInterest(SubSection parent, String title, String objectID, int nextIndex) {
@@ -67,7 +66,7 @@ public class PointOfInterest extends TourItem implements Parcelable {
     public PointOfInterest getNextPOI() {
         if (nextIndex == -1) return null;
 
-        return parent.nextPOI(nextIndex);
+        return parent.getPOI(nextIndex);
     }
 
     // needed for Parcelable

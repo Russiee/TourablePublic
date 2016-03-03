@@ -16,7 +16,7 @@ public class SubSection extends TourItem implements Parcelable {
     private final String title;
     private final SubSection parent;
 
-    /** This lets the object skip over any SubSections in `contents`. See {@link #nextPOI(int)}*/
+    /** This lets the object skip over any SubSections in `contents`. See {@link #getPOI(int)}*/
     private final int numSubSections;
 
     /** Holds all child SubSections and POIs. From the way the JSON is parsed, this will be filled
@@ -53,13 +53,23 @@ public class SubSection extends TourItem implements Parcelable {
     }
 
     /**
-     * Used by a {@link PointOfInterest} in a {@link com.hobbyte.touringandroid.ui.fragment.POIFragment}
-     * to navigate to the next point of interest.
-     *
-     * @param i the index of the next POI. See {@link PointOfInterest#getNextPOI()}.
+     * Returns the {@link PointOfInterest} at a given index, relative to the first POI in
+     * {@link #contents}.
      */
-    protected PointOfInterest nextPOI(int i) {
+    public PointOfInterest getPOI(int i) {
         return (PointOfInterest) contents.get(numSubSections + i);
+    }
+
+    /**
+     * Returns the {@link SubSection} at a given index. Will throw an error if `i` is a legal index
+     * but points to what is actually a {@link PointOfInterest}.
+     */
+    public SubSection getSubSection(int i) throws ArrayIndexOutOfBoundsException {
+        if (i >= numSubSections && i < contents.size()) throw new ArrayIndexOutOfBoundsException(
+                "There are only " + numSubSections + " in this SubSection!"
+        );
+
+        return (SubSection) contents.get(i);
     }
 
     /**
