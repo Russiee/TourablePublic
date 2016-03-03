@@ -12,7 +12,8 @@ var sectionTest = {
             "tour":  ""+pointerID,
             "superSection": "",
             "title": "The Test",
-            "description": "This is the main section test"
+            "description": "This is the main section test",
+            "depth": 0
 
         };
         request(url)
@@ -24,6 +25,7 @@ var sectionTest = {
                 throw err;
               }
               res.body.should.have.property("tour");
+              res.body.should.have.property("depth")
               res.body.should.have.property("superSection");
               res.body.should.have.property("title");
               res.body.should.have.property("description");
@@ -48,6 +50,7 @@ var sectionTest = {
             res.body.title.should.equal('The Test');
             res.body.description.should.equal("This is the main section test");                    
             res.body.tour.should.not.equal(null);
+            res.body.depth.should.equal(0);
             callback();
         });
     },
@@ -69,6 +72,7 @@ var sectionTest = {
        
         "title": "The Test2",
         "description": "This is the main section test2",
+        "depth": 0
 
         };
         request(url)
@@ -83,6 +87,7 @@ var sectionTest = {
               res.body.should.have.property("superSection");
               res.body.should.have.property("title");
               res.body.should.have.property("description");
+              res.body.should.have.property("depth");
               res.status.should.be.equal(200);
               callback();
           });
@@ -101,6 +106,7 @@ var sectionTest = {
             res.body.title.should.equal('The Test2');
             res.body.description.should.equal("This is the main section test2");                    
             res.body.tour.should.not.equal(null);
+            res.body.depth.should.equal(0);
             callback();
         });
     },
