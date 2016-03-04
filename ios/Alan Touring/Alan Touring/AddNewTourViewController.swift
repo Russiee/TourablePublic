@@ -12,9 +12,11 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
 
     var tourID: String = ""
     var tourIndex: Int?
+    var totalImagesToDownload: Float = 0.0
+    var downloadedImages: Float = 0.0
     
     @IBOutlet weak var busyWheel: UIActivityIndicatorView!
-
+    @IBOutlet weak var ProgressBar: UIProgressView!
     @IBOutlet weak var saveTourButton: UIButton!
     @IBOutlet weak var DownloadTypeChooser: UISegmentedControl!
     @IBOutlet weak var tourInformationLabel: UILabel!
@@ -22,7 +24,7 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
     
     
     override func viewDidLoad() {
-
+        print(tourID+" THIS IS TOUR ID")
         //Adds the observers for a valid or invalid key input completion message from ApiController
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedDownloading", name: beginDownloadKey, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedFinishedDownloading", name: endDownloadKey, object: nil)
@@ -35,19 +37,32 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
         
         let newCancelButton = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "cancelDownload")
         self.navigationItem.setLeftBarButtonItem(newCancelButton, animated: false)
-
+         ProgressBar.setProgress(0.0, animated: true)
+        
     }
     
     func NotifiedDownloading() {
         print("download begun")
         print("\(countOfImages) images added detected")
-        
-        
+        totalImagesToDownload++
+        let progress = (downloadedImages/totalImagesToDownload)
+        print("Progress IS NOW \(progress)")
     }
     
     func NotifiedFinishedDownloading(){
         print("download finished")
          print("\(countOfImages) images removed detected")
+        downloadedImages++
+        let progress = (downloadedImages/totalImagesToDownload)
+        if progress != 0 {
+        ProgressBar.setProgress(progress, animated: true)
+        
+        }
+        if progress == 1.0{
+            saveTourButton.setTitle("Save Tour", forState: .Normal)
+            saveTourButton.enabled = true
+        }
+        print("Progress IS NOW \(progress)")
         
     }
     
@@ -86,7 +101,8 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
     func NotifiedValid(){
         self.busyWheel.stopAnimating()
         self.hideButtonsForBusyWheel(false)
-        
+        saveTourButton.setTitle("Downloading", forState: .Normal)
+        saveTourButton.enabled = false
 
     }
     
@@ -97,5 +113,6 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
         tourInformationLabel.hidden = visibility
         DownloadTypeChooser.hidden = visibility
         saveTourButton.hidden = visibility
+        ProgressBar.hidden = visibility
     }
 }

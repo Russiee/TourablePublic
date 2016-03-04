@@ -14,7 +14,7 @@ var countOfImages = 0;
 
 class imageHandler: NSObject {
     
-    lazy var imagesToDownloadQueue =  Queue<String>()
+    lazy var imagesToDownload =  [String]()
     
     //making the TourIdParser a singleton to parse all tours from the API
     //in order to access TourIdParser methods call TourIdParser.shardInstance.METHOD()
@@ -85,7 +85,6 @@ class imageHandler: NSObject {
         //print("if true, saved image: \(result)")
         countOfImages--
        
-        
         triggerDownloadCompleteNotify()
        
         return result
@@ -115,14 +114,11 @@ class imageHandler: NSObject {
     func downloadImageSet(urls: [String]){
        
         countOfImages = countOfImages + urls.count
-        triggerDownloadBeginNotify()
 
         for url in urls {
-            imagesToDownloadQueue.enqueue(url)
-        }
-        
-        while !imagesToDownloadQueue.isEmpty() {
-            let imageUrl = imagesToDownloadQueue.dequeue()!
+            
+            triggerDownloadBeginNotify()
+            let imageUrl = url
             let actualURL = NSURL(string: imageUrl )
         
             getDataFromUrl(actualURL!) { (data, response, error)  in
@@ -138,7 +134,5 @@ class imageHandler: NSObject {
                 }
             }
         }
-
     }
-
 }

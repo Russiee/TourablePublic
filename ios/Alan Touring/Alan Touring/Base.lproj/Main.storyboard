@@ -293,6 +293,9 @@
                                 <rect key="contentStretch" x="1" y="0.0" width="1" height="1"/>
                                 <color key="color" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                             </activityIndicatorView>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jv4-7W-mfo">
+                                <rect key="frame" x="20" y="118" width="560" height="2"/>
+                            </progressView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -300,12 +303,16 @@
                             <constraint firstItem="4vk-pv-7vj" firstAttribute="trailing" secondItem="V9B-aU-NhZ" secondAttribute="trailingMargin" id="DOw-D0-D8w"/>
                             <constraint firstItem="4vk-pv-7vj" firstAttribute="top" secondItem="V9B-aU-NhZ" secondAttribute="top" constant="20" symbolic="YES" id="Ec4-lt-CUQ"/>
                             <constraint firstItem="tLd-Nq-5PN" firstAttribute="centerX" secondItem="TXq-08-F5F" secondAttribute="centerX" id="FWa-aA-uHR"/>
+                            <constraint firstItem="jv4-7W-mfo" firstAttribute="trailing" secondItem="V9B-aU-NhZ" secondAttribute="trailingMargin" id="PTG-d8-cxy"/>
                             <constraint firstItem="TXq-08-F5F" firstAttribute="leading" secondItem="4vk-pv-7vj" secondAttribute="leading" id="PeY-Jv-goJ"/>
                             <constraint firstItem="TXq-08-F5F" firstAttribute="leading" secondItem="V9B-aU-NhZ" secondAttribute="leadingMargin" id="a0f-3F-nf5"/>
                             <constraint firstItem="MTY-ww-ae4" firstAttribute="centerY" secondItem="V9B-aU-NhZ" secondAttribute="centerY" id="eIY-6b-R4K"/>
                             <constraint firstItem="MTY-ww-ae4" firstAttribute="centerX" secondItem="V9B-aU-NhZ" secondAttribute="centerX" id="qok-TU-Y6o"/>
+                            <constraint firstItem="jv4-7W-mfo" firstAttribute="top" secondItem="4vk-pv-7vj" secondAttribute="bottom" constant="77" id="s36-AI-jvA"/>
+                            <constraint firstItem="jv4-7W-mfo" firstAttribute="leading" secondItem="V9B-aU-NhZ" secondAttribute="leadingMargin" id="sAo-2l-chn"/>
                             <constraint firstItem="TXq-08-F5F" firstAttribute="trailing" secondItem="4vk-pv-7vj" secondAttribute="trailing" id="sDH-5B-L5z"/>
                             <constraint firstItem="TXq-08-F5F" firstAttribute="top" secondItem="V9B-aU-NhZ" secondAttribute="top" constant="144" id="wdV-oa-Tg4"/>
+                            <constraint firstItem="TXq-08-F5F" firstAttribute="top" secondItem="jv4-7W-mfo" secondAttribute="bottom" constant="24" id="xmx-Ed-FH7"/>
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
@@ -314,6 +321,7 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
                     <connections>
                         <outlet property="DownloadTypeChooser" destination="TXq-08-F5F" id="dkD-Rh-diq"/>
+                        <outlet property="ProgressBar" destination="jv4-7W-mfo" id="H1m-lO-tJJ"/>
                         <outlet property="busyWheel" destination="MTY-ww-ae4" id="Ha3-Fi-XQM"/>
                         <outlet property="saveTourButton" destination="tLd-Nq-5PN" id="ru3-Of-Wfg"/>
                         <outlet property="tourInformationLabel" destination="4vk-pv-7vj" id="7Xc-bK-GIy"/>
