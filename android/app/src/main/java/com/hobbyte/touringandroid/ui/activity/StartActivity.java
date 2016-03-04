@@ -193,8 +193,10 @@ public class StartActivity extends AppCompatActivity {
      */
     public void checkTourKey(View v) {
         // current valid key: KCL-1010
+        if (textKey.length() < 3) return; // TODO ask if there's a minimum Key length. Otherwise do 0
 
         String tourKey = textKey.getText().toString();
+        textKey.setEnabled(false);
 
         // check if key has already been used
         boolean exists = TourDBManager.getInstance(this).doesTourExist(tourKey);
@@ -217,8 +219,6 @@ public class StartActivity extends AppCompatActivity {
      * download options for the tour media.
      */
     private void goToTourDownload() {
-        textKey.setText("");
-
         Intent intent = new Intent(this, DownloadActivity.class);
         startActivity(intent);
     }
@@ -305,6 +305,9 @@ public class StartActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Boolean isValid) {
+            textKey.setText("");
+            textKey.setEnabled(true);
+
             if (isValid == null) {
                 showToast(getString(R.string.msg_tour_exists));
             } else if (isValid) {
@@ -312,7 +315,6 @@ public class StartActivity extends AppCompatActivity {
             } else {
                 showToast(getString(R.string.msg_invalid_key));
             }
-            textKey.setText("");
         }
     }
 }
