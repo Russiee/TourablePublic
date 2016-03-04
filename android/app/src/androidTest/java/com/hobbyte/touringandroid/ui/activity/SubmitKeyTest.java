@@ -1,4 +1,4 @@
-package com.hobbyte.touringandroid;
+package com.hobbyte.touringandroid.ui.activity;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -11,7 +11,7 @@ import android.content.Context;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.hobbyte.touringandroid.ui.activity.StartActivity;
+import com.hobbyte.touringandroid.R;
 
 import org.junit.Before;
 import org.junit.Rule;
