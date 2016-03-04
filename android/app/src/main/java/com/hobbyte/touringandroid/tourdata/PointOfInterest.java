@@ -67,6 +67,21 @@ public class PointOfInterest extends TourItem implements Parcelable {
         return String.format("P: %s (%d)", title, nextIndex);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PointOfInterest)) return false;
+
+        PointOfInterest poi = (PointOfInterest) o;
+
+        if (!objectID.equals(poi.objectID) || !title.equals(poi.title) ||
+                nextIndex != poi.nextIndex || !parent.equals(poi.parent)) {
+            return false;
+        }
+
+        return true;
+    }
+
     /* ======================================================
     *          STUFF FOR PARCELABLE
     *  ======================================================*/

@@ -98,6 +98,22 @@ public class SubSection extends TourItem implements Parcelable {
         return String.format("S: %s (%d)", title, numSubSections);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SubSection)) return false;
+
+        SubSection s = (SubSection) o;
+
+        // TODO: it's the `contents` that causes this to fail. Investigate
+        if (!objectID.equals(s.objectID) || !title.equals(s.title) || contents != s.contents ||
+                numSubSections != s.numSubSections || parent != s.parent) {
+            return false;
+        }
+
+        return true;
+    }
+
     /* ======================================================
     *          STUFF FOR PARCELABLE
     *  ======================================================*/

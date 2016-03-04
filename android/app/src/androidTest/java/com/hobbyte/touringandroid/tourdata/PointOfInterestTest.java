@@ -19,11 +19,14 @@ public class PointOfInterestTest {
 
     private PointOfInterest poi;
 
-    @Mock SubSection parent;
+    private SubSection parent;
+//    @Mock private SubSection parent;
 
     @Before
     public void setup() {
+        parent = new SubSection(null, "poop", "poop123", 0);
         poi = new PointOfInterest(parent, "POI Title", "poiabc123", -1);
+        parent.addItem(poi);
     }
 
     @Test
