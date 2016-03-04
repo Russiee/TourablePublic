@@ -9,6 +9,7 @@
 import Foundation
 
 let TableUpdateNotificationKey = "tableAddWasComplete"
+var objectIDs = [String]()
 
 public class TourIdParser {
 
@@ -39,6 +40,52 @@ public class TourIdParser {
         
         newArray.removeAtIndex(row)
         saveArray(newArray)
+    }
+    
+    //deletes whole tour
+    func deleteTour(pos: Int){
+        //gets tour at the row we want to delete
+        let arrayOfTours = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! [AnyObject]
+        //gets the pointer of the tour
+        let tourPointer = NSUserDefaults.standardUserDefaults().objectForKey(arrayOfTours[pos] as! String)
+        //setting the Tour ID to tourPointer ObjectId
+        let tourID = tourPointer!["objectId"] as! String
+        //get the tour from UserDefaults
+        let tour = NSUserDefaults.standardUserDefaults().objectForKey(tourID)
+        //gets all the objectIDs of the tour (which we have stored in UserDefaults)
+        getAllIDs(tour!["sections"] as! NSArray)
+        //deletes al the objectIDs from User Defaults
+        for ids in objectIDs{
+            NSUserDefaults.standardUserDefaults().removeObjectForKey(ids)
+        }
+        //reset array to empty for next call of getAllIDs
+        objectIDs = []
+        
+    }
+    
+    //gets all tours objectIDs
+    func getAllIDs(section: NSArray){
+        
+        for subsection in section{
+            objectIDs.append(subsection["objectId"] as! String)
+            let keys = subsection.allKeys
+            //print(keys)
+            for value in keys{
+                if value as! String == "pois"{
+                    print("poi reached")
+                    let POIS = subsection["pois"] as! NSArray
+                    for pois in POIS{
+                        objectIDs.append(pois["objectId"] as! String)
+                        
+                    }
+                }
+                    
+                else if((value as! String) == "subsections"){
+                    getAllIDs(subsection["subsections"] as! NSArray)
+                }
+            }
+        }
+        //print(objectIDs)
     }
    
     
@@ -78,13 +125,12 @@ public class TourIdParser {
 
         //this comes from the initialised of bundle Connector
         let bundleRoute = bundleRouteConnector()
-        
+        print(tourDict!["objectId"])
         bundleRoute.startConnection(tourDict!["objectId"] as! String)
         
         let MYDAMNDATA = bundleRoute.getJSONResult()
         tourDataParser().saveNewTour(MYDAMNDATA)
-        bundleRoute.getAllPOIs((MYDAMNDATA["sections"]) as! NSArray)
-        NSUserDefaults.standardUserDefaults().setObject(bundleRoute.getPOIList(), forKey: "POIList")
+        //bundleRoute.getAllPOIs((MYDAMNDATA["sections"]) as! NSArray)
 
         NSNotificationCenter.defaultCenter().addObserver (
 
