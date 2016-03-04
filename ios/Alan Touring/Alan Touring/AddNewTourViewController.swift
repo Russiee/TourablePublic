@@ -40,13 +40,14 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
     
     func NotifiedDownloading() {
         print("download begun")
+        print("\(countOfImages) images added detected")
         
         
     }
     
     func NotifiedFinishedDownloading(){
         print("download finished")
-        
+         print("\(countOfImages) images removed detected")
         
     }
     

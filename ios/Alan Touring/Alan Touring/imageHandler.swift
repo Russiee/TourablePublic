@@ -82,12 +82,12 @@ class imageHandler: NSObject {
         let jpgImageData = UIImageJPEGRepresentation(image, 1.0)
     
         let result = jpgImageData!.writeToFile(path, atomically: true)
-        print("if true, saved image: \(result)")
+        //print("if true, saved image: \(result)")
         countOfImages--
        
-        if countOfImages == 0{
-            triggerDownloadCompleteNotify()
-        }
+        
+        triggerDownloadCompleteNotify()
+       
         return result
     }
 
@@ -114,13 +114,9 @@ class imageHandler: NSObject {
     //called just once in pointOfInterest.swift
     func downloadImageSet(urls: [String]){
        
-        if countOfImages == 0{
-            
-        triggerDownloadBeginNotify()
-        }
-        
         countOfImages = countOfImages + urls.count
-        
+        triggerDownloadBeginNotify()
+
         for url in urls {
             imagesToDownloadQueue.enqueue(url)
         }
@@ -134,7 +130,7 @@ class imageHandler: NSObject {
                     guard let data = data where error == nil else {
                         return
                     }
-                    print(response?.suggestedFilename ?? "")
+                    //print(response?.suggestedFilename ?? "")
                     
                     let image = UIImage(data: data)
                     self.saveImage(image!, name: imageUrl)
