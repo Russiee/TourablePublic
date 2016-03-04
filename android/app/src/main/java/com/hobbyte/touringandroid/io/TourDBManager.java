@@ -173,7 +173,7 @@ public class TourDBManager extends SQLiteOpenHelper {
         long[] datetimes;
 
         try {
-            datetimes = convertStampToMillis(dateFormat, creationDate, updateDate, expiryDate);
+            datetimes = convertStampToMillis(creationDate, updateDate, expiryDate);
         } catch (ParseException e) {
             e.printStackTrace();
             // is there a better way to handle this?
@@ -245,22 +245,28 @@ public class TourDBManager extends SQLiteOpenHelper {
     }
 
     /**
-     * Returns an array containing the key IDs for every tour in the database.
+     * Fetches the information required to find out if a tour needs updating.
+     *
+     * @return an array where each row is of the form [(String) keyID, (String) tourID,
+     * (long) updatedAt]
      */
-    public String[] getTourKeys() {
+    public Object[][] getTourUpdateInfo() {
         open(false);
 
-        String[] cols = {TourList.COL_KEY_ID};
+        // TODO: change the return array and second column when tour version numbers are implemented
+        String[] cols = {TourList.COL_KEY_ID, TourList.COL_TOUR_ID, TourList.COL_DATE_UPDATED};
         Cursor c = db.query(
                 TourList.TABLE_NAME, cols,
                 null, null, null, null, null
         );
 
-        String[] keys = new String[c.getCount()];
+        Object[][] keys = new Object[c.getCount()][3];
         int i = 0;
 
         while (c.moveToNext()) {
-            keys[i] = c.getString(0);
+            keys[i][0] = c.getString(0);
+            keys[i][1] = c.getString(1);
+            keys[i][2] = c.getLong(2);
             ++i;
         }
 
@@ -356,12 +362,11 @@ public class TourDBManager extends SQLiteOpenHelper {
     /**
      * Takes one or more timestamps and converts them into milliseconds since Epoch.
      *
-     * @param dateFormat a String representing the format/pattern of the timestamp
      * @param timeArgs one or more timestamps
      * @return millisecond representations of the provided timestamps
      * @throws ParseException if the timestamps don't match the dateFormat
      */
-    public long[] convertStampToMillis(String dateFormat, String... timeArgs) throws ParseException {
+    public static long[] convertStampToMillis(String... timeArgs) throws ParseException {
         SimpleDateFormat df = new SimpleDateFormat(dateFormat);
 
         long[] toReturn = new long[timeArgs.length];
