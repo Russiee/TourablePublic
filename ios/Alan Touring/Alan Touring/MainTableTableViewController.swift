@@ -32,7 +32,8 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
 
 
         checkStateOfScreen()
-     
+        //TODO remove this, for demo use only
+        videoHandler.sharedInstance.downloadVideo("https://clips.vorwaerts-gmbh.de/VfE_html5.mp4")
         
     }
     

@@ -41,4 +41,23 @@ class mediaHelper {
         let fileURL = getDocumentsURL().URLByAppendingPathComponent(filename+fileType)
         return fileURL.path!
     }
+    
+    //permanently deletes the image with the specified name
+    func deleteImage(name: String, fileType: String)-> Bool {
+        //get the storage name and path of the file to delete
+        let fileName = String(name.hash)
+        let path = mediaHelper.sharedInstance.fileInDocumentsDirectory(fileName, fileType: fileType)
+        
+        do{
+            //try executing the delete and report on its success.
+            try  NSFileManager.defaultManager().removeItemAtPath(path)
+            print("delete success")
+            return true
+        }
+        catch{
+            print("delete fail")
+            return false
+        }
+        
+    }
 }
