@@ -25,6 +25,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "Notified", name: TableUpdateNotificationKey, object: nil)
     
         self.clearsSelectionOnViewWillAppear = false
+        
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
@@ -131,7 +132,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
                 alertView.textFieldAtIndex(0)?.resignFirstResponder()
         
                 // passes the entered tourId into the tourParser
-                // tourParser.addNewTourId(Field!.text!)
+                
                 
                 API.initateConnection(Field!.text!)
                 
@@ -208,7 +209,8 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         
         if segue.identifier == "goToAddTour" {
             if let destination = (segue.destinationViewController as! UINavigationController).topViewController as? addNewTourViewController {
-                destination.tourIndex = models.count 
+                destination.tourIndex = models.count
+                
             }
         }
     }

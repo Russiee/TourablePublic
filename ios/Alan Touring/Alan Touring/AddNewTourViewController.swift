@@ -20,7 +20,7 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
     @IBOutlet weak var saveTourButton: UIButton!
     @IBOutlet weak var DownloadTypeChooser: UISegmentedControl!
     @IBOutlet weak var tourInformationLabel: UILabel!
-    
+    @IBOutlet weak var downloadStatusLabel: UILabel!
     
     
     override func viewDidLoad() {
@@ -37,8 +37,8 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
         
         let newCancelButton = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "cancelDownload")
         self.navigationItem.setLeftBarButtonItem(newCancelButton, animated: false)
-         ProgressBar.setProgress(0.0, animated: true)
-        
+        ProgressBar.setProgress(0.0, animated: true)
+        downloadStatusLabel.text = ""
     }
     
     func NotifiedDownloading() {
@@ -55,12 +55,15 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
         downloadedImages++
         let progress = (downloadedImages/totalImagesToDownload)
         if progress != 0 {
-        ProgressBar.setProgress(progress, animated: true)
+            downloadStatusLabel.text = "\(Int(downloadedImages)) of \(Int(totalImagesToDownload))"
+            ProgressBar.setProgress(progress, animated: true)
+        
         
         }
         if progress == 1.0{
             saveTourButton.setTitle("Save Tour", forState: .Normal)
             saveTourButton.enabled = true
+            downloadStatusLabel.hidden = true
         }
         print("Progress IS NOW \(progress)")
         
@@ -114,5 +117,6 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
         DownloadTypeChooser.hidden = visibility
         saveTourButton.hidden = visibility
         ProgressBar.hidden = visibility
+        downloadStatusLabel.hidden = visibility
     }
 }

@@ -296,6 +296,15 @@
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jv4-7W-mfo">
                                 <rect key="frame" x="20" y="118" width="560" height="2"/>
                             </progressView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GUa-6f-m1I">
+                                <rect key="frame" x="20" y="89" width="106" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="106" id="54y-Xz-57X"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -303,10 +312,12 @@
                             <constraint firstItem="4vk-pv-7vj" firstAttribute="trailing" secondItem="V9B-aU-NhZ" secondAttribute="trailingMargin" id="DOw-D0-D8w"/>
                             <constraint firstItem="4vk-pv-7vj" firstAttribute="top" secondItem="V9B-aU-NhZ" secondAttribute="top" constant="20" symbolic="YES" id="Ec4-lt-CUQ"/>
                             <constraint firstItem="tLd-Nq-5PN" firstAttribute="centerX" secondItem="TXq-08-F5F" secondAttribute="centerX" id="FWa-aA-uHR"/>
+                            <constraint firstItem="jv4-7W-mfo" firstAttribute="top" secondItem="GUa-6f-m1I" secondAttribute="bottom" constant="8" symbolic="YES" id="IdF-fV-NeG"/>
                             <constraint firstItem="jv4-7W-mfo" firstAttribute="trailing" secondItem="V9B-aU-NhZ" secondAttribute="trailingMargin" id="PTG-d8-cxy"/>
                             <constraint firstItem="TXq-08-F5F" firstAttribute="leading" secondItem="4vk-pv-7vj" secondAttribute="leading" id="PeY-Jv-goJ"/>
                             <constraint firstItem="TXq-08-F5F" firstAttribute="leading" secondItem="V9B-aU-NhZ" secondAttribute="leadingMargin" id="a0f-3F-nf5"/>
                             <constraint firstItem="MTY-ww-ae4" firstAttribute="centerY" secondItem="V9B-aU-NhZ" secondAttribute="centerY" id="eIY-6b-R4K"/>
+                            <constraint firstItem="GUa-6f-m1I" firstAttribute="leading" secondItem="jv4-7W-mfo" secondAttribute="leading" id="fbx-eQ-c6a"/>
                             <constraint firstItem="MTY-ww-ae4" firstAttribute="centerX" secondItem="V9B-aU-NhZ" secondAttribute="centerX" id="qok-TU-Y6o"/>
                             <constraint firstItem="jv4-7W-mfo" firstAttribute="top" secondItem="4vk-pv-7vj" secondAttribute="bottom" constant="77" id="s36-AI-jvA"/>
                             <constraint firstItem="jv4-7W-mfo" firstAttribute="leading" secondItem="V9B-aU-NhZ" secondAttribute="leadingMargin" id="sAo-2l-chn"/>
@@ -323,6 +334,7 @@
                         <outlet property="DownloadTypeChooser" destination="TXq-08-F5F" id="dkD-Rh-diq"/>
                         <outlet property="ProgressBar" destination="jv4-7W-mfo" id="H1m-lO-tJJ"/>
                         <outlet property="busyWheel" destination="MTY-ww-ae4" id="Ha3-Fi-XQM"/>
+                        <outlet property="downloadStatusLabel" destination="GUa-6f-m1I" id="uyp-Tg-deV"/>
                         <outlet property="saveTourButton" destination="tLd-Nq-5PN" id="ru3-Of-Wfg"/>
                         <outlet property="tourInformationLabel" destination="4vk-pv-7vj" id="7Xc-bK-GIy"/>
                     </connections>
