@@ -26,7 +26,8 @@
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:paddingTop="8dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            >
 
             <TextView
                 android:id="@+id/txtTourTitle"
@@ -52,55 +53,48 @@
 
     <LinearLayout
         android:id="@+id/CenterLayout"
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:baselineAligned="false"
-        android:layout_above="@+id/bottomText"
-        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/updateProgressBar"
+
+        android:layout_centerInParent="true"
         android:layout_marginBottom="44dp">
 
-        <LinearLayout
-            android:id="@+id/videoOptionLayout"
-            android:orientation="vertical"
-            android:layout_width="0dp"
+        <Button
+            android:id="@+id/buttonStartTour"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_marginLeft="@dimen/start_button_LR_margins"
+            android:layout_marginRight="@dimen/start_button_LR_margins"
+            android:layout_marginTop="@dimen/start_button_TB_margins"
+            android:layout_marginBottom="@dimen/start_button_TB_margins"
+            android:text="@string/summary_activity_start_tour"
+            android:textColor="#ffffff"
+            android:onClick="openTourActivity"/>
 
-            <Button
-                android:id="@+id/buttonStartTour"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/start_button_LR_margins"
-                android:layout_marginRight="@dimen/start_button_LR_margins"
-                android:layout_marginTop="@dimen/start_button_TB_margins"
-                android:layout_marginBottom="@dimen/start_button_TB_margins"
-                android:text="@string/summary_activity_start_tour"
-                android:textColor="#ffffff"
-                android:onClick="openTourActivity"/>
-
-            <Button
-                android:id="@+id/buttonUpdateTour"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/start_button_LR_margins"
-                android:layout_marginRight="@dimen/start_button_LR_margins"
-                android:layout_marginTop="@dimen/start_button_TB_margins"
-                android:layout_marginBottom="@dimen/start_button_TB_margins"
-                android:visibility="gone"
-                android:text="@string/summary_activity_update_tour"
-                android:textColor="#ffffff" />
-
-        </LinearLayout>
+        <Button
+            android:id="@+id/buttonUpdateTour"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/start_button_LR_margins"
+            android:layout_marginRight="@dimen/start_button_LR_margins"
+            android:layout_marginTop="@dimen/start_button_TB_margins"
+            android:layout_marginBottom="@dimen/start_button_TB_margins"
+            android:visibility="gone"
+            android:text="@string/summary_activity_update_tour"
+            android:textColor="#ffffff"
+            android:onClick="doTourUpdate"/>
 
     </LinearLayout>
 
     <ProgressBar
         android:id="@+id/updateProgressBar"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
+        android:layout_above="@id/bottomText"
         android:visibility="invisible" />
 
     <TextView
