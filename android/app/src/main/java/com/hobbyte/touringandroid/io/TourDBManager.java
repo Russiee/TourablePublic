@@ -245,6 +245,31 @@ public class TourDBManager extends SQLiteOpenHelper {
     }
 
     /**
+     * Returns an array containing the key IDs for every tour in the database.
+     */
+    public String[] getTourKeys() {
+        open(false);
+
+        String[] cols = {TourList.COL_KEY_ID};
+        Cursor c = db.query(
+                TourList.TABLE_NAME, cols,
+                null, null, null, null, null
+        );
+
+        String[] keys = new String[c.getCount()];
+        int i = 0;
+
+        while (c.moveToNext()) {
+            keys[i] = c.getString(0);
+            ++i;
+        }
+
+        c.close();
+
+        return keys;
+    }
+
+    /**
      * Finds the tours which have expired and returns their keys. These tours should be deleted.
      *
      * @return a String array of tour keys which have expired.
@@ -258,13 +283,9 @@ public class TourDBManager extends SQLiteOpenHelper {
 
         // fetch all keys where the current date is greater than the tour's expiry date
         Cursor c = db.query(
-                TourList.TABLE_NAME,
-                cols,
-                where,
-                whereArgs,
-                null,
-                null,
-                null
+                TourList.TABLE_NAME, cols,
+                where, whereArgs,
+                null, null, null
         );
 
         int count = c.getCount();
