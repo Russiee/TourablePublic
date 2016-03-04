@@ -13,7 +13,7 @@
 
     <!-- SummaryActivity dimensions-->
     <dimen name="start_button_LR_margins">60dp</dimen>
-    <dimen name="start_button_TB_margins">10dp</dimen>
+    <dimen name="start_button_TB_margins">5dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
 </resources>
