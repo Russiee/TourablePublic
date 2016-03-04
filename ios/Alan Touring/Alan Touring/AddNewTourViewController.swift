@@ -14,8 +14,9 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
     var tourIndex: Int?
     
     @IBOutlet weak var busyWheel: UIActivityIndicatorView!
-    @IBOutlet weak var withVideoButton: UIButton!
-    @IBOutlet weak var withOutVideoButton: UIButton!
+
+    @IBOutlet weak var saveTourButton: UIButton!
+    @IBOutlet weak var DownloadTypeChooser: UISegmentedControl!
     @IBOutlet weak var tourInformationLabel: UILabel!
     
     
@@ -23,6 +24,9 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
     override func viewDidLoad() {
 
         //Adds the observers for a valid or invalid key input completion message from ApiController
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedDownloading", name: beginDownloadKey, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedFinishedDownloading", name: endDownloadKey, object: nil)
+
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedInvalid", name: invalidIdNotificationKey, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedValid", name: validIdNotificationKey, object: nil)
        //Starts busy wheel animation and hides the other items in the view.
@@ -32,6 +36,18 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
         let newCancelButton = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "cancelDownload")
         self.navigationItem.setLeftBarButtonItem(newCancelButton, animated: false)
 
+    }
+    
+    func NotifiedDownloading() {
+        print("download begun")
+        
+        
+    }
+    
+    func NotifiedFinishedDownloading(){
+        print("download finished")
+        
+        
     }
     
     //a method to allow the user to cancel the data download and return to the main table view
@@ -46,17 +62,6 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
         
     }
     
-    
-    //Will be used to confirm downloads of video for the tour
-    @IBAction func withVideoButton(sender: AnyObject) {
-        //tourIdParser.confirmTourId(true)
-        
-    }
-    
-    //Will be used to confirm no download of video from the tour
-    @IBAction func withoutVideoButton(sender: AnyObject) {
-
-    }
     
     override func viewWillDisappear(animated: Bool) {
        // tourIdParser.confirmTourId(true)
@@ -80,14 +85,16 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
     func NotifiedValid(){
         self.busyWheel.stopAnimating()
         self.hideButtonsForBusyWheel(false)
+        
 
     }
     
     //Method for hiding all other items in the view besides teh busy wheel. 
     //Visibility:True = hides all items
     func hideButtonsForBusyWheel(visibility: Bool){
-        withOutVideoButton.hidden = visibility
-        withVideoButton.hidden = visibility
+      
         tourInformationLabel.hidden = visibility
+        DownloadTypeChooser.hidden = visibility
+        saveTourButton.hidden = visibility
     }
 }

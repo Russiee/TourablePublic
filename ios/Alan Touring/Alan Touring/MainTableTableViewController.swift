@@ -16,7 +16,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     var models = NSMutableArray()
     var tourParser = TourIdParser()
     var API = ApiConnector.init()
-    var lastAddedCell = UITableViewCell()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,23 +31,12 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
 
 
         checkStateOfScreen()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedDownloading", name: beginDownloadKey, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedFinishedDownloading", name: endDownloadKey, object: nil)
+     
+        
     }
+    
 
-    func NotifiedDownloading() {
-        print("download begun")
-
-        self.models = self.tourParser.getAllTours()
-
-//      lastAddedCell = self.tableView.cellForRowAtIndexPath(tableView)
-        lastAddedCell.tintColor = UIColor.blueColor()
-    }
-
-    func NotifiedFinishedDownloading(){
-        print("download finished")
-        lastAddedCell.tintColor = UIColor.whiteColor()
-    }
+  
 
 
     //to check if should be emptry screen when cancelling a tour download

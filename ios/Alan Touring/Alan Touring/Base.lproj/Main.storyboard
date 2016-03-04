@@ -20,7 +20,7 @@
                                 <rect key="frame" x="0.0" y="92" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Lqn-8R-xaX" id="aeM-L8-Pdn">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                                 <connections>
@@ -167,7 +167,7 @@
                                 <rect key="frame" x="0.0" y="28" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="03k-d5-fcy" id="MB5-Hk-I9T">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -175,7 +175,7 @@
                                 <rect key="frame" x="0.0" y="72" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dgi-VV-zu4" id="fwy-GU-EvB">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4ix-lr-3Yf">
@@ -201,7 +201,7 @@
                                 <rect key="frame" x="0.0" y="116" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Gg6-Ke-AoR" id="Y1c-PJ-DfJ">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -274,66 +274,49 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y22-dL-SYm">
-                                <rect key="frame" x="20" y="304" width="560" height="168"/>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <state key="normal" title="Without Video"/>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="TXq-08-F5F">
+                                <rect key="frame" x="20" y="144" width="560" height="29"/>
+                                <segments>
+                                    <segment title="With Video"/>
+                                    <segment title="Without Video"/>
+                                </segments>
+                            </segmentedControl>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tLd-Nq-5PN">
+                                <rect key="frame" x="266" y="204" width="68" height="30"/>
+                                <state key="normal" title="Save Tour"/>
                                 <connections>
-                                    <action selector="withoutVideoButton:" destination="xqZ-b6-00V" eventType="touchUpInside" id="JU9-so-nnC"/>
-                                    <segue destination="tFV-kM-qdT" kind="unwind" identifier="cancel" unwindAction="cancelToAddNewTourController:" id="ssc-v4-CdP"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="D6z-7G-kRU">
-                                <rect key="frame" x="20" y="77" width="560" height="159"/>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="159" id="gsv-gq-ts6"/>
-                                </constraints>
-                                <state key="normal" title="With Video"/>
-                                <connections>
-                                    <action selector="withVideoButton:" destination="xqZ-b6-00V" eventType="touchUpInside" id="96D-Oj-Yk4"/>
-                                    <segue destination="tFV-kM-qdT" kind="unwind" unwindAction="saveTourDetail:" id="Nue-fV-sYC"/>
+                                    <segue destination="tFV-kM-qdT" kind="unwind" unwindAction="cancelToAddNewTourController:" id="7ck-7c-6yS"/>
                                 </connections>
                             </button>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="MTY-ww-ae4">
-                                <rect key="frame" x="282" y="267" width="37" height="37"/>
+                                <rect key="frame" x="282" y="228" width="37" height="37"/>
                                 <rect key="contentStretch" x="1" y="0.0" width="1" height="1"/>
                                 <color key="color" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                             </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="D6z-7G-kRU" firstAttribute="leading" secondItem="4vk-pv-7vj" secondAttribute="leading" id="3mi-Zv-3sq"/>
-                            <constraint firstAttribute="bottom" secondItem="Y22-dL-SYm" secondAttribute="bottom" constant="20" symbolic="YES" id="43n-7A-FDn"/>
+                            <constraint firstItem="tLd-Nq-5PN" firstAttribute="top" secondItem="TXq-08-F5F" secondAttribute="bottom" constant="32" id="1b8-WN-qlX"/>
                             <constraint firstItem="4vk-pv-7vj" firstAttribute="trailing" secondItem="V9B-aU-NhZ" secondAttribute="trailingMargin" id="DOw-D0-D8w"/>
-                            <constraint firstItem="MTY-ww-ae4" firstAttribute="top" secondItem="D6z-7G-kRU" secondAttribute="bottom" constant="31" id="DpK-dl-U64"/>
                             <constraint firstItem="4vk-pv-7vj" firstAttribute="top" secondItem="V9B-aU-NhZ" secondAttribute="top" constant="20" symbolic="YES" id="Ec4-lt-CUQ"/>
-                            <constraint firstItem="Y22-dL-SYm" firstAttribute="centerX" secondItem="MTY-ww-ae4" secondAttribute="centerX" id="LsC-YX-7AN"/>
-                            <constraint firstItem="Y22-dL-SYm" firstAttribute="trailing" secondItem="D6z-7G-kRU" secondAttribute="trailing" id="Tm6-Xa-00a"/>
-                            <constraint firstItem="D6z-7G-kRU" firstAttribute="top" secondItem="4vk-pv-7vj" secondAttribute="bottom" constant="36" id="X2r-eU-yQa"/>
-                            <constraint firstItem="D6z-7G-kRU" firstAttribute="leading" secondItem="V9B-aU-NhZ" secondAttribute="leadingMargin" id="YAH-pI-IXt"/>
-                            <constraint firstItem="Y22-dL-SYm" firstAttribute="trailing" secondItem="D6z-7G-kRU" secondAttribute="trailing" id="aOp-83-hQM"/>
-                            <constraint firstItem="D6z-7G-kRU" firstAttribute="leading" secondItem="Y22-dL-SYm" secondAttribute="leading" id="b1S-5A-Mmm"/>
-                            <constraint firstItem="D6z-7G-kRU" firstAttribute="trailing" secondItem="4vk-pv-7vj" secondAttribute="trailing" id="eER-Yl-wOt"/>
-                            <constraint firstItem="Y22-dL-SYm" firstAttribute="leading" secondItem="D6z-7G-kRU" secondAttribute="leading" id="pVQ-aL-bq7"/>
-                            <constraint firstItem="Y22-dL-SYm" firstAttribute="top" secondItem="MTY-ww-ae4" secondAttribute="bottom" id="uDt-WG-dJH"/>
+                            <constraint firstItem="tLd-Nq-5PN" firstAttribute="centerX" secondItem="TXq-08-F5F" secondAttribute="centerX" id="FWa-aA-uHR"/>
+                            <constraint firstItem="TXq-08-F5F" firstAttribute="leading" secondItem="4vk-pv-7vj" secondAttribute="leading" id="PeY-Jv-goJ"/>
+                            <constraint firstItem="TXq-08-F5F" firstAttribute="leading" secondItem="V9B-aU-NhZ" secondAttribute="leadingMargin" id="a0f-3F-nf5"/>
+                            <constraint firstItem="MTY-ww-ae4" firstAttribute="centerY" secondItem="V9B-aU-NhZ" secondAttribute="centerY" id="eIY-6b-R4K"/>
+                            <constraint firstItem="MTY-ww-ae4" firstAttribute="centerX" secondItem="V9B-aU-NhZ" secondAttribute="centerX" id="qok-TU-Y6o"/>
+                            <constraint firstItem="TXq-08-F5F" firstAttribute="trailing" secondItem="4vk-pv-7vj" secondAttribute="trailing" id="sDH-5B-L5z"/>
+                            <constraint firstItem="TXq-08-F5F" firstAttribute="top" secondItem="V9B-aU-NhZ" secondAttribute="top" constant="144" id="wdV-oa-Tg4"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="Tm6-Xa-00a"/>
-                                <exclude reference="pVQ-aL-bq7"/>
-                            </mask>
-                        </variation>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Add New Tour" id="h1S-ya-PM5"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
                     <connections>
+                        <outlet property="DownloadTypeChooser" destination="TXq-08-F5F" id="dkD-Rh-diq"/>
                         <outlet property="busyWheel" destination="MTY-ww-ae4" id="Ha3-Fi-XQM"/>
+                        <outlet property="saveTourButton" destination="tLd-Nq-5PN" id="ru3-Of-Wfg"/>
                         <outlet property="tourInformationLabel" destination="4vk-pv-7vj" id="7Xc-bK-GIy"/>
-                        <outlet property="withOutVideoButton" destination="Y22-dL-SYm" id="6SN-D1-6TD"/>
-                        <outlet property="withVideoButton" destination="D6z-7G-kRU" id="End-fH-jQN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="p6H-uK-RQh" userLabel="First Responder" sceneMemberID="firstResponder"/>
