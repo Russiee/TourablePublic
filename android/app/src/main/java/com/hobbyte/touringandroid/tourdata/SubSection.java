@@ -30,14 +30,6 @@ public class SubSection extends TourItem implements Parcelable {
         this.numSubSections = numSubSections;
     }
 
-    // needed for Parcelable
-    public SubSection(Parcel in) {
-        super(in.readString());
-        title = in.readString();
-        numSubSections = in.readInt();
-        parent = (SubSection) in.readValue(SubSection.class.getClassLoader());
-    }
-
     /**
      * Add a {@link SubSection} or {@link PointOfInterest} to {@link #contents}.
      */
@@ -100,13 +92,23 @@ public class SubSection extends TourItem implements Parcelable {
         return TourItem.TYPE_SUBSECTION;
     }
 
-    // needed for Parcelable
+    // currently used for debugging purposes
     @Override
-    public int describeContents() {
-        return 0;
+    public String toString() {
+        return String.format("S: %s (%d)", title, numSubSections);
     }
 
-    // needed for Parcelable
+    /* ======================================================
+    *          STUFF FOR PARCELABLE
+    *  ======================================================*/
+
+    public SubSection(Parcel in) {
+        super(in.readString());
+        title = in.readString();
+        numSubSections = in.readInt();
+        parent = (SubSection) in.readValue(SubSection.class.getClassLoader());
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(objectID);
@@ -115,7 +117,6 @@ public class SubSection extends TourItem implements Parcelable {
         dest.writeValue(parent);
     }
 
-    // needed for Parcelable
     public static final Parcelable.Creator<SubSection> CREATOR
             = new Parcelable.Creator<SubSection>() {
         @Override
@@ -129,9 +130,8 @@ public class SubSection extends TourItem implements Parcelable {
         }
     };
 
-    // currently used for debugging purposes
     @Override
-    public String toString() {
-        return String.format("S: %s (%d)", title, numSubSections);
+    public int describeContents() {
+        return 0;
     }
 }
