@@ -84,9 +84,7 @@ class imageHandler: NSObject {
         let result = jpgImageData!.writeToFile(path, atomically: true)
         //print("if true, saved image: \(result)")
         countOfImages--
-       
         triggerDownloadCompleteNotify()
-       
         return result
     }
 
@@ -134,5 +132,24 @@ class imageHandler: NSObject {
                 }
             }
         }
+    }
+    
+    //permanently deletes the image with the specified name
+    func deleteImage(name: String)-> Bool {
+            //get the storage name and path of the file to delete
+            let fileName = String(name.hash)
+            let path = fileInDocumentsDirectory(fileName)
+        
+        do{
+            //try executing the delete and report on its success.
+          try  NSFileManager.defaultManager().removeItemAtPath(path)
+            print("delete success")
+            return true
+        }
+        catch{
+            print("delete fail")
+            return false
+        }
+        
     }
 }
