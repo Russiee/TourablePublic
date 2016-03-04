@@ -30,21 +30,7 @@ class imageHandler: NSObject {
         return Static.instance!
     }
 
-    func getDataFromUrl(url:NSURL, completion: ((data: NSData?, response: NSURLResponse?, error: NSError? ) -> Void)) {
-        NSURLSession.sharedSession().dataTaskWithURL(url) { (data, response, error) in
-            completion(data: data, response: response, error: error)
-            }.resume()
-    }
-
-    func getDocumentsURL() -> NSURL {
-        let documentsURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0]
-        return documentsURL
-    }
-
-    func fileInDocumentsDirectory(filename: String) -> String {
-        let fileURL = getDocumentsURL().URLByAppendingPathComponent(filename+".jpg")
-        return fileURL.path!
-    }
+  
     
     func triggerDownloadCompleteNotify() {
         NSNotificationCenter.defaultCenter().addObserver(
@@ -76,7 +62,7 @@ class imageHandler: NSObject {
         //let fileName2 = fileName1.substringToIndex(fileName1.endIndex.advancedBy(-6))
     
         //self.addUrlToFileNameMap(name, fileName: fileName1)
-        let path = fileInDocumentsDirectory(fileName1)
+        let path = mediaHelper.sharedInstance.fileInDocumentsDirectory(fileName1, fileType: ".jpg")
         //TODO when profiling, this was found to be extremely heavy, so we should look at putting this in an async
         //let pngImageData = UIImagePNGRepresentation(image)
         let jpgImageData = UIImageJPEGRepresentation(image, 1.0)
@@ -94,7 +80,7 @@ class imageHandler: NSObject {
             return nil
         }else{
             let fileName = String(name!.hash)
-            let path = fileInDocumentsDirectory(fileName)
+            let path = mediaHelper.sharedInstance.fileInDocumentsDirectory(fileName,fileType: ".jpg")
             let image = UIImage(contentsOfFile: path)
             
             if image == nil {
@@ -119,7 +105,7 @@ class imageHandler: NSObject {
             let imageUrl = url
             let actualURL = NSURL(string: imageUrl )
         
-            getDataFromUrl(actualURL!) { (data, response, error)  in
+            mediaHelper.sharedInstance.getDataFromUrl(actualURL!) { (data, response, error)  in
                 dispatch_async(dispatch_get_main_queue()) { () -> Void in
                     guard let data = data where error == nil else {
                         return
@@ -138,7 +124,7 @@ class imageHandler: NSObject {
     func deleteImage(name: String)-> Bool {
             //get the storage name and path of the file to delete
             let fileName = String(name.hash)
-            let path = fileInDocumentsDirectory(fileName)
+            let path = mediaHelper.sharedInstance.fileInDocumentsDirectory(fileName, fileType: ".jpg")
         
         do{
             //try executing the delete and report on its success.
