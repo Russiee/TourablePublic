@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.github.clans.fab.FloatingActionButton;
 import com.hobbyte.touringandroid.R;
 import com.hobbyte.touringandroid.internet.ServerAPI;
+import com.hobbyte.touringandroid.internet.UpdateChecker;
 import com.hobbyte.touringandroid.io.FileManager;
 import com.hobbyte.touringandroid.io.TourDBContract;
 import com.hobbyte.touringandroid.io.TourDBManager;
@@ -57,6 +58,8 @@ public class StartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
         CONTEXT = getApplicationContext();
+
+        new UpdateChecker(getApplicationContext()).start();
 
         //get references for animations
         keyEntryLayout = (LinearLayout) findViewById(R.id.keyEntryLayout);
@@ -225,11 +228,12 @@ public class StartActivity extends AppCompatActivity {
 
     /**
      * Moves the app to the {@link SummaryActivity}, ready to start the tour
-     * @param tourId tour to start
+     * @param keyID tour to start
      */
-    private void goToTour(final String tourId) {
+    private void goToTour(final String keyID) {
+        TourDBManager.getInstance(this).updateAccessedTime(keyID);
         Intent intent = new Intent(this, SummaryActivity.class);
-        intent.putExtra(SummaryActivity.KEY_ID, tourId);
+        intent.putExtra(SummaryActivity.KEY_ID, keyID);
         startActivity(intent);
     }
 
