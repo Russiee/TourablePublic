@@ -56,7 +56,7 @@ class bundleRouteConnector: NSObject, NSURLConnectionDelegate{
     }
     
      func getAllPOIs(section: NSArray){
-    
+        
         print("//// have waited for JSON to download////")
         for subsection in section{
             let keys = subsection.allKeys
@@ -67,6 +67,7 @@ class bundleRouteConnector: NSObject, NSURLConnectionDelegate{
                         let POIS = subsection["pois"] as! NSArray
                         for pois in POIS{
                         POIList.append(pois["objectId"] as! String)
+            
                     }
                 }
                     

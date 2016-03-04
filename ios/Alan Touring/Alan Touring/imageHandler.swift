@@ -14,7 +14,7 @@ var countOfImages = 0;
 
 class imageHandler: NSObject {
     
-    lazy var imagesToDownloadQueue =  Queue<String>()
+    lazy var imagesToDownload =  [String]()
     
     //making the TourIdParser a singleton to parse all tours from the API
     //in order to access TourIdParser methods call TourIdParser.shardInstance.METHOD()
@@ -82,12 +82,11 @@ class imageHandler: NSObject {
         let jpgImageData = UIImageJPEGRepresentation(image, 1.0)
     
         let result = jpgImageData!.writeToFile(path, atomically: true)
-        print("if true, saved image: \(result)")
+        //print("if true, saved image: \(result)")
         countOfImages--
        
-        if countOfImages == 0{
-            triggerDownloadCompleteNotify()
-        }
+        triggerDownloadCompleteNotify()
+       
         return result
     }
 
@@ -114,19 +113,12 @@ class imageHandler: NSObject {
     //called just once in pointOfInterest.swift
     func downloadImageSet(urls: [String]){
        
-        if countOfImages == 0{
-            
-        triggerDownloadBeginNotify()
-        }
-        
         countOfImages = countOfImages + urls.count
-        
+
         for url in urls {
-            imagesToDownloadQueue.enqueue(url)
-        }
-        
-        while !imagesToDownloadQueue.isEmpty() {
-            let imageUrl = imagesToDownloadQueue.dequeue()!
+            
+            triggerDownloadBeginNotify()
+            let imageUrl = url
             let actualURL = NSURL(string: imageUrl )
         
             getDataFromUrl(actualURL!) { (data, response, error)  in
@@ -134,7 +126,7 @@ class imageHandler: NSObject {
                     guard let data = data where error == nil else {
                         return
                     }
-                    print(response?.suggestedFilename ?? "")
+                    //print(response?.suggestedFilename ?? "")
                     
                     let image = UIImage(data: data)
                     self.saveImage(image!, name: imageUrl)
@@ -142,7 +134,5 @@ class imageHandler: NSObject {
                 }
             }
         }
-
     }
-
 }
