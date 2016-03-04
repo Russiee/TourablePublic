@@ -42,7 +42,6 @@ class DataCacheTest: XCTestCase{
     
         let result = tourParserForTest.getAllTours()
         let resultString = result.objectAtIndex(0) as? String
-        print(resultString)
         
         XCTAssertEqual(result.count, 1)
 

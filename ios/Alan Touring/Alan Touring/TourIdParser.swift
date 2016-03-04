@@ -11,7 +11,9 @@ import Foundation
 let TableUpdateNotificationKey = "tableAddWasComplete"
 
 public class TourIdParser {
-    
+
+    var API = ApiConnector()
+
     //making the TourIdParser a singleton to parse all tours from the API
     //in order to access TourIdParser methods call TourIdParser.shardInstance.METHOD()
     class var sharedInstance: TourIdParser {
@@ -21,39 +23,32 @@ public class TourIdParser {
         }
         dispatch_once(&Static.onceToken) {
             Static.instance = TourIdParser()
-            
+  
         }
         return Static.instance!
     }
 
-    var API = ApiConnector()
-    
-    
-    
     func deleteTourIdAtRow(row: Int) {
         //remove from "Array"
         var newArray : [AnyObject] = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! [AnyObject]
         NSUserDefaults.standardUserDefaults().removeObjectForKey(newArray[row] as! String)
         
-        //remove from Meta Data
+        //remove from Metadata
         NSUserDefaults.standardUserDefaults().removeObjectForKey(newArray[row] as! String)
         NSUserDefaults.standardUserDefaults().synchronize()
         
-        
         newArray.removeAtIndex(row)
         saveArray(newArray)
-        
     }
    
     
     //Adds a new tourId to the array
-     func updateArray(tourId: String){
+    func updateArray(tourId: String){
         //Duplicates the array, creating a mutable version that the new tourId can be added to.
         var newArray : [AnyObject] = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! NSMutableArray as [AnyObject]
         newArray.append(tourId)
         saveArray(newArray)
     }
-    
     
     
     //saves the copy of the array passed to it persistently and updates working copy kept in this class.
@@ -70,45 +65,46 @@ public class TourIdParser {
     // from the cache with its tour Id code
     func addTourMetaData(metadata: NSDictionary){
 
-        //let keys = ["code","createdAt","expiresAt","objectId","tour","updatedAt"]
-        var dict = metadata
-        var tourDict = metadata["tour"]
-        print("metadata for tour as follows: \(tourDict)")
-        //TODO: this is a hack to match the KCL-1010 tourID to the mock tour data for testing.
-        //This WILL CAUSE BUGS when working with toursIDs that have actual tours acociated with them
-        
-        //dict["objectId"] = objectId
-        let tourCode = dict["code"]!
-        
+        let tourDict = metadata["tour"]
+        let tourCode = metadata["code"]!
 
-        //let metadataDict = dict as NSDictionary
-        
         NSUserDefaults.standardUserDefaults().setObject(tourDict, forKey: tourCode as! String)
         NSUserDefaults.standardUserDefaults().synchronize()
 
-        
         self.updateArray(tourCode as! String)
+
         //Give objectId of tour as param
-         _ = bundleRouteConnector.init().initateConnection(tourDict!["objectId"] as! String)
-        NSNotificationCenter.defaultCenter().addObserver(
+
+
+        //this comes from the initialised of bundle Connector
+        let bundleRoute = bundleRouteConnector()
+        
+        bundleRoute.startConnection(tourDict!["objectId"] as! String)
+        
+        let MYDAMNDATA = bundleRoute.getJSONResult()
+        tourDataParser().saveNewTour(MYDAMNDATA)
+        bundleRoute.getAllPOIs((MYDAMNDATA["sections"]) as! NSArray)
+        NSUserDefaults.standardUserDefaults().setObject(bundleRoute.getPOIList(), forKey: "POIList")
+
+        NSNotificationCenter.defaultCenter().addObserver (
+
             self,
             selector: "TableChanged:",
             name: "TabledDataChanged",
             object: nil
         )
     }
-    
-    //Gets the dictonary from the cache with the tour code passed to it
-    func getTourMetadata(tourCode: String) -> Dictionary<String,AnyObject>{
 
+    //Gets the dictonary from the cache with the tour code passed to it
+    func getTourMetadata(tourCode: String) -> Dictionary<String,AnyObject> {
         return NSUserDefaults.standardUserDefaults().objectForKey(tourCode) as! [String : AnyObject]
     }
+
     //Notifies observers that the table of tour Ids has been updated.
     func notify() {
         NSNotificationCenter.defaultCenter().postNotificationName(TableUpdateNotificationKey, object: self)
-
     }
-    
+
     //method for getting tourIds that have been added for checking the table updates.
     public func getAllTours() -> NSMutableArray {
         return NSUserDefaults.standardUserDefaults().objectForKey("Array") as! NSMutableArray

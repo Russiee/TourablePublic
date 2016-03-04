@@ -17,6 +17,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     var tourParser = TourIdParser()
     var API = ApiConnector.init()
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         models = tourParser.getAllTours()
@@ -27,11 +28,17 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
-        
-        
+
+
         checkStateOfScreen()
+     
+        
     }
     
+
+  
+
+
     //to check if should be emptry screen when cancelling a tour download
     override func viewWillAppear(animated: Bool) {
         checkStateOfScreen()
@@ -69,8 +76,8 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         cell.textLabel?.text = models.objectAtIndex(indexPath.row) as? String
         return cell
     }
-    
-    
+
+
     // a function to tell change the background image when loading the app AND when deleting a cell results in no tours left
     func checkStateOfScreen(){
         if models.count == 0 {
@@ -85,8 +92,6 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         } else {
             tableView.backgroundView = nil
             tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
-            
-
         }
         
     }
@@ -97,57 +102,50 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     @IBAction func saveTourDetail(segue:UIStoryboardSegue) {
         
         self.models = self.tourParser.getAllTours()
-        tableView.reloadData()
         
+        tableView.reloadData()
+        //lastAddedCell = tableView.cellForRowAtIndexPath(NSIndexPath(index: tableView.numberOfRowsInSection(0)-1))!
     }
     
     @objc func TableChanged(notification: NSNotification){
         //do stuff
     }
     
-    
-    
     @IBAction func plussPressed(sender: UIBarButtonItem) {
-        
         showAlert()
-     
     }
     
     func showAlert(){
-        
         let alert = UIAlertView(title: "Add New Tour", message: "Enter the key you have recieved", delegate: self, cancelButtonTitle:"Cancel")
-       alert.alertViewStyle = UIAlertViewStyle.PlainTextInput
+        alert.alertViewStyle = UIAlertViewStyle.PlainTextInput
         alert.addButtonWithTitle("Add")
         let textField = alert.textFieldAtIndex(0)
         textField!.placeholder = "Enter Tour ID"
         alert.show()
-
     }
     
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
         switch buttonIndex{
-            
-        case 1://gets text field and hides keyboard in preperation for segue
+            case 1: //gets text field and hides keyboard in preperation for segue
                 let Field = alertView.textFieldAtIndex(0)
                 alertView.textFieldAtIndex(0)?.resignFirstResponder()
         
-                //passes the entered tourId into the tourParser
+                // passes the entered tourId into the tourParser
                 // tourParser.addNewTourId(Field!.text!)
+                
                 API.initateConnection(Field!.text!)
-                //goes to the AddNewTourPage
+                
+                // goes to the AddNewTourPage
                 performSegueWithIdentifier("goToAddTour", sender: self)
-                tableView.backgroundView = nil //to change the background image
+                // to change the background image
+                tableView.backgroundView = nil
             
+            case 0: break  //Cancel pressed, unwind segue executed automatically
             
-        case 0: break  //Cancel pressed, unwind segue executed automatically
-            
-        default: print("This is here because Swift")
-        
+            default: print("This is here because Swift")
         }
     }
-    
-    
-    
+
     /*
     // Override to support conditional editing of the table view.
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
@@ -171,7 +169,6 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
             
             //Don't touch. Magic.
             //tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-            
             
         } else if editingStyle == .Insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view

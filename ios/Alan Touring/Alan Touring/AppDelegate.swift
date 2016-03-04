@@ -20,6 +20,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         self.window?.backgroundColor = UIColor.whiteColor()
         
+        if(NSUserDefaults.standardUserDefaults().objectForKey("POIList")==nil){
+            let newArray = [String]()
+            //Stores the Array in NSUserDefaults, overwriting existing copy
+            NSUserDefaults.standardUserDefaults().setObject(newArray, forKey: "POIList")
+            //Commits changes to memory, required for iOS 7 and below.
+            NSUserDefaults.standardUserDefaults().synchronize()
+        }
+        
         //if app is launched for first time, creates an empty array in the cache for the tours
         if(NSUserDefaults.standardUserDefaults().objectForKey("Array")==nil){
             let newArray = [AnyObject]()
@@ -28,6 +36,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             //Commits changes to memory, required for iOS 7 and below.
             NSUserDefaults.standardUserDefaults().synchronize()
         }
+        let fileManager = NSFileManager.defaultManager()
+        if NSUserDefaults.standardUserDefaults().objectForKey("imageKeys") == nil{
+            let dictonary = Dictionary<String,String>()
+            NSUserDefaults.standardUserDefaults().setObject(dictonary, forKey: "imageKeys")
+            NSUserDefaults.standardUserDefaults().synchronize()
+            do {
+                try fileManager.createDirectoryAtPath(imageHandler.sharedInstance.getDocumentsURL().absoluteString,
+                    withIntermediateDirectories: false, attributes: nil)
+            } catch {
+                print("An Error was generated creating directory")
+            }
+        }
+
         
         return true
     }

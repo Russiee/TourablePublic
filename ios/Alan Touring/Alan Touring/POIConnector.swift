@@ -9,7 +9,7 @@
 import Foundation
 //Handles API connectivity for points of interest. As these are handled differently to 
 //tour sections
-class POIConnector: NSObject, NSURLConnectionDelegate{
+class POIConnector: NSObject, NSURLConnectionDelegate {
     
     lazy var data = NSMutableData()
     var urlPath: String = ""
@@ -42,9 +42,8 @@ class POIConnector: NSObject, NSURLConnectionDelegate{
                 //SAVE JSON
                 POIParser.init().savePOI(jsonResult)
             }
-            catch let err as NSError{
+            catch _ as NSError{
                 //Need to let user know if the tourID they entered was faulty here
-                //print(err.description)
                 print("POIConnector: there was an error parsing a poi")
             }
         }

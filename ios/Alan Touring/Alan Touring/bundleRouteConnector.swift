@@ -6,26 +6,20 @@ import UIKit
 class bundleRouteConnector: NSObject, NSURLConnectionDelegate{
 
     lazy var data = NSMutableData()
-    var urlPath: String = ""
+    //var urlPath: String = ""
+    var jsonResultFromAPI: NSDictionary!
+    var POIList = [String]()
+
+    override init() { }
 
     //Makes the connection to the API
-    private func startConnection( objectID: String){
-        print("got here")
-
+    func startConnection( objectID: String){
         let resetData = NSMutableData()
         //Reseting data to blank with every new connection
         data = resetData
 
         //The path to where the Tour Data is stored
-
-        urlPath = "https://touring-api.herokuapp.com/api/v1/bundle/"+objectID
-        print(urlPath)
-        //Standard URLConnection method
-        //        let request: NSURLRequest = NSURLRequest(URL: NSURL(string: urlPath)!)
-        //
-        //        //change to URLSession
-        //        let connection: NSURLConnection = NSURLConnection(request: request, delegate: self, startImmediately: false)!
-        //        connection.start()
+        let urlPath = "https://touring-api.herokuapp.com/api/v1/bundle/" + objectID
         let request = NSURLRequest(URL: NSURL(string: urlPath)!)
         let config = NSURLSessionConfiguration.defaultSessionConfiguration()
         let session = NSURLSession(configuration: config)
@@ -33,53 +27,60 @@ class bundleRouteConnector: NSObject, NSURLConnectionDelegate{
         let task = session.dataTaskWithRequest(request) { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
             self.data.appendData(data!)
             do {
-                let jsonResult: NSDictionary = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
-                print("BUNDLE DOWNLOAD COMPLETE")
-
-                 tourDataParser().saveNewTour(jsonResult)
+                self.jsonResultFromAPI = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
+                //passing through the array of sections
+                
+                //print("---------------------------------")
+                //print(((self.jsonResultFromAPI["sections"])![0]!)["subsections"])
             }
             catch let err as NSError{
                 //Need to let user know if the tourID they entered was faulty here
                 print(err.description)
-                
             }
+            
         }
         task.resume()
-
-
     }
-    
-    
+
     private func connection(connection: NSURLConnection!, didReceiveData data: NSData!){
         //Storing the data for use
         self.data.appendData(data)
     }
     
-    func initateConnection(objectId: String){
-        startConnection(objectId)
+    // called to retrieve the data returned by the API
+    func getJSONResult() -> NSDictionary {
+        while(jsonResultFromAPI == nil){
+            
+        }
+        return jsonResultFromAPI
     }
     
-    //KEEP FOR NOW (SHOULD HANDLE 'SAVING TOUR' AFTER DOWNLOAD). KEEP IN CASE CONNECTION BREAKS AGAIN
-    //handles data after connection is complete.
-    //    private func connectionDidFinishLoading(connection: NSURLConnection!) {
-    //
-    //        do {
-    //
-    //            let jsonResult: NSDictionary = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
-    //
-    //            self.storeTourJSON(jsonResult)
-    //        }
-    //        catch let err as NSError{
-    //            //Need to let user know if the tourID they entered was faulty here
-    //
-    //            print(err.description)
-    //
-    //
-    //        }
+     func getAllPOIs(section: NSArray){
     
-    //    }
+        print("//// have waited for JSON to download////")
+        for subsection in section{
+            let keys = subsection.allKeys
+            //print(keys)
+            for value in keys{
+                if value as! String == "pois"{
+                    print("poi reached")
+                        let POIS = subsection["pois"] as! NSArray
+                        for pois in POIS{
+                        POIList.append(pois["objectId"] as! String)
+                    }
+                }
+                    
+                else if((value as! String) == "subsections"){
+                    getAllPOIs(subsection["subsections"] as! NSArray)
+                    }
+                }
+            }
+        print("//// managed to get all the POIS////")
+        print(POIList)
+        }
     
-    
-    
+    func getPOIList() -> [String]{
+        return POIList
+    }
     
 }

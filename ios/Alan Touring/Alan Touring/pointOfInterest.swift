@@ -32,30 +32,20 @@ class pointOfInterest {
         self.section = section
         self.title = title
         self.updatedAt = updatedAt
-        print("POI "+self.objectId)
-        
     }
     
     
-
     func downloadContent() {
-        let imghd = imageHandler.init()
         var urlsToDownload = [String]()
         
-        for item in post{
+        for item in post {
             if let url: String? = item["url"] as? String{
                 if  url != nil{
-                    print(url)
                     urlsToDownload.append(url!)
                 }
             }
-            
-            if item["post"] as? String == post[post.count - 1]["post"] as? String
-            {
-                print("last item")
-            }
         }
-        imghd.downloadImageSet(urlsToDownload)
+        imageHandler.sharedInstance.downloadImageSet(urlsToDownload)
     }
 
 
