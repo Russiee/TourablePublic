@@ -23,14 +23,6 @@ public class PointOfInterest extends TourItem implements Parcelable {
         this.parent = parent;
     }
 
-    // needed for Parcelable
-    public PointOfInterest(Parcel in) {
-        super(in.readString());
-        title = in.readString();
-        nextIndex = in.readInt();
-        parent = (SubSection) in.readValue(SubSection.class.getClassLoader());
-    }
-
     /**
      * Get the SubSection's title, as described in the JSON.
      */
@@ -69,13 +61,23 @@ public class PointOfInterest extends TourItem implements Parcelable {
         return parent.getPOI(nextIndex);
     }
 
-    // needed for Parcelable
+    // currently used for debugging purposes
     @Override
-    public int describeContents() {
-        return 0;
+    public String toString() {
+        return String.format("P: %s (%d)", title, nextIndex);
     }
 
-    // needed for Parcelable
+    /* ======================================================
+    *          STUFF FOR PARCELABLE
+    *  ======================================================*/
+
+    public PointOfInterest(Parcel in) {
+        super(in.readString());
+        title = in.readString();
+        nextIndex = in.readInt();
+        parent = (SubSection) in.readValue(SubSection.class.getClassLoader());
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(objectID);
@@ -84,7 +86,6 @@ public class PointOfInterest extends TourItem implements Parcelable {
         dest.writeValue(parent);
     }
 
-    // needed for Parcelable
     public static final Parcelable.Creator<PointOfInterest> CREATOR
             = new Parcelable.Creator<PointOfInterest>() {
         @Override
@@ -98,9 +99,8 @@ public class PointOfInterest extends TourItem implements Parcelable {
         }
     };
 
-    // currently used for debugging purposes
     @Override
-    public String toString() {
-        return String.format("P: %s (%d)", title, nextIndex);
+    public int describeContents() {
+        return 0;
     }
 }
