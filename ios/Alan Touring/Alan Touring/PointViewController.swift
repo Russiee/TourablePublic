@@ -17,12 +17,14 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var scrollView: UIScrollView!
     var poiID = ""
     var superSectionID = ""
-    var POIList = NSUserDefaults.standardUserDefaults().objectForKey("POIList")!
+    var POIList = [String]()
     
     @IBOutlet weak var exampleVideoButton: UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        getPOIS()
         
         
         //adding a tool bar with two buttons for the previous and next POI in the tour
@@ -45,16 +47,25 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
     }
     // navigate to previous POI
     
+    func getPOIS(){
+        POIList = []
+        for POIS in (((NSUserDefaults.standardUserDefaults().objectForKey(superSectionID)) as! NSDictionary)["pois"]) as! NSArray{
+            
+            POIList.append(POIS["objectId"] as! String)
+        }
+    }
+    
     func createToolBar() -> UIToolbar{
+        
         let toolbar: UIToolbar = UIToolbar()
         
         toolbar.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44)
         
-        if(POIList.indexOfObject(poiID) == 0){
+        if(POIList.indexOf(poiID) == 0){
             let items = [UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil) ,UIBarButtonItem(title: "Next", style: .Plain , target: self, action: "nextPOI"), exampleVideoButton!]
             toolbar.setItems(items, animated: true)
         }
-        else if(POIList.indexOfObject(poiID) == (POIList.count - 1)){
+        else if(POIList.indexOf(poiID) == (POIList.count - 1)){
             let items = [UIBarButtonItem(title: "Previous", style: .Plain , target: self, action: "previousPOI") , UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil), exampleVideoButton!]
             toolbar.setItems(items, animated: true)
         }
@@ -67,14 +78,8 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
         
     }
     func previousPOI(){
-//        let superSection = tourDataParser().getTourSection(superSectionID)
-//        
-//        let poiArray = superSection.getPointsOfInterest()
         
-        // pointer in reverse order
-//        print(POIList)
-//        print(poiID)
-        let Z = POIList.indexOfObject(poiID)
+        let Z = POIList.indexOf(poiID)!
         //print(Z)
         
         poiID = (POIList as! NSArray)[Z - 1] as! String
@@ -88,9 +93,7 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
     // navigate to next POI
     func nextPOI(){
         
-//        print(POIList)
-//        print(poiID)
-        let Z = POIList.indexOfObject(poiID)
+        let Z = POIList.indexOf(poiID)!
         //print(Z)
         
         poiID = (POIList as! NSArray)[Z + 1] as! String
@@ -100,6 +103,7 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
         }
         viewDidLoad()
     }
+
     
     
     func createSubviews(post: NSArray){
