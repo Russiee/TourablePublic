@@ -274,13 +274,6 @@ public class StartActivity extends AppCompatActivity {
                     keyExpiryDate = null;
                 }
 
-                // check if key has already been used
-                boolean exists = TourDBManager.getInstance(getApplicationContext()).doesTourExist(keyID);
-
-                if (exists) {
-                    return null;
-                }
-
                 SharedPreferences prefs = getApplicationContext().getSharedPreferences(
                         getString(R.string.preference_file_key),
                         Context.MODE_PRIVATE);
@@ -308,9 +301,7 @@ public class StartActivity extends AppCompatActivity {
             textKey.setText("");
             textKey.setEnabled(true);
 
-            if (isValid == null) {
-                showToast(getString(R.string.msg_tour_exists));
-            } else if (isValid) {
+            if (isValid) {
                 goToTourDownload();
             } else {
                 showToast(getString(R.string.msg_invalid_key));
