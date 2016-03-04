@@ -12,6 +12,7 @@ import UIKit
 //keys for notifying observers of outcome of the key verification route
 let invalidIdNotificationKey = "InvalidKeyEnteredNotification"
 let validIdNotificationKey = "ValidKeyEnteredNotification"
+var tourIdForSummary = ""
 
 class ApiConnector: NSObject, NSURLConnectionDelegate{
     
@@ -53,7 +54,8 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
    
         do {
             let jsonResult: NSDictionary = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
-            self.storeMetadataJson(jsonResult)
+            _ = TourIdParser().addTourMetaData(jsonResult)
+            self.triggerValidKeyNotification()
         }
         catch let err as NSError{
             //Need to let user know if the tourID they entered was faulty here
@@ -89,20 +91,7 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
         }
         notify()
     }
-    
-    //Takes the metadata and passes it to the tourIdParser.
-    func storeMetadataJson(JSONData: NSDictionary){
-        //Storing Meta Data so we can access it for other use
-       
-        //TODO: sort this
-        //This will be the objectId taken from the key verification route.
 
-        _ = TourIdParser().addTourMetaData(JSONData)
-        self.triggerValidKeyNotification()
-       
-    }
-    
-    
     // remove the heading and trailing spaces
     // rejects any tourIds with invalid symbols
     func cleanTourId(tourId: String) -> String {
@@ -111,10 +100,11 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
         
         if trimmedTourId.containsString(" ") || trimmedTourId.containsString("/")||trimmedTourId.containsString("\"")||trimmedTourId.containsString("\\"){
             print("the tour id input must not contain whitespaces.")
-            //not possible to retunr nil so returns blank.
-            return ""
+            //not possible to return nil so returns blank.
+             tourIdForSummary = ""
+             return ""
         }
-        
+        tourIdForSummary = trimmedTourId
         return trimmedTourId
     }
     
