@@ -42,5 +42,17 @@ class mediaHelper {
         return fileURL.path!
     }
     
+    //check if the file exists at the specified path
+    func checkFileExists(path: String) -> Bool{
+        if (NSFileManager.defaultManager().fileExistsAtPath(path)){
+            //file exists
+            return true
+        }
+        else{
+            //file does not exist
+            return false
+        }
+    }
+    
 
 }
