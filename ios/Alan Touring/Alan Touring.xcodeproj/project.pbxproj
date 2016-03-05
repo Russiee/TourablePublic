@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7A3988D01C849C1E006572E6 /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3988CF1C849C1E006572E6 /* Queue.swift */; };
+		E5007F851C8B6ACA0041B31C /* TourDeleter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5007F841C8B6ACA0041B31C /* TourDeleter.swift */; };
 		E536DCBF1C6510FD00A7B2FC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E536DCBE1C6510FC00A7B2FC /* AppDelegate.swift */; };
 		E536DCC11C6510FD00A7B2FC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E536DCC01C6510FD00A7B2FC /* ViewController.swift */; };
 		E536DCC41C6510FD00A7B2FC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E536DCC21C6510FD00A7B2FC /* Main.storyboard */; };
@@ -56,6 +57,7 @@
 
 /* Begin PBXFileReference section */
 		7A3988CF1C849C1E006572E6 /* Queue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Queue.swift; sourceTree = "<group>"; };
+		E5007F841C8B6ACA0041B31C /* TourDeleter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TourDeleter.swift; sourceTree = "<group>"; };
 		E536DCBB1C6510FC00A7B2FC /* Alan Touring.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Alan Touring.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E536DCBE1C6510FC00A7B2FC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E536DCC01C6510FD00A7B2FC /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -181,6 +183,7 @@
 				FA0A51711C7747B400E4F733 /* tourSection.swift */,
 				FA0A51761C774CEC00E4F733 /* pointOfInterest.swift */,
 				FA4D0F5E1C6A4D08007D79E3 /* TourIdParser.swift */,
+				E5007F841C8B6ACA0041B31C /* TourDeleter.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -376,6 +379,7 @@
 				FA2BB2981C78F46500D784E8 /* imageHandler.swift in Sources */,
 				FA4D0F5F1C6A4D08007D79E3 /* TourIdParser.swift in Sources */,
 				FA0A51721C7747B400E4F733 /* tourSection.swift in Sources */,
+				E5007F851C8B6ACA0041B31C /* TourDeleter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

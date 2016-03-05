@@ -160,7 +160,8 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             
-            tourParser.deleteTour(indexPath.row)
+            TourDeleter.sharedInstance.deleteMediaInTour(indexPath.row)
+            TourDeleter.sharedInstance.deleteTour(indexPath.row)
             // Delete the row from the data source
             tourParser.deleteTourIdAtRow(indexPath.row)
             //Update copy of data to display
