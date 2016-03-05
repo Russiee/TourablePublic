@@ -114,10 +114,11 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     }
     
     @IBAction func plussPressed(sender: UIBarButtonItem) {
-        showAlert()
+        showTourKeyAlert()
     }
     
-    func showAlert(){
+    //prompt user for tour code input
+    func showTourKeyAlert(){
         let alert = UIAlertView(title: "Add New Tour", message: "Enter the key you have recieved", delegate: self, cancelButtonTitle:"Cancel")
         alert.alertViewStyle = UIAlertViewStyle.PlainTextInput
         alert.addButtonWithTitle("Add")
@@ -125,23 +126,33 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         textField!.placeholder = "Enter Tour ID"
         alert.show()
     }
-    
+    //Alert user that the tour they are trying to add already exists.
+    func showTourAlreadyExistsAlert(){
+        let alert = UIAlertView(title: "Tour Add Error", message: "A tour with that key already exists.", delegate: self, cancelButtonTitle:"Cancel")
+        alert.alertViewStyle = UIAlertViewStyle.Default
+        alert.show()
+    }
+    //controls the behavior of the alerts for user tour code entry
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
         switch buttonIndex{
             case 1: //gets text field and hides keyboard in preperation for segue
                 let Field = alertView.textFieldAtIndex(0)
                 alertView.textFieldAtIndex(0)?.resignFirstResponder()
-        
+                
+                //checks if the tour already exists. If not:
                 // passes the entered tourId into the tourParser
-                
-                
-                API.initateConnection(Field!.text!)
-                
-                // goes to the AddNewTourPage
-                performSegueWithIdentifier("goToAddTour", sender: self)
-                // to change the background image
-                tableView.backgroundView = nil
-            
+                let tours = TourIdParser.sharedInstance.getAllTours()
+                if tours.containsObject(Field!.text!){
+                    //Tour already exists
+                    showTourAlreadyExistsAlert()
+                }else{
+                    //Tour does not exist. Procede.
+                    API.initateConnection(Field!.text!)
+                    // goes to the AddNewTourPage
+                    performSegueWithIdentifier("goToAddTour", sender: self)
+                    // to change the background image
+                    tableView.backgroundView = nil
+                }
             case 0: break  //Cancel pressed, unwind segue executed automatically
             
             default: print("This is here because Swift")
