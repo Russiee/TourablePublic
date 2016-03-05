@@ -228,10 +228,10 @@
                         <viewControllerLayoutGuide type="bottom" id="JsW-vL-j9g"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="PHN-9f-g4e">
-                        <rect key="frame" x="0.0" y="64" width="600" height="492"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PcQ-SN-rzc">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PcQ-SN-rzc">
                                 <rect key="frame" x="0.0" y="-64" width="600" height="601"/>
                             </scrollView>
                         </subviews>
@@ -293,7 +293,7 @@
                                 <rect key="frame" x="266" y="264" width="68" height="30"/>
                                 <state key="normal" title="Save Tour"/>
                                 <connections>
-                                    <segue destination="tFV-kM-qdT" kind="unwind" unwindAction="cancelToAddNewTourController:" id="7ck-7c-6yS"/>
+                                    <segue destination="tFV-kM-qdT" kind="unwind" identifier="cancel" unwindAction="cancelToAddNewTourController:" id="7ck-7c-6yS"/>
                                 </connections>
                             </button>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="MTY-ww-ae4">
@@ -358,6 +358,7 @@
                         <outlet property="saveTourButton" destination="tLd-Nq-5PN" id="ru3-Of-Wfg"/>
                         <outlet property="tourDescriptionLabel" destination="4g3-3l-u5G" id="Hav-Ve-2yg"/>
                         <outlet property="tourTitleLabel" destination="4vk-pv-7vj" id="A3e-9J-S6f"/>
+                        <segue destination="Bbx-Al-6dq" kind="show" identifier="cancel" id="9IY-92-nMs"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="p6H-uK-RQh" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -405,6 +406,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
+        <segue reference="9IY-92-nMs"/>
         <segue reference="d1o-YK-Yz6"/>
     </inferredMetricsTieBreakers>
 </document>
