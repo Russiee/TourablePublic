@@ -9,8 +9,9 @@
 import Foundation
 import MediaPlayer
 
+//Deals with the download and saving of video mp4 files for playback in tours.
 class videoHandler {
-    
+    //This is a singleton class.
     class var sharedInstance: videoHandler {
         struct Static {
             static var onceToken: dispatch_once_t = 0
@@ -22,65 +23,56 @@ class videoHandler {
         }
         return Static.instance!
     }
-
-
-func downloadVideo(url: String){
-    let actualURL = NSURL(string: url)
-    print("starting video dl from \(actualURL)")
-    mediaHelper.sharedInstance.getDataFromUrl(actualURL!) { (data, response, error)  in
-        dispatch_async(dispatch_get_main_queue()) { () -> Void in
-            guard let data = data where error == nil else {
-                return
+    
+    //Downloads and triggers the save of the video with the specified url (https only)
+    func downloadVideo(url: String){
+        //creates an NSUrl from the string given.
+        let actualURL = NSURL(string: url)
+        mediaHelper.sharedInstance.getDataFromUrl(actualURL!) { (data, response, error)  in
+            dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                guard let data = data where error == nil else {
+                    return
+                }
+                //Save the data from the server as a video, with the url as its name.
+                self.saveVideo(data, name: url)
             }
-            print("finished video dl")
-            self.saveVideo(data, name: url)
-            //HOW TO GET HERE THE FINAL DOWNLOADED IMAGE
         }
     }
-}
-    
+    //Saves the video binary file under the specified name.
     func saveVideo(videoData: NSData, name: String ) -> Bool{
-        
-        let fileName1 = String(name.hash)
-        
-        var fileSize : UInt64 = 0
-        let path = mediaHelper.sharedInstance.fileInDocumentsDirectory(fileName1, fileType: ".mp4")
-        print("\(path) url at point of save")
-        do {
-            let attr : NSDictionary? = try NSFileManager.defaultManager().attributesOfItemAtPath(path)
-            
-            if let _attr = attr {
-                fileSize = _attr.fileSize();
-                print(fileSize)
-            }
-        } catch {
-            print("Error: \(error)")
-        }
-        //let fileName2 = fileName1.substringToIndex(fileName1.endIndex.advancedBy(-6))
-        
-        //self.addUrlToFileNameMap(name, fileName: fileName1)
-                //TODO when profiling, this was found to be extremely heavy, so we should look at putting this in an async
-        //let pngImageData = UIImagePNGRepresentation(image)
-       
+        //The name is hashed to ensure it is uniqe and compatible with iOS filesystem
+        let fileHash = String(name.hash)
+        //get the full path to save the file to.
+        let path = mediaHelper.sharedInstance.fileInDocumentsDirectory(fileHash, fileType: ".mp4")
+        //write the file to disk at the specified path.
         let result = videoData.writeToFile(path, atomically: true)
-        //print("if true, saved image: \(result)")
-        print("save of video worked! \(result)")
+        print("save of video worked: \(result)")
+        //returns success status.
         return result
     }
     
-    
-    func loadVideoPath(name: String?) -> String? {
-        //let fileName = self.getFileNameFromUrl(name)
-        if name == nil{
+    //returns the file location of the video if it exists. If not will url of the web resource for 
+    //online streaming.
+    func loadVideoPath(url: String?) -> NSURL? {
+
+        if url == nil{
             return nil
         }else{
-            let fileName = String(name!.hash)
+            let fileName = String(url!.hash)
             let path = mediaHelper.sharedInstance.fileInDocumentsDirectory(fileName,fileType: ".mp4")
-            return path
+            //check if the file has been downloaded and saved.
+            if mediaHelper.sharedInstance.checkFileExists(path){
+                //yes, return the filepath
+                return NSURL(fileURLWithPath: path)
+            }else{
+                //no, return the online url
+                return NSURL(string: url!)
+            }
+            
         }
     }
     
-   
-        
-
+    
+    
+    
 }

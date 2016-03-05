@@ -43,7 +43,8 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
         self.createSubviews(pointToDisplay.post)
         
     }
-    
+    //For testing, plays the specified video when tapped. We will be able to use
+    //for playing actual videos later.
     @IBAction func exmapleVideoButton(sender: AnyObject) {
 
         do{
@@ -273,11 +274,8 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
                 }
             }
         }
-        
         scrollView.contentSize = CGSizeMake(self.view.frame.size.width, totalHeight+offset)
-        
     }
-    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -293,21 +291,29 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
         // Pass the selected object to the new view controller.
         
     }
+    
+    //used to display a video when it is tapped on screen.
+    //videoUrl: file url or online url of video to display
+    //loop: should the video repeat
     func playVideo(videoUrl: String, loop: Bool) throws {
+        //path of video to play
         let path = videoHandler.sharedInstance.loadVideoPath(videoUrl)
-        print(path)
-        self.player = AVPlayer(URL: NSURL(fileURLWithPath: path!))
+        print("this is the path \(path)")
+        //Create a new player with the path given to it.
+        self.player = AVPlayer(URL: path!)
+        //create a new fullscreen controller for the video
         let playerController = AVPlayerViewController()
+        //add the videoplyer to the controller
         playerController.player = player
-        
+        //Notify when the video has finished so we can loop it if required.
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "playerDidFinishPlaying",
             name: AVPlayerItemDidPlayToEndTimeNotification, object: player.currentItem)
-        
         self.presentViewController(playerController, animated: true) {
-            
+            //Start the video
             self.player.play()
         }
     }
+    //Loop the video when this is notified by the player.
     func playerDidFinishPlaying() {
         // Your code here
         print("VIDEO FINISHED")
