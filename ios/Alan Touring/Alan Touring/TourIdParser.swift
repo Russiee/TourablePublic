@@ -60,6 +60,9 @@ public class TourIdParser {
         }
         //reset array to empty for next call of getAllIDs
         objectIDs = []
+        //deletes the objectId of the tour itself
+        NSUserDefaults.standardUserDefaults().removeObjectForKey(tourID)
+        print("deleted all of the tour")
         
     }
     
