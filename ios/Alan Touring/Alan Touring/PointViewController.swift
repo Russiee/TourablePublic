@@ -58,21 +58,22 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
     func createToolBar() -> UIToolbar{
         
         let toolbar: UIToolbar = UIToolbar()
-        
-        toolbar.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44)
-        
-        if(POIList.indexOf(poiID) == 0){
-            let items = [UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil) ,UIBarButtonItem(title: "Next", style: .Plain , target: self, action: "nextPOI"), exampleVideoButton!]
-            toolbar.setItems(items, animated: true)
-        }
-        else if(POIList.indexOf(poiID) == (POIList.count - 1)){
-            let items = [UIBarButtonItem(title: "Previous", style: .Plain , target: self, action: "previousPOI") , UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil), exampleVideoButton!]
-            toolbar.setItems(items, animated: true)
-        }
-        else{
-            let items = [UIBarButtonItem(title: "Previous", style: .Plain , target: self, action: "previousPOI") , UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil) ,UIBarButtonItem(title: "Next", style: .Plain , target: self, action: "nextPOI"), exampleVideoButton!]
-            toolbar.setItems(items, animated: true)
-        }
+            if(POIList.count > 1){
+                toolbar.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44)
+                
+                if(POIList.indexOf(poiID) == 0){
+                    let items = [UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil) ,UIBarButtonItem(title: "Next", style: .Plain , target: self, action: "nextPOI"), exampleVideoButton!]
+                    toolbar.setItems(items, animated: true)
+                }
+                else if(POIList.indexOf(poiID) == (POIList.count - 1)){
+                    let items = [UIBarButtonItem(title: "Previous", style: .Plain , target: self, action: "previousPOI") , UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil), exampleVideoButton!]
+                    toolbar.setItems(items, animated: true)
+                }
+                else{
+                    let items = [UIBarButtonItem(title: "Previous", style: .Plain , target: self, action: "previousPOI") , UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil) ,UIBarButtonItem(title: "Next", style: .Plain , target: self, action: "nextPOI"), exampleVideoButton!]
+                    toolbar.setItems(items, animated: true)
+                }
+            }
         
         return toolbar
         
