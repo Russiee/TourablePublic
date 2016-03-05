@@ -45,6 +45,7 @@ class TourSummaryController: UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedDownloading", name: beginDownloadKey, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedFinishedDownloading", name: endDownloadKey, object: nil)
         
+       _ = TourUpdateManager(tourIDtoCheck: tourId)
     }
     
     func NotifiedDownloading(){

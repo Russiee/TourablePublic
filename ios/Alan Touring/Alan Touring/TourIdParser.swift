@@ -65,8 +65,12 @@ public class TourIdParser {
     // from the cache with its tour Id code
     func addTourMetaData(metadata: NSDictionary){
 
-        let tourDict = metadata["tour"]
         let tourCode = metadata["code"]!
+
+        let tourDict = metadata["tour"] as! NSMutableDictionary
+        tourDict["expiresAt"] = metadata["expiresAt"]
+        tourDict["updatedAt"] = metadata["updatedAt"]
+        tourDict["createdAt"] = metadata["createdAt"]
 
         NSUserDefaults.standardUserDefaults().setObject(tourDict, forKey: tourCode as! String)
         NSUserDefaults.standardUserDefaults().synchronize()
@@ -78,8 +82,8 @@ public class TourIdParser {
 
         //this comes from the initialised of bundle Connector
         let bundleRoute = bundleRouteConnector()
-        print(tourDict!["objectId"])
-        bundleRoute.startConnection(tourDict!["objectId"] as! String)
+        print(tourDict["objectId"])
+        bundleRoute.startConnection(tourDict["objectId"] as! String)
         
         let MYDAMNDATA = bundleRoute.getJSONResult()
         tourDataParser().saveNewTour(MYDAMNDATA)
