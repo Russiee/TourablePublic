@@ -10,6 +10,8 @@
 import UIKit
 
 import Foundation
+import AVKit
+import AVFoundation
 
 class PointViewController: UIViewController, UIScrollViewDelegate {
     
@@ -18,6 +20,8 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
     var poiID = ""
     var superSectionID = ""
     var POIList = [String]()
+    var player = AVPlayer()
+    
     
     @IBOutlet weak var exampleVideoButton: UIBarButtonItem!
     
@@ -33,17 +37,21 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
         
         scrollView.delegate = self
         scrollView.contentSize = CGSize(width: self.view.frame.size.width, height: self.view.frame.size.height)
-        //      scrollView.contentInset = UIEdgeInsetsMake(0.00, 0.00, 44.0, 0.00)
-        //      scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(0.00, 0.00, 44.0, 0.00)
         
         let pointToDisplay = POIParser().getTourSection(poiID)
         
         self.createSubviews(pointToDisplay.post)
         
     }
-    
+    //For testing, plays the specified video when tapped. We will be able to use
+    //for playing actual videos later.
     @IBAction func exmapleVideoButton(sender: AnyObject) {
-        performSegueWithIdentifier("segueToVideo", sender: self)
+
+        do{
+            try self.playVideo("https://clips.vorwaerts-gmbh.de/VfE_html5.mp4", loop: true)
+        }catch{
+            print("error playing video")
+        }
     }
     // navigate to previous POI
     
@@ -58,22 +66,22 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
     func createToolBar() -> UIToolbar{
         
         let toolbar: UIToolbar = UIToolbar()
-            if(POIList.count > 1){
-                toolbar.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44)
-                
-                if(POIList.indexOf(poiID) == 0){
-                    let items = [UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil) ,UIBarButtonItem(title: "Next", style: .Plain , target: self, action: "nextPOI"), exampleVideoButton!]
-                    toolbar.setItems(items, animated: true)
-                }
-                else if(POIList.indexOf(poiID) == (POIList.count - 1)){
-                    let items = [UIBarButtonItem(title: "Previous", style: .Plain , target: self, action: "previousPOI") , UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil), exampleVideoButton!]
-                    toolbar.setItems(items, animated: true)
-                }
-                else{
-                    let items = [UIBarButtonItem(title: "Previous", style: .Plain , target: self, action: "previousPOI") , UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil) ,UIBarButtonItem(title: "Next", style: .Plain , target: self, action: "nextPOI"), exampleVideoButton!]
-                    toolbar.setItems(items, animated: true)
-                }
+        if(POIList.count > 1){
+            toolbar.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44)
+            
+            if(POIList.indexOf(poiID) == 0){
+                let items = [UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil) ,UIBarButtonItem(title: "Next", style: .Plain , target: self, action: "nextPOI"), exampleVideoButton!]
+                toolbar.setItems(items, animated: true)
             }
+            else if(POIList.indexOf(poiID) == (POIList.count - 1)){
+                let items = [UIBarButtonItem(title: "Previous", style: .Plain , target: self, action: "previousPOI") , UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil), exampleVideoButton!]
+                toolbar.setItems(items, animated: true)
+            }
+            else{
+                let items = [UIBarButtonItem(title: "Previous", style: .Plain , target: self, action: "previousPOI") , UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil) ,UIBarButtonItem(title: "Next", style: .Plain , target: self, action: "nextPOI"), exampleVideoButton!]
+                toolbar.setItems(items, animated: true)
+            }
+        }
         
         return toolbar
         
@@ -104,7 +112,7 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
         }
         viewDidLoad()
     }
-
+    
     
     
     func createSubviews(post: NSArray){
@@ -266,11 +274,8 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
                 }
             }
         }
-
         scrollView.contentSize = CGSizeMake(self.view.frame.size.width, totalHeight+offset)
-
     }
-    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -282,16 +287,44 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-    // Get the new view controller using segue.destinationViewController.
-    // Pass the selected object to the new view controller.
-        if segue.identifier == "segueToVideo"{
-            if let destination = segue.destinationViewController as? VideoViewController {
-                destination.videoUrl =
-                    "https://clips.vorwaerts-gmbh.de/VfE_html5.mp4"
-                //Heres one I made ealier
-                
-            }
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
+        
     }
     
+    //used to display a video when it is tapped on screen.
+    //videoUrl: file url or online url of video to display
+    //loop: should the video repeat
+    func playVideo(videoUrl: String, loop: Bool) throws {
+        //path of video to play
+        let path = videoHandler.sharedInstance.loadVideoPath(videoUrl)
+        print("this is the path \(path)")
+        //Create a new player with the path given to it.
+        self.player = AVPlayer(URL: path!)
+        //create a new fullscreen controller for the video
+        let playerController = AVPlayerViewController()
+        //add the videoplyer to the controller
+        playerController.player = player
+        //Notify when the video has finished so we can loop it if required.
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "playerDidFinishPlaying",
+            name: AVPlayerItemDidPlayToEndTimeNotification, object: player.currentItem)
+        self.presentViewController(playerController, animated: true) {
+            //Start the video
+            self.player.play()
+        }
     }
+    //Loop the video when this is notified by the player.
+    func playerDidFinishPlaying() {
+        // Your code here
+        print("VIDEO FINISHED")
+       
+            //Defines the start of the video and sets the video back there.
+            let restartTime : Int64 = 0
+            let preferredTimeScale : Int32 = 1
+            let timeToGoTo : CMTime = CMTimeMake(restartTime, preferredTimeScale)
+            self.player.seekToTime(timeToGoTo)
+            self.player.play()
+        
 }
+}
+
