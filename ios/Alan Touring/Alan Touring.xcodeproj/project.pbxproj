@@ -26,6 +26,11 @@
 		FA4D0F5F1C6A4D08007D79E3 /* TourIdParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4D0F5E1C6A4D08007D79E3 /* TourIdParser.swift */; };
 		FA4EBAC01C68CC1100E6E601 /* AddNewTourViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4EBABF1C68CC1100E6E601 /* AddNewTourViewController.swift */; };
 		FA57DD201C6B7EDA002739FF /* DataCacheTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA57DD1F1C6B7EDA002739FF /* DataCacheTest.swift */; };
+		FA6FD5491C8A2D880033964F /* videoHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6FD5481C8A2D880033964F /* videoHandler.swift */; };
+		FA6FD54B1C8A2DCE0033964F /* MediaHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6FD54A1C8A2DCE0033964F /* MediaHelper.swift */; };
+		FA6FD54F1C8A35390033964F /* VideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6FD54E1C8A35390033964F /* VideoViewController.swift */; };
+		FA7936AA1C8A43EA006AD406 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA7936A91C8A43EA006AD406 /* MediaPlayer.framework */; };
+		FA7936AC1C8A4C2B006AD406 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA7936AB1C8A4C2B006AD406 /* AVKit.framework */; };
 		FA9803291C666195001D23E2 /* MainTableTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9803281C666195001D23E2 /* MainTableTableViewController.swift */; };
 		FAB049191C6E34BF00679C10 /* ApiConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB049181C6E34BF00679C10 /* ApiConnector.swift */; };
 		FAD1B1541C6BAEB400CA5327 /* TourSummaryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD1B1531C6BAEB400CA5327 /* TourSummaryController.swift */; };
@@ -76,6 +81,11 @@
 		FA4D0F5E1C6A4D08007D79E3 /* TourIdParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TourIdParser.swift; sourceTree = "<group>"; };
 		FA4EBABF1C68CC1100E6E601 /* AddNewTourViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNewTourViewController.swift; sourceTree = "<group>"; };
 		FA57DD1F1C6B7EDA002739FF /* DataCacheTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataCacheTest.swift; sourceTree = "<group>"; };
+		FA6FD5481C8A2D880033964F /* videoHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = videoHandler.swift; sourceTree = "<group>"; };
+		FA6FD54A1C8A2DCE0033964F /* MediaHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaHelper.swift; sourceTree = "<group>"; };
+		FA6FD54E1C8A35390033964F /* VideoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoViewController.swift; sourceTree = "<group>"; };
+		FA7936A91C8A43EA006AD406 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		FA7936AB1C8A4C2B006AD406 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		FA9803281C666195001D23E2 /* MainTableTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTableTableViewController.swift; sourceTree = "<group>"; };
 		FAB049181C6E34BF00679C10 /* ApiConnector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiConnector.swift; sourceTree = "<group>"; };
 		FAD1B1531C6BAEB400CA5327 /* TourSummaryController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TourSummaryController.swift; sourceTree = "<group>"; };
@@ -88,6 +98,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA7936AC1C8A4C2B006AD406 /* AVKit.framework in Frameworks */,
+				FA7936AA1C8A43EA006AD406 /* MediaPlayer.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -111,6 +123,8 @@
 		E536DCB21C6510FC00A7B2FC = {
 			isa = PBXGroup;
 			children = (
+				FA7936AB1C8A4C2B006AD406 /* AVKit.framework */,
+				FA7936A91C8A43EA006AD406 /* MediaPlayer.framework */,
 				E536DCBD1C6510FC00A7B2FC /* Alan Touring */,
 				E536DCD51C6510FD00A7B2FC /* Alan TouringTests */,
 				E536DCE01C6510FD00A7B2FC /* Alan TouringUITests */,
@@ -183,6 +197,7 @@
 				E536DCC01C6510FD00A7B2FC /* ViewController.swift */,
 				E536DCBE1C6510FC00A7B2FC /* AppDelegate.swift */,
 				FA2164A51C7CB5E60056FF02 /* PointViewController.swift */,
+				FA6FD54E1C8A35390033964F /* VideoViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -194,6 +209,8 @@
 				FA0A516F1C772AAD00E4F733 /* bundleRouteConnector.swift */,
 				FAE5F69C1C789D2500346321 /* POIConnector.swift */,
 				FA2BB2971C78F46500D784E8 /* imageHandler.swift */,
+				FA6FD5481C8A2D880033964F /* videoHandler.swift */,
+				FA6FD54A1C8A2DCE0033964F /* MediaHelper.swift */,
 			);
 			name = Connectivity;
 			sourceTree = "<group>";
@@ -344,11 +361,13 @@
 			files = (
 				FAD1B1541C6BAEB400CA5327 /* TourSummaryController.swift in Sources */,
 				FA0A51771C774CEC00E4F733 /* pointOfInterest.swift in Sources */,
+				FA6FD5491C8A2D880033964F /* videoHandler.swift in Sources */,
 				FAE5F69F1C789D4000346321 /* POIParser.swift in Sources */,
 				FA0A51701C772AAD00E4F733 /* bundleRouteConnector.swift in Sources */,
 				FA0A51741C77482D00E4F733 /* tourDataParser.swift in Sources */,
 				E536DCC71C6510FD00A7B2FC /* Alan_Touring.xcdatamodeld in Sources */,
 				FA0A517B1C775C3700E4F733 /* TourSectionsController.swift in Sources */,
+				FA6FD54F1C8A35390033964F /* VideoViewController.swift in Sources */,
 				7A3988D01C849C1E006572E6 /* Queue.swift in Sources */,
 				FAB049191C6E34BF00679C10 /* ApiConnector.swift in Sources */,
 				FA9803291C666195001D23E2 /* MainTableTableViewController.swift in Sources */,
@@ -356,6 +375,7 @@
 				FAE5F69D1C789D2500346321 /* POIConnector.swift in Sources */,
 				FA4EBAC01C68CC1100E6E601 /* AddNewTourViewController.swift in Sources */,
 				E536DCC11C6510FD00A7B2FC /* ViewController.swift in Sources */,
+				FA6FD54B1C8A2DCE0033964F /* MediaHelper.swift in Sources */,
 				E536DCBF1C6510FD00A7B2FC /* AppDelegate.swift in Sources */,
 				FA2BB2981C78F46500D784E8 /* imageHandler.swift in Sources */,
 				FA4D0F5F1C6A4D08007D79E3 /* TourIdParser.swift in Sources */,
@@ -507,7 +527,7 @@
 				DEFINES_MODULE = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = "Alan Touring/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Hobbyte.Alan-Touring";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -523,7 +543,7 @@
 				DEFINES_MODULE = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = "Alan Touring/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Hobbyte.Alan-Touring";
 				PRODUCT_NAME = "$(TARGET_NAME)";

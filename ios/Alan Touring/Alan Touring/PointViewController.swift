@@ -19,6 +19,7 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
     var superSectionID = ""
     var POIList = NSUserDefaults.standardUserDefaults().objectForKey("POIList")!
     
+    @IBOutlet weak var exampleVideoButton: UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,22 +40,26 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
         
     }
     
+    @IBAction func exmapleVideoButton(sender: AnyObject) {
+        performSegueWithIdentifier("segueToVideo", sender: self)
+    }
     // navigate to previous POI
     
     func createToolBar() -> UIToolbar{
         let toolbar: UIToolbar = UIToolbar()
+        
         toolbar.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44)
         
         if(POIList.indexOfObject(poiID) == 0){
-            let items = [UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil) ,UIBarButtonItem(title: "Next", style: .Plain , target: self, action: "nextPOI")]
+            let items = [UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil) ,UIBarButtonItem(title: "Next", style: .Plain , target: self, action: "nextPOI"), exampleVideoButton!]
             toolbar.setItems(items, animated: true)
         }
         else if(POIList.indexOfObject(poiID) == (POIList.count - 1)){
-            let items = [UIBarButtonItem(title: "Previous", style: .Plain , target: self, action: "previousPOI") , UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)]
+            let items = [UIBarButtonItem(title: "Previous", style: .Plain , target: self, action: "previousPOI") , UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil), exampleVideoButton!]
             toolbar.setItems(items, animated: true)
         }
         else{
-            let items = [UIBarButtonItem(title: "Previous", style: .Plain , target: self, action: "previousPOI") , UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil) ,UIBarButtonItem(title: "Next", style: .Plain , target: self, action: "nextPOI")]
+            let items = [UIBarButtonItem(title: "Previous", style: .Plain , target: self, action: "previousPOI") , UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil) ,UIBarButtonItem(title: "Next", style: .Plain , target: self, action: "nextPOI"), exampleVideoButton!]
             toolbar.setItems(items, animated: true)
         }
         
@@ -72,7 +77,7 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
         let Z = POIList.indexOfObject(poiID)
         //print(Z)
         
-        poiID = (POIList[Z - 1]) as! String
+        poiID = (POIList as! NSArray)[Z - 1] as! String
         let subViews = scrollView.subviews
         for views in subViews{
             views.removeFromSuperview()
@@ -88,7 +93,7 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
         let Z = POIList.indexOfObject(poiID)
         //print(Z)
         
-        poiID = (POIList[Z + 1]) as! String
+        poiID = (POIList as! NSArray)[Z + 1] as! String
         let subViews = scrollView.subviews
         for views in subViews{
             views.removeFromSuperview()
@@ -267,13 +272,21 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-    /*
+    
     // MARK: - Navigation
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
     // Get the new view controller using segue.destinationViewController.
     // Pass the selected object to the new view controller.
+        if segue.identifier == "segueToVideo"{
+            if let destination = segue.destinationViewController as? VideoViewController {
+                destination.videoUrl =
+                    "https://clips.vorwaerts-gmbh.de/VfE_html5.mp4"
+                //Heres one I made ealier
+                
+            }
     }
-    */
+    
+    }
 }
