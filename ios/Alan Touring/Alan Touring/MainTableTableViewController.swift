@@ -159,7 +159,8 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
    //Deletes data from the table and updates the cache to reflect his.
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
-
+            
+            tourParser.deleteTour(indexPath.row)
             // Delete the row from the data source
             tourParser.deleteTourIdAtRow(indexPath.row)
             //Update copy of data to display

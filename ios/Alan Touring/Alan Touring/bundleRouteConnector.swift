@@ -8,7 +8,6 @@ class bundleRouteConnector: NSObject, NSURLConnectionDelegate{
     lazy var data = NSMutableData()
     //var urlPath: String = ""
     var jsonResultFromAPI: NSDictionary!
-    var POIList = [String]()
 
     override init() { }
 
@@ -55,33 +54,5 @@ class bundleRouteConnector: NSObject, NSURLConnectionDelegate{
         return jsonResultFromAPI
     }
     
-     func getAllPOIs(section: NSArray){
-        
-        print("//// have waited for JSON to download////")
-        for subsection in section{
-            let keys = subsection.allKeys
-            //print(keys)
-            for value in keys{
-                if value as! String == "pois"{
-                    print("poi reached")
-                        let POIS = subsection["pois"] as! NSArray
-                        for pois in POIS{
-                        POIList.append(pois["objectId"] as! String)
-            
-                    }
-                }
-                    
-                else if((value as! String) == "subsections"){
-                    getAllPOIs(subsection["subsections"] as! NSArray)
-                    }
-                }
-            }
-        print("//// managed to get all the POIS////")
-        print(POIList)
-        }
-    
-    func getPOIList() -> [String]{
-        return POIList
-    }
     
 }
