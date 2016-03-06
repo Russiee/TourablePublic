@@ -28,12 +28,13 @@ class TourSummaryController: UIViewController {
     @IBOutlet weak var beingTourButton: UIButton!
 
     override func viewWillAppear(animated: Bool) {
+
         tourIdLabel.text = tourId
         UIDescriptionBox.sizeToFit()
         UIDescriptionBox.layoutIfNeeded()
         UIDescriptionBox.textAlignment = NSTextAlignment.Center
         beingTourButton.enabled = true
-        
+
         setup = TourIdParser.sharedInstance.getTourMetadata(tourId)
         objectId = setup["objectId"] as! String
         print("trying to get tour from ID: \(objectId)")
@@ -43,7 +44,9 @@ class TourSummaryController: UIViewController {
         print("SETUP: \(setup)")
         let data = setup["objectId"]
         TourExpiryLabel.text = (data as! String)
-        
+    }
+
+    override func viewDidLoad() {
         self.navigationController?.setToolbarHidden(true, animated: false)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedDownloading", name: beginDownloadKey, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedFinishedDownloading", name: endDownloadKey, object: nil)
@@ -52,6 +55,7 @@ class TourSummaryController: UIViewController {
 
         tourManager = TourUpdateManager(tourCodetoCheck: tourId, tableRow: tableRow)
     }
+
 
     func NotifiedDownloading(){
         print("download begun")
