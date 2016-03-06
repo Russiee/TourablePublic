@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.hobbyte.touringandroid.App;
@@ -35,6 +36,8 @@ public class SummaryActivity extends AppCompatActivity {
 
     private Button openButton;
     private Button updateButton;
+
+    private ProgressBar progressBar;
 
     private String keyID;
     private String tourID;
@@ -111,8 +114,8 @@ public class SummaryActivity extends AppCompatActivity {
 
     private void updateProgress(float progress) {
         progress = progress * 100;
-        Log.d(TAG, String.format("Progress: %.2f", progress));
-        // update progress bar
+        progressBar.setProgress((int) progress);
+//        Log.d(TAG, String.format("Progress: %.2f", progress));
     }
 
     private void onDownloadFinished() {
@@ -149,6 +152,11 @@ public class SummaryActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Boolean aBoolean) {
+            // set up the progress bar
+            progressBar = (ProgressBar) findViewById(R.id.updateProgressBar);
+            progressBar.setVisibility(View.VISIBLE);
+            progressBar.setMax(100);
+
             // start the download task
             boolean hasVideo = TourDBManager.getInstance(getApplicationContext()).doesTourHaveVideo(keyID);
             DownloadTourTask task = new DownloadTourTask(handler, keyID, tourID, hasVideo);
