@@ -1,6 +1,8 @@
 package com.hobbyte.touringandroid.internet;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
@@ -8,6 +10,7 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -158,6 +161,32 @@ public class ServerAPI {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static Bitmap downloadBitmap(String keyID, String urlString) {
+        Log.d(TAG, "Preparing to download image at " + urlString);
+        HttpURLConnection connection = null;
+        Bitmap bitmap = null;
+
+        try {
+            URL url = new URL(urlString);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.connect();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (connection != null) {
+            // download image into a bitmap
+            try (BufferedInputStream bis = new BufferedInputStream(connection.getInputStream())) {
+                bitmap = BitmapFactory.decodeStream(bis);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                connection.disconnect();
+            }
+        }
+        return bitmap;
     }
 
     /**
