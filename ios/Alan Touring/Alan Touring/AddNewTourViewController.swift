@@ -94,7 +94,7 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
         
         //Closes the view and returns user to the mainTableview if key was invalid.
 
-        performSegueWithIdentifier("cancel", sender: self)
+        performSegueWithIdentifier("cancelAdd", sender: self)
         
     }
     
