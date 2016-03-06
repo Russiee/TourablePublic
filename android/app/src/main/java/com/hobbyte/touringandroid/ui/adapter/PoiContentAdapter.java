@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.hobbyte.touringandroid.App;
 import com.hobbyte.touringandroid.tourdata.ListViewItem;
 import com.hobbyte.touringandroid.internet.LoadImageFromURL;
 import com.hobbyte.touringandroid.R;
@@ -64,7 +65,7 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
 
         if (listViewItemType == IMG) {
             ImageView imageView = (ImageView) view.findViewById(R.id.poiContentImageView);
-            new LoadImageFromURL(imageView, StartActivity.getContext()).execute(listViewItem.getText(), keyID); //Load image in a separate thread
+            new LoadImageFromURL(imageView, App.context).execute(listViewItem.getText(), keyID); //Load image in a separate thread
             return view;
         } else {
             TextView contentView = (TextView) view.findViewById(R.id.poiContentTextView);
