@@ -14,6 +14,7 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
     var tourIndex: Int?
     var totalImagesToDownload: Float = 0.0
     var downloadedImages: Float = 0.0
+    let newCancelButton = UIBarButtonItem()
     
     @IBOutlet weak var busyWheel: UIActivityIndicatorView!
     @IBOutlet weak var ProgressBar: UIProgressView!
@@ -23,8 +24,6 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
     @IBOutlet weak var downloadStatusLabel: UILabel!
     @IBOutlet weak var tourDescriptionLabel: UILabel!
     
-    
-    let newCancelButton = UIBarButtonItem()
     
     
     override func viewDidLoad() {
@@ -70,32 +69,22 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
     
     //a method to allow the user to cancel the data download and return to the main table view
     func cancelDownload() {
-
         //delete the metaData and data stored in "Array"
         TourIdParser.sharedInstance.deleteTourIdAtRow(tourIndex!)
         //unwind segue back to the main tableview
         self.dismissViewControllerAnimated(true, completion: nil)
-        
     }
     
-    
     override func viewWillDisappear(animated: Bool) {
-       
     }
     
     //Called if the tourId entered is invalid. Stops busy wheel, hides view and presents error message.
     func NotifiedInvalid() {
         self.busyWheel.stopAnimating()
-
         //Shows warning to user that tour id was invalid.
-        let alert = UIAlertView(title: "Tour ID Error", message: "The tour ID entered is not valid or is out of date", delegate: self, cancelButtonTitle:"OK")
-        alert.alertViewStyle = UIAlertViewStyle.Default
-        alert.show()
-        
+        AlertViewBuilder.sharedInstance.showWarningAlert("Tour ID Error", message: "The tour ID entered is not valid or is out of date")
         //Closes the view and returns user to the mainTableview if key was invalid.
-
         performSegueWithIdentifier("cancelAdd", sender: self)
-        
     }
     
     //Called if the tourId if valid. Stops the busy wheel and shows the download settings.
@@ -111,14 +100,12 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
         let dataId = TourIdParser().getTourMetadata(tourIdForSummary)["objectId"] as! String
         let tour = tourDataParser().getTourSection(dataId)
         tourTitleLabel.text = tour.title as String
-        tourDescriptionLabel.text =  tour.description 
-        
+        tourDescriptionLabel.text =  tour.description
     }
     
     //Method for hiding all other items in the view besides teh busy wheel. 
     //Visibility:True = hides all items
     func hideButtonsForBusyWheel(visibility: Bool){
-      
         tourTitleLabel.hidden = visibility
         DownloadTypeChooser.hidden = visibility
         saveTourButton.hidden = visibility
