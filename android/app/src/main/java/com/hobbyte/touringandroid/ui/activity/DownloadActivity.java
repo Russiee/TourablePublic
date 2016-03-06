@@ -73,7 +73,8 @@ public class DownloadActivity extends AppCompatActivity {
         handler = new ProgressHandler(this);
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        bottomTextView = (TextView) findViewById(R.id.bottomText);
+        progressBar.setMax(100);
+//        bottomTextView = (TextView) findViewById(R.id.bottomText);
 
         imageOptionCaptionEditText = (TextView) findViewById(R.id.imageOptionCaptionEditText);
         videoOptionCaptionEditText = (TextView) findViewById(R.id.videoOptionCaptionEditText);
@@ -88,6 +89,8 @@ public class DownloadActivity extends AppCompatActivity {
             public void onClick(View v) {
                 DownloadTourTask dThread = new DownloadTourTask(handler, keyID, tourID, false);
                 dThread.start();
+
+                progressBar.setVisibility(View.VISIBLE);
 
                 hasVideo = false;
                 changeUiAfterSelection("");
@@ -185,15 +188,18 @@ public class DownloadActivity extends AppCompatActivity {
         downloadVideoButton.setEnabled(false);
 
         progressBar.setVisibility(View.VISIBLE);
-        bottomTextView.setText(getResources().getString(R.string.download_activity_label));
+//        bottomTextView.setText(getResources().getString(R.string.download_activity_label));
     }
 
     private void updateProgress(float progress) {
         progress = progress * 100;
-        bottomTextView.setText(String.format("%s%.1f%%",
+
+        progressBar.setProgress((int) progress);
+
+        /*bottomTextView.setText(String.format("%s%.1f%%",
                         getString(R.string.download_activity_label),
                         progress)
-        );
+        );*/
     }
 
     private void onDownloadFinished() {
