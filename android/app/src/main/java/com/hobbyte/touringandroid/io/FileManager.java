@@ -1,25 +1,20 @@
 package com.hobbyte.touringandroid.io;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 
-import com.hobbyte.touringandroid.ui.activity.StartActivity;
+import com.hobbyte.touringandroid.App;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,7 +38,7 @@ public class FileManager {
      * @return a JSON preresentaion of the file
      */
     public static JSONObject getJSON(String keyID, String filename) {
-        return getJSON(StartActivity.getContext(), keyID, filename);
+        return getJSON(App.context, keyID, filename);
     }
 
     /**
@@ -87,7 +82,7 @@ public class FileManager {
     public static void makeTourDirectories(Context context, String keyID) {
 
         //...com.hobbyte.touring/files/
-        File tourFolder = new File(StartActivity.getContext().getFilesDir(), keyID);
+        File tourFolder = new File(App.context.getFilesDir(), keyID);
         boolean foldersCreatedSuccessfully = tourFolder.mkdir();
 
         //...com.hobbyte.touring/files/keyID/poi/
@@ -116,7 +111,7 @@ public class FileManager {
      * @param filename   the name of this JSON. BUNDLE_JSON or TOUR_JSON
      */
     public static void saveJSON(JSONObject jsonObject, String keyID, String filename) {
-        saveJSON(StartActivity.getContext(), jsonObject, keyID, filename);
+        saveJSON(App.context, jsonObject, keyID, filename);
     }
 
     /**
@@ -149,33 +144,7 @@ public class FileManager {
      * @param urlString a URL to an image file
      * @return true if the file was saved successfully
      */
-    public static boolean saveImage(Context context, String keyID, String urlString) {
-        Log.d(TAG, "Preparing to download image at " + urlString);
-        HttpURLConnection connection = null;
-        Bitmap bitmap = null;
-
-        try {
-            URL url = new URL(urlString);
-            connection = (HttpURLConnection) url.openConnection();
-            connection.connect();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        if (connection != null) {
-            // download image into a bitmap
-            try (BufferedInputStream bis = new BufferedInputStream(connection.getInputStream())) {
-                bitmap = BitmapFactory.decodeStream(bis);
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
-            } finally {
-                connection.disconnect();
-            }
-        }
-
-        if (bitmap != null) {
+    public static boolean saveImage(Context context, Bitmap bitmap, String urlString, String keyID) {
             // extract image file name and save it on device
             Matcher m = Pattern.compile(IMG_NAME).matcher(urlString);
 
@@ -183,6 +152,7 @@ public class FileManager {
                 String img = m.group(1);
                 File file = new File(context.getFilesDir(), String.format("%s/image/%s", keyID, img));
 
+                Log.d(TAG, "Saving image " + img);
                 try (FileOutputStream fos = new FileOutputStream(file)) {
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
                 } catch (Exception e) {
@@ -190,7 +160,6 @@ public class FileManager {
                     return false;
                 }
             }
-        }
 
         return true;
     }
@@ -208,7 +177,8 @@ public class FileManager {
     }
 
     /**
-     * Deletes all files associated with a tour.
+     * Completely removes a tour from the device, deleting both its row in the local DB and all
+     * downloaded files.
      *
      * @param context the calling Activity
      * @param keyID   the key ID for a specific tour
@@ -217,6 +187,16 @@ public class FileManager {
         TourDBManager dbHelper = TourDBManager.getInstance(context);
         dbHelper.deleteTour(keyID);
 
+        deleteTourFiles(context, keyID);
+    }
+
+    /**
+     * Deletes all downloaded files for a particular tour.
+     *
+     * @param context the calling Activity
+     * @param keyID the key ID for a specific tour
+     */
+    public static void deleteTourFiles(Context context, String keyID) {
         DeleteTourTask task = new DeleteTourTask();
         task.execute(context.getFilesDir(), keyID);
     }
