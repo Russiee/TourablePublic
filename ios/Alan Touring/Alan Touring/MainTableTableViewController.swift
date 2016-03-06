@@ -175,17 +175,11 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
             
             TourDeleter.sharedInstance.deleteMediaInTour(indexPath.row)
             TourDeleter.sharedInstance.deleteTour(indexPath.row)
-            // Delete the row from the data source
-            tourParser.deleteTourIdAtRow(indexPath.row)
-            //Update copy of data to display
-            
             models = tourParser.getAllTours()
             checkStateOfScreen()
             //Reload Table
             tableView.reloadData()
-            
-            //Don't touch. Magic.
-            //tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+
             
         } else if editingStyle == .Insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
