@@ -21,11 +21,14 @@ class TourSummaryController: UIViewController {
     var setup = Dictionary<String, AnyObject>()
     var tourManager = TourUpdateManager()
     var tableRow = 0
+    // counter to activate the busy wheel while updating
+    var imageCount = 0
 
     @IBOutlet weak var tourTitleLabel: UILabel!
     @IBOutlet weak var UIDescriptionBox: UITextView!
     @IBOutlet weak var TourExpiryLabel: UILabel!
     @IBOutlet weak var beingTourButton: UIButton!
+    @IBOutlet weak var updateIndicator: UIActivityIndicatorView! //busy wheel
 
     override func viewWillAppear(animated: Bool) {
 
@@ -44,6 +47,7 @@ class TourSummaryController: UIViewController {
         print("SETUP: \(setup)")
         let data = setup["objectId"]
         TourExpiryLabel.text = (data as! String)
+        updateIndicator.hidden = true
     }
 
     override func viewDidLoad() {
@@ -56,13 +60,21 @@ class TourSummaryController: UIViewController {
         tourManager = TourUpdateManager(tourCodetoCheck: tourId, tableRow: tableRow)
     }
 
-
+    // increase counter to activate user wheel
     func NotifiedDownloading(){
-        print("download begun")
+        imageCount++
     }
-
+    
+    // decrease the counter to stop the busy wheel.
     func NotifiedFinishedDownloading(){
-        print("download finished in here")
+        imageCount--
+        // if 0 stop animation
+        if imageCount == 0{
+            updateIndicator.stopAnimating()
+            updateIndicator.hidden = true
+            beingTourButton.setTitle("Begin Tour", forState: .Normal)
+            beingTourButton.enabled = true
+        }
     }
 
     // triggered if the TourUpdateManager sends the notification that an update is available
@@ -82,6 +94,11 @@ class TourSummaryController: UIViewController {
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
         switch buttonIndex{
             case 1:
+                // change the 'begin tour' button appearance if updating
+                beingTourButton.setTitle("Updating...", forState: .Normal)
+                beingTourButton.enabled = false
+                updateIndicator.hidden = false
+                updateIndicator.startAnimating()
                 tourManager.triggerUpdate()
             case 0:
                 break  //Cancel pressed, do not download update
