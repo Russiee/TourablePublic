@@ -14,6 +14,13 @@ public class TourUpdateManager {
     var currentMetadata: Dictionary<String,AnyObject>!
     var newMetadata: NSDictionary!
 
+    init(){
+        //does nothing
+        self.tourCode = ""
+        self.currentMetadata = Dictionary()
+        self.newMetadata = NSDictionary()
+    }
+
     init(tourCodetoCheck: String) {
         self.tourCode = tourCodetoCheck
         self.currentMetadata = TourIdParser().getTourMetadata(tourCode)
@@ -41,15 +48,25 @@ public class TourUpdateManager {
 
         switch (dateComparison) {
             case NSComparisonResult.OrderedDescending:
-                // if user clicks 'yes' on update alert 
-                triggerUpdate()
-                // here you should 'say' that the app is updating stuff (maybe)
+                self.triggerUpdateAvailableNotification()
             default:
-                // here update a label that the tour is updated (maybe)
-                print("")
+                print("This is because Swift")
         }
     }
-    
+
+    func triggerUpdateAvailableNotification() {
+        NSNotificationCenter.defaultCenter().addObserver(
+            self,
+            selector: "Tour Update Available:",
+            name: "Tour Update Notification",
+            object: nil)
+        func notify() {
+            NSNotificationCenter.defaultCenter().postNotificationName(updateAvailableKey, object: self)
+
+        }
+        notify()
+    }
+
     func triggerUpdate() {
         _ = TourIdParser().getTourMetadata(tourCode)
     }
