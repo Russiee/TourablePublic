@@ -8,9 +8,11 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.os.StatFs;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -18,17 +20,14 @@ import android.widget.TextView;
 
 import com.hobbyte.touringandroid.R;
 import com.hobbyte.touringandroid.internet.ServerAPI;
-import com.hobbyte.touringandroid.io.BundleSaver;
+import com.hobbyte.touringandroid.io.DownloadTourTask;
 import com.hobbyte.touringandroid.io.FileManager;
 import com.hobbyte.touringandroid.io.TourDBManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.lang.ref.WeakReference;
 
 public class DownloadActivity extends AppCompatActivity {
     private static final String TAG = "DownloadActivity";
@@ -46,6 +45,8 @@ public class DownloadActivity extends AppCompatActivity {
 
     private Button downloadImagesButton;
     private Button downloadVideoButton;
+
+    private static ProgressHandler handler;
 
     private JSONObject tourJSON;
     private String keyID;
@@ -69,6 +70,8 @@ public class DownloadActivity extends AppCompatActivity {
 
         new FetchTourJSON().execute();
 
+        handler = new ProgressHandler(this);
+
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         bottomTextView = (TextView) findViewById(R.id.bottomText);
 
@@ -83,8 +86,10 @@ public class DownloadActivity extends AppCompatActivity {
         downloadImagesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DownloadTourMediaClass k = new DownloadTourMediaClass();
-                k.execute(IMAGES);
+                DownloadTourTask dThread = new DownloadTourTask(handler, keyID, tourID, false);
+                dThread.start();
+
+                hasVideo = false;
                 changeUiAfterSelection("");
             }
         });
@@ -92,8 +97,10 @@ public class DownloadActivity extends AppCompatActivity {
         downloadVideoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DownloadTourMediaClass k = new DownloadTourMediaClass();
-                k.execute(VIDEO);
+                DownloadTourTask dThread = new DownloadTourTask(handler, keyID, tourID, true);
+                dThread.start();
+
+                hasVideo = true;
                 changeUiAfterSelection(" & video");
             }
         });
@@ -181,6 +188,19 @@ public class DownloadActivity extends AppCompatActivity {
         bottomTextView.setText(getResources().getString(R.string.download_activity_label));
     }
 
+    private void updateProgress(float progress) {
+        progress = progress * 100;
+        bottomTextView.setText(String.format("%s%.1f%%",
+                        getString(R.string.download_activity_label),
+                        progress)
+        );
+    }
+
+    private void onDownloadFinished() {
+        addTourToDB();
+        moveToTourActivity();
+    }
+
     /**
      * Opens the tour activty witha  tour
      */
@@ -203,13 +223,12 @@ public class DownloadActivity extends AppCompatActivity {
         editor.remove(getString(R.string.prefs_current_key));
         editor.remove(getString(R.string.prefs_current_tour));
         editor.remove(getString(R.string.prefs_current_expiry));
-        editor.commit();
+        editor.apply();
 
-        // move to tour
-        // TODO: move to SummaryActivity instead
-        Intent intent = new Intent(this, TourActivity.class);
-        intent.putExtra(TourActivity.INTENT_KEY_ID, keyID);
-        intent.putExtra(TourActivity.INTENT_TITLE, title);
+        // move to SummaryActivity
+        Intent intent = new Intent(this, SummaryActivity.class);
+        intent.putExtra(SummaryActivity.KEY_ID, keyID);
+        intent.putExtra(SummaryActivity.TOUR_ID, tourID);
         startActivity(intent);
     }
 
@@ -239,78 +258,9 @@ public class DownloadActivity extends AppCompatActivity {
     }
 
     /**
-     * Asynchronously downloads the media of the tour
+     * Downloads the JSON for a tour object on the server. It is used to get the tour title and
+     * description in this activity, plus in TourActivity.
      */
-    private class DownloadTourMediaClass extends AsyncTask<Integer, Float, Boolean> {
-
-        private HashSet<String> mediaURLs;
-        private String imageOnlyPattern = "https?:\\/\\/[\\w\\d\\.\\/]*\\.(jpe?g|png)";
-        private String allMediaPattern = "https?:\\/\\/[\\w\\d\\.\\/]*\\.(jpe?g|png|mp4)";
-
-        @Override
-        protected Boolean doInBackground(Integer... params) {
-            String bundleString = ServerAPI.getBundleString(tourID);
-
-            // use pattern matcher to extract all media URLs
-            Pattern p = null;
-
-            if (params[0] == IMAGES) {
-                p = Pattern.compile(imageOnlyPattern);
-                hasVideo = false;
-            } else if (params[0] == VIDEO) {
-                p = Pattern.compile(allMediaPattern);
-                hasVideo = true;
-            }
-
-            Matcher matcher = p.matcher(bundleString);
-            mediaURLs = new HashSet<String>();
-
-            while (matcher.find()) {
-                mediaURLs.add(matcher.group());
-            }
-
-            // on a separate thread, save the bundle and POI JSON
-            Log.d(TAG, "About to start bundle saver");
-            BundleSaver bundleSaver = new BundleSaver(getApplicationContext(), bundleString, keyID);
-            bundleSaver.start();
-
-            float total = (float) mediaURLs.size();
-            float count = 0.0f;
-            boolean success = false;
-
-            // save media to device
-            for (Iterator<String> i = mediaURLs.iterator(); i.hasNext(); ) {
-                success = FileManager.saveImage(getApplicationContext(), keyID, i.next());
-                publishProgress(++count / total);
-            }
-
-            return success;
-        }
-
-        @Override
-        protected void onProgressUpdate(Float... values) {
-            float progress = values[0] * 100;
-            bottomTextView.setText(String.format("%s%.1f%%",
-                    getString(R.string.download_activity_label),
-                    progress)
-            );
-        }
-
-        @Override
-        protected void onPostExecute(Boolean isValid) {
-
-            Log.i(TAG, "finished downloading");
-
-            if (isValid) {
-                addTourToDB();
-                moveToTourActivity();
-            }
-            // removes activity from users stack so when they press back from a tour they go back
-            // to the main menu
-            //DownloadActivity.this.finish();
-        }
-    }
-
     private class FetchTourJSON extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
@@ -323,6 +273,52 @@ public class DownloadActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             loadTourDescription();
+        }
+    }
+
+    /**
+     * Handles messages from a non-UI thread. In this case, it is used from a DownLoadTourThread to
+     * notify the activity when progress is made with downloading tour media, and when the download
+     * is finished.
+     * <p>
+     * The use of static and a WeakReference are for preventing memory leaks (see
+     * <a href="https://groups.google.com/forum/#!msg/android-developers/1aPZXZG6kWk/lIYDavGYn5UJ">
+     * here</a>.
+     */
+    private static class ProgressHandler extends Handler {
+        private final WeakReference<DownloadActivity> activity;
+
+        public ProgressHandler(DownloadActivity a) {
+            super(Looper.getMainLooper());
+            activity = new WeakReference<DownloadActivity>(a);
+        }
+
+        @Override
+        public void handleMessage(final Message msg) {
+            final DownloadActivity dActivity = activity.get();
+
+            if (dActivity != null) {
+                switch (msg.getData().getInt(DownloadTourTask.STATE)) {
+                    case DownloadTourTask.STATE_DOWNLOADING:
+                        dActivity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                dActivity.updateProgress(
+                                        msg.getData().getFloat(DownloadTourTask.PROGRESS)
+                                );
+                            }
+                        });
+                        break;
+                    case DownloadTourTask.STATE_FINISHED:
+                        dActivity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                dActivity.onDownloadFinished();
+                            }
+                        });
+                        break;
+                }
+            }
         }
     }
 }

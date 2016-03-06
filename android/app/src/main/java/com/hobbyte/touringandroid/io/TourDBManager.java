@@ -344,19 +344,41 @@ public class TourDBManager extends SQLiteOpenHelper {
         String[] whereArgs = {keyID};
 
         Cursor c = db.query(
-                TourList.TABLE_NAME,
-                cols,
-                where,
-                whereArgs,
-                null,
-                null,
-                null
+                TourList.TABLE_NAME, cols,
+                where, whereArgs,
+                null, null, null
         );
 
         boolean exists = c.getCount() > 0;
         c.close();
 
         return exists;
+    }
+
+    /**
+     * Checks if a tour was downloaded with both images and video, or images only.
+     *
+     * @param keyID the ID of a tour key (not the tour ID itself)
+     * @return false if the tour was downloaded with images only
+     */
+    public boolean doesTourHaveVideo(String keyID) {
+        open(false);
+
+        String[] cols = {TourList.COL_HAS_VIDEO};
+        String where = TourList.COL_KEY_ID + " = ?";
+        String[] whereArgs = {keyID};
+
+        Cursor c = db.query(
+                TourList.TABLE_NAME, cols,
+                where, whereArgs,
+                null, null, null
+        );
+
+        c.moveToFirst();
+        boolean hasVideo = c.getInt(0) == 1;
+
+        c.close();
+        return hasVideo;
     }
 
     /**

@@ -49,7 +49,7 @@ public class FileManager {
      * @return a JSON preresentaion of the file
      */
     public static JSONObject getJSON(Context context, String keyID, String filename) {
-        Log.d(TAG, "Loading JSON from " + filename);
+        Log.d(TAG, String.format("Loading JSON from %s/%s", keyID, filename));
         try {
             File tourFolder = new File(context.getFilesDir(), keyID);
             File tourJson = new File(tourFolder, filename);
@@ -197,7 +197,8 @@ public class FileManager {
      * @param keyID the key ID for a specific tour
      */
     public static void deleteTourFiles(Context context, String keyID) {
-        DeleteTourTask task = new DeleteTourTask();
-        task.execute(context.getFilesDir(), keyID);
+        Log.d(TAG, "Deleting tour files for " + keyID);
+        DeleteTourTask task = new DeleteTourTask(context, keyID);
+        task.start();
     }
 }
