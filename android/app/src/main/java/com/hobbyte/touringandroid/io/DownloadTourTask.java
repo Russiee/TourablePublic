@@ -15,7 +15,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- *
+ * Downloads the bundle JSON and then does two things with it:
+ * <ul><li>Processes the JSON for use in creating {@link com.hobbyte.touringandroid.tourdata.Tour}
+ * objects</li><li>Strips out all URLs, then downloads and saves them to the device</li></ul>
  */
 public class DownloadTourTask extends Thread {
     private static final String TAG = "DownloadTourTask";
@@ -32,6 +34,13 @@ public class DownloadTourTask extends Thread {
 
     private Handler handler;
 
+    /**
+     *
+     * @param handler a {@link Handler} implementation from an Activity that updates a progress bar
+     * @param keyID a tour's key ID
+     * @param tourID a tour's ID
+     * @param getVideo should be false if you want to download images only
+     */
     public DownloadTourTask(Handler handler, String keyID, String tourID, boolean getVideo) {
         this.keyID = keyID;
         this.tourID = tourID;

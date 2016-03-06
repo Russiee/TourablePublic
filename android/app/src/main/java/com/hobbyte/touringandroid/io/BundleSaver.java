@@ -108,7 +108,7 @@ public class BundleSaver extends Thread {
                 buildBundle(sections.getJSONObject(i));
             }
 
-            FileManager.saveJSON(context, json, keyID, "bundle");
+            FileManager.saveJSON(context, json, keyID, FileManager.BUNDLE_JSON);
 
         } catch (JSONException je) {
             je.printStackTrace();

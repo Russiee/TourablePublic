@@ -13,6 +13,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,8 +44,6 @@ import java.util.Date;
 public class StartActivity extends AppCompatActivity {
     private static final String TAG = "StartActivity";
 
-    public static Context CONTEXT;
-
     //for animations
     private static boolean FADE_IN = true;
     private static boolean FADE_OUT = false;
@@ -52,13 +51,14 @@ public class StartActivity extends AppCompatActivity {
     private LinearLayout keyEntryLayout;
     private LinearLayout previousToursLayout;
     private BackAwareEditText textKey;
+    private Button submitButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-        CONTEXT = getApplicationContext();
 
+//        FileManager.removeTour(getApplicationContext(), "APd4HhtBm9");
         new UpdateChecker(getApplicationContext()).start();
 
         //get references for animations
@@ -67,7 +67,6 @@ public class StartActivity extends AppCompatActivity {
         textKey = (BackAwareEditText) findViewById(R.id.textEnterTour);
         textKey.setCallBackClass(this);
 
-//        FileManager.removeTour(getApplicationContext(), "APd4HhtBm9");
 
         // make the FAB do something
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -90,10 +89,6 @@ public class StartActivity extends AppCompatActivity {
         TourDBManager.getInstance(this).close();
 
         super.onPause();
-    }
-
-    public static Context getContext() {
-        return CONTEXT;
     }
 
     /**
@@ -127,6 +122,9 @@ public class StartActivity extends AppCompatActivity {
                 long expiryTime = c.getLong(c.getColumnIndex(TourDBContract.TourList.COL_DATE_EXPIRES_ON));
                 String expiryText = df.format(new Date(expiryTime));
                 final String keyID = c.getString(c.getColumnIndex(TourDBContract.TourList.COL_KEY_ID));
+                final String tourID = c.getString(c.getColumnIndex(TourDBContract.TourList.COL_TOUR_ID));
+
+                Log.d(TAG, String.format("k: %s t: %s", keyID, tourID));
 
                 tourName.setText(name);
                 expiryDate.setText(String.format("Expires %s", expiryText));
@@ -135,7 +133,7 @@ public class StartActivity extends AppCompatActivity {
                 tourItem.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        goToTour(keyID);
+                        goToTour(keyID, tourID);
                     }
                 });
             }
@@ -199,7 +197,6 @@ public class StartActivity extends AppCompatActivity {
         if (textKey.length() < 3) return; // TODO ask if there's a minimum Key length. Otherwise do 0
 
         String tourKey = textKey.getText().toString();
-        textKey.setEnabled(false);
 
         // check if key has already been used
         boolean exists = TourDBManager.getInstance(this).doesTourExist(tourKey);
@@ -230,10 +227,11 @@ public class StartActivity extends AppCompatActivity {
      * Moves the app to the {@link SummaryActivity}, ready to start the tour
      * @param keyID tour to start
      */
-    private void goToTour(final String keyID) {
+    private void goToTour(String keyID, String tourID) {
         TourDBManager.getInstance(this).updateAccessedTime(keyID);
         Intent intent = new Intent(this, SummaryActivity.class);
         intent.putExtra(SummaryActivity.KEY_ID, keyID);
+        intent.putExtra(SummaryActivity.TOUR_ID, tourID);
         startActivity(intent);
     }
 
@@ -254,6 +252,13 @@ public class StartActivity extends AppCompatActivity {
      * If the key is valid, take the user to the next activity.
      */
     private class KeyCheckTask extends AsyncTask<String, Void, Boolean> {
+
+        @Override
+        protected void onPreExecute() {
+            submitButton = (Button) findViewById(R.id.buttonSubmitKey);
+            submitButton.setEnabled(false);
+            textKey.setEnabled(false);
+        }
 
         @Override
         protected Boolean doInBackground(String... params) {
@@ -303,6 +308,7 @@ public class StartActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean isValid) {
             textKey.setText("");
+            submitButton.setEnabled(true);
             textKey.setEnabled(true);
 
             if (isValid) {
