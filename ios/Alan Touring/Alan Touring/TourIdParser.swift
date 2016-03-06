@@ -12,8 +12,6 @@ let TableUpdateNotificationKey = "tableAddWasComplete"
 
 public class TourIdParser {
 
-    var API = ApiConnector()
-
     //making the TourIdParser a singleton to parse all tours from the API
     //in order to access TourIdParser methods call TourIdParser.shardInstance.METHOD()
     class var sharedInstance: TourIdParser {

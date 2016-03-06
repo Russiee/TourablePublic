@@ -20,6 +20,7 @@ class TourSummaryController: UIViewController {
     var objectId = ""
     var setup = Dictionary<String, AnyObject>()
     var tourManager = TourUpdateManager()
+    var tableRow = 0
 
     @IBOutlet weak var tourTitleLabel: UILabel!
     @IBOutlet weak var UIDescriptionBox: UITextView!
@@ -49,7 +50,7 @@ class TourSummaryController: UIViewController {
         // Notification for TourUpdateManager called when there is an update available
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedUpdateAvailable", name: updateAvailableKey, object: nil)
 
-        tourManager = TourUpdateManager(tourCodetoCheck: tourId)
+        tourManager = TourUpdateManager(tourCodetoCheck: tourId, tableRow: tableRow)
     }
 
     func NotifiedDownloading(){

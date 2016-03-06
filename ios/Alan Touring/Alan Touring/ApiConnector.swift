@@ -18,13 +18,26 @@ var tourIdForSummary = ""
 
 class ApiConnector: NSObject, NSURLConnectionDelegate{
     
+    class var sharedInstance: ApiConnector {
+        struct Static {
+            static var onceToken: dispatch_once_t = 0
+            static var instance: ApiConnector? = nil
+        }
+        dispatch_once(&Static.onceToken) {
+            Static.instance = ApiConnector()
+            
+        }
+        return Static.instance!
+    }
+    
+    
     lazy var data = NSMutableData()
     var urlPath: String = ""
     var JSONMetadataFromAPI: NSDictionary!
     var isUpdating = false
 
-    func initateConnection(var tourCode: String, isUpdate: Bool){
-        isUpdating = isUpdate
+    func initateConnection(var tourCode: String, isCheckingForUpdate: Bool){
+        isUpdating = isCheckingForUpdate
         let resetData = NSMutableData()
         //Reseting data to blank with every new connection
         data = resetData
