@@ -15,7 +15,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
    
     var models = NSMutableArray()
     var tourParser = TourIdParser()
-    var API = ApiConnector.init()
+    var APIConnector = ApiConnector.init()
     
     
     override func viewDidLoad() {
@@ -143,7 +143,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
                     if ApiConnector().isConnectedToNetwork(){
                         print("\(ApiConnector().isConnectedToNetwork()) network status")
                     //Tour does not exist. Procede.
-                    API.initateConnection(Field!.text!)
+                    APIConnector.initateConnection(Field!.text!, isUpdate: false)
                     // goes to the AddNewTourPage
                     performSegueWithIdentifier("goToAddTour", sender: self)
                     // to change the background image
