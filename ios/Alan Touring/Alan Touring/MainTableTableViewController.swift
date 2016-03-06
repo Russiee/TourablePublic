@@ -15,8 +15,6 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
    
     var models = NSMutableArray()
     var tourParser = TourIdParser()
-    var API = ApiConnector.init()
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,7 +31,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
 
         checkStateOfScreen()
         //TODO remove this, for demo use only
-        let connection: Bool = ApiConnector().isConnectedToNetwork()
+        let connection: Bool = ApiConnector.sharedInstance.isConnectedToNetwork()
         print("internet connection status: \(connection)")
         
     }
@@ -61,6 +59,11 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         return 1
     }
 
+    override func viewDidAppear(animated: Bool) {
+        models = tourParser.getAllTours()
+        tableView.reloadData()
+    }
+    
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         
@@ -140,10 +143,10 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
                     //Tour already exists
                     AlertViewBuilder.sharedInstance.showWarningAlert("Tour Add Error", message: "A tour with that key already exists")
                 }else{
-                    if ApiConnector().isConnectedToNetwork(){
-                        print("\(ApiConnector().isConnectedToNetwork()) network status")
+                    if ApiConnector.sharedInstance.isConnectedToNetwork(){
+                        print("\(ApiConnector.sharedInstance.isConnectedToNetwork()) network status")
                     //Tour does not exist. Procede.
-                    API.initateConnection(Field!.text!)
+                    ApiConnector.sharedInstance.initateConnection(Field!.text!, isCheckingForUpdate: false)
                     // goes to the AddNewTourPage
                     performSegueWithIdentifier("goToAddTour", sender: self)
                     // to change the background image
@@ -172,17 +175,11 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
             
             TourDeleter.sharedInstance.deleteMediaInTour(indexPath.row)
             TourDeleter.sharedInstance.deleteTour(indexPath.row)
-            // Delete the row from the data source
-            tourParser.deleteTourIdAtRow(indexPath.row)
-            //Update copy of data to display
-            
             models = tourParser.getAllTours()
             checkStateOfScreen()
             //Reload Table
             tableView.reloadData()
-            
-            //Don't touch. Magic.
-            //tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+
             
         } else if editingStyle == .Insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
@@ -216,6 +213,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
             if let destination = segue.destinationViewController as? TourSummaryController {
                 if let tourIndex = tableView.indexPathForSelectedRow?.row {
                     destination.tourId = models[tourIndex] as! String
+                    destination.tableRow = tourIndex
                 }
             }
         }

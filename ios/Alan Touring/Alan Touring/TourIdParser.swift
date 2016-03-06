@@ -12,8 +12,6 @@ let TableUpdateNotificationKey = "tableAddWasComplete"
 
 public class TourIdParser {
 
-    var API = ApiConnector()
-
     //making the TourIdParser a singleton to parse all tours from the API
     //in order to access TourIdParser methods call TourIdParser.shardInstance.METHOD()
     class var sharedInstance: TourIdParser {
@@ -31,12 +29,7 @@ public class TourIdParser {
     func deleteTourIdAtRow(row: Int) {
         //remove from "Array"
         var newArray : [AnyObject] = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! [AnyObject]
-        NSUserDefaults.standardUserDefaults().removeObjectForKey(newArray[row] as! String)
-        
         //remove from Metadata
-        NSUserDefaults.standardUserDefaults().removeObjectForKey(newArray[row] as! String)
-        NSUserDefaults.standardUserDefaults().synchronize()
-        
         newArray.removeAtIndex(row)
         saveArray(newArray)
     }
@@ -64,9 +57,12 @@ public class TourIdParser {
     //Adds the metadata passed to it into the cache, after turning it into a dictonary that can be retrieved 
     // from the cache with its tour Id code
     func addTourMetaData(metadata: NSDictionary){
-
-        let tourDict = metadata["tour"]
         let tourCode = metadata["code"]!
+
+        let tourDict = metadata["tour"] as! NSMutableDictionary
+        tourDict["expiresAt"] = metadata["expiresAt"]
+        tourDict["updatedAt"] = metadata["updatedAt"]
+        tourDict["createdAt"] = metadata["createdAt"]
 
         NSUserDefaults.standardUserDefaults().setObject(tourDict, forKey: tourCode as! String)
         NSUserDefaults.standardUserDefaults().synchronize()
@@ -78,15 +74,14 @@ public class TourIdParser {
 
         //this comes from the initialised of bundle Connector
         let bundleRoute = bundleRouteConnector()
-        print(tourDict!["objectId"])
-        bundleRoute.startConnection(tourDict!["objectId"] as! String)
+        print(tourDict["objectId"])
+        bundleRoute.startConnection(tourDict["objectId"] as! String)
         
         let MYDAMNDATA = bundleRoute.getJSONResult()
         tourDataParser().saveNewTour(MYDAMNDATA)
         //bundleRoute.getAllPOIs((MYDAMNDATA["sections"]) as! NSArray)
 
         NSNotificationCenter.defaultCenter().addObserver (
-
             self,
             selector: "TableChanged:",
             name: "TabledDataChanged",

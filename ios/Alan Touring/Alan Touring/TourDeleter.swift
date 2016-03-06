@@ -28,6 +28,7 @@ public class TourDeleter {
     
     //deletes whole tour
     func deleteTour(pos: Int){
+        
         //gets tour at the row we want to delete
         let arrayOfTours = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! [AnyObject]
         //gets the pointer of the tour
@@ -48,6 +49,8 @@ public class TourDeleter {
         //deletes the objectId of the tour itself
         NSUserDefaults.standardUserDefaults().removeObjectForKey(tourID)
         NSUserDefaults.standardUserDefaults().synchronize()
+        TourIdParser().deleteTourIdAtRow(pos)
+        
         
     }
     

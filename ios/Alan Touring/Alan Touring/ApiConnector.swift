@@ -18,16 +18,32 @@ var tourIdForSummary = ""
 
 class ApiConnector: NSObject, NSURLConnectionDelegate{
     
+    class var sharedInstance: ApiConnector {
+        struct Static {
+            static var onceToken: dispatch_once_t = 0
+            static var instance: ApiConnector? = nil
+        }
+        dispatch_once(&Static.onceToken) {
+            Static.instance = ApiConnector()
+            
+        }
+        return Static.instance!
+    }
+    
+    
     lazy var data = NSMutableData()
     var urlPath: String = ""
-    
-    func initateConnection(var tourId: String){
+    var JSONMetadataFromAPI: NSDictionary!
+    var isUpdating = false
+
+    func initateConnection(var tourCode: String, isCheckingForUpdate: Bool){
+        isUpdating = isCheckingForUpdate
         let resetData = NSMutableData()
         //Reseting data to blank with every new connection
         data = resetData
-        tourId = cleanTourId(tourId)
+        tourCode = cleanTourId(tourCode)
         //The path to where the Tour Data is stored
-        urlPath = "https://touring-api.herokuapp.com/api/v1/key/verify/" + tourId
+        urlPath = "https://touring-api.herokuapp.com/api/v1/key/verify/" + tourCode
         
         //Standard URLConnection method
         do {
@@ -51,12 +67,15 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
         //Storing the data for use
         self.data.appendData(data)
     }
-    //Completion handler for the key verification route.
+    
+    // Completion handler for the key verification route.
     func connectionDidFinishLoading(connection: NSURLConnection!) {
-   
         do {
             let jsonResult: NSDictionary = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
-            _ = TourIdParser().addTourMetaData(jsonResult)
+            JSONMetadataFromAPI = jsonResult
+            if !isUpdating {
+                _ = TourIdParser().addTourMetaData(jsonResult)
+            }
             self.triggerValidKeyNotification()
         }
         catch let err as NSError{
@@ -64,8 +83,9 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
             print(err.description)
             self.triggerInvalidKeyNotification()
         }
-    
+
     }
+
     //send a notification that the tour id
     func triggerInvalidKeyNotification() {
         NSNotificationCenter.defaultCenter().addObserver(
@@ -78,6 +98,15 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
 
         }
         notify()
+    }
+    
+    func getTourMetadata(tourCode: String) -> NSDictionary {
+        // if the network call is not finished retrieve the tour metadata from the cache
+        if JSONMetadataFromAPI != nil {
+           return JSONMetadataFromAPI
+        } else {
+            return TourIdParser().getTourMetadata(tourCode)
+        }
     }
     
     //Send a notifcation that the tour id entered was valid and parsed correctly
@@ -99,7 +128,7 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
     func cleanTourId(tourId: String) -> String {
 
         let trimmedTourId = tourId.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-        
+
         if trimmedTourId.containsString(" ") || trimmedTourId.containsString("/")||trimmedTourId.containsString("\"")||trimmedTourId.containsString("\\"){
             print("the tour id input must not contain whitespaces.")
             //not possible to return nil so returns blank.
