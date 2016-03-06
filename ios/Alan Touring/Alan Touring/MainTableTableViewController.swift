@@ -38,10 +38,6 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         
     }
     
-
-  
-
-
     //to check if should be emptry screen when cancelling a tour download
     override func viewWillAppear(animated: Bool) {
         checkStateOfScreen()
@@ -129,17 +125,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         alert.show()
     }
     //Alert user that the tour they are trying to add already exists.
-    func showTourAlreadyExistsAlert(){
-        let alert = UIAlertView(title: "Tour Add Error", message: "A tour with that key already exists.", delegate: self, cancelButtonTitle:"Cancel")
-        alert.alertViewStyle = UIAlertViewStyle.Default
-        alert.show()
-    }
-    
-    func showNoInternetAlert(){
-        let alert = UIAlertView(title: "Internet Connection Error", message: "No internet connection detected. Please check and retry.", delegate: self, cancelButtonTitle:"Cancel")
-        alert.alertViewStyle = UIAlertViewStyle.Default
-        alert.show()
-    }
+
     //controls the behavior of the alerts for user tour code entry
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
         switch buttonIndex{
@@ -152,7 +138,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
                 let tours = TourIdParser.sharedInstance.getAllTours()
                 if tours.containsObject(Field!.text!){
                     //Tour already exists
-                    showTourAlreadyExistsAlert()
+                    AlertViewBuilder.sharedInstance.showWarningAlert("Tour Add Error", message: "A tour with that key already exists")
                 }else{
                     if ApiConnector().isConnectedToNetwork(){
                         print("\(ApiConnector().isConnectedToNetwork()) network status")
@@ -163,7 +149,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
                     // to change the background image
                     tableView.backgroundView = nil
                     }else{
-                        showNoInternetAlert()
+                        AlertViewBuilder.sharedInstance.showWarningAlert("No Internet Connection", message: "No internet connection detected. Please check and retry.")
                     }
                 }
             case 0: break  //Cancel pressed, unwind segue executed automatically
