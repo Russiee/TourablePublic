@@ -33,7 +33,8 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
 
         checkStateOfScreen()
         //TODO remove this, for demo use only
-        //videoHandler.sharedInstance.downloadVideo("https://clips.vorwaerts-gmbh.de/VfE_html5.mp4")
+        let connection: Bool = ApiConnector().isConnectedToNetwork()
+        print("internet connection status: \(connection)")
         
     }
     
@@ -133,6 +134,12 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         alert.alertViewStyle = UIAlertViewStyle.Default
         alert.show()
     }
+    
+    func showNoInternetAlert(){
+        let alert = UIAlertView(title: "Internet Connection Error", message: "No internet connection detected. Please check and retry.", delegate: self, cancelButtonTitle:"Cancel")
+        alert.alertViewStyle = UIAlertViewStyle.Default
+        alert.show()
+    }
     //controls the behavior of the alerts for user tour code entry
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
         switch buttonIndex{
@@ -147,12 +154,17 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
                     //Tour already exists
                     showTourAlreadyExistsAlert()
                 }else{
+                    if ApiConnector().isConnectedToNetwork(){
+                        print("\(ApiConnector().isConnectedToNetwork()) network status")
                     //Tour does not exist. Procede.
                     API.initateConnection(Field!.text!)
                     // goes to the AddNewTourPage
                     performSegueWithIdentifier("goToAddTour", sender: self)
                     // to change the background image
                     tableView.backgroundView = nil
+                    }else{
+                        showNoInternetAlert()
+                    }
                 }
             case 0: break  //Cancel pressed, unwind segue executed automatically
             
