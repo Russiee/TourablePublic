@@ -20,7 +20,6 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
     
     lazy var data = NSMutableData()
     var urlPath: String = ""
-    var connection: NSURLConnection!
     var JSONMetadataFromAPI: NSDictionary!
     var isUpdating = false
 
@@ -36,7 +35,7 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
         //Standard URLConnection method
         do {
             let request: NSURLRequest = NSURLRequest(URL: NSURL(string: urlPath)!)
-            connection = NSURLConnection(request: request, delegate: self, startImmediately: false)!
+            let connection: NSURLConnection = NSURLConnection(request: request, delegate: self, startImmediately: false)!
             connection.start()
         }
         catch let err as NSError{
