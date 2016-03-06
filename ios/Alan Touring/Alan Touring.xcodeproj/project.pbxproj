@@ -26,6 +26,7 @@
 		FA2BB2981C78F46500D784E8 /* imageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2BB2971C78F46500D784E8 /* imageHandler.swift */; };
 		FA4D0F5F1C6A4D08007D79E3 /* TourIdParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4D0F5E1C6A4D08007D79E3 /* TourIdParser.swift */; };
 		FA4EBAC01C68CC1100E6E601 /* AddNewTourViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4EBABF1C68CC1100E6E601 /* AddNewTourViewController.swift */; };
+		FA56AD7B1C8C614B00F200B9 /* AlertViewBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56AD7A1C8C614B00F200B9 /* AlertViewBuilder.swift */; };
 		FA57DD201C6B7EDA002739FF /* DataCacheTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA57DD1F1C6B7EDA002739FF /* DataCacheTest.swift */; };
 		FA6FD5491C8A2D880033964F /* videoHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6FD5481C8A2D880033964F /* videoHandler.swift */; };
 		FA6FD54B1C8A2DCE0033964F /* MediaHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6FD54A1C8A2DCE0033964F /* MediaHelper.swift */; };
@@ -81,6 +82,7 @@
 		FA2BB2971C78F46500D784E8 /* imageHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = imageHandler.swift; sourceTree = "<group>"; };
 		FA4D0F5E1C6A4D08007D79E3 /* TourIdParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TourIdParser.swift; sourceTree = "<group>"; };
 		FA4EBABF1C68CC1100E6E601 /* AddNewTourViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNewTourViewController.swift; sourceTree = "<group>"; };
+		FA56AD7A1C8C614B00F200B9 /* AlertViewBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertViewBuilder.swift; sourceTree = "<group>"; };
 		FA57DD1F1C6B7EDA002739FF /* DataCacheTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataCacheTest.swift; sourceTree = "<group>"; };
 		FA6FD5481C8A2D880033964F /* videoHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = videoHandler.swift; sourceTree = "<group>"; };
 		FA6FD54A1C8A2DCE0033964F /* MediaHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaHelper.swift; sourceTree = "<group>"; };
@@ -221,6 +223,7 @@
 				FAD1B1531C6BAEB400CA5327 /* TourSummaryController.swift */,
 				E536DCC01C6510FD00A7B2FC /* ViewController.swift */,
 				FA2164A51C7CB5E60056FF02 /* PointViewController.swift */,
+				FA56AD7A1C8C614B00F200B9 /* AlertViewBuilder.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -362,6 +365,7 @@
 				FAD1B1541C6BAEB400CA5327 /* TourSummaryController.swift in Sources */,
 				FA0A51771C774CEC00E4F733 /* pointOfInterest.swift in Sources */,
 				FA6FD5491C8A2D880033964F /* videoHandler.swift in Sources */,
+				FA56AD7B1C8C614B00F200B9 /* AlertViewBuilder.swift in Sources */,
 				FAE5F69F1C789D4000346321 /* POIParser.swift in Sources */,
 				FA0A51701C772AAD00E4F733 /* bundleRouteConnector.swift in Sources */,
 				FA0A51741C77482D00E4F733 /* tourDataParser.swift in Sources */,
