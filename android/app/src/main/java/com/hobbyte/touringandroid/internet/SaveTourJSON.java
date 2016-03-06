@@ -2,6 +2,7 @@ package com.hobbyte.touringandroid.internet;
 
 import android.util.Log;
 
+import com.hobbyte.touringandroid.App;
 import com.hobbyte.touringandroid.ui.activity.StartActivity;
 
 import org.json.JSONObject;
@@ -36,7 +37,7 @@ public class SaveTourJSON {
     private void makeDirectories(String keyID) {
 
         //...com.hobbyte.touring/files/
-        tourFolder = new File(StartActivity.getContext().getFilesDir(), keyID);
+        tourFolder = new File(App.context.getFilesDir(), keyID);
         boolean foldersCreatedSuccessfully = tourFolder.mkdir();
 
         //...com.hobbyte.touring/files/keyID/image/
