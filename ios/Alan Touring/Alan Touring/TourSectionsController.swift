@@ -32,18 +32,20 @@ class TourSectionsController: UITableViewController {
 
             //print("\(subsectionData.title) DATA RECOVERED FROM ID")
             tourTitles[subsectionData.title as String] =  subsectionData.sectionId
+            //appends the Names of subsections in the order they appear
+            keys.append(subsectionData.title as String)
  
         }
         let poip = POIParser.init()
         for poiPointer in poiArray{
             let poiData = poip.getTourSection((poiPointer["objectId"] as? String)!)
             tourTitles[poiData.title as String] = poiData.objectId
+            //appends the Names of subsections in the order they appear
+            keys.append(poiData.title as String)
         }
 
 
         models = tourTitles
-
-        keys = Array(models.keys)
         
         checkStateOfScreen()
         
@@ -79,7 +81,6 @@ class TourSectionsController: UITableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier("tableCell2", forIndexPath: indexPath)
         
         // Configure the cell...
-        keys = Array(models.keys)
         
         cell.textLabel?.text = keys[indexPath.row] 
         return cell
