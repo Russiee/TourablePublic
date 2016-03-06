@@ -38,10 +38,6 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         
     }
     
-
-  
-
-
     //to check if should be emptry screen when cancelling a tour download
     override func viewWillAppear(animated: Bool) {
         checkStateOfScreen()
