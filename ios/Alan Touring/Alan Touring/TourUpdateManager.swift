@@ -24,9 +24,6 @@ public class TourUpdateManager {
         let connection = ApiConnector.init()
         connection.initateConnection(tourCode, isUpdate: true)
         newMetadata = connection.getTourMetadata(tourCode)
-
-        print(newMetadata)
-
     }
 
     func checkForUpdates() {
@@ -40,21 +37,20 @@ public class TourUpdateManager {
         let currentDate = dateFormatter.dateFromString(currentDateString as! String)
         let newDate = dateFormatter.dateFromString(newDateString as! String)
 
-        print(currentDateString)
-        print(newDateString)
-
-        print(currentDate)
-        print(newDate)
-
         let dateComparison = currentDate!.compare(newDate!)
 
         switch (dateComparison) {
             case NSComparisonResult.OrderedDescending:
-                _ = TourIdParser().getTourMetadata(tourCode)
-                // here you should 'say' that the app is updating stuff
+                // if user clicks 'yes' on update alert 
+                triggerUpdate()
+                // here you should 'say' that the app is updating stuff (maybe)
             default:
-                // here trigger alert that everything is up to date
+                // here update a label that the tour is updated (maybe)
                 print("")
         }
+    }
+    
+    func triggerUpdate() {
+        _ = TourIdParser().getTourMetadata(tourCode)
     }
 }
