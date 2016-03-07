@@ -45,15 +45,8 @@ public class TourUpdateManager {
         downloadNewMetadata()
 
         if self.newMetadata != nil {
-            let currentDateString = currentMetadata["updatedAt"]
-            let newDateString = newMetadata["updatedAt"]
-
-            let dateFormatter = NSDateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd'T'hh:mm:ss.SSSz"
-            let currentDate = dateFormatter.dateFromString(currentDateString as! String)
-            let newDate = dateFormatter.dateFromString(newDateString as! String)
-
-            let dateComparison = currentDate!.compare(newDate!)
+            
+            let dateComparison = compareDates("updatedAt")
 
             // check if the current date is less recent than the one in the metadata. If yes, ask the user to update tour.
             switch (dateComparison) {
@@ -66,7 +59,23 @@ public class TourUpdateManager {
             }
         }
     }
-
+    
+    func compareDates(fieldToCompare: String) -> NSComparisonResult {
+        print("calling compare dates")
+        print(currentMetadata)
+        print(newMetadata)
+        let currentDateString = currentMetadata[fieldToCompare]
+        let newDateString = newMetadata[fieldToCompare]
+        
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'hh:mm:ss.SSSz"
+        let currentDate = dateFormatter.dateFromString(currentDateString as! String)
+        let newDate = dateFormatter.dateFromString(newDateString as! String)
+        
+        return currentDate!.compare(newDate!)
+    }
+    
+    
     // trigger notification when there is an update avaiable
     func triggerUpdateAvailableNotification() {
         NSNotificationCenter.defaultCenter().addObserver(
