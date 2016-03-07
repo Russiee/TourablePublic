@@ -214,6 +214,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
                 if let tourIndex = tableView.indexPathForSelectedRow?.row {
                     destination.tourId = models[tourIndex] as! String
                     destination.tableRow = tourIndex
+                    tableView.deselectRowAtIndexPath(tableView.indexPathForSelectedRow!, animated: true)
                 }
             }
         }

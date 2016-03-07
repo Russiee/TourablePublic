@@ -137,16 +137,14 @@ class TourSectionsController: UITableViewController {
         if (segue.identifier == "showNextPage") {
             let newViewController = segue.destinationViewController as! TourSectionsController
             newViewController.superTableId = objectId!
-
+            
         } else if (segue.identifier == "PointOfInterestSegue") {
             let newViewController = segue.destinationViewController as! PointViewController
-
             newViewController.poiID = objectId!
             newViewController.superSectionID = superTableId
-
         }
+        tableView.deselectRowAtIndexPath(tableView.indexPathForSelectedRow!, animated: true)
     }
-   
 }
 
 
