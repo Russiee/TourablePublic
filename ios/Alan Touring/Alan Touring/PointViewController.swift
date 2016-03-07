@@ -124,8 +124,8 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
         var headerArray = [UIView]()
         for row in post{
             
-            var types = Array((row as! NSDictionary).allKeys)
-            if types[0] as! String == "type"{
+            let types = (row as! NSDictionary).allKeys as![NSString]
+            if types.contains("type"){
                 
                 switch row["type"] as! String{
                     
