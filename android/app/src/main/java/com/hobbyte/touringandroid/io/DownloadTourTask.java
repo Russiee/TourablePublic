@@ -9,6 +9,11 @@ import android.util.Log;
 import com.hobbyte.touringandroid.App;
 import com.hobbyte.touringandroid.internet.ServerAPI;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.net.HttpURLConnection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.regex.Matcher;
@@ -57,6 +62,7 @@ public class DownloadTourTask extends Thread {
 
         // use pattern matcher to extract all media URLs
         Pattern p = null;
+        Pattern namePattern = Pattern.compile(FileManager.IMG_NAME);
 
         if (getVideo) {
             p = Pattern.compile(allMediaPattern);
@@ -84,11 +90,45 @@ public class DownloadTourTask extends Thread {
         for (Iterator<String> i = mediaURLs.iterator(); i.hasNext(); ) {
             String urlString = i.next();
 
+            Matcher m = namePattern.matcher(urlString);
+            String img = "hello.jpg";
+
+            if (m.matches()) {
+                img = m.group(1);
+                Log.d(TAG, img);
+            }
+
+            HttpURLConnection connection = ServerAPI.getConnection(urlString);
+
+            try {
+                BufferedInputStream bis = new BufferedInputStream(connection.getInputStream());
+                BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(
+                        new File(App.context.getFilesDir(), String.format("%s/image/%s", keyID, img))
+                ));
+
+                byte[] buffer = new byte[8192];
+                int bytesRead;
+
+
+                while ((bytesRead = bis.read(buffer)) != -1) {
+                    bos.write(buffer, 0, bytesRead);
+                }
+
+                connection.disconnect();
+                bis.close();
+//                bos.flush();
+                bos.close();
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             // first download the image from the web
-            Bitmap bitmap = ServerAPI.downloadBitmap(urlString);
+            /*Bitmap bitmap = ServerAPI.downloadBitmap(urlString);
 
             // then save the image on the device
-            success = FileManager.saveImage(App.context, bitmap, urlString, keyID);
+            success = FileManager.saveImage(App.context, bitmap, urlString, keyID);*/
 
             // inform the calling activity that progress has been made
             Bundle bundle = new Bundle();
