@@ -163,7 +163,7 @@ public class ServerAPI {
         return null;
     }
 
-    public static Bitmap downloadBitmap(String keyID, String urlString) {
+    public static Bitmap downloadBitmap(String urlString) {
         Log.d(TAG, "Preparing to download image at " + urlString);
         HttpURLConnection connection = null;
         Bitmap bitmap = null;
