@@ -28,12 +28,12 @@ public class TourUpdateManager {
         self.tourTableRow = tableRow
         self.tourCode = tourCodetoCheck
         self.currentMetadata = TourIdParser().getTourMetadata(tourCode)
+        downloadNewMetadata()
         checkForUpdates()
     }
 
     // download fresh metadata for the tour if there is internet connection
     func downloadNewMetadata() {
-
         if ApiConnector.sharedInstance.isConnectedToNetwork() {
             ApiConnector.sharedInstance.initateConnection(tourCode, isCheckingForUpdate: true)
             newMetadata = ApiConnector.sharedInstance.getTourMetadata(tourCode)
@@ -41,9 +41,8 @@ public class TourUpdateManager {
     }
 
     // check for updates comparing freshly downloaded metadata with current stored one
+    // if there are updates the user is asked if he wants to download them
     func checkForUpdates() {
-        downloadNewMetadata()
-
         if self.newMetadata != nil {
             
             let dateComparison = compareDates("updatedAt")
@@ -59,7 +58,26 @@ public class TourUpdateManager {
             }
         }
     }
+    // check if a project is out to date comparing freshly downloaded metadata with current stored one
+    // if the project is out to date, it is deleted after informing the user
+    func checkForOutdatedProject() {
+        if self.newMetadata != nil {
+            let dateComparison = compareDates("expiresAt")
+
+            // check if the current date is less recent than the one in the metadata. If yes tour is going to be deleted.
+            // SHOULD CHECK IF THE CURRENT DATE OF TODAY IS MORE RECENT THAN THE EXPIRY DATE
+            switch (dateComparison) {
+            case NSComparisonResult.OrderedAscending:
+                // warn the user that the project is about to be deleted
+                print("project needs to be deleted")
+            default:
+                // remove this next line when finsihed developing feature.
+                print("This is because Swift")
+            }
+        }
+    }
     
+    // compare two dates from the current saved metadata and the new one that has just been downloaded.
     func compareDates(fieldToCompare: String) -> NSComparisonResult {
         print("calling compare dates")
         print(currentMetadata)
@@ -74,7 +92,6 @@ public class TourUpdateManager {
         
         return currentDate!.compare(newDate!)
     }
-    
     
     // trigger notification when there is an update avaiable
     func triggerUpdateAvailableNotification() {
