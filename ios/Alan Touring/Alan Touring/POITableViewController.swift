@@ -18,6 +18,7 @@ class POITableViewController: UITableViewController {
         super.viewDidLoad()
 
         getPOIS()
+        print(POIList)
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -48,7 +49,7 @@ class POITableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        return POIList.count
     }
 
     
