@@ -1,6 +1,5 @@
 package com.hobbyte.touringandroid.io;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,6 +12,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -21,8 +21,8 @@ import java.util.regex.Pattern;
 
 /**
  * Downloads the bundle JSON and then does two things with it:
- * <ul><li>Processes the JSON for use in creating {@link com.hobbyte.touringandroid.tourdata.Tour}
- * objects</li><li>Strips out all URLs, then downloads and saves them to the device</li></ul>
+ * <ul><li>Processes the JSON for use in creating a {@link com.hobbyte.touringandroid.tourdata.Tour}
+ * </li><li>Strips out all URLs, then downloads and saves them to the device</li></ul>
  */
 public class DownloadTourTask extends Thread {
     private static final String TAG = "DownloadTourTask";
@@ -32,7 +32,10 @@ public class DownloadTourTask extends Thread {
     public static final String STATE = "downloadState";
     public static final String PROGRESS = "downloadProgress";
 
-    private HashSet<String> mediaURLs;
+    public static final String IMAGE_ONLY_PATTERN = "https?:\\/\\/[\\w\\d\\.\\/]*\\.(jpe?g|png)";
+    public static final String VIDEO_ONLY_PATTERN = "https?:\\/\\/[\\w\\d\\.\\/]*\\.(mp4)";
+    public static final String FILE_NAME_PATTERN = "https?:\\/\\/[\\w\\.\\/]*\\/(\\w*\\.(jpe?g|png|mp4))";
+
     private String keyID;
     private String tourID;
     private boolean getVideo;
@@ -57,91 +60,120 @@ public class DownloadTourTask extends Thread {
     public void run() {
         String bundleString = ServerAPI.getBundleString(tourID);
 
-        String imageOnlyPattern = "https?:\\/\\/[\\w\\d\\.\\/]*\\.(jpe?g|png)";
-        String allMediaPattern = "https?:\\/\\/[\\w\\d\\.\\/]*\\.(jpe?g|png|mp4)";
+        // use pattern matcher to extract URLs
+        Matcher imageMatcher = Pattern.compile(IMAGE_ONLY_PATTERN).matcher(bundleString);
 
-        // use pattern matcher to extract all media URLs
-        Pattern p = null;
-        Pattern namePattern = Pattern.compile(FileManager.IMG_NAME);
+        // used to separate the file name and extension from the rest of the URL
+        Pattern namePattern = Pattern.compile(FILE_NAME_PATTERN);
 
-        if (getVideo) {
-            p = Pattern.compile(allMediaPattern);
-        } else {
-            p = Pattern.compile(imageOnlyPattern);
+        // add URLs to a Set to prevent downloading duplicates
+        HashSet<String> imageURLs = new HashSet<>();
+        HashSet<String> videoURLs = new HashSet<>(); // won't necessarily be used
+
+        while (imageMatcher.find()) {
+            imageURLs.add(imageMatcher.group());
         }
 
-        Matcher matcher = p.matcher(bundleString);
-        mediaURLs = new HashSet<String>();
+        // same for video
+        if (getVideo) {
+            videoURLs.add("https://archive.org/download/ksnn_compilation_master_the_internet/ksnn_compilation_master_the_internet_512kb.mp4");
+            Matcher videoMatcher = Pattern.compile(VIDEO_ONLY_PATTERN).matcher(bundleString);
 
-        while (matcher.find()) {
-            mediaURLs.add(matcher.group());
+            while (videoMatcher.find()) {
+                videoURLs.add(videoMatcher.group());
+            }
         }
 
         // on a separate thread, save the bundle and POI JSON
-        Log.d(TAG, "About to start bundle saver");
-        
         BundleSaver bundleSaver = new BundleSaver(App.context, bundleString, keyID);
         bundleSaver.start();
 
-        float total = (float) mediaURLs.size();
+        float total = (float) imageURLs.size() + 2 * videoURLs.size(); // make video files fill more progress
         float count = 0.0f;
-        boolean success = false;
 
-        for (Iterator<String> i = mediaURLs.iterator(); i.hasNext(); ) {
+        for (Iterator<String> i = imageURLs.iterator(); i.hasNext(); ) {
             String urlString = i.next();
-
             Matcher m = namePattern.matcher(urlString);
             String img = "hello.jpg";
 
             if (m.matches()) {
                 img = m.group(1);
-                Log.d(TAG, img);
             }
 
-            HttpURLConnection connection = ServerAPI.getConnection(urlString);
+            saveFile(urlString, img, "image", 8192);
+            informActivity(++count / total);
+        }
 
-            try {
-                BufferedInputStream bis = new BufferedInputStream(connection.getInputStream());
-                BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(
-                        new File(App.context.getFilesDir(), String.format("%s/image/%s", keyID, img))
-                ));
+        if (getVideo) {
+            for (Iterator<String> i = videoURLs.iterator(); i.hasNext(); ) {
+                String urlString = i.next();
+                Matcher m = namePattern.matcher(urlString);
+                String img = "hello.mp4";
 
-                byte[] buffer = new byte[8192];
-                int bytesRead;
-
-
-                while ((bytesRead = bis.read(buffer)) != -1) {
-                    bos.write(buffer, 0, bytesRead);
+                if (m.matches()) {
+                    img = m.group(1);
                 }
 
-                connection.disconnect();
-                bis.close();
-//                bos.flush();
-                bos.close();
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
+                saveFile(urlString, img, "video", 8192); // TODO figure out if there's ever a reason to use bigger than 8192
+                count += 2;
+                informActivity(count / total);
             }
-
-            // first download the image from the web
-            /*Bitmap bitmap = ServerAPI.downloadBitmap(urlString);
-
-            // then save the image on the device
-            success = FileManager.saveImage(App.context, bitmap, urlString, keyID);*/
-
-            // inform the calling activity that progress has been made
-            Bundle bundle = new Bundle();
-            bundle.putInt(STATE, STATE_DOWNLOADING);
-            bundle.putFloat(PROGRESS, ++count / total);
-            Message msg = handler.obtainMessage();
-            msg.setData(bundle);
-            handler.handleMessage(msg);
         }
 
         // inform the calling activity that the download is complete
         Bundle bundle = new Bundle();
         bundle.putInt(STATE, STATE_FINISHED);
+        Message msg = handler.obtainMessage();
+        msg.setData(bundle);
+        handler.handleMessage(msg);
+    }
+
+    /**
+     * Creates a stream from the URL connection, which is read in chunks of bytes and written
+     * straight to disk.
+     *
+     * @param url the URL of the file
+     * @param name the file name & extension
+     * @param folder the destination folder (image or video)
+     * @param bufferSize the amount of memory to read/write at a time. Please use a whole number
+     *                   of kB
+     */
+    private void saveFile(String url, String name, String folder, int bufferSize) {
+        HttpURLConnection connection = ServerAPI.getConnection(url);
+
+        try {
+            BufferedInputStream bis = new BufferedInputStream(connection.getInputStream(), bufferSize);
+            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(
+                    new File(App.context.getFilesDir(), String.format("%s/%s/%s", keyID, folder, name))
+            ), bufferSize);
+
+            byte[] buffer = new byte[bufferSize];
+            int bytesRead;
+            int bytesTotal = 0;
+
+            while ((bytesRead = bis.read(buffer)) != -1) {
+                bos.write(buffer, 0, bytesRead);
+                bytesTotal += bytesRead;
+            }
+
+            connection.disconnect();
+            bis.close();
+            bos.close();
+
+            Log.d(TAG, String.format("Downloaded %s - %d bytes total", name, bytesTotal));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Sends a message to the calling activity's ProgressHandler, which updates the progress bar.
+     */
+    private void informActivity(float progress) {
+        Bundle bundle = new Bundle();
+        bundle.putInt(STATE, STATE_DOWNLOADING);
+        bundle.putFloat(PROGRESS, progress);
         Message msg = handler.obtainMessage();
         msg.setData(bundle);
         handler.handleMessage(msg);
