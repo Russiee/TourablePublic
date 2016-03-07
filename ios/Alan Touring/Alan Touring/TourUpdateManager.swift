@@ -30,7 +30,6 @@ public class TourUpdateManager {
         self.currentMetadata = TourIdParser().getTourMetadata(tourCode)
         downloadNewMetadata()
         checkForUpdates()
-        checkForOutdatedProject()
     }
 
     // download fresh metadata for the tour if there is internet connection
@@ -50,11 +49,9 @@ public class TourUpdateManager {
             let newDate = dateFromString(newMetadata["updatedAt"] as! String)
             
             let comparisonResultString = compareDates(currentDate, newDate: newDate)
-
             // check if the current date is less recent than the one in the metadata. If yes, ask the user to update tour.
-            if comparisonResultString == "descending" {
-//                self.triggerUpdateAvailableNotification()
-            } else { // to be removed
+            if comparisonResultString == "ascending" {
+                print("current date \(currentDate) is less recent than the last updated \(newDate), therefore update triggered here")
                 self.triggerUpdateAvailableNotification()
             }
         }
@@ -68,11 +65,9 @@ public class TourUpdateManager {
             let expiresDate = dateFromString(currentMetadata["expiresAt"] as! String)
 
             let comparisonResulFromString = compareDates(todaysDate, newDate: expiresDate)
-
-            // SHOULD CHECK IF THE CURRENT DATE OF TODAY IS MORE RECENT THAN THE EXPIRY DATE
-            if comparisonResulFromString == "ascending" {
-                // delete the project here. Theoretically has a countdown warning the user that there is only one week left or something
-                print("delete")
+            if comparisonResulFromString == "descending" {
+                print("today is \(todaysDate) and it is beyond expiry \(expiresDate). Therefore delete project")
+                TourDeleter().deleteTour(tourTableRow)
             } else if comparisonResulFromString == "same" {
                 // warn the user that the this is the last day they can open the project
             }
