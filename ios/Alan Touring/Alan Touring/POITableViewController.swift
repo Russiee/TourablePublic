@@ -105,7 +105,7 @@ class POITableViewController: UITableViewController {
                         //for all subsequent images
                         //Set the position of the image to start at the bottom of the last image + offset
                         
-                        let view2 = UILabel(frame: CGRectMake(0, 0, width, headerArray[0].frame.height))
+                        let view2 = UILabel(frame: CGRectMake(0, 0, width, 40))
                         let label = UILabel(frame: view2.bounds)
                         label.font = label.font.fontWithSize(30)
                         label.text = (row["content"] as! String)
@@ -221,6 +221,11 @@ class POITableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier("poiCells", forIndexPath: indexPath)
 
         // Configure the cell...
+        //gets rid of subviews before adding new ones to make sure no overlaps occur
+        for view in cell.contentView.subviews {
+            view.removeFromSuperview()
+            
+        }
             cell.contentView.addSubview(poiViews[indexPath.row])
             cell.selectionStyle = UITableViewCellSelectionStyle.None
             cell.contentView.clipsToBounds = true
