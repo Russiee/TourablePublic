@@ -85,7 +85,7 @@ public class DownloadTourTask extends Thread {
             String urlString = i.next();
 
             // first download the image from the web
-            Bitmap bitmap = ServerAPI.downloadBitmap(keyID, urlString);
+            Bitmap bitmap = ServerAPI.downloadBitmap(urlString);
 
             // then save the image on the device
             success = FileManager.saveImage(App.context, bitmap, urlString, keyID);
