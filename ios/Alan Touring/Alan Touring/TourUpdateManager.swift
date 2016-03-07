@@ -30,6 +30,7 @@ public class TourUpdateManager {
         self.currentMetadata = TourIdParser().getTourMetadata(tourCode)
         downloadNewMetadata()
         checkForUpdates()
+        checkForOutdatedProject()
     }
 
     // download fresh metadata for the tour if there is internet connection
@@ -45,52 +46,58 @@ public class TourUpdateManager {
     func checkForUpdates() {
         if self.newMetadata != nil {
             
-            let dateComparison = compareDates("updatedAt")
+            let currentDate = dateFromString(currentMetadata["updatedAt"] as! String)
+            let newDate = dateFromString(newMetadata["updatedAt"] as! String)
+            
+            let comparisonResultString = compareDates(currentDate, newDate: newDate)
 
             // check if the current date is less recent than the one in the metadata. If yes, ask the user to update tour.
-            switch (dateComparison) {
-                case NSComparisonResult.OrderedDescending:
-                    self.triggerUpdateAvailableNotification()
-                default:
-                    // remove this next line when finsihed developing feature.
-                    self.triggerUpdateAvailableNotification()
-                    print("This is because Swift")
+            if comparisonResultString == "descending" {
+//                self.triggerUpdateAvailableNotification()
+            } else { // to be removed
+                self.triggerUpdateAvailableNotification()
             }
         }
     }
-    // check if a project is out to date comparing freshly downloaded metadata with current stored one
+
+    // check if a project is out to date comparing metadata with current today's date.
     // if the project is out to date, it is deleted after informing the user
     func checkForOutdatedProject() {
         if self.newMetadata != nil {
-            let dateComparison = compareDates("expiresAt")
+            let todaysDate = NSDate()
+            let expiresDate = dateFromString(currentMetadata["expiresAt"] as! String)
 
-            // check if the current date is less recent than the one in the metadata. If yes tour is going to be deleted.
+            let comparisonResulFromString = compareDates(todaysDate, newDate: expiresDate)
+
             // SHOULD CHECK IF THE CURRENT DATE OF TODAY IS MORE RECENT THAN THE EXPIRY DATE
-            switch (dateComparison) {
-            case NSComparisonResult.OrderedAscending:
-                // warn the user that the project is about to be deleted
-                print("project needs to be deleted")
-            default:
-                // remove this next line when finsihed developing feature.
-                print("This is because Swift")
+            if comparisonResulFromString == "ascending" {
+                // delete the project here. Theoretically has a countdown warning the user that there is only one week left or something
+                print("delete")
+            } else if comparisonResulFromString == "same" {
+                // warn the user that the this is the last day they can open the project
             }
         }
     }
     
-    // compare two dates from the current saved metadata and the new one that has just been downloaded.
-    func compareDates(fieldToCompare: String) -> NSComparisonResult {
-        print("calling compare dates")
-        print(currentMetadata)
-        print(newMetadata)
-        let currentDateString = currentMetadata[fieldToCompare]
-        let newDateString = newMetadata[fieldToCompare]
-        
+    // compare two dates and returns a string saying the order of the dates.
+    func compareDates(currentDate: NSDate, newDate: NSDate) -> String {
+        let dateComparison = currentDate.compare(newDate)
+
+        switch (dateComparison) {
+        case NSComparisonResult.OrderedDescending:
+            return "descending"
+        case NSComparisonResult.OrderedAscending:
+            return "ascending"
+        default:
+            return "same"
+        }
+    }
+    
+    // receive a string of format "yyyy-MM-dd'T'hh:mm:ss.SSSz" and returns an NSDate object
+    func dateFromString(date: String) -> NSDate {
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'hh:mm:ss.SSSz"
-        let currentDate = dateFormatter.dateFromString(currentDateString as! String)
-        let newDate = dateFormatter.dateFromString(newDateString as! String)
-        
-        return currentDate!.compare(newDate!)
+        return dateFormatter.dateFromString(date)!
     }
     
     // trigger notification when there is an update avaiable
