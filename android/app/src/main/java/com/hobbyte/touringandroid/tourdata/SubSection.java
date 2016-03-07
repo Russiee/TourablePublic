@@ -95,7 +95,7 @@ public class SubSection extends TourItem implements Parcelable {
     // currently used for debugging purposes
     @Override
     public String toString() {
-        return String.format("S: %s (%d)", title, numSubSections);
+        return title;
     }
 
     @Override
