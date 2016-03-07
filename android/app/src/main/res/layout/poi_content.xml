@@ -4,4 +4,6 @@
     android:layout_height="wrap_content"
     android:id="@+id/poiContentTextView"
     android:paddingTop="18dp"
-    android:textColor="@color/colorText" />
+    android:textColor="@color/colorText"
+    android:background="#ffffff"
+    android:padding="16dp"/>
