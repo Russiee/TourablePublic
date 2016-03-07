@@ -15,6 +15,18 @@
         <item name="android:fontFamily">"sans-serif-thin"</item>
     </style>
 
+    <style name="dialogTheme" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="colorPrimary">#29B6F6</item>
+        <item name="colorPrimaryDark">#01579B</item>
+        <item name="colorAccent">#F44336</item>
+        <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="colorButtonNormal">#fa29B6F6</item>
+        <item name="android:textColor">@color/colorText</item>
+        <item name="android:textAppearance">@color/colorText</item>
+        <item name="android:fontFamily">"sans-serif-thin"</item>
+    </style>
+
     <!-- DownloadActivity tour title-->
     <style name="TourTitle" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:textSize">20sp</item>
