@@ -1,24 +1,33 @@
 package com.hobbyte.touringandroid.ui.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.internal.view.ContextThemeWrapper;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
+import com.hobbyte.touringandroid.App;
 import com.hobbyte.touringandroid.R;
 import com.hobbyte.touringandroid.internet.ServerAPI;
 import com.hobbyte.touringandroid.internet.UpdateChecker;
@@ -52,6 +61,8 @@ public class StartActivity extends AppCompatActivity {
     private LinearLayout previousToursLayout;
     private BackAwareEditText textKey;
     private Button submitButton;
+
+    private String keyid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,23 +128,54 @@ public class StartActivity extends AppCompatActivity {
 
                 TextView tourName = (TextView) tourItem.findViewById(R.id.textTourName);
                 TextView expiryDate = (TextView) tourItem.findViewById(R.id.textTourExpiry);
+                RelativeLayout tour = (RelativeLayout) tourItem.findViewById(R.id.tourItem);
+                ImageView delete = (ImageView) tourItem.findViewById(R.id.deleteImage);
 
                 String name = c.getString(c.getColumnIndex(TourDBContract.TourList.COL_TOUR_NAME));
                 long expiryTime = c.getLong(c.getColumnIndex(TourDBContract.TourList.COL_DATE_EXPIRES_ON));
                 String expiryText = df.format(new Date(expiryTime));
                 final String keyID = c.getString(c.getColumnIndex(TourDBContract.TourList.COL_KEY_ID));
                 final String tourID = c.getString(c.getColumnIndex(TourDBContract.TourList.COL_TOUR_ID));
-
+                tour.setTag(keyID);
                 Log.d(TAG, String.format("k: %s t: %s", keyID, tourID));
-
                 tourName.setText(name);
                 expiryDate.setText(String.format("Expires %s", expiryText));
                 layout.addView(tourItem);
 
-                tourItem.setOnClickListener(new View.OnClickListener() {
+                tour.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         goToTour(keyID, tourID);
+                    }
+                });
+
+                delete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new AlertDialog.Builder(new ContextThemeWrapper(StartActivity.this, R.style.dialogTheme)).setTitle("Delete tour").setMessage("Are you sure you want to delete this tour?")
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface d, int temp) {
+                                        FileManager.removeTour(App.context, keyID);
+                                        finish();
+                                        startActivity(getIntent());
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface d, int temp) {
+                                        // do nothing
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert).show();
+                    }
+                });
+
+                tour.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        System.out.println(v.getTag().toString());
+                        registerForContextMenu(v);
+                        openContextMenu(v);
+                        return true;
                     }
                 });
             }
@@ -190,11 +232,13 @@ public class StartActivity extends AppCompatActivity {
     /**
      * Checks if the provided tour key is valid. If so, continue to the next activity, otherwise
      * inform the user that the key was invalid.
+     *
      * @param v the submit button
      */
     public void checkTourKey(View v) {
         // current valid key: KCL-1010
-        if (textKey.length() < 3) return; // TODO ask if there's a minimum Key length. Otherwise do 0
+        if (textKey.length() < 3)
+            return; // TODO ask if there's a minimum Key length. Otherwise do 0
 
         String tourKey = textKey.getText().toString();
 
@@ -225,6 +269,7 @@ public class StartActivity extends AppCompatActivity {
 
     /**
      * Moves the app to the {@link SummaryActivity}, ready to start the tour
+     *
      * @param keyID tour to start
      */
     private void goToTour(String keyID, String tourID) {
@@ -317,5 +362,19 @@ public class StartActivity extends AppCompatActivity {
                 showToast(getString(R.string.msg_invalid_key));
             }
         }
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.add(0, v.getId(), 0, "Delete");
+        keyid = v.getTag().toString();
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        FileManager.removeTour(this, keyid);
+        this.recreate();
+        return true;
     }
 }

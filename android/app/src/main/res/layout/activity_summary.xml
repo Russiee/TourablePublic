@@ -26,8 +26,7 @@
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:paddingTop="8dp"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/txtTourTitle"
@@ -57,22 +56,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:baselineAligned="false"
-        android:layout_above="@+id/updateProgressBar"
 
-        android:layout_centerInParent="true"
-        android:layout_marginBottom="44dp">
-
-        <Button
-            android:id="@+id/buttonStartTour"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/start_button_LR_margins"
-            android:layout_marginRight="@dimen/start_button_LR_margins"
-            android:layout_marginTop="@dimen/start_button_TB_margins"
-            android:layout_marginBottom="@dimen/start_button_TB_margins"
-            android:text="@string/summary_activity_start_tour"
-            android:textColor="#ffffff"
-            android:onClick="openTourActivity"/>
+        android:layout_alignTop="@+id/updateProgressBar"
+        android:layout_alignParentStart="true">
 
         <Button
             android:id="@+id/buttonUpdateTour"
@@ -93,15 +79,28 @@
         android:id="@+id/updateProgressBar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/progress_bar_height"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@id/bottomText"
         style="@android:style/Widget.Material.ProgressBar.Horizontal"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:id="@+id/bottomText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/updateProgressBar"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/buttonStartTour"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/summary_activity_start_tour"
+        android:textColor="#ffffff"
+        android:onClick="openTourActivity"
+        android:layout_marginLeft="@dimen/start_button_LR_margins"
+        android:layout_marginRight="@dimen/start_button_LR_margins"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
+
 </RelativeLayout>
