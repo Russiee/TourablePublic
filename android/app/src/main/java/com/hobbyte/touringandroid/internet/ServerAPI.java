@@ -179,6 +179,7 @@ public class ServerAPI {
         if (connection != null) {
             // download image into a bitmap
             try (BufferedInputStream bis = new BufferedInputStream(connection.getInputStream())) {
+
                 bitmap = BitmapFactory.decodeStream(bis);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -187,6 +188,20 @@ public class ServerAPI {
             }
         }
         return bitmap;
+    }
+
+    public static HttpURLConnection getConnection(String urlString) {
+        HttpURLConnection connection = null;
+
+        try {
+            URL url = new URL(urlString);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.connect();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return connection;
     }
 
     /**
