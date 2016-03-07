@@ -1,6 +1,7 @@
 package com.hobbyte.touringandroid.ui.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,9 +34,10 @@ public class TourItemAdapter extends ArrayAdapter<TourItem> {
         TextView subsectionView = (TextView) view.findViewById(R.id.SubSectionTextView);
 
         if (selected.getType() == TourItem.TYPE_SUBSECTION) {
-            subsectionView.setText(String.format("S: %s", selected.getTitle()));
+            subsectionView.setText(selected.getTitle());
         } else {
-            subsectionView.setText(String.format("P: %s", selected.getTitle()));
+            subsectionView.setText(selected.getTitle());
+            subsectionView.setTextColor(Color.parseColor("#F44336"));
         }
         return view;
     }

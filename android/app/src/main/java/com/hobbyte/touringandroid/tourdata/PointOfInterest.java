@@ -64,7 +64,7 @@ public class PointOfInterest extends TourItem implements Parcelable {
     // currently used for debugging purposes
     @Override
     public String toString() {
-        return String.format("P: %s (%d)", title, nextIndex);
+        return title;
     }
 
     @Override
