@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import Foundation
 
 
 class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
@@ -117,6 +117,12 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     
     @IBAction func plussPressed(sender: UIBarButtonItem) {
         showTourKeyAlert()
+    }
+    
+    func checkToursToDelete() {
+        //TODO 1: access tour list with tour codes (therefore not the cached "array" as we will change the codes with the titles)
+        
+        //TODO 2: iterate throught the list and for each one check if it is outdated throught a TourUpdateManager
     }
     
     
