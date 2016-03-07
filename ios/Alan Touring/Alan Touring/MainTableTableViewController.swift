@@ -38,6 +38,8 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     
     //to check if should be emptry screen when cancelling a tour download
     override func viewWillAppear(animated: Bool) {
+        //makes sure Tool bar is visible again after coming back from Tour
+        self.navigationController?.setToolbarHidden(false, animated: false)
         checkStateOfScreen()
     }
 
