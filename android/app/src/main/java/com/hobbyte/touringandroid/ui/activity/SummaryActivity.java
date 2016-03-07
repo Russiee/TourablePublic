@@ -38,6 +38,7 @@ public class SummaryActivity extends AppCompatActivity {
     private Button updateButton;
 
     private ProgressBar progressBar;
+    private TextView progressText;
 
     private String keyID;
     private String tourID;
@@ -115,6 +116,7 @@ public class SummaryActivity extends AppCompatActivity {
     private void updateProgress(float progress) {
         progress = progress * 100;
         progressBar.setProgress((int) progress);
+        progressText.setText(String.valueOf(Math.round(progress)) + "%");
 //        Log.d(TAG, String.format("Progress: %.2f", progress));
     }
 
@@ -154,6 +156,7 @@ public class SummaryActivity extends AppCompatActivity {
         protected void onPostExecute(Boolean aBoolean) {
             // set up the progress bar
             progressBar = (ProgressBar) findViewById(R.id.updateProgressBar);
+            progressText = (TextView) findViewById(R.id.bottomText);
             progressBar.setVisibility(View.VISIBLE);
             progressBar.setMax(100);
 
