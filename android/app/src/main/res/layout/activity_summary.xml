@@ -58,7 +58,9 @@
         android:baselineAligned="false"
 
         android:layout_alignTop="@+id/updateProgressBar"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="false"
+        android:layout_alignParentEnd="false"
+        android:layout_centerInParent="true">
 
         <Button
             android:id="@+id/buttonUpdateTour"
@@ -81,8 +83,9 @@
         android:layout_height="@dimen/progress_bar_height"
         style="@android:style/Widget.Material.ProgressBar.Horizontal"
         android:visibility="invisible"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentStart="true"
+        android:layout_centerInParent="true" />
 
     <TextView
         android:id="@+id/bottomText"
