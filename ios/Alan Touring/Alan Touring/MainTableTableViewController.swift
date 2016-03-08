@@ -135,8 +135,10 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     func showTourKeyAlert(){
         let alert = UIAlertView(title: "Add New Tour", message: "Enter the key you have recieved", delegate: self, cancelButtonTitle:"Cancel")
         alert.alertViewStyle = UIAlertViewStyle.PlainTextInput
+        
         alert.addButtonWithTitle("Add")
         let textField = alert.textFieldAtIndex(0)
+        textField?.keyboardAppearance = UIKeyboardAppearance.Alert
         textField!.placeholder = "Enter Tour ID"
         alert.show()
     }
