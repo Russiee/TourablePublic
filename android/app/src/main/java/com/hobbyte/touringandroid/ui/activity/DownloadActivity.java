@@ -236,6 +236,7 @@ public class DownloadActivity extends AppCompatActivity {
         intent.putExtra(SummaryActivity.KEY_ID, keyID);
         intent.putExtra(SummaryActivity.TOUR_ID, tourID);
         startActivity(intent);
+        this.finish();
     }
 
     /**

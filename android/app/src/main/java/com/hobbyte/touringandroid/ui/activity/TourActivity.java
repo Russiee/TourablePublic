@@ -8,12 +8,10 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.support.v7.widget.Toolbar;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
@@ -22,13 +20,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hobbyte.touringandroid.R;
 import com.hobbyte.touringandroid.io.FileManager;
 import com.hobbyte.touringandroid.tourdata.PointOfInterest;
+import com.hobbyte.touringandroid.tourdata.SubSection;
 import com.hobbyte.touringandroid.tourdata.Tour;
 import com.hobbyte.touringandroid.tourdata.TourBuilder;
 import com.hobbyte.touringandroid.tourdata.TourItem;
-import com.hobbyte.touringandroid.R;
-import com.hobbyte.touringandroid.tourdata.SubSection;
 import com.hobbyte.touringandroid.ui.fragment.POIFragment;
 import com.hobbyte.touringandroid.ui.fragment.SectionFragment;
 
@@ -101,7 +99,7 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
      */
     @Override
     public void onBackPressed() {
-        if(backStack.size() > 1 && !backtoSummary) {
+        if (backStack.size() > 1 && !backtoSummary) {
             currentSection = backStack.getLast();
             backStack.removeLast();
             backtoSummary = false;
@@ -109,10 +107,8 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
         } else if (!backtoSummary) {
             Toast.makeText(getApplicationContext(), "Please press back again to exit", Toast.LENGTH_SHORT).show();
             backtoSummary = true;
-        } else if(backtoSummary){
-            Intent intent = new Intent(this, SummaryActivity.class);
-            intent.putExtra(SummaryActivity.KEY_ID, keyID);
-            startActivity(intent);
+        } else if (backtoSummary) {
+            super.onBackPressed();
         }
     }
 
@@ -131,8 +127,8 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
             loadCurrentSection();
         } else {
             //If the clicked POI is not in first position in the list, sets the previous POI to the POI before the selected POI
-            if((position != 0) && contents.get(position-1).getType() == TourItem.TYPE_POI) {
-                previousPOI = (PointOfInterest) contents.get(position-1);
+            if ((position != 0) && contents.get(position - 1).getType() == TourItem.TYPE_POI) {
+                previousPOI = (PointOfInterest) contents.get(position - 1);
             }
             loadPointOfInterest((PointOfInterest) selected);
         }
@@ -162,6 +158,7 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
 
     /**
      * Takes the selected POI and creates a ListFragment which shows all the posts in the POI.
+     *
      * @param poi
      */
     private void loadPointOfInterest(PointOfInterest poi) {
@@ -233,10 +230,10 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
 
         LinearLayout home = (LinearLayout) findViewById(R.id.homeLayout);
         home.setOnClickListener(new View.OnClickListener() {
-           public void onClick(View v) {
-               Intent intent = new Intent(getApplicationContext(), StartActivity.class);
-               startActivity(intent);
-           }
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), StartActivity.class);
+                startActivity(intent);
+            }
         });
         navList.setAdapter(new ArrayAdapter<>(this, R.layout.nav_drawer_item, topLevelContents));
 
@@ -296,12 +293,13 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
     /**
      * Sets text for the corresponding POI (Left or Right) if such a POI exists. Otherwise makes the toolbar invisible if POI is solitary.
      * Also configures onClickListeners to load the selected Point of Interest.
+     *
      * @param poi the current Point of Interest displayed on the screen
      */
     public void setPoiNavText(PointOfInterest poi) {
 
         //Checks next Point of Interest, if not null sets layout to visisble and configures onClickListener
-        if(poi.getNextPOI() != null) {
+        if (poi.getNextPOI() != null) {
             rightPOI.setText(poi.getNextPOI().getTitle());
             rightLayout.setVisibility(View.VISIBLE);
             rightLayout.setOnClickListener(new View.OnClickListener() {
@@ -314,7 +312,7 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
             rightLayout.setVisibility(View.INVISIBLE); //Hides layout if next POI is null
         }
         //Checks previous Point of Interest, if not null and the parents of the current POI and previous POI are equal, sets layout to visible and configures listener
-        if(previousPOI != null && previousPOI != poi && previousPOI.getParent() == poi.getParent()) {
+        if (previousPOI != null && previousPOI != poi && previousPOI.getParent() == poi.getParent()) {
             leftPOI.setText(previousPOI.getTitle());
             leftLayout.setVisibility(View.VISIBLE);
             leftLayout.setOnClickListener(new View.OnClickListener() {
@@ -326,7 +324,7 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
             leftLayout.setVisibility(View.INVISIBLE);
         }
         //If POI is solitary, hides the toolbar as it is not needed.
-        if(rightLayout.getVisibility() == View.INVISIBLE && leftLayout.getVisibility() == View.INVISIBLE) {
+        if (rightLayout.getVisibility() == View.INVISIBLE && leftLayout.getVisibility() == View.INVISIBLE) {
             poiNavigation.setVisibility(View.INVISIBLE);
         }
     }
