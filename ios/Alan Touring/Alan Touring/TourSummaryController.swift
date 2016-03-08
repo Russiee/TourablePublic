@@ -56,8 +56,10 @@ class TourSummaryController: UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedFinishedDownloading", name: endDownloadKey, object: nil)
         // Notification for TourUpdateManager called when there is an update available
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedUpdateAvailable", name: updateAvailableKey, object: nil)
-
-        tourManager = TourUpdateManager(tourCodetoCheck: tourId, tableRow: tableRow)
+        
+        // code that checks for updates. not working atm.
+//        tourManager = TourUpdateManager(tourCodetoCheck: tourId, tableRow: tableRow)
+//        tourManager.checkForUpdates()
     }
 
     // increase counter to activate user wheel

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import Foundation
 
 
 class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
@@ -33,7 +33,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         //TODO remove this, for demo use only
         let connection: Bool = ApiConnector.sharedInstance.isConnectedToNetwork()
         print("internet connection status: \(connection)")
-        
+        checkToursToDelete()
     }
     
     //to check if should be emptry screen when cancelling a tour download
@@ -99,10 +99,10 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         }
         
     }
-    
+
     @IBAction func cancelToAddNewTourController(segue:UIStoryboardSegue) {
     }
-    
+
     @IBAction func saveTourDetail(segue:UIStoryboardSegue) {
         
         self.models = self.tourParser.getAllTours()
@@ -119,7 +119,18 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         showTourKeyAlert()
     }
     
-    
+    // triggerd in ViewDidLoad, it iterates the list of tours and deletes the outdated one.
+    func checkToursToDelete() {
+        var tourManager: TourUpdateManager
+        
+        for var indexRow = 0; indexRow < models.count; indexRow++ {
+            print(models[indexRow])
+            tourManager = TourUpdateManager.init(tourCodetoCheck: models[indexRow] as! String, tableRow: indexRow)
+            tourManager.checkIfOutdatedAndDeleteProject()
+        }
+    }
+
+
     //prompt user for tour code input
     func showTourKeyAlert(){
         let alert = UIAlertView(title: "Add New Tour", message: "Enter the key you have recieved", delegate: self, cancelButtonTitle:"Cancel")
@@ -187,7 +198,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }
-    
+
 
     /*
     // Override to support rearranging the table view.
@@ -220,7 +231,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
                 }
             }
         }
-        
+
         if segue.identifier == "goToAddTour" {
             if let destination = (segue.destinationViewController as! UINavigationController).topViewController as? addNewTourViewController {
                 destination.tourIndex = models.count
