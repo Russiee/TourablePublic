@@ -79,8 +79,8 @@ public class StartActivity extends AppCompatActivity {
         showSplashScreen();
         setContentView(R.layout.activity_start);
 
-//        FileManager.removeTour(getApplicationContext(), "APd4HhtBm9");
-        new UpdateChecker(getApplicationContext()).start();
+        FileManager.removeTour(getApplicationContext(), "APd4HhtBm9");
+//        new UpdateChecker(getApplicationContext()).start();
 
         //get references for animations
         keyEntryLayout = (LinearLayout) findViewById(R.id.keyEntryLayout);
