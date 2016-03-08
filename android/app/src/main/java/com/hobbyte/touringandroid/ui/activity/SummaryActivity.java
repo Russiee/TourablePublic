@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.hobbyte.touringandroid.App;
 import com.hobbyte.touringandroid.R;
 import com.hobbyte.touringandroid.internet.ServerAPI;
 import com.hobbyte.touringandroid.io.DeleteTourTask;
@@ -86,6 +85,7 @@ public class SummaryActivity extends AppCompatActivity {
         intent.putExtra(TourActivity.INTENT_KEY_ID, keyID);
         intent.putExtra(TourActivity.INTENT_TITLE, title);
         startActivity(intent);
+        this.finish();
     }
 
     private void loadTourDescription() {
@@ -123,12 +123,6 @@ public class SummaryActivity extends AppCompatActivity {
     private void onDownloadFinished() {
         // re-enable buttons. Hide update button?
         openButton.setEnabled(true);
-    }
-
-    @Override
-    public void onBackPressed() {
-            Intent intent = new Intent(this, StartActivity.class);
-            startActivity(intent);
     }
 
     private class UpdateTask extends AsyncTask<String, Void, Boolean> {

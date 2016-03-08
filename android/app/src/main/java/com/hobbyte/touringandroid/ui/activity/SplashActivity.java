@@ -2,13 +2,12 @@ package com.hobbyte.touringandroid.ui.activity;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.hobbyte.touringandroid.App;
 import com.hobbyte.touringandroid.R;
 import com.hobbyte.touringandroid.internet.UpdateChecker;
-import com.hobbyte.touringandroid.io.FileManager;
 import com.hobbyte.touringandroid.io.TourDBManager;
 
 public class SplashActivity extends AppCompatActivity {
@@ -54,7 +53,8 @@ public class SplashActivity extends AppCompatActivity {
             String[] expired = TourDBManager.getInstance(App.context).getExpiredTours();
 
             for (String keyID : expired) {
-                FileManager.removeTour(App.context, keyID);
+                //TODO: remove once expiry date is proper
+                //FileManager.removeTour(App.context, keyID);
             }
 
             return null;

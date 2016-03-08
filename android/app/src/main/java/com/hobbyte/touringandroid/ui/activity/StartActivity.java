@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.internal.view.ContextThemeWrapper;
 import android.util.Log;
 import android.view.ContextMenu;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -29,7 +28,6 @@ import com.github.clans.fab.FloatingActionButton;
 import com.hobbyte.touringandroid.App;
 import com.hobbyte.touringandroid.R;
 import com.hobbyte.touringandroid.internet.ServerAPI;
-import com.hobbyte.touringandroid.internet.UpdateChecker;
 import com.hobbyte.touringandroid.io.FileManager;
 import com.hobbyte.touringandroid.io.TourDBContract;
 import com.hobbyte.touringandroid.io.TourDBManager;
@@ -226,8 +224,9 @@ public class StartActivity extends AppCompatActivity {
      * @param fadeIn true if transparent to opaque, false if opaque to transparent
      */
     private void fade(View view, boolean fadeIn) {
-        //current alpha --> opaque or transparent
-        AlphaAnimation a = new AlphaAnimation(view.getAlpha(), fadeIn ? 1.0f : 0.0f);
+        //opaque or transparent --> opaque or transparent
+        //the first one would be view.getAlpha() but apparently the alpha given by anim
+        AlphaAnimation a = new AlphaAnimation(fadeIn ? 0.0f : 1.0f, fadeIn ? 1.0f : 0.0f);
         a.setDuration(400); //system 'medium' animation time
         a.setFillAfter(true); //so alpha sticks
         view.startAnimation(a); //run
@@ -305,7 +304,6 @@ public class StartActivity extends AppCompatActivity {
      */
     private void showToast(String message) {
         Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.BOTTOM, 0, 20);
         toast.show();
     }
 
