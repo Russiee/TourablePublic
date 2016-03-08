@@ -14,7 +14,8 @@ public class TourUpdateManager {
     let tourCode: String!
     var currentMetadata: Dictionary<String,AnyObject>!
     var newMetadata: NSDictionary!
-
+    var alreadyFetchedMetadata = false
+    
     // created just to initialise blank field object in other classes
     init(){
         //does nothing
@@ -28,8 +29,6 @@ public class TourUpdateManager {
         self.tourTableRow = tableRow
         self.tourCode = tourCodetoCheck
         self.currentMetadata = TourIdParser().getTourMetadata(tourCode)
-        downloadNewMetadata()
-        checkForUpdates()
     }
 
     // download fresh metadata for the tour if there is internet connection
@@ -43,6 +42,8 @@ public class TourUpdateManager {
     // check for updates comparing freshly downloaded metadata with current stored one
     // if there are updates the user is asked if he wants to download them
     func checkForUpdates() {
+        downloadNewMetadata()
+        
         if self.newMetadata != nil {
             
             let currentDate = dateFromString(currentMetadata["updatedAt"] as! String)
@@ -59,7 +60,13 @@ public class TourUpdateManager {
 
     // check if a project is out to date comparing metadata with current today's date.
     // if the project is out to date, it is deleted after informing the user
-    func checkForOutdatedProject() {
+    func checkIfOutdatedAndDeleteProject() {
+        // in this way the metadata is downloaded only once when opening the app.
+        if !alreadyFetchedMetadata {
+            downloadNewMetadata()
+            alreadyFetchedMetadata = true
+        }
+        
         if self.newMetadata != nil {
             let todaysDate = NSDate()
             let expiresDate = dateFromString(currentMetadata["expiresAt"] as! String)

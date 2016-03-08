@@ -58,6 +58,7 @@ class TourSummaryController: UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedUpdateAvailable", name: updateAvailableKey, object: nil)
 
         tourManager = TourUpdateManager(tourCodetoCheck: tourId, tableRow: tableRow)
+        tourManager.checkForUpdates()
     }
 
     // increase counter to activate user wheel
