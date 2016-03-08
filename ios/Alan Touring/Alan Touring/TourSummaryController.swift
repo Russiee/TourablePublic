@@ -26,8 +26,9 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
     var summaryData = (timeHours: 0,timeMins: 0, isCurrent: true, expiresIn: 0)
 
 
-    @IBOutlet weak var UIDescriptionBox: UITextView!
+
     @IBOutlet weak var beginTourButton: UIButton!
+    @IBOutlet weak var UIDescriptionBox: UITextView!
     @IBOutlet weak var updateIndicator: UIActivityIndicatorView! //busy wheel
     @IBOutlet weak var tableView: UITableView!
     

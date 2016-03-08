@@ -10,24 +10,39 @@
         <scene sceneID="HKX-Tx-vzM">
             <objects>
                 <tableViewController extendedLayoutIncludesOpaqueBars="YES" id="Bbx-Al-6dq" customClass="MainTableTableViewController" customModule="Alan_Touring" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Y17-v9-zK9">
+                    <tableView key="view" autoresizesSubviews="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Y17-v9-zK9">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="sectionIndexBackgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
-                        <view key="tableHeaderView" contentMode="scaleToFill" id="1uj-O7-VKu">
-                            <rect key="frame" x="0.0" y="64" width="600" height="44"/>
+                        <color key="backgroundColor" red="0.94117647059999998" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="sectionIndexBackgroundColor" red="0.94117647059999998" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
+                        <view key="tableFooterView" opaque="NO" contentMode="scaleToFill" id="YbC-lN-haV">
+                            <rect key="frame" x="0.0" y="136" width="600" height="107"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="0.94117647058823528" green="0.93725490196078431" blue="0.93725490196078431" alpha="1" colorSpace="calibratedRGB"/>
-                        </view>
-                        <view key="tableFooterView" contentMode="scaleToFill" id="lmv-fx-lyD">
-                            <rect key="frame" x="0.0" y="180" width="600" height="589"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="0.94117647059999998" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qFn-jb-js7">
+                                    <rect key="frame" x="179" y="-13" width="243" height="112"/>
+                                    <color key="backgroundColor" red="0.94117647059999998" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="243" id="pj3-2u-tIl"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                    <state key="normal" title="Add Tour" backgroundImage="generic_button">
+                                        <color key="titleColor" red="0.027450980390000001" green="0.24313725489999999" blue="0.45882352939999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="addTourPressed:" destination="Bbx-Al-6dq" eventType="touchUpInside" id="fcn-HR-pNY"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="qFn-jb-js7" firstAttribute="bottom" secondItem="YbC-lN-haV" secondAttribute="bottomMargin" id="HdN-5h-gG9"/>
+                                <constraint firstItem="qFn-jb-js7" firstAttribute="centerX" secondItem="YbC-lN-haV" secondAttribute="centerX" id="LEM-Xi-4ht"/>
+                                <constraint firstItem="qFn-jb-js7" firstAttribute="top" secondItem="YbC-lN-haV" secondAttribute="top" priority="1" constant="100" id="Sio-cv-Otn"/>
+                            </constraints>
                         </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="tableCell" id="Lqn-8R-xaX">
-                                <rect key="frame" x="0.0" y="136" width="600" height="44"/>
+                                <rect key="frame" x="0.0" y="92" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Lqn-8R-xaX" id="aeM-L8-Pdn">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
@@ -58,12 +73,17 @@
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
                     <connections>
-                        <outlet property="bottomSpacer" destination="lmv-fx-lyD" id="Mjm-hj-9Iz"/>
-                        <outlet property="topSpacer" destination="1uj-O7-VKu" id="Kh4-jA-QCR"/>
+                        <outlet property="addTourButton" destination="qFn-jb-js7" id="wKH-be-1Nr"/>
+                        <outlet property="addTourButtonView" destination="YbC-lN-haV" id="tRZ-rz-m5A"/>
                         <segue destination="u6k-g6-3Ca" kind="show" identifier="goToAddTour" id="WQD-7c-JvU"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="apu-A8-5aL" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="cLb-rq-XSt">
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal" title="Add Another Tour"/>
+                </button>
                 <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="QJT-8b-jcJ">
                     <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
@@ -152,7 +172,7 @@
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
                         <outlet property="UIDescriptionBox" destination="mTv-Im-kld" id="EA5-28-fsl"/>
-                        <outlet property="beingTourButton" destination="6DD-cZ-3vf" id="i5z-lH-2ax"/>
+                        <outlet property="beginTourButton" destination="6DD-cZ-3vf" id="c4L-fG-lmj"/>
                         <outlet property="tableView" destination="m9X-WR-BhL" id="5ns-kW-Yur"/>
                         <outlet property="updateIndicator" destination="9TJ-NC-d4X" id="XLk-fa-2Of"/>
                     </connections>

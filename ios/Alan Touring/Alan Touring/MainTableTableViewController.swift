@@ -11,37 +11,31 @@ import Foundation
 
 
 class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
-    
-    @IBOutlet weak var topSpacer: UIView!
-    @IBOutlet weak var bottomSpacer: UIView!
    
     var models = NSMutableArray()
     var tourParser = TourIdParser()
     
+    @IBOutlet weak var addTourButton: UIButton!
+    @IBOutlet weak var addTourButtonView: UIView!
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         models = tourParser.getAllTours()
-        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "Notified", name: TableUpdateNotificationKey, object: nil)
-    
         self.clearsSelectionOnViewWillAppear = false
-        
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
-
-
         checkStateOfScreen()
         //TODO remove this, for demo use only
         let connection: Bool = ApiConnector.sharedInstance.isConnectedToNetwork()
         print("internet connection status: \(connection)")
         checkToursToDelete()
+        tableView.tableFooterView = addTourButtonView
+        tableView.contentInset = UIEdgeInsetsMake(50, 0, 0, 0)
     }
     
     //to check if should be emptry screen when cancelling a tour download
     override func viewWillAppear(animated: Bool) {
         //makes sure Tool bar is visible again after coming back from Tour
-        self.navigationController?.setToolbarHidden(false, animated: false)
+        self.navigationController?.setToolbarHidden(true, animated: false)
         checkStateOfScreen()
     }
 
@@ -95,14 +89,14 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
             
             tableView.backgroundView = empty_state_label
             tableView.separatorStyle = UITableViewCellSeparatorStyle.None
-            topSpacer.hidden = true
-            bottomSpacer.hidden = true
+            addTourButtonView.frame = CGRectMake(0 , 0, self.view.frame.width, self.view.frame.height * 0.7)
+            addTourButton.backgroundColor = UIColor.darkGrayColor()
+            addTourButton.tintColor = UIColor.whiteColor()
             
         } else {
             tableView.backgroundView = nil
             tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
-            topSpacer.hidden = false
-            bottomSpacer.hidden = false
+             addTourButtonView.frame = CGRectMake(0 , 0, self.view.frame.width, self.view.frame.height*0.8-tableView.bounds.height)
         }
         
     }
@@ -110,12 +104,13 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     @IBAction func cancelToAddNewTourController(segue:UIStoryboardSegue) {
     }
 
+    @IBAction func addTourPressed(sender: AnyObject) {
+        showTourKeyAlert()
+        
+    }
     @IBAction func saveTourDetail(segue:UIStoryboardSegue) {
-        
         self.models = self.tourParser.getAllTours()
-        
         tableView.reloadData()
-        //lastAddedCell = tableView.cellForRowAtIndexPath(NSIndexPath(index: tableView.numberOfRowsInSection(0)-1))!
     }
     
     @objc func TableChanged(notification: NSNotification){
@@ -123,7 +118,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     }
     
     @IBAction func plussPressed(sender: UIBarButtonItem) {
-        showTourKeyAlert()
+        
     }
     
     // triggerd in ViewDidLoad, it iterates the list of tours and deletes the outdated one.
@@ -183,14 +178,6 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         }
     }
 
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
    //Deletes data from the table and updates the cache to reflect his.
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
@@ -208,23 +195,6 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         }    
     }
 
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
