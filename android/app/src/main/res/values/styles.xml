@@ -5,11 +5,11 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="android:windowNoTitle">true</item>
-        <item name="colorPrimary">#29B6F6</item>
-        <item name="colorPrimaryDark">#01579B</item>
-        <item name="colorAccent">#F44336</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/colorBackground</item>
-        <item name="colorButtonNormal">#fa29B6F6</item>
+        <item name="colorButtonNormal">@color/colorAccent</item>
         <item name="android:textColor">@color/colorText</item>
         <item name="android:textAppearance">@color/colorText</item>
         <item name="android:fontFamily">"sans-serif-thin"</item>
@@ -17,11 +17,11 @@
 
     <style name="dialogTheme" parent="Theme.AppCompat.Dialog">
         <item name="android:windowNoTitle">true</item>
-        <item name="colorPrimary">#29B6F6</item>
-        <item name="colorPrimaryDark">#01579B</item>
-        <item name="colorAccent">#F44336</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/colorBackground</item>
-        <item name="colorButtonNormal">#29B6F6</item>
+        <item name="colorButtonNormal">@color/colorAccent</item>
         <item name="android:textColor">@color/colorText</item>
         <item name="android:textAppearance">@color/colorText</item>
         <item name="android:fontFamily">"sans-serif-thin"</item>
@@ -40,9 +40,9 @@
 
     <style name="ToolbarTheme" parent="AppTheme">
         <!-- www.google.com/design/spec/style/color.html -->
-        <item name="android:colorPrimary">#29B6F6</item>
-        <item name="android:colorPrimaryDark">#01579B</item>
-        <item name="android:colorAccent">#F44336</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColor">@color/colorText</item>
         <item name="android:textAppearance">@color/colorText</item>
         <item name="android:fontFamily">"sans-serif-thin"</item>
