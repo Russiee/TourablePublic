@@ -353,7 +353,6 @@
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Add New Tour" id="h1S-ya-PM5"/>
-                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
                     <connections>
                         <outlet property="DownloadTypeChooser" destination="TXq-08-F5F" id="dkD-Rh-diq"/>
@@ -374,7 +373,7 @@
         <!--entryController-->
         <scene sceneID="OIh-ep-3KP">
             <objects>
-                <navigationController title="entryController" toolbarHidden="NO" id="xBy-sT-h06" sceneMemberID="viewController">
+                <navigationController title="entryController" toolbarHidden="NO" id="xBy-sT-h06" customClass="NavViewController" customModule="Alan_Touring" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="vGh-hI-a3l">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -391,10 +390,10 @@
             </objects>
             <point key="canvasLocation" x="-518" y="-5"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Nav View Controller-->
         <scene sceneID="czt-gQ-heR">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="u6k-g6-3Ca" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="u6k-g6-3Ca" customClass="NavViewController" customModule="Alan_Touring" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="5Ez-sZ-iiz">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
