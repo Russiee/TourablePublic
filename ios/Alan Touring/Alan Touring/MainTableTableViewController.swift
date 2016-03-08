@@ -123,10 +123,9 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
 
         var tourManager: TourUpdateManager
         
-        for tour in models {
-            print(tour)
-            //table row only missing thing.
-            tourManager = TourUpdateManager.init(tourCodetoCheck: tour as! String, tableRow: 0)
+        for var indexRow = 0; indexRow < models.count; indexRow++ {
+            print(models[indexRow])
+            tourManager = TourUpdateManager.init(tourCodetoCheck: models[indexRow] as! String, tableRow: indexRow)
             tourManager.checkIfOutdatedAndDeleteProject()
         }
     }
