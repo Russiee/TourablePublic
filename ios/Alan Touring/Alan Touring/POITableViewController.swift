@@ -34,7 +34,7 @@ class POITableViewController: UITableViewController {
     }
     
     @IBAction func PreviousSection(sender: UIBarButtonItem) {
-        
+            self.navigationController?.popViewControllerAnimated(true)
     }
     
     @IBAction func NextPOI(sender: UIBarButtonItem) {
