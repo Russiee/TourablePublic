@@ -10,22 +10,28 @@ import Foundation
 
 public class TourUpdateManager {
 
-    let tourTableRow: Int!
-    let tourCode: String!
+    var tourTableRow: Int!
+    var tourCode: String!
     var currentMetadata: Dictionary<String,AnyObject>!
     var newMetadata: NSDictionary!
     var alreadyFetchedMetadata = false
     
     // created just to initialise blank field object in other classes
-    init(){
-        //does nothing
-        self.tourTableRow = Int()
-        self.tourCode = ""
-        self.currentMetadata = Dictionary()
-        self.newMetadata = NSDictionary()
+  
+    class var sharedInstance: TourUpdateManager {
+        struct Static {
+            static var onceToken: dispatch_once_t = 0
+            static var instance: TourUpdateManager? = nil
+        }
+        dispatch_once(&Static.onceToken) {
+            Static.instance = TourUpdateManager()
+            
+        }
+        return Static.instance!
     }
 
-    init(tourCodetoCheck: String, tableRow: Int) {
+
+   func getCurrentData(tourCodetoCheck: String, tableRow: Int) {
         self.tourTableRow = tableRow
         self.tourCode = tourCodetoCheck
         self.currentMetadata = TourIdParser().getTourMetadata(tourCode)
@@ -115,6 +121,16 @@ public class TourUpdateManager {
 
         }
         notify()
+    }
+    
+    func getTourStatusInfo() -> (timeHours: Int,timeMins: Int, isCurrent: Bool, expiresIn: Int){
+    
+        let timeHours = 1
+        let timeMins = 30
+        let isCurrent = true
+        let expiresIn = 2
+
+        return (timeHours, timeMins, isCurrent, expiresIn)
     }
 
     // called from the tourSummary when the user confirms to download the updates

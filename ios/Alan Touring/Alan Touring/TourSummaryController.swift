@@ -10,7 +10,7 @@ import UIKit
 
 let updateAvailableKey = "updateAvailable"
 
-class TourSummaryController: UIViewController {
+class TourSummaryController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
 
 
@@ -19,22 +19,21 @@ class TourSummaryController: UIViewController {
     var tourIndex: Int!
     var objectId = ""
     var setup = Dictionary<String, AnyObject>()
-    var tourManager = TourUpdateManager()
     var tableRow = 0
     // counter to activate the busy wheel while updating
     var imageCount = 0
+    var summaryTable = [String]()
+    var summaryData = (timeHours: 0,timeMins: 0, isCurrent: true, expiresIn: 0)
 
 
     @IBOutlet weak var UIDescriptionBox: UITextView!
-
     @IBOutlet weak var beingTourButton: UIButton!
     @IBOutlet weak var updateIndicator: UIActivityIndicatorView! //busy wheel
-
+    @IBOutlet weak var tableView: UITableView!
+    
     override func viewWillAppear(animated: Bool) {
 
-
         beingTourButton.enabled = true
-
         setup = TourIdParser.sharedInstance.getTourMetadata(tourId)
         objectId = setup["objectId"] as! String
         let topLayerTourInfo = tourDataParser.init().getTourSection(objectId )
@@ -44,16 +43,23 @@ class TourSummaryController: UIViewController {
     }
 
     override func viewDidLoad() {
+        
+        
+       
         self.navigationController?.setToolbarHidden(true, animated: false)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedDownloading", name: beginDownloadKey, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedFinishedDownloading", name: endDownloadKey, object: nil)
         // Notification for TourUpdateManager called when there is an update available
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedUpdateAvailable", name: updateAvailableKey, object: nil)
         // code that checks for updates. not working atm.
-//        tourManager = TourUpdateManager(tourCodetoCheck: tourId, tableRow: tableRow)
+        summaryTable = formatDataForTable(tourId, tableRow: tableRow)
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.tableFooterView = UIView(frame: CGRectZero)
 //        tourManager.checkForUpdates()
     }
 
+    
     // increase counter to activate user wheel
     func NotifiedDownloading(){
         imageCount++
@@ -69,6 +75,24 @@ class TourSummaryController: UIViewController {
             beingTourButton.setTitle("Begin Tour", forState: .Normal)
             beingTourButton.enabled = true
         }
+    }
+    func formatDataForTable(tourId: String, tableRow: Int) -> [String]{
+        TourUpdateManager.sharedInstance.getCurrentData(tourId, tableRow: tableRow)
+        summaryData = TourUpdateManager.sharedInstance.getTourStatusInfo()
+        
+        var updateStatus = "Version status unkown"
+        let estimatedTime = "Estimated time: \(summaryData.0) hour \(summaryData.1) minutes"
+        if summaryData.2 {
+            updateStatus = "Your version is current"
+        }else{
+            updateStatus = "An update is available"
+        }
+        let timeRemaining = "Tour key expires in \(summaryData.3) days"
+        var result = [String]()
+        result.append(estimatedTime)
+        result.append(updateStatus)
+        result.append(timeRemaining)
+        return result
     }
 
     // triggered if the TourUpdateManager sends the notification that an update is available
@@ -93,7 +117,7 @@ class TourSummaryController: UIViewController {
                 beingTourButton.enabled = false
                 updateIndicator.hidden = false
                 updateIndicator.startAnimating()
-                tourManager.triggerUpdate()
+                TourUpdateManager.sharedInstance.triggerUpdate()
             case 0:
                 break  //Cancel pressed, do not download update
             default:
@@ -114,6 +138,30 @@ class TourSummaryController: UIViewController {
     @IBAction func clickBeginTour(sender: AnyObject) {
 //      beingTourButton.setTitle("Loading Tour", forState: .Normal)
         beingTourButton.enabled = false
+    }
+    
+  
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1 // This was put in mainly for my own unit testing
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return summaryTable.count // Most of the time my data source is an array of something...  will replace with the actual name of the data source
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        // Note:  Be sure to replace the argument to dequeueReusableCellWithIdentifier with the actual identifier string!
+        let cell = tableView.dequeueReusableCellWithIdentifier("fakeCell")! as UITableViewCell
+        print(summaryTable[indexPath.row])
+        cell.textLabel?.text = summaryTable[indexPath.row]
+        print(summaryData.expiresIn)
+        if indexPath.row == 2 && summaryData.expiresIn < 3{
+           
+            cell.textLabel?.textColor = UIColor.redColor()
+        }
+        // set cell's textLabel.text property
+        // set cell's detailTextLabel.text property
+        return cell
     }
     
 }

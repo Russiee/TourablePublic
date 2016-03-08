@@ -132,8 +132,8 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         
         for var indexRow = 0; indexRow < models.count; indexRow++ {
             print(models[indexRow])
-            tourManager = TourUpdateManager.init(tourCodetoCheck: models[indexRow] as! String, tableRow: indexRow)
-            tourManager.checkIfOutdatedAndDeleteProject()
+            TourUpdateManager.sharedInstance.getCurrentData(models[indexRow] as! String, tableRow: indexRow)
+            TourUpdateManager.sharedInstance.checkIfOutdatedAndDeleteProject()
         }
     }
 
