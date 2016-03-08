@@ -118,9 +118,9 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     @IBAction func plussPressed(sender: UIBarButtonItem) {
         showTourKeyAlert()
     }
-
+    
+    // triggerd in ViewDidLoad, it iterates the list of tours and deletes the outdated one.
     func checkToursToDelete() {
-
         var tourManager: TourUpdateManager
         
         for var indexRow = 0; indexRow < models.count; indexRow++ {
