@@ -384,7 +384,7 @@
             <objects>
                 <tableViewController id="w6Y-H8-yy9" customClass="POITableViewController" customModule="Alan_Touring" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="A0j-vj-qfP">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="556"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -402,7 +402,32 @@
                             <outlet property="delegate" destination="w6Y-H8-yy9" id="Zxt-VY-H0G"/>
                         </connections>
                     </tableView>
+                    <toolbarItems>
+                        <barButtonItem title="Previous" id="PzX-rm-ioh">
+                            <connections>
+                                <action selector="PreviousPOI:" destination="w6Y-H8-yy9" id="yEr-Ga-YMv"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem systemItem="flexibleSpace" id="OP4-wr-VQU"/>
+                        <barButtonItem title="Previous Section" id="msd-xP-OaW">
+                            <connections>
+                                <action selector="PreviousSection:" destination="w6Y-H8-yy9" id="rQV-AV-L5t"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem systemItem="flexibleSpace" id="eB6-NP-McI"/>
+                        <barButtonItem title="Next" id="DGI-Or-u5s">
+                            <connections>
+                                <action selector="NextPOI:" destination="w6Y-H8-yy9" id="brn-EA-i0d"/>
+                            </connections>
+                        </barButtonItem>
+                    </toolbarItems>
                     <navigationItem key="navigationItem" id="N3v-Wq-uSZ"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
+                    <connections>
+                        <outlet property="NextPOIButton" destination="DGI-Or-u5s" id="TTW-zy-9gC"/>
+                        <outlet property="PreviousPoiButton" destination="PzX-rm-ioh" id="kAF-ed-vg9"/>
+                        <outlet property="PreviousSectionButton" destination="msd-xP-OaW" id="eNg-DL-LLD"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wVd-8W-bdG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

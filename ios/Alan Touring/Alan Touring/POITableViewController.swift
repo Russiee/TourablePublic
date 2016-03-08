@@ -14,18 +14,55 @@ class POITableViewController: UITableViewController {
     var superSectionID = "xI21AHATXD"
     var POIList = [String]()
     var poiViews = [UIView]()
+
+    @IBOutlet var PreviousPoiButton: UIBarButtonItem!
+    
+    @IBOutlet var PreviousSectionButton: UIBarButtonItem!
+    
+    @IBOutlet var NextPOIButton: UIBarButtonItem!
+    
+    @IBAction func PreviousPOI(sender: UIBarButtonItem) {
+        print("clicked prevousPOI")
+        let Z = POIList.indexOf(poiID)!
+        //print(Z)
+        
+        poiID = (POIList)[Z - 1]
+        poiViews = []
+        self.tableView.reloadData()
+        viewDidLoad()
+        print("previous POi now displaying")
+    }
+    
+    @IBAction func PreviousSection(sender: UIBarButtonItem) {
+        
+    }
+    
+    @IBAction func NextPOI(sender: UIBarButtonItem) {
+        print("clicked next POI")
+        let Z = POIList.indexOf(poiID)!
+        
+        poiID = (POIList)[Z + 1]
+        poiViews=[]
+        self.tableView.reloadData()
+        viewDidLoad()
+        print("next poi now displaying")
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         getPOIS()
-        //print(POIList)
+        createToolBar()
         let pointToDisplay = POIParser().getTourSection(poiID)
         print(pointToDisplay.post)
         createSubviews(pointToDisplay.post)
+        //reloads the tableViewData so that the Views are shown, potential move to viewWillAppear the createSubViews method
+        self.tableView.reloadData()
         self.tableView.separatorStyle = UITableViewCellSeparatorStyle.None
         self.tableView.clipsToBounds = true
-        print(poiViews)
+        
+        self.navigationController?.setToolbarHidden(false, animated: false)
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -40,6 +77,27 @@ class POITableViewController: UITableViewController {
             
             POIList.append(POIS["objectId"] as! String)
         }
+    }
+    
+    func createToolBar(){
+        PreviousPoiButton.enabled = true; NextPOIButton.enabled = true; PreviousSectionButton.enabled = true
+        
+        if(POIList.count > 1){
+            if(POIList.indexOf(poiID) == 0){
+                PreviousPoiButton.enabled = false
+            }
+            else if(POIList.indexOf(poiID) == (POIList.count - 1)){
+                NextPOIButton.enabled = false
+            }
+            else{
+                PreviousSectionButton.enabled = false
+            }
+        }
+        else{
+            self.navigationController?.toolbarItems
+        }
+        
+        
     }
 
     override func didReceiveMemoryWarning() {
