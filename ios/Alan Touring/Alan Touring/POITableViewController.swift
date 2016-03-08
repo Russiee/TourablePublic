@@ -10,8 +10,8 @@ import UIKit
 
 class POITableViewController: UITableViewController {
 
-    var poiID = "ZUiJcyXQyG"
-    var superSectionID = "xI21AHATXD"
+    var poiID = ""
+    var superSectionID = ""
     var POIList = [String]()
     var poiViews = [UIView]()
 
@@ -94,7 +94,8 @@ class POITableViewController: UITableViewController {
             }
         }
         else{
-            self.navigationController?.toolbarItems
+            PreviousPoiButton.enabled = false
+            NextPOIButton.enabled = false
         }
         
         

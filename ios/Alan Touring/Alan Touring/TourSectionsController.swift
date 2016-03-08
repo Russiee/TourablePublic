@@ -151,7 +151,8 @@ class TourSectionsController: UITableViewController {
 
         for poi in tourPOIS{
             if (poi["objectId"] as! String) == objectForSegue{
-                self.performSegueWithIdentifier("PointOfInterestSegue", sender: self)
+                //self.performSegueWithIdentifier("PointOfInterestSegue", sender: self)
+                self.performSegueWithIdentifier("POISegue", sender: self)
                 break
             }
         }
@@ -204,7 +205,12 @@ class TourSectionsController: UITableViewController {
             newViewController.superTableId = objectId!
             
         } else if (segue.identifier == "PointOfInterestSegue") {
-            let newViewController = segue.destinationViewController as! PointViewController
+            let newViewController = segue.destinationViewController as! POITableViewController
+            newViewController.poiID = objectId!
+            newViewController.superSectionID = superTableId
+        }
+        else if (segue.identifier == "POISegue") {
+            let newViewController = segue.destinationViewController as! POITableViewController
             newViewController.poiID = objectId!
             newViewController.superSectionID = superTableId
         }
