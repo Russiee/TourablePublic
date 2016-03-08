@@ -2,10 +2,14 @@
 <resources>
     <string name="app_name">TouringAndroid</string>
 
+    <string name="title_activity_start">StartActivity</string>
     <string name="title_activity_download">DownloadActivity</string>
     <string name="title_activity_pointofinterest">PointOfInterestActivity</string>
     <string name="title_activity_tour">TourActivity</string>
     <string name="title_activity_summary">SummaryActivity</string>
+
+    <string name="splash_header_text">Alan \n Touring</string>
+    <string name="splash_swipe_text">Swipe to start</string>
 
     <string name="preference_file_key">com.hobbyte.touringandroid.PREF_FILE_KEY</string>
     <string name="prefs_is_new_install">KEY_FRESH</string>

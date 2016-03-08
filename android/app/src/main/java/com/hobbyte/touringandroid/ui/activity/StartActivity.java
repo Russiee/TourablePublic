@@ -76,7 +76,7 @@ public class StartActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        showSplashScreen();
+//        showSplashScreen();
         setContentView(R.layout.activity_start);
 
 //        FileManager.removeTour(getApplicationContext(), "APd4HhtBm9");
