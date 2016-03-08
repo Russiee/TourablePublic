@@ -4,6 +4,9 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
+    <!-- Splash screen dimensions-->
+    <dimen name="slash_padding">18dp</dimen>
+
     <!-- StartActivity dimensions -->
     <dimen name="previous_tour_padding_top">50dp</dimen>
 
