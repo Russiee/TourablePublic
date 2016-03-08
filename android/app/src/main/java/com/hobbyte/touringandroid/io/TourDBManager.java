@@ -297,7 +297,6 @@ public class TourDBManager extends SQLiteOpenHelper {
         int count = c.getCount();
 
         // return expired keys
-        if (count > 0) {
             String[] toDelete = new String[count];
 
             while (c.moveToNext()) {
@@ -305,11 +304,9 @@ public class TourDBManager extends SQLiteOpenHelper {
             }
 
             c.close();
-            return toDelete;
-        }
 
         c.close();
-        return null;
+        return toDelete;
     }
 
     /**
