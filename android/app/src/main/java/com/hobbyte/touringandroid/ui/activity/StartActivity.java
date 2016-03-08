@@ -1,5 +1,6 @@
 package com.hobbyte.touringandroid.ui.activity;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -45,9 +46,9 @@ import java.util.Date;
  * @author Jonathan
  * @author Max
  * @author Nikita
- *
- * The opening actiivty of the app.
- * Displays previously downloaded tours and provides functionality to add new tours.
+ *         <p/>
+ *         The opening actiivty of the app.
+ *         Displays previously downloaded tours and provides functionality to add new tours.
  */
 public class StartActivity extends AppCompatActivity {
     private static final String TAG = "StartActivity";
@@ -55,6 +56,7 @@ public class StartActivity extends AppCompatActivity {
     //for animations
     private static boolean FADE_IN = true;
     private static boolean FADE_OUT = false;
+    private boolean inputPhase = false;
 
     private LinearLayout keyEntryLayout;
     private LinearLayout previousToursLayout;
@@ -188,15 +190,19 @@ public class StartActivity extends AppCompatActivity {
      * Hides the input box, shows the existing tours table
      */
     public void hideInput() {
-        fade(keyEntryLayout, FADE_OUT);
-        fade(previousToursLayout, FADE_IN);
-        textKey.clearFocus();
+        if (inputPhase) {
+            fade(keyEntryLayout, FADE_OUT);
+            fade(previousToursLayout, FADE_IN);
+            textKey.clearFocus();
+            inputPhase = false;
+        }
     }
 
     /**
      * Shows input box, keyboard and hides the existing tours table
      */
     private void showInput() {
+        inputPhase = true;
         //layout.xml defines the layout as invisible. Otherwise it shows when the app is loaded.
         keyEntryLayout.setVisibility(View.VISIBLE);
 
