@@ -1,6 +1,5 @@
 package com.hobbyte.touringandroid.ui.activity;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,7 +15,6 @@ import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.inputmethod.InputMethodManager;
@@ -64,21 +62,15 @@ public class StartActivity extends AppCompatActivity {
     private BackAwareEditText textKey;
     private Button submitButton;
 
-    private String keyid;
-
-    private Dialog splashDialog;
-
-    float x1, x2;
-    float y1, y2;
+    private String keyID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        showSplashScreen();
         setContentView(R.layout.activity_start);
 
 //        FileManager.removeTour(getApplicationContext(), "APd4HhtBm9");
-        new UpdateChecker(getApplicationContext()).start();
+//        new UpdateChecker(getApplicationContext()).start();
 
         //get references for animations
         keyEntryLayout = (LinearLayout) findViewById(R.id.keyEntryLayout);
@@ -292,6 +284,19 @@ public class StartActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.add(0, v.getId(), 0, "Delete");
+        keyID = v.getTag().toString();
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        FileManager.removeTour(this, keyID);
+        this.recreate();
+        return true;
+    }
 
     /**
      * Shows a Toast message at the bottom of the screen.
@@ -375,53 +380,4 @@ public class StartActivity extends AppCompatActivity {
             }
         }
     }
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        menu.add(0, v.getId(), 0, "Delete");
-        keyid = v.getTag().toString();
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        FileManager.removeTour(this, keyid);
-        this.recreate();
-        return true;
-    }
-
-    /**
-     * Sets up a splash screen on first launch of the app displaying the name of the app
-     */
-    private void showSplashScreen() {
-        splashDialog = new Dialog(this, R.style.SplashScreen);
-        splashDialog.setContentView(R.layout.splashscreen);
-        View v = splashDialog.findViewById(R.id.splashBackground);
-        v.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN: {
-                        System.out.println("TOUCHED DOWN");
-                        x1 = event.getX();
-                        y1 = event.getY();
-                        break;
-                    }
-                    case MotionEvent.ACTION_UP: {
-                        x2 = event.getX();
-                        y2 = event.getY();
-
-                        if (x1 < x2) {
-                            splashDialog.dismiss();
-                            System.out.println("HELP");
-                        }
-                        break;
-                    }
-                }
-                return false;
-            }
-        });
-        splashDialog.show();
-    }
-
 }
