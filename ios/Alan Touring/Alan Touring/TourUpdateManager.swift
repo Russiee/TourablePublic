@@ -122,14 +122,14 @@ public class TourUpdateManager {
         }
         notify()
     }
-    
+    //get the current status of the tour from the latest data on the api. Returns a tuple
     func getTourStatusInfo() -> (timeHours: Int,timeMins: Int, isCurrent: Bool, expiresIn: Int){
     
+        //place holder information, this will need implementation
         let timeHours = 1
         let timeMins = 30
         let isCurrent = true
         let expiresIn = 2
-
         return (timeHours, timeMins, isCurrent, expiresIn)
     }
 

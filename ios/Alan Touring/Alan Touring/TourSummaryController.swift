@@ -27,13 +27,13 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
 
 
     @IBOutlet weak var UIDescriptionBox: UITextView!
-    @IBOutlet weak var beingTourButton: UIButton!
+    @IBOutlet weak var beginTourButton: UIButton!
     @IBOutlet weak var updateIndicator: UIActivityIndicatorView! //busy wheel
     @IBOutlet weak var tableView: UITableView!
     
     override func viewWillAppear(animated: Bool) {
 
-        beingTourButton.enabled = true
+        beginTourButton.enabled = true
         setup = TourIdParser.sharedInstance.getTourMetadata(tourId)
         objectId = setup["objectId"] as! String
         let topLayerTourInfo = tourDataParser.init().getTourSection(objectId )
@@ -43,20 +43,23 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
     }
 
     override func viewDidLoad() {
-        
-        
-       
+        //we dont need a toolbar for this view
         self.navigationController?.setToolbarHidden(true, animated: false)
+        //notify this class about the status of update downloads
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedDownloading", name: beginDownloadKey, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedFinishedDownloading", name: endDownloadKey, object: nil)
         // Notification for TourUpdateManager called when there is an update available
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedUpdateAvailable", name: updateAvailableKey, object: nil)
-        // code that checks for updates. not working atm.
+       
+        //get the latest formatted data for the ui.
         summaryTable = formatDataForTable(tourId, tableRow: tableRow)
+        //set the data source and deligate of the table to this class.
         tableView.dataSource = self
         tableView.delegate = self
+        //make the table only as big as the number of nows.
         tableView.tableFooterView = UIView(frame: CGRectZero)
-//        tourManager.checkForUpdates()
+         // code that checks for updates. not working atm.
+        // tourManager.checkForUpdates()
     }
 
     
@@ -72,22 +75,27 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
         if imageCount == 0{
             updateIndicator.stopAnimating()
             updateIndicator.hidden = true
-            beingTourButton.setTitle("Begin Tour", forState: .Normal)
-            beingTourButton.enabled = true
+            beginTourButton.setTitle("Begin Tour", forState: .Normal)
+            beginTourButton.enabled = true
         }
     }
     func formatDataForTable(tourId: String, tableRow: Int) -> [String]{
+        //get the current update and expiry status for the current tour
         TourUpdateManager.sharedInstance.getCurrentData(tourId, tableRow: tableRow)
+        //set the summary data tuple to the result of this call
         summaryData = TourUpdateManager.sharedInstance.getTourStatusInfo()
         
+        //format the strings with the data from TourUpdateManager for display on the tour summary
         var updateStatus = "Version status unkown"
-        let estimatedTime = "Estimated time: \(summaryData.0) hour \(summaryData.1) minutes"
-        if summaryData.2 {
+        let estimatedTime = "Estimated time: \(summaryData.timeHours) hour \(summaryData.timeMins) minutes"
+        //checks the update status of the tour
+        if summaryData.isCurrent {
             updateStatus = "Your version is current"
         }else{
             updateStatus = "An update is available"
         }
-        let timeRemaining = "Tour key expires in \(summaryData.3) days"
+        let timeRemaining = "Tour key expires in \(summaryData.expiresIn) days"
+        //create an array of the data
         var result = [String]()
         result.append(estimatedTime)
         result.append(updateStatus)
@@ -113,8 +121,8 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
         switch buttonIndex{
             case 1:
                 // change the 'begin tour' button appearance if updating
-                beingTourButton.setTitle("Updating...", forState: .Normal)
-                beingTourButton.enabled = false
+                beginTourButton.setTitle("Updating...", forState: .Normal)
+                beginTourButton.enabled = false
                 updateIndicator.hidden = false
                 updateIndicator.startAnimating()
                 TourUpdateManager.sharedInstance.triggerUpdate()
@@ -136,8 +144,7 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
     }
 
     @IBAction func clickBeginTour(sender: AnyObject) {
-//      beingTourButton.setTitle("Loading Tour", forState: .Normal)
-        beingTourButton.enabled = false
+        beginTourButton.enabled = false
     }
     
   
@@ -150,17 +157,15 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        // Note:  Be sure to replace the argument to dequeueReusableCellWithIdentifier with the actual identifier string!
+        //get the cell at that point in the table
         let cell = tableView.dequeueReusableCellWithIdentifier("fakeCell")! as UITableViewCell
-        print(summaryTable[indexPath.row])
+        //set the text of the row
         cell.textLabel?.text = summaryTable[indexPath.row]
-        print(summaryData.expiresIn)
+        //time is running out, highlight expiry red
         if indexPath.row == 2 && summaryData.expiresIn < 3{
            
             cell.textLabel?.textColor = UIColor.redColor()
         }
-        // set cell's textLabel.text property
-        // set cell's detailTextLabel.text property
         return cell
     }
     
