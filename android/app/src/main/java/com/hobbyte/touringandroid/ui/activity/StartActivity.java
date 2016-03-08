@@ -9,21 +9,17 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.internal.view.ContextThemeWrapper;
 import android.util.Log;
 import android.view.ContextMenu;
-import android.view.GestureDetector;
-import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -51,9 +47,9 @@ import java.util.Date;
  * @author Jonathan
  * @author Max
  * @author Nikita
- *
- * The opening actiivty of the app.
- * Displays previously downloaded tours and provides functionality to add new tours.
+ *         <p/>
+ *         The opening actiivty of the app.
+ *         Displays previously downloaded tours and provides functionality to add new tours.
  */
 public class StartActivity extends AppCompatActivity {
     private static final String TAG = "StartActivity";
@@ -61,6 +57,7 @@ public class StartActivity extends AppCompatActivity {
     //for animations
     private static boolean FADE_IN = true;
     private static boolean FADE_OUT = false;
+    private boolean inputPhase = false;
 
     private LinearLayout keyEntryLayout;
     private LinearLayout previousToursLayout;
@@ -73,6 +70,7 @@ public class StartActivity extends AppCompatActivity {
 
     float x1, x2;
     float y1, y2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -198,15 +196,19 @@ public class StartActivity extends AppCompatActivity {
      * Hides the input box, shows the existing tours table
      */
     public void hideInput() {
-        fade(keyEntryLayout, FADE_OUT);
-        fade(previousToursLayout, FADE_IN);
-        textKey.clearFocus();
+        if (inputPhase) {
+            fade(keyEntryLayout, FADE_OUT);
+            fade(previousToursLayout, FADE_IN);
+            textKey.clearFocus();
+            inputPhase = false;
+        }
     }
 
     /**
      * Shows input box, keyboard and hides the existing tours table
      */
     private void showInput() {
+        inputPhase = true;
         //layout.xml defines the layout as invisible. Otherwise it shows when the app is loaded.
         keyEntryLayout.setVisibility(View.VISIBLE);
 
@@ -398,22 +400,18 @@ public class StartActivity extends AppCompatActivity {
         v.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction())
-                {
-                    case MotionEvent.ACTION_DOWN:
-                    {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN: {
                         System.out.println("TOUCHED DOWN");
                         x1 = event.getX();
                         y1 = event.getY();
                         break;
                     }
-                    case MotionEvent.ACTION_UP:
-                    {
+                    case MotionEvent.ACTION_UP: {
                         x2 = event.getX();
                         y2 = event.getY();
 
-                        if (x1 < x2)
-                        {
+                        if (x1 < x2) {
                             splashDialog.dismiss();
                             System.out.println("HELP");
                         }
