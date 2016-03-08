@@ -72,7 +72,8 @@ public class TourUpdateManager {
             let expiresDate = dateFromString(currentMetadata["expiresAt"] as! String)
 
             let comparisonResulFromString = compareDates(todaysDate, newDate: expiresDate)
-            if comparisonResulFromString == "descending" {
+            //if comparisonResulFromString == "descending" {
+            if false {
                 print("today is \(todaysDate) and it is beyond expiry \(expiresDate). Therefore delete project")
                 TourDeleter().deleteTour(tourTableRow)
             } else if comparisonResulFromString == "same" {

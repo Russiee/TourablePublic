@@ -7,7 +7,7 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--Alan Touring-->
+        <!--Your Tours-->
         <scene sceneID="HKX-Tx-vzM">
             <objects>
                 <tableViewController extendedLayoutIncludesOpaqueBars="YES" id="Bbx-Al-6dq" customClass="MainTableTableViewController" customModule="Alan_Touring" customModuleProvider="target" sceneMemberID="viewController">
@@ -15,14 +15,26 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="sectionIndexBackgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                        <view key="tableHeaderView" contentMode="scaleToFill" id="1uj-O7-VKu">
+                            <rect key="frame" x="0.0" y="64" width="600" height="44"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" red="0.94117647058823528" green="0.93725490196078431" blue="0.93725490196078431" alpha="1" colorSpace="calibratedRGB"/>
+                        </view>
+                        <view key="tableFooterView" contentMode="scaleToFill" id="lmv-fx-lyD">
+                            <rect key="frame" x="0.0" y="180" width="600" height="589"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" red="0.94117647059999998" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
+                        </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="tableCell" id="Lqn-8R-xaX">
-                                <rect key="frame" x="0.0" y="92" width="600" height="44"/>
+                                <rect key="frame" x="0.0" y="136" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Lqn-8R-xaX" id="aeM-L8-Pdn">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <segue destination="uSc-BO-M9N" kind="show" identifier="toTableSummary" id="04o-v7-evA"/>
                                 </connections>
@@ -42,9 +54,11 @@
                             </connections>
                         </barButtonItem>
                     </toolbarItems>
-                    <navigationItem key="navigationItem" title="Alan Touring" id="lbB-tE-EcH"/>
+                    <navigationItem key="navigationItem" title="Your Tours" id="lbB-tE-EcH"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
                     <connections>
+                        <outlet property="bottomSpacer" destination="lmv-fx-lyD" id="Mjm-hj-9Iz"/>
+                        <outlet property="topSpacer" destination="1uj-O7-VKu" id="Kh4-jA-QCR"/>
                         <segue destination="u6k-g6-3Ca" kind="show" identifier="goToAddTour" id="WQD-7c-JvU"/>
                     </connections>
                 </tableViewController>

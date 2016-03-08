@@ -12,6 +12,8 @@ import Foundation
 
 class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     
+    @IBOutlet weak var topSpacer: UIView!
+    @IBOutlet weak var bottomSpacer: UIView!
    
     var models = NSMutableArray()
     var tourParser = TourIdParser()
@@ -93,9 +95,14 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
             
             tableView.backgroundView = empty_state_label
             tableView.separatorStyle = UITableViewCellSeparatorStyle.None
+            topSpacer.hidden = true
+            bottomSpacer.hidden = true
+            
         } else {
             tableView.backgroundView = nil
             tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
+            topSpacer.hidden = false
+            bottomSpacer.hidden = false
         }
         
     }
