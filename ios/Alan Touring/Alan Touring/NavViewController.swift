@@ -22,7 +22,7 @@ class NavViewController: UINavigationController, UIViewControllerTransitioningDe
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName : UIColor.whiteColor()]
         UIToolbar.appearance().barTintColor = UIColor(red: 21/255.0, green: 42.0/255.0, blue: 74.0/255.0, alpha: 1.0)
         UIToolbar.appearance().tintColor = UIColor.whiteColor()
-      
+
         
     }
 
