@@ -13,7 +13,7 @@ let updateAvailableKey = "updateAvailable"
 class TourSummaryController: UIViewController {
 
 
-    @IBOutlet weak var tourIdLabel: UILabel!
+
     var tourId = ""
     var tourObjectId = ""
     var tourIndex: Int!
@@ -26,13 +26,13 @@ class TourSummaryController: UIViewController {
 
     @IBOutlet weak var tourTitleLabel: UILabel!
     @IBOutlet weak var UIDescriptionBox: UITextView!
-    @IBOutlet weak var TourExpiryLabel: UILabel!
+
     @IBOutlet weak var beingTourButton: UIButton!
     @IBOutlet weak var updateIndicator: UIActivityIndicatorView! //busy wheel
 
     override func viewWillAppear(animated: Bool) {
 
-        tourIdLabel.text = tourId
+
         UIDescriptionBox.sizeToFit()
         UIDescriptionBox.layoutIfNeeded()
         UIDescriptionBox.textAlignment = NSTextAlignment.Center
@@ -45,8 +45,8 @@ class TourSummaryController: UIViewController {
         tourTitleLabel.text = topLayerTourInfo.title as String
         UIDescriptionBox.text = topLayerTourInfo.description
         print("SETUP: \(setup)")
-        let data = setup["objectId"]
-        TourExpiryLabel.text = (data as! String)
+        let data = setup["objectId"] as! String
+        self.title = tourDataParser().getTourSection(data).title as String
         updateIndicator.hidden = true
     }
 
@@ -56,7 +56,6 @@ class TourSummaryController: UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedFinishedDownloading", name: endDownloadKey, object: nil)
         // Notification for TourUpdateManager called when there is an update available
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedUpdateAvailable", name: updateAvailableKey, object: nil)
-        
         // code that checks for updates. not working atm.
 //        tourManager = TourUpdateManager(tourCodetoCheck: tourId, tableRow: tableRow)
 //        tourManager.checkForUpdates()
