@@ -24,7 +24,7 @@ class TourSummaryController: UIViewController {
     // counter to activate the busy wheel while updating
     var imageCount = 0
 
-    @IBOutlet weak var tourTitleLabel: UILabel!
+
     @IBOutlet weak var UIDescriptionBox: UITextView!
 
     @IBOutlet weak var beingTourButton: UIButton!
@@ -33,20 +33,13 @@ class TourSummaryController: UIViewController {
     override func viewWillAppear(animated: Bool) {
 
 
-        UIDescriptionBox.sizeToFit()
-        UIDescriptionBox.layoutIfNeeded()
-        UIDescriptionBox.textAlignment = NSTextAlignment.Center
         beingTourButton.enabled = true
 
         setup = TourIdParser.sharedInstance.getTourMetadata(tourId)
         objectId = setup["objectId"] as! String
-        print("trying to get tour from ID: \(objectId)")
         let topLayerTourInfo = tourDataParser.init().getTourSection(objectId )
-        tourTitleLabel.text = topLayerTourInfo.title as String
         UIDescriptionBox.text = topLayerTourInfo.description
-        print("SETUP: \(setup)")
-        let data = setup["objectId"] as! String
-        self.title = tourDataParser().getTourSection(data).title as String
+        self.title = topLayerTourInfo.title as String
         updateIndicator.hidden = true
     }
 
