@@ -24,7 +24,8 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
     var imageCount = 0
     var summaryTable = [String]()
     var summaryData = (timeHours: 0,timeMins: 0, isCurrent: true, expiresIn: 0)
-
+    let button = UIButton(type: UIButtonType.RoundedRect)
+    var isUpdating = false
 
 
     @IBOutlet weak var beginTourButton: UIButton!
@@ -59,6 +60,7 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
         tableView.delegate = self
         //make the table only as big as the number of nows.
         tableView.tableFooterView = UIView(frame: CGRectZero)
+        tableView.rowHeight = 60.0
          // code that checks for updates. not working atm.
         // tourManager.checkForUpdates()
     }
@@ -78,6 +80,11 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
             updateIndicator.hidden = true
             beginTourButton.setTitle("Begin Tour", forState: .Normal)
             beginTourButton.enabled = true
+            isUpdating = false
+            summaryTable = formatDataForTable(tourId, tableRow: tableRow)
+            //shouldnt need this next line in final version
+            summaryData.isCurrent = true
+            tableView.reloadData()
         }
     }
     func formatDataForTable(tourId: String, tableRow: Int) -> [String]{
@@ -107,32 +114,10 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
     // triggered if the TourUpdateManager sends the notification that an update is available
     func NotifiedUpdateAvailable(){
         print("update was found to be avialble")
-        showTourUpdateAlert()
+        summaryData.isCurrent = false
+        tableView.reloadData()
     }
 
-    func showTourUpdateAlert(){
-        let alert = UIAlertView(title: "Tour Update", message: "An update to this tour is avialable. Would you like to download it?", delegate: self, cancelButtonTitle:"Cancel")
-        alert.alertViewStyle = UIAlertViewStyle.Default
-        alert.addButtonWithTitle("Update")
-        alert.show()
-    }
-
-    //controls the behavior of the alerts to trigger updates
-    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
-        switch buttonIndex{
-            case 1:
-                // change the 'begin tour' button appearance if updating
-                beginTourButton.setTitle("Updating...", forState: .Normal)
-                beginTourButton.enabled = false
-                updateIndicator.hidden = false
-                updateIndicator.startAnimating()
-                TourUpdateManager.sharedInstance.triggerUpdate()
-            case 0:
-                break  //Cancel pressed, do not download update
-            default:
-                print("This is here because Swift")
-        }
-    }
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         // Create a new variable to store the instance of PlayerTableViewController
@@ -148,7 +133,19 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
         beginTourButton.enabled = false
     }
     
-  
+    @IBAction func updateButtonClicked(sender: AnyObject){
+        print("update clicked")
+        isUpdating = true
+        button.removeFromSuperview()
+        tableView.reloadData()
+        beginTourButton.setTitle("Updating...", forState: .Normal)
+        beginTourButton.enabled = false
+        updateIndicator.hidden = false
+        updateIndicator.startAnimating()
+        TourUpdateManager.sharedInstance.triggerUpdate()
+       
+    }
+    
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1 // This was put in mainly for my own unit testing
     }
@@ -166,6 +163,28 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
         if indexPath.row == 2 && summaryData.expiresIn < 3{
            
             cell.textLabel?.textColor = UIColor.redColor()
+        }
+        if indexPath.row == 1 {
+            let cellHeight: CGFloat = 60.0
+            if !summaryData.isCurrent && !isUpdating{
+                button.frame = CGRectMake(40, 60, 75, 24)
+                button.center = CGPoint(x: view.bounds.width * 0.85, y: cellHeight / 2.0)
+                button.layer.cornerRadius = 3
+                button.layer.borderWidth = 1
+                button.layer.borderColor = button.titleLabel?.textColor.CGColor
+                button.addTarget(self, action: "updateButtonClicked:", forControlEvents: UIControlEvents.TouchUpInside)
+                button.setTitle("UPDATE", forState: UIControlState.Normal)
+                cell.addSubview(button)
+            }else if summaryData.isCurrent && !isUpdating{
+                let tick_image = UIImage(named: "green_tick")
+                let tickFrame = UIImageView(image: tick_image)
+                tickFrame.center = CGPoint(x: view.bounds.width * 0.95, y: cellHeight / 2.0)
+                cell.addSubview(tickFrame)
+            }else{
+                updateIndicator.frame = CGRectMake(40, 60, 75, 24)
+                updateIndicator.center = CGPoint(x: view.bounds.width * 0.90, y: 60.0 / 2.0)
+                cell.addSubview(updateIndicator)
+            }
         }
         return cell
     }

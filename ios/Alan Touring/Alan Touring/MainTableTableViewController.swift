@@ -30,6 +30,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         checkToursToDelete()
         tableView.tableFooterView = addTourButtonView
         tableView.contentInset = UIEdgeInsetsMake(50, 0, 0, 0)
+        
     }
     
     //to check if should be emptry screen when cancelling a tour download
@@ -86,17 +87,21 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
             empty_state_label.contentMode = .ScaleAspectFit
             
             // style it as necessary
-            
             tableView.backgroundView = empty_state_label
             tableView.separatorStyle = UITableViewCellSeparatorStyle.None
             addTourButtonView.frame = CGRectMake(0 , 0, self.view.frame.width, self.view.frame.height * 0.7)
-            addTourButton.backgroundColor = UIColor.darkGrayColor()
-            addTourButton.tintColor = UIColor.whiteColor()
-            
+            let empty_state_button_UI = UIImage(named: "empty_state_button")
+            addTourButton.setBackgroundImage(empty_state_button_UI, forState: .Normal)
+            addTourButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+            self.view.backgroundColor = UIColor(red: 7/255, green: 62/255, blue: 117/255, alpha: 1.0)
         } else {
             tableView.backgroundView = nil
             tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
              addTourButtonView.frame = CGRectMake(0 , 0, self.view.frame.width, self.view.frame.height*0.8-tableView.bounds.height)
+            let add_button_UI = UIImage(named: "generic_button")
+            addTourButton.setBackgroundImage(add_button_UI, forState: .Normal)
+            addTourButton.setTitleColor(UIColor(red: 7/255, green: 62/255, blue: 117/255, alpha: 1.0), forState: .Normal)
+            self.view.backgroundColor = UIColor.groupTableViewBackgroundColor()
         }
         
     }
@@ -123,8 +128,6 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     
     // triggerd in ViewDidLoad, it iterates the list of tours and deletes the outdated one.
     func checkToursToDelete() {
-        var tourManager: TourUpdateManager
-        
         for var indexRow = 0; indexRow < models.count; indexRow++ {
             print(models[indexRow])
             TourUpdateManager.sharedInstance.getCurrentData(models[indexRow] as! String, tableRow: indexRow)

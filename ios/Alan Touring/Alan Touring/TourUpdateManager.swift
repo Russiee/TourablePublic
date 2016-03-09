@@ -128,8 +128,8 @@ public class TourUpdateManager {
         //place holder information, this will need implementation
         let timeHours = 1
         let timeMins = 30
-        let isCurrent = true
-        let expiresIn = 2
+        let isCurrent = false
+        let expiresIn = 7
         return (timeHours, timeMins, isCurrent, expiresIn)
     }
 
