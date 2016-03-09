@@ -171,7 +171,7 @@ this.timeout(10000);
     })
     
     it('should correctly update the added key', function(done){
-        keyTest.PUT(keyObjID, url, function(){
+        keyTest.PUT(tourObjID, keyObjID, url, function(){
             done();
         });
     })

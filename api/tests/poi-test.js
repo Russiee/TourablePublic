@@ -21,7 +21,6 @@ var poiTest = {
 
             };
             
-            console.log("hey")
             request(url)
             .post('api/v1/poi/')
             .send(poi)
