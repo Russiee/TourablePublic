@@ -74,15 +74,25 @@ class TourSectionsController: UITableViewController {
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 2
+        if poiKeys.isEmpty || sectionKeys.isEmpty{
+            return 1
+        }else{
+            return 2
+        }
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        if section == 0{
+        if section == 0 && poiKeys.isEmpty{
         return sectionKeys.count
-        }else{
+        }else if section == 0 && sectionKeys.isEmpty{
             return poiKeys.count
+        }else if section == 0 && !sectionKeys.isEmpty && !poiKeys.isEmpty{
+            return sectionKeys.count
+        }else if section == 1 && !sectionKeys.isEmpty && !poiKeys.isEmpty{
+            return poiKeys.count
+        }else{
+            return 0
         }
     }
 
@@ -92,9 +102,13 @@ class TourSectionsController: UITableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier("tableCell2", forIndexPath: indexPath)
         
         // Configure the cell...
-        if indexPath.section == 0{
+        if indexPath.section == 0 && poiKeys.isEmpty{
             cell.textLabel?.text = sectionKeys[indexPath.row]
-        }else{
+        }else if indexPath.section == 0 && sectionKeys.isEmpty{
+            cell.textLabel?.text = poiKeys[indexPath.row]
+        }else if indexPath.section == 0 && !sectionKeys.isEmpty && !poiKeys.isEmpty{
+            cell.textLabel?.text = sectionKeys[indexPath.row]
+        }else if indexPath.section == 1 && !sectionKeys.isEmpty && !poiKeys.isEmpty{
             cell.textLabel?.text = poiKeys[indexPath.row]
         }
         return cell
@@ -104,11 +118,17 @@ class TourSectionsController: UITableViewController {
         //CODE TO GO TO THE NEXT LEVEL OF TOUR OR DISPLAY POINT OF INTEREST
         let row = tableView.indexPathForSelectedRow!.row
         var rowTitle = ""
-        if indexPath.section == 0{
-             rowTitle = sectionKeys[row]
-        }else{
+     
+        if indexPath.section == 0 && poiKeys.isEmpty{
+            rowTitle = sectionKeys[row]
+        }else if indexPath.section == 0 && sectionKeys.isEmpty{
+             rowTitle = poiKeys[row]
+        }else if indexPath.section == 0 && !sectionKeys.isEmpty && !poiKeys.isEmpty{
+            rowTitle = sectionKeys[row]
+        }else if indexPath.section == 1 && !sectionKeys.isEmpty && !poiKeys.isEmpty{
              rowTitle = poiKeys[row]
         }
+    
 
         let objectForSegue = models[rowTitle]
 
@@ -154,11 +174,16 @@ class TourSectionsController: UITableViewController {
         
         var title = ""
         
-        if tableView.indexPathForSelectedRow?.section == 0{
+        if tableView.indexPathForSelectedRow?.section == 0 && poiKeys.isEmpty{
              title = sectionKeys[self.tableView.indexPathForSelectedRow!.row]
-        }else{
-            title = poiKeys[self.tableView.indexPathForSelectedRow!.row]
+        }else if tableView.indexPathForSelectedRow?.section == 0 && sectionKeys.isEmpty{
+             title = poiKeys[self.tableView.indexPathForSelectedRow!.row]
+        }else if tableView.indexPathForSelectedRow?.section == 0 && !sectionKeys.isEmpty && !poiKeys.isEmpty{
+             title = sectionKeys[self.tableView.indexPathForSelectedRow!.row]
+        }else if tableView.indexPathForSelectedRow?.section == 1 && !sectionKeys.isEmpty && !poiKeys.isEmpty{
+             title = poiKeys[self.tableView.indexPathForSelectedRow!.row]
         }
+
         let objectId = models[title]
 
         if (segue.identifier == "showNextPage") {
@@ -175,11 +200,15 @@ class TourSectionsController: UITableViewController {
     
  override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
     let headerTitles = ["SUBSECTIONS","POINTS OF INTEREST"]
-    if section < headerTitles.count {
+    if tableView.numberOfSections == 1 && sectionKeys.isEmpty{
+        return headerTitles[1]
+    }else if tableView.numberOfSections == 1 && poiKeys.isEmpty{
+        return headerTitles[0]
+    }else if section < headerTitles.count {
         return headerTitles[section]
+    }else{
+        return nil
     }
-    
-    return nil
 }
 
 
