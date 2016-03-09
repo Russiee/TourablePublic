@@ -13,7 +13,8 @@ class TourSectionsController: UITableViewController {
     var models = [String: String]()
     var superTableId = ""
     var poiArray = []
-    var keys = [String]()
+    var sectionKeys = [String]()
+    var poiKeys = [String]()
 
     @IBOutlet weak var SubectionsView: UIView!
 
@@ -28,11 +29,9 @@ class TourSectionsController: UITableViewController {
         
         for subsectionPointer in subsectionArray{
             let subsectionData = tdp.getTourSection((subsectionPointer["objectId"] as? String)!)
-
-            //print("\(subsectionData.title) DATA RECOVERED FROM ID")
             tourTitles[subsectionData.title as String] =  subsectionData.sectionId
             //appends the Names of subsections in the order they appear
-            keys.append(subsectionData.title as String)
+            sectionKeys.append(subsectionData.title as String)
  
         }
         
@@ -41,10 +40,10 @@ class TourSectionsController: UITableViewController {
             let poiData = poip.getTourSection((poiPointer["objectId"] as? String)!)
             tourTitles[poiData.title as String] = poiData.objectId
             //appends the Names of subsections in the order they appear
-            keys.append(poiData.title as String)
+            poiKeys.append(poiData.title as String)
         }
 
-      
+        
         models = tourTitles
         checkStateOfScreen()
         
@@ -81,9 +80,9 @@ class TourSectionsController: UITableViewController {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         if section == 0{
-        return models.count
+        return sectionKeys.count
         }else{
-            return 0
+            return poiKeys.count
         }
     }
 
@@ -93,17 +92,25 @@ class TourSectionsController: UITableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier("tableCell2", forIndexPath: indexPath)
         
         // Configure the cell...
-        
-        cell.textLabel?.text = keys[indexPath.row] 
+        if indexPath.section == 0{
+            cell.textLabel?.text = sectionKeys[indexPath.row]
+        }else{
+            cell.textLabel?.text = poiKeys[indexPath.row]
+        }
         return cell
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         //CODE TO GO TO THE NEXT LEVEL OF TOUR OR DISPLAY POINT OF INTEREST
         let row = tableView.indexPathForSelectedRow!.row
-        let RowTitle = keys[row]
+        var rowTitle = ""
+        if indexPath.section == 0{
+             rowTitle = sectionKeys[row]
+        }else{
+             rowTitle = poiKeys[row]
+        }
 
-        let objectForSegue = models[RowTitle]
+        let objectForSegue = models[rowTitle]
 
         let tourSections = tourDataParser.init().getTourSection(superTableId).getSubSections()
         let tourPOIS = tourDataParser.init().getTourSection(superTableId).getPointsOfInterest()
@@ -144,7 +151,14 @@ class TourSectionsController: UITableViewController {
     }
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        let title = keys[self.tableView.indexPathForSelectedRow!.row]
+        
+        var title = ""
+        
+        if tableView.indexPathForSelectedRow?.section == 0{
+             title = sectionKeys[self.tableView.indexPathForSelectedRow!.row]
+        }else{
+            title = poiKeys[self.tableView.indexPathForSelectedRow!.row]
+        }
         let objectId = models[title]
 
         if (segue.identifier == "showNextPage") {

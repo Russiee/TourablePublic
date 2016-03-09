@@ -130,7 +130,6 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     // triggerd in ViewDidLoad, it iterates the list of tours and deletes the outdated one.
     func checkToursToDelete() {
         for var indexRow = 0; indexRow < models.count; indexRow++ {
-            print(models[indexRow])
             TourUpdateManager.sharedInstance.getCurrentData(models[indexRow] as! String, tableRow: indexRow)
             TourUpdateManager.sharedInstance.checkIfOutdatedAndDeleteProject()
         }
@@ -165,7 +164,6 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
                     AlertViewBuilder.sharedInstance.showWarningAlert("Tour Add Error", message: "A tour with that key already exists")
                 }else{
                     if ApiConnector.sharedInstance.isConnectedToNetwork(){
-                        print("\(ApiConnector.sharedInstance.isConnectedToNetwork()) network status")
                     //Tour does not exist. Procede.
                     ApiConnector.sharedInstance.initateConnection(Field!.text!, isCheckingForUpdate: false)
                     // goes to the AddNewTourPage
