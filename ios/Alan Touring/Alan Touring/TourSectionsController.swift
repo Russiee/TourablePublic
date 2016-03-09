@@ -16,17 +16,21 @@ class TourSectionsController: UITableViewController {
     var sectionKeys = [String]()
     var poiKeys = [String]()
 
-    @IBOutlet weak var SubectionsView: UIView!
+    
+    @IBOutlet weak var tourSummaryLabel: UILabel!
+    @IBOutlet weak var tourSummaryView: UIView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.clearsSelectionOnViewWillAppear = false
-        let tour = tourDataParser.init().getTourSection(superTableId)
+        let tour = tourDataParser().getTourSection(superTableId)
         let subsectionArray = tour.getSubSections()
+        print(tour.description)
+        tourSummaryLabel.text = tour.description
         poiArray = tour.getPointsOfInterest()
         var tourTitles = [String: String]()
         let tdp = tourDataParser.init()
-        
+        tableView.tableHeaderView = tourSummaryView
         for subsectionPointer in subsectionArray{
             let subsectionData = tdp.getTourSection((subsectionPointer["objectId"] as? String)!)
             tourTitles[subsectionData.title as String] =  subsectionData.sectionId
@@ -34,7 +38,12 @@ class TourSectionsController: UITableViewController {
             sectionKeys.append(subsectionData.title as String)
  
         }
-        
+        tourSummaryLabel.lineBreakMode = .ByWordWrapping // or NSLineBreakMode.ByWordWrapping
+        tourSummaryLabel.numberOfLines = 0
+        //tourSummaryView.frame = CGRectMake(tourSummaryView.frame.maxX, tourSummaryView.frame.maxY, self.view.frame.width, tourSummaryLabel.frame.height)
+       
+        tourSummaryView.setNeedsLayout()
+        tourSummaryView.layoutIfNeeded()
         let poip = POIParser.init()
         for poiPointer in poiArray{
             let poiData = poip.getTourSection((poiPointer["objectId"] as? String)!)

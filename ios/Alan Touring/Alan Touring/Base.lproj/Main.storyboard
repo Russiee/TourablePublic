@@ -9,7 +9,7 @@
         <!--Your Tours-->
         <scene sceneID="HKX-Tx-vzM">
             <objects>
-                <tableViewController extendedLayoutIncludesOpaqueBars="YES" id="Bbx-Al-6dq" customClass="MainTableTableViewController" customModule="Alan_Touring" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController extendedLayoutIncludesOpaqueBars="YES" id="Bbx-Al-6dq" customClass="MainTableTableViewController" customModule="Tourable" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" autoresizesSubviews="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Y17-v9-zK9">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -44,7 +44,7 @@
                                 <rect key="frame" x="0.0" y="92" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Lqn-8R-xaX" id="aeM-L8-Pdn">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -96,7 +96,7 @@
         <!--Tour Summary-->
         <scene sceneID="AVS-R3-3Zd">
             <objects>
-                <viewController title="Tour Summary" id="uSc-BO-M9N" customClass="TourSummaryController" customModule="Alan_Touring" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Tour Summary" id="uSc-BO-M9N" customClass="TourSummaryController" customModule="Tourable" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="AcZ-3T-jdS"/>
                         <viewControllerLayoutGuide type="bottom" id="WLy-3d-JbQ"/>
@@ -141,7 +141,7 @@
                                         <rect key="frame" x="0.0" y="28" width="600" height="70"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="AIS-jg-lGy" id="SGs-Pq-8sd">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="70"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="69"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -181,42 +181,43 @@
         <!--Tour Sections Controller-->
         <scene sceneID="xGN-Es-PgC">
             <objects>
-                <tableViewController id="YdX-AY-UmE" customClass="TourSectionsController" customModule="Alan_Touring" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="q5v-NL-AGs">
+                <tableViewController id="YdX-AY-UmE" customClass="TourSectionsController" customModule="Tourable" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" autoresizesSubviews="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="q5v-NL-AGs">
                         <rect key="frame" x="0.0" y="64" width="600" height="492"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="separatorColor" red="0.94117647059999998" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="sectionIndexColor" red="0.086274509799999996" green="0.18039215689999999" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
-                        <view key="tableHeaderView" contentMode="scaleToFill" id="Fjy-TP-qlX">
-                            <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                        <view key="tableHeaderView" autoresizesSubviews="NO" contentMode="scaleToFill" horizontalHuggingPriority="1" verticalHuggingPriority="1" horizontalCompressionResistancePriority="1" verticalCompressionResistancePriority="1" id="Fjy-TP-qlX">
+                            <rect key="frame" x="0.0" y="0.0" width="600" height="72"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Fite Me" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iO2-Ly-Kyf">
-                                    <rect key="frame" x="8" y="11" width="103" height="21"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="1" verticalHuggingPriority="1" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="Fite Me" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iO2-Ly-Kyf">
+                                    <rect key="frame" x="8" y="8" width="584" height="56"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                             </subviews>
                             <color key="backgroundColor" red="0.082352941176470587" green="0.16470588235294117" blue="0.29019607843137252" alpha="1" colorSpace="calibratedRGB"/>
-                        </view>
-                        <view key="tableFooterView" contentMode="scaleToFill" id="COX-gG-5ff">
-                            <rect key="frame" x="0.0" y="243.5" width="600" height="589"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="0.94117647059999998" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstItem="iO2-Ly-Kyf" firstAttribute="top" secondItem="Fjy-TP-qlX" secondAttribute="topMargin" id="RpQ-1B-PgS"/>
+                                <constraint firstItem="iO2-Ly-Kyf" firstAttribute="trailing" secondItem="Fjy-TP-qlX" secondAttribute="trailingMargin" id="Wlq-C8-e7c"/>
+                                <constraint firstItem="iO2-Ly-Kyf" firstAttribute="bottom" secondItem="Fjy-TP-qlX" secondAttribute="bottomMargin" id="smv-lv-Rah"/>
+                                <constraint firstItem="iO2-Ly-Kyf" firstAttribute="leading" secondItem="Fjy-TP-qlX" secondAttribute="leadingMargin" id="vf0-fW-1jR"/>
+                            </constraints>
                         </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="tableCell2" id="03k-d5-fcy">
-                                <rect key="frame" x="0.0" y="93.5" width="600" height="44"/>
+                                <rect key="frame" x="0.0" y="122" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="03k-d5-fcy" id="MB5-Hk-I9T">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="fakeCell" id="dgi-VV-zu4" customClass="nextedCellController" customModule="Alan_Touring" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="137.5" width="600" height="44"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="fakeCell" id="dgi-VV-zu4" customClass="nextedCellController" customModule="Tourable" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="166" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dgi-VV-zu4" id="fwy-GU-EvB">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
@@ -241,8 +242,8 @@
                                     <segue destination="YdX-AY-UmE" kind="show" identifier="showNextPage" id="pdF-9W-JZ1"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="fakeCell2" id="Gg6-Ke-AoR" customClass="PointOfInterestCellViewController" customModule="Alan_Touring" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="181.5" width="600" height="44"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="fakeCell2" id="Gg6-Ke-AoR" customClass="PointOfInterestCellViewController" customModule="Tourable" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="210" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Gg6-Ke-AoR" id="Y1c-PJ-DfJ">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
@@ -256,7 +257,8 @@
                         </connections>
                     </tableView>
                     <connections>
-                        <outlet property="SubectionsView" destination="Fjy-TP-qlX" id="Ovv-5c-dSk"/>
+                        <outlet property="tourSummaryLabel" destination="iO2-Ly-Kyf" id="yR6-y5-49U"/>
+                        <outlet property="tourSummaryView" destination="Fjy-TP-qlX" id="Dct-3m-ivE"/>
                         <segue destination="A4f-95-gmM" kind="show" identifier="PointOfInterestSegue" id="ann-WX-v7O"/>
                     </connections>
                 </tableViewController>
@@ -267,7 +269,7 @@
         <!--Point View Controller-->
         <scene sceneID="RGt-el-doc">
             <objects>
-                <viewController id="A4f-95-gmM" customClass="PointViewController" customModule="Alan_Touring" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="A4f-95-gmM" customClass="PointViewController" customModule="Tourable" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Vcy-xj-eNY"/>
                         <viewControllerLayoutGuide type="bottom" id="JsW-vL-j9g"/>
@@ -309,7 +311,7 @@
         <!--Hello-->
         <scene sceneID="Bwp-4b-I2N">
             <objects>
-                <viewController title="Hello" definesPresentationContext="YES" providesPresentationContextTransitionStyle="YES" id="xqZ-b6-00V" customClass="addNewTourViewController" customModule="Alan_Touring" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Hello" definesPresentationContext="YES" providesPresentationContextTransitionStyle="YES" id="xqZ-b6-00V" customClass="addNewTourViewController" customModule="Tourable" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="H9D-3l-B7V"/>
                         <viewControllerLayoutGuide type="bottom" id="u5V-LO-tHL"/>
@@ -413,7 +415,7 @@
         <!--entryController-->
         <scene sceneID="OIh-ep-3KP">
             <objects>
-                <navigationController title="entryController" toolbarHidden="NO" id="xBy-sT-h06" customClass="NavViewController" customModule="Alan_Touring" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController title="entryController" toolbarHidden="NO" id="xBy-sT-h06" customClass="NavViewController" customModule="Tourable" customModuleProvider="target" sceneMemberID="viewController">
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="vGh-hI-a3l">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -434,7 +436,7 @@
         <!--Nav View Controller-->
         <scene sceneID="czt-gQ-heR">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="u6k-g6-3Ca" customClass="NavViewController" customModule="Alan_Touring" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="u6k-g6-3Ca" customClass="NavViewController" customModule="Tourable" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="5Ez-sZ-iiz">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
