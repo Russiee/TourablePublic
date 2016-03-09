@@ -15,18 +15,17 @@ class TourSectionsController: UITableViewController {
     var poiArray = []
     var keys = [String]()
 
+    @IBOutlet weak var SubectionsView: UIView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.clearsSelectionOnViewWillAppear = false
         let tour = tourDataParser.init().getTourSection(superTableId)
-
         let subsectionArray = tour.getSubSections()
-
         poiArray = tour.getPointsOfInterest()
         var tourTitles = [String: String]()
-
         let tdp = tourDataParser.init()
+        
         for subsectionPointer in subsectionArray{
             let subsectionData = tdp.getTourSection((subsectionPointer["objectId"] as? String)!)
 
@@ -36,6 +35,7 @@ class TourSectionsController: UITableViewController {
             keys.append(subsectionData.title as String)
  
         }
+        
         let poip = POIParser.init()
         for poiPointer in poiArray{
             let poiData = poip.getTourSection((poiPointer["objectId"] as? String)!)
@@ -44,12 +44,11 @@ class TourSectionsController: UITableViewController {
             keys.append(poiData.title as String)
         }
 
-
+      
         models = tourTitles
-        
         checkStateOfScreen()
         
-    }
+           }
     
     //to check if should be emptry screen when cancelling a tour download
     override func viewWillAppear(animated: Bool) {
@@ -61,18 +60,31 @@ class TourSectionsController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    override func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        
+        if let view = view as? UITableViewHeaderFooterView {
+            view.textLabel!.backgroundColor = UIColor.clearColor()
+            view.textLabel!.font =  UIFont.systemFontOfSize(17.0)
+            view.textLabel!.textColor = UIColor(red: 21/255, green: 42/255, blue: 74/255, alpha: 1.0)
+
+        }
+        
+    }
 
     // MARK: - Table view data source
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 1
+        return 2
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        
+        if section == 0{
         return models.count
+        }else{
+            return 0
+        }
     }
 
 
@@ -114,6 +126,7 @@ class TourSectionsController: UITableViewController {
 
     // a function to tell change the background image when loading the app AND when deleting a cell results in no tours left
     func checkStateOfScreen() {
+         tableView.rowHeight = 60.0
         if models.count == 0 {
             let  empty_state_image = UIImage(named: "empty_ts_placeholder")
             let empty_state_label = UIImageView(image: empty_state_image)
@@ -145,54 +158,21 @@ class TourSectionsController: UITableViewController {
         }
         tableView.deselectRowAtIndexPath(tableView.indexPathForSelectedRow!, animated: true)
     }
+    
+ override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    let headerTitles = ["SUBSECTIONS","POINTS OF INTEREST"]
+    if section < headerTitles.count {
+        return headerTitles[section]
+    }
+    
+    return nil
 }
 
 
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-    // Return false if you do not want the specified item to be editable.
-    return true
-    }
-    */
-    
-    //Deletes data from the table and updates the cache to reflect his.
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-           
-           // tableView.reloadData()
-            
-            //Don't touch. Magic.
-            //tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-            
-            
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }
-    }
-    
-    
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-    
-    }
-    */
-    
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-    // Return false if you do not want the item to be re-orderable.
-    return true
-    }
-    */
-    
-    
-    // MARK: - Navigation
-    
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
+}
 
-    
+
+
     
  
     
