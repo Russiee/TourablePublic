@@ -29,14 +29,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:textColor="@color/colorText"/>
+                android:textColor="@color/colorDarkText"/>
 
             <TextView
                 android:id="@+id/textTourExpiry"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/textTourName"
-                android:textColor="@color/colorText"/>
+                android:textColor="@color/colorDarkText"/>
         </RelativeLayout>
 
         <ImageView

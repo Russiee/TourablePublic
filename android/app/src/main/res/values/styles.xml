@@ -8,11 +8,14 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="android:windowBackground">@color/colorLightBackground</item>
         <item name="colorButtonNormal">@color/colorAccent</item>
-        <item name="android:textColor">@color/colorText</item>
-        <item name="android:textAppearance">@color/colorText</item>
+        <item name="android:textColor">@color/colorDarkText</item>
+        <item name="android:textAppearance">@color/colorDarkText</item>
         <item name="android:fontFamily">"sans-serif-thin"</item>
+        <item name="android:textColorPrimary">@color/colorDarkText</item>
+        <item name="android:textColorSecondary">@color/primary_text_disabled_material_dark</item>
+        <item name="android:textColorSecondaryInverse">@color/colorDarkText</item>
     </style>
 
     <style name="dialogTheme" parent="Theme.AppCompat.Dialog">
@@ -20,10 +23,10 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="android:windowBackground">@color/colorLightBackground</item>
         <item name="colorButtonNormal">@color/colorAccent</item>
-        <item name="android:textColor">@color/colorText</item>
-        <item name="android:textAppearance">@color/colorText</item>
+        <item name="android:textColor">@color/colorDarkText</item>
+        <item name="android:textAppearance">@color/colorDarkText</item>
         <item name="android:fontFamily">"sans-serif-thin"</item>
     </style>
 
@@ -33,8 +36,8 @@
     </style>
 
     <style name="TourActivityTheme" parent="AppTheme">
-        <item name="android:textColor">@color/colorText</item>
-        <item name="android:textAppearance">@color/colorText</item>
+        <item name="android:textColor">@color/colorDarkText</item>
+        <item name="android:textAppearance">@color/colorDarkText</item>
         <item name="android:fontFamily">"sans-serif-thin"</item>
     </style>
 
@@ -43,8 +46,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColor">@color/colorText</item>
-        <item name="android:textAppearance">@color/colorText</item>
+        <item name="android:textColor">@color/colorDarkText</item>
+        <item name="android:textAppearance">@color/colorDarkText</item>
         <item name="android:fontFamily">"sans-serif-thin"</item>
     </style>
 
