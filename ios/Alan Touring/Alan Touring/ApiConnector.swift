@@ -36,7 +36,7 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
     var JSONMetadataFromAPI: NSDictionary!
     var isUpdating = false
 
-    func initateConnection(var tourCode: String, isCheckingForUpdate: Bool){
+    func initiateConnection(var tourCode: String, isCheckingForUpdate: Bool){
         isUpdating = isCheckingForUpdate
         let resetData = NSMutableData()
         //Reseting data to blank with every new connection
@@ -76,6 +76,7 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
             if !isUpdating {
                 _ = TourIdParser().addTourMetaData(jsonResult)
             }
+            print("finished loading")
             self.triggerValidKeyNotification()
         }
         catch let err as NSError{

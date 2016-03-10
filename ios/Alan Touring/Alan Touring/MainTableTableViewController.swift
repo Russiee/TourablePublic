@@ -46,7 +46,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     }
     
     func Notified() {
-
+        checkStateOfScreen()
         models = tourParser.getAllTours()
         tableView.reloadData()
     }
@@ -83,26 +83,30 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     func checkStateOfScreen(){
          tableView.rowHeight = 60.0
         if models.count == 0 {
-            let  empty_state_image = UIImage(named: "empty_tv_placeholder")
-            let empty_state_label = UIImageView(image: empty_state_image)
-            empty_state_label.contentMode = .ScaleAspectFit
-            
-            // style it as necessary
-            tableView.backgroundView = empty_state_label
-            tableView.separatorStyle = UITableViewCellSeparatorStyle.None
+         
             addTourButtonView.frame = CGRectMake(0 , 0, self.view.frame.width, self.view.frame.height * 0.7)
             let empty_state_button_UI = UIImage(named: "empty_state_button")
             addTourButton.setBackgroundImage(empty_state_button_UI, forState: .Normal)
             addTourButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
             self.view.backgroundColor = UIColor(red: 7/255, green: 62/255, blue: 117/255, alpha: 1.0)
+           // addTourButton.layer.cornerRadius = 3
+           // addTourButton.layer.borderWidth = 1
+            let  empty_state_image = UIImage(named: "empty_tv_placeholder")
+            let empty_state_label = UIImageView(image: empty_state_image)
+            empty_state_label.contentMode = .ScaleAspectFit
+            tableView.backgroundView = empty_state_label
+            tableView.separatorStyle = UITableViewCellSeparatorStyle.None
         } else {
-            tableView.backgroundView = nil
-            tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
-             addTourButtonView.frame = CGRectMake(0 , 0, self.view.frame.width, self.view.frame.height*0.8-tableView.bounds.height)
+         
+            addTourButtonView.frame = CGRectMake(0 , 0, self.view.frame.width, self.view.frame.height*0.8-tableView.bounds.height)
             let add_button_UI = UIImage(named: "generic_button")
             addTourButton.setBackgroundImage(add_button_UI, forState: .Normal)
             addTourButton.setTitleColor(UIColor(red: 7/255, green: 62/255, blue: 117/255, alpha: 1.0), forState: .Normal)
+           // addTourButton.layer.cornerRadius = 3
+            //addTourButton.layer.borderWidth = 1
             self.view.backgroundColor = UIColor.groupTableViewBackgroundColor()
+            tableView.backgroundView = nil
+            tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
         }
         
     }
@@ -131,7 +135,8 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     func checkToursToDelete() {
         for var indexRow = 0; indexRow < models.count; indexRow++ {
             TourUpdateManager.sharedInstance.getCurrentData(models[indexRow] as! String, tableRow: indexRow)
-            TourUpdateManager.sharedInstance.checkIfOutdatedAndDeleteProject()
+            //Need to find a better way to do this, it is causing the tour to be downloaed twice.
+           // TourUpdateManager.sharedInstance.checkIfOutdatedAndDeleteProject()
         }
     }
 
@@ -165,7 +170,8 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
                 }else{
                     if ApiConnector.sharedInstance.isConnectedToNetwork(){
                     //Tour does not exist. Procede.
-                    ApiConnector.sharedInstance.initateConnection(Field!.text!, isCheckingForUpdate: false)
+                        print("here")
+                    ApiConnector.sharedInstance.initiateConnection(Field!.text!, isCheckingForUpdate: false)
                     // goes to the AddNewTourPage
                     performSegueWithIdentifier("goToAddTour", sender: self)
                     // to change the background image

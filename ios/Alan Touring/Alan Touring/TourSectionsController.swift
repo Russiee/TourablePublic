@@ -18,10 +18,11 @@ class TourSectionsController: UITableViewController {
 
     
     @IBOutlet weak var tourSummaryLabel: UILabel!
-    @IBOutlet weak var tourSummaryView: UIView!
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        //tourSummaryLabel.removeFromSuperview()
         self.clearsSelectionOnViewWillAppear = false
         let tour = tourDataParser().getTourSection(superTableId)
         let subsectionArray = tour.getSubSections()
@@ -30,7 +31,7 @@ class TourSectionsController: UITableViewController {
         poiArray = tour.getPointsOfInterest()
         var tourTitles = [String: String]()
         let tdp = tourDataParser.init()
-        tableView.tableHeaderView = tourSummaryView
+        tableView.tableHeaderView = tourSummaryLabel
         for subsectionPointer in subsectionArray{
             let subsectionData = tdp.getTourSection((subsectionPointer["objectId"] as? String)!)
             tourTitles[subsectionData.title as String] =  subsectionData.sectionId
@@ -38,12 +39,14 @@ class TourSectionsController: UITableViewController {
             sectionKeys.append(subsectionData.title as String)
  
         }
+
+
         tourSummaryLabel.lineBreakMode = .ByWordWrapping // or NSLineBreakMode.ByWordWrapping
         tourSummaryLabel.numberOfLines = 0
-        //tourSummaryView.frame = CGRectMake(tourSummaryView.frame.maxX, tourSummaryView.frame.maxY, self.view.frame.width, tourSummaryLabel.frame.height)
-       
-        tourSummaryView.setNeedsLayout()
-        tourSummaryView.layoutIfNeeded()
+        tourSummaryLabel.sizeToFit()
+        tourSummaryLabel.sizeToFit()
+
+        
         let poip = POIParser.init()
         for poiPointer in poiArray{
             let poiData = poip.getTourSection((poiPointer["objectId"] as? String)!)
@@ -52,10 +55,11 @@ class TourSectionsController: UITableViewController {
             poiKeys.append(poiData.title as String)
         }
 
-        
+        tableView.reloadInputViews()
+        tableView.reloadData()
+        self.reloadInputViews()
         models = tourTitles
         checkStateOfScreen()
-        
            }
     
     //to check if should be emptry screen when cancelling a tour download

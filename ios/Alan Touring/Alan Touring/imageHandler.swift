@@ -12,8 +12,9 @@ let beginDownloadKey = "downloadInProgress"
 let endDownloadKey = "DownloadComplete"
 var countOfImages = 0;
 
+
 class imageHandler: NSObject {
-    
+    lazy var imageQueue = [String]()
     lazy var imagesToDownload =  [String]()
     
     //making the TourIdParser a singleton to parse all tours from the API
@@ -92,15 +93,24 @@ class imageHandler: NSObject {
             return image
         }
     }
-    
+    func queueImage(urls: [String]){
+        imageQueue.appendContentsOf(urls)
+    }
+    func savePlaceholders(urls: [String]){
+        for url in urls {
+            print("save placeholder of create logic for online viewing here for url \(url)")
+            print("****DO NOT DELETE THIS MESSAGE UNTIL IMPLEMENTED****")
+        }
+    }
     
     //called just once in pointOfInterest.swift
-    func downloadImageSet(urls: [String]){
+    func downloadMediaSet(urls: [String]){
        
         countOfImages = countOfImages + urls.count
 
         for url in urls {
             
+            if(url.characters.last == "g"){
             triggerDownloadBeginNotify()
             let imageUrl = url
             let actualURL = NSURL(string: imageUrl )
@@ -116,6 +126,9 @@ class imageHandler: NSObject {
                     self.saveImage(image!, name: imageUrl)
                     //HOW TO GET HERE THE FINAL DOWNLOADED IMAGE
                 }
+                }
+            }else{
+                videoHandler.sharedInstance.downloadVideo(url)
             }
         }
     }

@@ -50,8 +50,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 print("An Error was generated creating directory")
             }
         }
-        UINavigationBar.appearance().setBackgroundImage(UIImage(), forBarPosition: .Any, barMetrics: .Default)
-        UINavigationBar.appearance().shadowImage = UIImage()
+       // UINavigationBar.appearance().setBackgroundImage(UIImage(), forBarPosition: .Any, barMetrics: .Default)
+       // UINavigationBar.appearance().shadowImage = UIImage()
         
         return true
     }

@@ -45,7 +45,7 @@ class pointOfInterest {
                 }
             }
         }
-        imageHandler.sharedInstance.downloadImageSet(urlsToDownload)
+        imageHandler.sharedInstance.queueImage(urlsToDownload)
         
         
     }

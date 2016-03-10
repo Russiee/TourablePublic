@@ -30,7 +30,8 @@
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" red="0.086274509803921567" green="0.1803921568627451" blue="0.29019607843137252" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.08235294118" green="0.1647058824" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="tintColor" red="0.08235294118" green="0.1647058824" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="1SD-l7-soc" firstAttribute="top" secondItem="csv-h8-mGG" secondAttribute="bottom" constant="8" symbolic="YES" id="2pH-vC-bdl"/>
                             <constraint firstItem="csv-h8-mGG" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="6ER-VD-utT"/>
