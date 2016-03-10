@@ -88,10 +88,28 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
     
     //Called if the tourId if valid. Stops the busy wheel and shows the download settings.
     func NotifiedValid(){
-        self.busyWheel.stopAnimating()
-        self.hideButtonsForBusyWheel(false)
-        saveTourButton.setTitle("Downloading...", forState: .Normal)
-        saveTourButton.enabled = false
+        
+        //saveTourButton.setTitle("Downloading...", forState: .Normal)
+        //saveTourButton.enabled = false
+        let alert = UIAlertController(title: "Notice", message: "Tour key is valid! You can now download this tour. If you download it without video you will need an internet connection during the tour.", preferredStyle: UIAlertControllerStyle.Alert)
+        
+        // add the actions (buttons)
+        alert.addAction(UIAlertAction(title: "Download without media (33kb)", style: UIAlertActionStyle.Default, handler: { action in
+            imageHandler.sharedInstance.imageQueue = [String]()
+            self.dismissViewControllerAnimated(true, completion: nil)
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: { action in
+            self.performSegueWithIdentifier("cancelAdd", sender: self)
+            TourDeleter.sharedInstance.deleteTour(self.tourIndex!)
+        }))
+        alert.addAction(UIAlertAction(title: "Download with media (15mb)", style: UIAlertActionStyle.Default, handler: { action in
+            imageHandler.sharedInstance.downloadMediaSet(imageHandler.sharedInstance.imageQueue)
+            self.busyWheel.stopAnimating()
+            self.hideButtonsForBusyWheel(false)
+        }))
+        
+        // show the alert
+        self.presentViewController(alert, animated: true, completion: nil)
         self.setTourInfomation()
     }
     

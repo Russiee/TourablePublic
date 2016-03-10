@@ -40,7 +40,7 @@ public class TourUpdateManager {
     // download fresh metadata for the tour if there is internet connection
     func downloadNewMetadata() {
         if ApiConnector.sharedInstance.isConnectedToNetwork() {
-            ApiConnector.sharedInstance.initateConnection(tourCode, isCheckingForUpdate: true)
+           ApiConnector.sharedInstance.initiateConnection(tourCode, isCheckingForUpdate: true)
             newMetadata = ApiConnector.sharedInstance.getTourMetadata(tourCode)
         }
     }
@@ -136,6 +136,6 @@ public class TourUpdateManager {
     // called from the tourSummary when the user confirms to download the updates
     func triggerUpdate() {
         TourDeleter().deleteTour(tourTableRow)
-        ApiConnector.sharedInstance.initateConnection(tourCode, isCheckingForUpdate: false)
+        ApiConnector.sharedInstance.initiateConnection(tourCode, isCheckingForUpdate: false)
     }
 }

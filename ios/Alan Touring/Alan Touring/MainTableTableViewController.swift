@@ -131,7 +131,8 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     func checkToursToDelete() {
         for var indexRow = 0; indexRow < models.count; indexRow++ {
             TourUpdateManager.sharedInstance.getCurrentData(models[indexRow] as! String, tableRow: indexRow)
-            TourUpdateManager.sharedInstance.checkIfOutdatedAndDeleteProject()
+            //Need to find a better way to do this, it is causing the tour to be downloaed twice.
+           // TourUpdateManager.sharedInstance.checkIfOutdatedAndDeleteProject()
         }
     }
 
@@ -165,7 +166,8 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
                 }else{
                     if ApiConnector.sharedInstance.isConnectedToNetwork(){
                     //Tour does not exist. Procede.
-                    ApiConnector.sharedInstance.initateConnection(Field!.text!, isCheckingForUpdate: false)
+                        print("here")
+                    ApiConnector.sharedInstance.initiateConnection(Field!.text!, isCheckingForUpdate: false)
                     // goes to the AddNewTourPage
                     performSegueWithIdentifier("goToAddTour", sender: self)
                     // to change the background image
