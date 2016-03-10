@@ -18,7 +18,7 @@ class TourSectionsController: UITableViewController {
 
     
     @IBOutlet weak var tourSummaryLabel: UILabel!
-    @IBOutlet weak var tourSummaryView: UIView!
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,7 +31,7 @@ class TourSectionsController: UITableViewController {
         poiArray = tour.getPointsOfInterest()
         var tourTitles = [String: String]()
         let tdp = tourDataParser.init()
-        tableView.tableHeaderView = tourSummaryView
+        tableView.tableHeaderView = tourSummaryLabel
         for subsectionPointer in subsectionArray{
             let subsectionData = tdp.getTourSection((subsectionPointer["objectId"] as? String)!)
             tourTitles[subsectionData.title as String] =  subsectionData.sectionId
@@ -39,12 +39,13 @@ class TourSectionsController: UITableViewController {
             sectionKeys.append(subsectionData.title as String)
  
         }
+
+
         tourSummaryLabel.lineBreakMode = .ByWordWrapping // or NSLineBreakMode.ByWordWrapping
         tourSummaryLabel.numberOfLines = 0
-        
-        //tourSummaryView.addSubview(tourSummaryLabel)
-        tourSummaryView.setNeedsLayout()
-        tourSummaryView.layoutIfNeeded()
+        tourSummaryLabel.sizeToFit()
+        tourSummaryLabel.sizeToFit()
+
         
         let poip = POIParser.init()
         for poiPointer in poiArray{
@@ -54,7 +55,9 @@ class TourSectionsController: UITableViewController {
             poiKeys.append(poiData.title as String)
         }
 
-        
+        tableView.reloadInputViews()
+        tableView.reloadData()
+        self.reloadInputViews()
         models = tourTitles
         checkStateOfScreen()
            }
