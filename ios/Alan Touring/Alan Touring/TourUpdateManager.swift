@@ -35,7 +35,12 @@ public class TourUpdateManager {
         self.tourTableRow = tableRow
         self.tourCode = tourCodetoCheck
         self.currentMetadata = TourIdParser().getTourMetadata(tourCode)
-        //checkForUpdates()
+
+
+        downloadNewMetadata()
+        checkForUpdates()
+        //checkForOutdatedProject()
+
     }
 
     // download fresh metadata for the tour if there is internet connection

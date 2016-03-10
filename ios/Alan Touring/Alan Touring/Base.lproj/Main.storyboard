@@ -383,7 +383,7 @@
         <!--Table View Controller-->
         <scene sceneID="iBR-5g-kVt">
             <objects>
-                <tableViewController id="w6Y-H8-yy9" customClass="POITableViewController" customModule="Alan_Touring" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="w6Y-H8-yy9" customClass="POITableViewController" customModule="Tourable" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="A0j-vj-qfP">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="556"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
