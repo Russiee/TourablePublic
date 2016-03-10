@@ -10,22 +10,28 @@ import Foundation
 
 public class TourUpdateManager {
 
-    let tourTableRow: Int!
-    let tourCode: String!
+    var tourTableRow: Int!
+    var tourCode: String!
     var currentMetadata: Dictionary<String,AnyObject>!
     var newMetadata: NSDictionary!
     var alreadyFetchedMetadata = false
     
     // created just to initialise blank field object in other classes
-    init(){
-        //does nothing
-        self.tourTableRow = Int()
-        self.tourCode = ""
-        self.currentMetadata = Dictionary()
-        self.newMetadata = NSDictionary()
+  
+    class var sharedInstance: TourUpdateManager {
+        struct Static {
+            static var onceToken: dispatch_once_t = 0
+            static var instance: TourUpdateManager? = nil
+        }
+        dispatch_once(&Static.onceToken) {
+            Static.instance = TourUpdateManager()
+            
+        }
+        return Static.instance!
     }
 
-    init(tourCodetoCheck: String, tableRow: Int) {
+
+   func getCurrentData(tourCodetoCheck: String, tableRow: Int) {
         self.tourTableRow = tableRow
         self.tourCode = tourCodetoCheck
         self.currentMetadata = TourIdParser().getTourMetadata(tourCode)
@@ -72,7 +78,8 @@ public class TourUpdateManager {
             let expiresDate = dateFromString(currentMetadata["expiresAt"] as! String)
 
             let comparisonResulFromString = compareDates(todaysDate, newDate: expiresDate)
-            if comparisonResulFromString == "descending" {
+            //if comparisonResulFromString == "descending" {
+            if false {
                 print("today is \(todaysDate) and it is beyond expiry \(expiresDate). Therefore delete project")
                 TourDeleter().deleteTour(tourTableRow)
             } else if comparisonResulFromString == "same" {
@@ -114,6 +121,16 @@ public class TourUpdateManager {
 
         }
         notify()
+    }
+    //get the current status of the tour from the latest data on the api. Returns a tuple
+    func getTourStatusInfo() -> (timeHours: Int,timeMins: Int, isCurrent: Bool, expiresIn: Int){
+    
+        //place holder information, this will need implementation
+        let timeHours = 1
+        let timeMins = 30
+        let isCurrent = false
+        let expiresIn = 7
+        return (timeHours, timeMins, isCurrent, expiresIn)
     }
 
     // called from the tourSummary when the user confirms to download the updates

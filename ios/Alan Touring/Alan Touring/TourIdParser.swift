@@ -74,7 +74,6 @@ public class TourIdParser {
 
         //this comes from the initialised of bundle Connector
         let bundleRoute = bundleRouteConnector()
-        print(tourDict["objectId"])
         bundleRoute.startConnection(tourDict["objectId"] as! String)
         
         let MYDAMNDATA = bundleRoute.getJSONResult()

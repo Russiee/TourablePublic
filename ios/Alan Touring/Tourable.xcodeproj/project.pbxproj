@@ -11,7 +11,6 @@
 		7A432AB11C8B69AB007482F8 /* TourUpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A432AB01C8B69AB007482F8 /* TourUpdateManager.swift */; };
 		E5007F851C8B6ACA0041B31C /* TourDeleter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5007F841C8B6ACA0041B31C /* TourDeleter.swift */; };
 		E536DCBF1C6510FD00A7B2FC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E536DCBE1C6510FC00A7B2FC /* AppDelegate.swift */; };
-		E536DCC11C6510FD00A7B2FC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E536DCC01C6510FD00A7B2FC /* ViewController.swift */; };
 		E536DCC41C6510FD00A7B2FC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E536DCC21C6510FD00A7B2FC /* Main.storyboard */; };
 		E536DCC71C6510FD00A7B2FC /* Alan_Touring.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E536DCC51C6510FD00A7B2FC /* Alan_Touring.xcdatamodeld */; };
 		E536DCC91C6510FD00A7B2FC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E536DCC81C6510FD00A7B2FC /* Assets.xcassets */; };
@@ -34,6 +33,7 @@
 		FA7936AC1C8A4C2B006AD406 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA7936AB1C8A4C2B006AD406 /* AVKit.framework */; };
 		FA9803291C666195001D23E2 /* MainTableTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9803281C666195001D23E2 /* MainTableTableViewController.swift */; };
 		FAB049191C6E34BF00679C10 /* ApiConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB049181C6E34BF00679C10 /* ApiConnector.swift */; };
+		FACF41081C8F1D74000C2D5A /* NavViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACF41071C8F1D74000C2D5A /* NavViewController.swift */; };
 		FAD1B1541C6BAEB400CA5327 /* TourSummaryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD1B1531C6BAEB400CA5327 /* TourSummaryController.swift */; };
 		FAE5F69D1C789D2500346321 /* POIConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE5F69C1C789D2500346321 /* POIConnector.swift */; };
 		FAE5F69F1C789D4000346321 /* POIParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE5F69E1C789D4000346321 /* POIParser.swift */; };
@@ -60,9 +60,8 @@
 		7A3988CF1C849C1E006572E6 /* Queue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Queue.swift; sourceTree = "<group>"; };
 		7A432AB01C8B69AB007482F8 /* TourUpdateManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TourUpdateManager.swift; sourceTree = "<group>"; };
 		E5007F841C8B6ACA0041B31C /* TourDeleter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TourDeleter.swift; sourceTree = "<group>"; };
-		E536DCBB1C6510FC00A7B2FC /* Alan Touring.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Alan Touring.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E536DCBB1C6510FC00A7B2FC /* Tourable.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tourable.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E536DCBE1C6510FC00A7B2FC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		E536DCC01C6510FD00A7B2FC /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		E536DCC31C6510FD00A7B2FC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E536DCC61C6510FD00A7B2FC /* Alan_Touring.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Alan_Touring.xcdatamodel; sourceTree = "<group>"; };
 		E536DCC81C6510FD00A7B2FC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -90,6 +89,7 @@
 		FA7936AB1C8A4C2B006AD406 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		FA9803281C666195001D23E2 /* MainTableTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTableTableViewController.swift; sourceTree = "<group>"; };
 		FAB049181C6E34BF00679C10 /* ApiConnector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiConnector.swift; sourceTree = "<group>"; };
+		FACF41071C8F1D74000C2D5A /* NavViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavViewController.swift; sourceTree = "<group>"; };
 		FAD1B1531C6BAEB400CA5327 /* TourSummaryController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TourSummaryController.swift; sourceTree = "<group>"; };
 		FAE5F69C1C789D2500346321 /* POIConnector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = POIConnector.swift; sourceTree = "<group>"; };
 		FAE5F69E1C789D4000346321 /* POIParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = POIParser.swift; sourceTree = "<group>"; };
@@ -135,7 +135,7 @@
 		E536DCBC1C6510FC00A7B2FC /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E536DCBB1C6510FC00A7B2FC /* Alan Touring.app */,
+				E536DCBB1C6510FC00A7B2FC /* Tourable.app */,
 				E536DCD21C6510FD00A7B2FC /* Alan TouringTests.xctest */,
 				E536DCDD1C6510FD00A7B2FC /* Alan TouringUITests.xctest */,
 			);
@@ -220,9 +220,9 @@
 				FA4EBABF1C68CC1100E6E601 /* AddNewTourViewController.swift */,
 				FA9803281C666195001D23E2 /* MainTableTableViewController.swift */,
 				FAD1B1531C6BAEB400CA5327 /* TourSummaryController.swift */,
-				E536DCC01C6510FD00A7B2FC /* ViewController.swift */,
 				FA2164A51C7CB5E60056FF02 /* PointViewController.swift */,
 				FA56AD7A1C8C614B00F200B9 /* AlertViewBuilder.swift */,
+				FACF41071C8F1D74000C2D5A /* NavViewController.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -230,9 +230,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E536DCBA1C6510FC00A7B2FC /* Alan Touring */ = {
+		E536DCBA1C6510FC00A7B2FC /* Tourable */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E536DCE61C6510FD00A7B2FC /* Build configuration list for PBXNativeTarget "Alan Touring" */;
+			buildConfigurationList = E536DCE61C6510FD00A7B2FC /* Build configuration list for PBXNativeTarget "Tourable" */;
 			buildPhases = (
 				E536DCB71C6510FC00A7B2FC /* Sources */,
 				E536DCB81C6510FC00A7B2FC /* Frameworks */,
@@ -242,9 +242,9 @@
 			);
 			dependencies = (
 			);
-			name = "Alan Touring";
+			name = Tourable;
 			productName = "Alan Touring";
-			productReference = E536DCBB1C6510FC00A7B2FC /* Alan Touring.app */;
+			productReference = E536DCBB1C6510FC00A7B2FC /* Tourable.app */;
 			productType = "com.apple.product-type.application";
 		};
 		E536DCD11C6510FD00A7B2FC /* Alan TouringTests */ = {
@@ -309,7 +309,7 @@
 					};
 				};
 			};
-			buildConfigurationList = E536DCB61C6510FC00A7B2FC /* Build configuration list for PBXProject "Alan Touring" */;
+			buildConfigurationList = E536DCB61C6510FC00A7B2FC /* Build configuration list for PBXProject "Tourable" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -322,7 +322,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				E536DCBA1C6510FC00A7B2FC /* Alan Touring */,
+				E536DCBA1C6510FC00A7B2FC /* Tourable */,
 				E536DCD11C6510FD00A7B2FC /* Alan TouringTests */,
 				E536DCDC1C6510FD00A7B2FC /* Alan TouringUITests */,
 			);
@@ -377,12 +377,12 @@
 				FA2164A61C7CB5E60056FF02 /* PointViewController.swift in Sources */,
 				FAE5F69D1C789D2500346321 /* POIConnector.swift in Sources */,
 				FA4EBAC01C68CC1100E6E601 /* AddNewTourViewController.swift in Sources */,
-				E536DCC11C6510FD00A7B2FC /* ViewController.swift in Sources */,
 				FA6FD54B1C8A2DCE0033964F /* MediaHelper.swift in Sources */,
 				E536DCBF1C6510FD00A7B2FC /* AppDelegate.swift in Sources */,
 				FA2BB2981C78F46500D784E8 /* imageHandler.swift in Sources */,
 				FA4D0F5F1C6A4D08007D79E3 /* TourIdParser.swift in Sources */,
 				FA0A51721C7747B400E4F733 /* tourSection.swift in Sources */,
+				FACF41081C8F1D74000C2D5A /* NavViewController.swift in Sources */,
 				E5007F851C8B6ACA0041B31C /* TourDeleter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -409,12 +409,12 @@
 /* Begin PBXTargetDependency section */
 		E536DCD41C6510FD00A7B2FC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = E536DCBA1C6510FC00A7B2FC /* Alan Touring */;
+			target = E536DCBA1C6510FC00A7B2FC /* Tourable */;
 			targetProxy = E536DCD31C6510FD00A7B2FC /* PBXContainerItemProxy */;
 		};
 		E536DCDF1C6510FD00A7B2FC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = E536DCBA1C6510FC00A7B2FC /* Alan Touring */;
+			target = E536DCBA1C6510FC00A7B2FC /* Tourable */;
 			targetProxy = E536DCDE1C6510FD00A7B2FC /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -605,7 +605,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E536DCB61C6510FC00A7B2FC /* Build configuration list for PBXProject "Alan Touring" */ = {
+		E536DCB61C6510FC00A7B2FC /* Build configuration list for PBXProject "Tourable" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E536DCE41C6510FD00A7B2FC /* Debug */,
@@ -614,7 +614,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E536DCE61C6510FD00A7B2FC /* Build configuration list for PBXNativeTarget "Alan Touring" */ = {
+		E536DCE61C6510FD00A7B2FC /* Build configuration list for PBXNativeTarget "Tourable" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E536DCE71C6510FD00A7B2FC /* Debug */,

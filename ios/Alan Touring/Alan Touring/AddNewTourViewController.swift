@@ -27,7 +27,6 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
     
     
     override func viewDidLoad() {
-        
         //Adds the observers for image downloading, alowing progress bar to be updated.
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedDownloading", name: beginDownloadKey, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedFinishedDownloading", name: endDownloadKey, object: nil)

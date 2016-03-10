@@ -89,7 +89,6 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
     func previousPOI(){
         
         let Z = POIList.indexOf(poiID)!
-        //print(Z)
         
         poiID = (POIList as! NSArray)[Z - 1] as! String
         let subViews = scrollView.subviews
@@ -103,7 +102,6 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
     func nextPOI(){
         
         let Z = POIList.indexOf(poiID)!
-        //print(Z)
         
         poiID = (POIList as! NSArray)[Z + 1] as! String
         let subViews = scrollView.subviews
@@ -298,7 +296,6 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
     func playVideo(videoUrl: String, loop: Bool) throws {
         //path of video to play
         let path = videoHandler.sharedInstance.loadVideoPath(videoUrl)
-        print("this is the path \(path)")
         //Create a new player with the path given to it.
         self.player = AVPlayer(URL: path!)
         //create a new fullscreen controller for the video
@@ -315,8 +312,6 @@ class PointViewController: UIViewController, UIScrollViewDelegate {
     }
     //Loop the video when this is notified by the player.
     func playerDidFinishPlaying() {
-        // Your code here
-        print("VIDEO FINISHED")
        
             //Defines the start of the video and sets the video back there.
             let restartTime : Int64 = 0

@@ -17,9 +17,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
-        
+        UIApplication.sharedApplication().statusBarStyle = .LightContent
         self.window?.backgroundColor = UIColor.whiteColor()
-        
+        UINavigationBar.appearance().barTintColor = UIColor(red: 234.0/255.0, green: 46.0/255.0, blue: 73.0/255.0, alpha: 1.0)
+        UINavigationBar.appearance().tintColor = UIColor.whiteColor()
+        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName : UIColor.whiteColor()]
         if(NSUserDefaults.standardUserDefaults().objectForKey("POIList")==nil){
             let newArray = [String]()
             //Stores the Array in NSUserDefaults, overwriting existing copy
@@ -48,7 +50,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 print("An Error was generated creating directory")
             }
         }
-
+        UINavigationBar.appearance().setBackgroundImage(UIImage(), forBarPosition: .Any, barMetrics: .Default)
+        UINavigationBar.appearance().shadowImage = UIImage()
         
         return true
     }

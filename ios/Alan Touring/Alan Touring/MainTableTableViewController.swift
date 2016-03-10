@@ -11,35 +11,32 @@ import Foundation
 
 
 class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
-    
    
     var models = NSMutableArray()
     var tourParser = TourIdParser()
     
+    @IBOutlet weak var addTourButton: UIButton!
+    @IBOutlet weak var addTourButtonView: UIView!
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         models = tourParser.getAllTours()
-        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "Notified", name: TableUpdateNotificationKey, object: nil)
-    
         self.clearsSelectionOnViewWillAppear = false
-        
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
-
-
         checkStateOfScreen()
         //TODO remove this, for demo use only
         let connection: Bool = ApiConnector.sharedInstance.isConnectedToNetwork()
         print("internet connection status: \(connection)")
         checkToursToDelete()
+        tableView.tableFooterView = addTourButtonView
+        tableView.contentInset = UIEdgeInsetsMake(50, 0, 0, 0)
+        
     }
     
     //to check if should be emptry screen when cancelling a tour download
     override func viewWillAppear(animated: Bool) {
         //makes sure Tool bar is visible again after coming back from Tour
-        self.navigationController?.setToolbarHidden(false, animated: false)
+        self.navigationController?.setToolbarHidden(true, animated: false)
         checkStateOfScreen()
     }
 
@@ -84,18 +81,28 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
 
     // a function to tell change the background image when loading the app AND when deleting a cell results in no tours left
     func checkStateOfScreen(){
+         tableView.rowHeight = 60.0
         if models.count == 0 {
             let  empty_state_image = UIImage(named: "empty_tv_placeholder")
             let empty_state_label = UIImageView(image: empty_state_image)
             empty_state_label.contentMode = .ScaleAspectFit
             
             // style it as necessary
-            
             tableView.backgroundView = empty_state_label
             tableView.separatorStyle = UITableViewCellSeparatorStyle.None
+            addTourButtonView.frame = CGRectMake(0 , 0, self.view.frame.width, self.view.frame.height * 0.7)
+            let empty_state_button_UI = UIImage(named: "empty_state_button")
+            addTourButton.setBackgroundImage(empty_state_button_UI, forState: .Normal)
+            addTourButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+            self.view.backgroundColor = UIColor(red: 7/255, green: 62/255, blue: 117/255, alpha: 1.0)
         } else {
             tableView.backgroundView = nil
             tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
+             addTourButtonView.frame = CGRectMake(0 , 0, self.view.frame.width, self.view.frame.height*0.8-tableView.bounds.height)
+            let add_button_UI = UIImage(named: "generic_button")
+            addTourButton.setBackgroundImage(add_button_UI, forState: .Normal)
+            addTourButton.setTitleColor(UIColor(red: 7/255, green: 62/255, blue: 117/255, alpha: 1.0), forState: .Normal)
+            self.view.backgroundColor = UIColor.groupTableViewBackgroundColor()
         }
         
     }
@@ -103,12 +110,13 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     @IBAction func cancelToAddNewTourController(segue:UIStoryboardSegue) {
     }
 
+    @IBAction func addTourPressed(sender: AnyObject) {
+        showTourKeyAlert()
+        
+    }
     @IBAction func saveTourDetail(segue:UIStoryboardSegue) {
-        
         self.models = self.tourParser.getAllTours()
-        
         tableView.reloadData()
-        //lastAddedCell = tableView.cellForRowAtIndexPath(NSIndexPath(index: tableView.numberOfRowsInSection(0)-1))!
     }
     
     @objc func TableChanged(notification: NSNotification){
@@ -116,17 +124,14 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     }
     
     @IBAction func plussPressed(sender: UIBarButtonItem) {
-        showTourKeyAlert()
+        
     }
     
     // triggerd in ViewDidLoad, it iterates the list of tours and deletes the outdated one.
     func checkToursToDelete() {
-        var tourManager: TourUpdateManager
-        
         for var indexRow = 0; indexRow < models.count; indexRow++ {
-            print(models[indexRow])
-            tourManager = TourUpdateManager.init(tourCodetoCheck: models[indexRow] as! String, tableRow: indexRow)
-            tourManager.checkIfOutdatedAndDeleteProject()
+            TourUpdateManager.sharedInstance.getCurrentData(models[indexRow] as! String, tableRow: indexRow)
+            TourUpdateManager.sharedInstance.checkIfOutdatedAndDeleteProject()
         }
     }
 
@@ -135,8 +140,10 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     func showTourKeyAlert(){
         let alert = UIAlertView(title: "Add New Tour", message: "Enter the key you have recieved", delegate: self, cancelButtonTitle:"Cancel")
         alert.alertViewStyle = UIAlertViewStyle.PlainTextInput
+        
         alert.addButtonWithTitle("Add")
         let textField = alert.textFieldAtIndex(0)
+        textField?.keyboardAppearance = UIKeyboardAppearance.Alert
         textField!.placeholder = "Enter Tour ID"
         alert.show()
     }
@@ -157,7 +164,6 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
                     AlertViewBuilder.sharedInstance.showWarningAlert("Tour Add Error", message: "A tour with that key already exists")
                 }else{
                     if ApiConnector.sharedInstance.isConnectedToNetwork(){
-                        print("\(ApiConnector.sharedInstance.isConnectedToNetwork()) network status")
                     //Tour does not exist. Procede.
                     ApiConnector.sharedInstance.initateConnection(Field!.text!, isCheckingForUpdate: false)
                     // goes to the AddNewTourPage
@@ -173,14 +179,6 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
             default: print("This is here because Swift")
         }
     }
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
 
    //Deletes data from the table and updates the cache to reflect his.
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -199,23 +197,6 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         }    
     }
 
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation

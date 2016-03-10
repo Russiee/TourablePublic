@@ -63,7 +63,6 @@ public class TourDeleter {
             //print(keys)
             for value in keys{
                 if value as! String == "pois"{
-                    print("poi reached")
                     let POIS = subsection["pois"] as! NSArray
                     for pois in POIS{
                         objectIDs.append(pois["objectId"] as! String)
@@ -85,11 +84,9 @@ public class TourDeleter {
         do{
             //try executing the delete and report on its success.
             try  NSFileManager.defaultManager().removeItemAtPath(path)
-            print("delete success")
             return true
         }
         catch{
-            print("delete fail")
             return false
         }
         
@@ -123,7 +120,6 @@ public class TourDeleter {
             let keys = subsection.allKeys
             for value in keys{
                 if value as! String == "pois"{
-                    print("poi reached")
                     let POIS = subsection["pois"] as! NSArray
                     for pois in POIS{
                         let post = pois["post"] as! NSArray
@@ -144,7 +140,6 @@ public class TourDeleter {
                 }
             }
         }
-        //print(mediaURLS)
     }
     
 }
