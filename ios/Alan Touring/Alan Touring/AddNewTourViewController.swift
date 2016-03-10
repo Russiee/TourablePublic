@@ -18,8 +18,6 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
     
     @IBOutlet weak var busyWheel: UIActivityIndicatorView!
     @IBOutlet weak var ProgressBar: UIProgressView!
-    @IBOutlet weak var saveTourButton: UIButton!
-    @IBOutlet weak var DownloadTypeChooser: UISegmentedControl!
     @IBOutlet weak var tourTitleLabel: UILabel!
     @IBOutlet weak var downloadStatusLabel: UILabel!
     @IBOutlet weak var tourDescriptionLabel: UILabel!
@@ -60,10 +58,10 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
         //I.e progess = 100%
         if progress == 1.0{
             //Allow user to leave page, hide download status
-            saveTourButton.enabled = true
-            saveTourButton.setTitle("Save Tour", forState: .Normal)
             downloadStatusLabel.hidden = true
+            self.dismissViewControllerAnimated(true, completion: nil)
         }
+        
     }
     
     //a method to allow the user to cancel the data download and return to the main table view
@@ -124,8 +122,6 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
     //Visibility:True = hides all items
     func hideButtonsForBusyWheel(visibility: Bool){
         tourTitleLabel.hidden = visibility
-        DownloadTypeChooser.hidden = visibility
-        saveTourButton.hidden = visibility
         ProgressBar.hidden = visibility
         downloadStatusLabel.hidden = visibility
         tourDescriptionLabel.hidden = visibility
