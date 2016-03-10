@@ -89,8 +89,8 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
             addTourButton.setBackgroundImage(empty_state_button_UI, forState: .Normal)
             addTourButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
             self.view.backgroundColor = UIColor(red: 7/255, green: 62/255, blue: 117/255, alpha: 1.0)
-            addTourButton.layer.cornerRadius = 3
-            addTourButton.layer.borderWidth = 1
+           // addTourButton.layer.cornerRadius = 3
+           // addTourButton.layer.borderWidth = 1
             let  empty_state_image = UIImage(named: "empty_tv_placeholder")
             let empty_state_label = UIImageView(image: empty_state_image)
             empty_state_label.contentMode = .ScaleAspectFit
@@ -102,8 +102,8 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
             let add_button_UI = UIImage(named: "generic_button")
             addTourButton.setBackgroundImage(add_button_UI, forState: .Normal)
             addTourButton.setTitleColor(UIColor(red: 7/255, green: 62/255, blue: 117/255, alpha: 1.0), forState: .Normal)
-            addTourButton.layer.cornerRadius = 3
-            addTourButton.layer.borderWidth = 1
+           // addTourButton.layer.cornerRadius = 3
+            //addTourButton.layer.borderWidth = 1
             self.view.backgroundColor = UIColor.groupTableViewBackgroundColor()
             tableView.backgroundView = nil
             tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
