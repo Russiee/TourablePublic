@@ -32,9 +32,7 @@ public class DownloadTourTask extends Thread {
     public static final String STATE = "downloadState";
     public static final String PROGRESS = "downloadProgress";
 
-    public static final String IMAGE_ONLY_PATTERN = "https?:\\/\\/[\\w\\d\\.\\/]*\\.(jpe?g|png)";
-    public static final String VIDEO_ONLY_PATTERN = "https?:\\/\\/[\\w\\d\\.\\/]*\\.(mp4)";
-    public static final String FILE_NAME_PATTERN = "https?:\\/\\/[\\w\\.\\/]*\\/(\\w*\\.(jpe?g|png|mp4))";
+    public static final String FILE_NAME_PATTERN = "https?:\\/\\/[-\\w\\.\\/]*\\/([\\p{Punct}\\w]*\\.(jpe?g|png|mp4))";
 
     private String keyID;
     private String tourID;
@@ -60,33 +58,21 @@ public class DownloadTourTask extends Thread {
     public void run() {
         String bundleString = ServerAPI.getBundleString(tourID);
 
-        // use pattern matcher to extract URLs
-        Matcher imageMatcher = Pattern.compile(IMAGE_ONLY_PATTERN).matcher(bundleString);
+        // on a separate thread, save the bundle and POI JSON
+        BundleSaver bundleSaver = new BundleSaver(App.context, bundleString, keyID);
+        bundleSaver.start();
+
+        try {
+            bundleSaver.join();
+        } catch (InterruptedException e) {
+            Log.e(TAG, e.getMessage());
+        }
 
         // used to separate the file name and extension from the rest of the URL
         Pattern namePattern = Pattern.compile(FILE_NAME_PATTERN);
 
-        // add URLs to a Set to prevent downloading duplicates
-        HashSet<String> imageURLs = new HashSet<>();
-        HashSet<String> videoURLs = new HashSet<>(); // won't necessarily be used
-
-        while (imageMatcher.find()) {
-            imageURLs.add(imageMatcher.group());
-        }
-
-        // same for video
-        if (getVideo) {
-            videoURLs.add("https://archive.org/download/ksnn_compilation_master_the_internet/ksnn_compilation_master_the_internet_512kb.mp4");
-            Matcher videoMatcher = Pattern.compile(VIDEO_ONLY_PATTERN).matcher(bundleString);
-
-            while (videoMatcher.find()) {
-                videoURLs.add(videoMatcher.group());
-            }
-        }
-
-        // on a separate thread, save the bundle and POI JSON
-        BundleSaver bundleSaver = new BundleSaver(App.context, bundleString, keyID);
-        bundleSaver.start();
+        HashSet<String> imageURLs = bundleSaver.getImageURLs();
+        HashSet<String> videoURLs = bundleSaver.getVideoURLs();
 
         float total = (float) imageURLs.size() + 2 * videoURLs.size(); // make video files fill more progress
         float count = 0.0f;
@@ -94,13 +80,12 @@ public class DownloadTourTask extends Thread {
         for (Iterator<String> i = imageURLs.iterator(); i.hasNext(); ) {
             String urlString = i.next();
             Matcher m = namePattern.matcher(urlString);
-            String img = "hello.jpg";
 
             if (m.matches()) {
-                img = m.group(1);
+                String img = m.group(1);
+                saveFile(urlString, img, "image", 8192);
             }
 
-            saveFile(urlString, img, "image", 8192);
             informActivity(++count / total);
         }
 
@@ -108,13 +93,12 @@ public class DownloadTourTask extends Thread {
             for (Iterator<String> i = videoURLs.iterator(); i.hasNext(); ) {
                 String urlString = i.next();
                 Matcher m = namePattern.matcher(urlString);
-                String img = "hello.mp4";
 
                 if (m.matches()) {
-                    img = m.group(1);
+                    String img = m.group(1);
+                    saveFile(urlString, img, "video", 8192); // TODO figure out if there's ever a reason to use bigger than 8192
                 }
 
-                saveFile(urlString, img, "video", 8192); // TODO figure out if there's ever a reason to use bigger than 8192
                 count += 2;
                 informActivity(count / total);
             }
