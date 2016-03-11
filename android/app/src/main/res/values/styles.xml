@@ -30,6 +30,16 @@
         <item name="android:fontFamily">"sans-serif-thin"</item>
     </style>
 
+
+    <style name="summaryScreen" parent="Theme.AppCompat.Light.NoActionBar">
+         <item name="android:textColor">@color/colorDarkText</item>
+    </style>
+
+    <style name="summaryScreenTitle" parent="summaryScreen">
+        <item name="android:textSize">20sp</item>
+         <item name="android:textColor">@color/colorDarkText</item>
+    </style>
+
     <!-- DownloadActivity tour title-->
     <style name="TourTitle" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:textSize">20sp</item>
