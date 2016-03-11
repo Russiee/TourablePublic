@@ -114,7 +114,7 @@ public class DownloadActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         // leaving a database instance open across activities is BAD!!
-        TourDBManager.getInstance(this).close();
+        TourDBManager.getInstance(getApplicationContext()).close();
 
         super.onPause();
     }
@@ -243,7 +243,7 @@ public class DownloadActivity extends AppCompatActivity {
      * Creates a enw entry in the local db for a newly downloaded tour.
      */
     private void addTourToDB() {
-        TourDBManager dbHelper = TourDBManager.getInstance(this);
+        TourDBManager dbHelper = TourDBManager.getInstance(getApplicationContext());
 
         String name = "empty";
         String createdAt = "";

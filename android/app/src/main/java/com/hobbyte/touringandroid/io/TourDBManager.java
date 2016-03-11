@@ -40,6 +40,7 @@ public class TourDBManager extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "TourData.db";
 
     public static final String dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS";
+//    public static final String dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
     private static TourDBManager tdbmInstance;
     private SQLiteDatabase db;
@@ -74,9 +75,14 @@ public class TourDBManager extends SQLiteOpenHelper {
         DATABASE METHODS
      =============================================*/
 
+    /**
+     * Returns the Singleton instance of this class, through which the database can be queried.
+     * For the Context parameter, please use {@link Activity#getApplicationContext()} or
+     * {@link com.hobbyte.touringandroid.App#context} instead of an Activity instance.
+     */
     public static synchronized TourDBManager getInstance(Context context) {
         if (tdbmInstance == null) {
-            tdbmInstance = new TourDBManager(context.getApplicationContext());
+            tdbmInstance = new TourDBManager(context);
         }
 
         return tdbmInstance;

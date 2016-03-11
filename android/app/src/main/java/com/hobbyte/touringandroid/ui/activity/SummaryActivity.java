@@ -75,7 +75,7 @@ public class SummaryActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         // leaving a database instance open across activities is BAD!!
-        TourDBManager.getInstance(this).close();
+        TourDBManager.getInstance(getApplicationContext()).close();
 
         super.onPause();
     }
