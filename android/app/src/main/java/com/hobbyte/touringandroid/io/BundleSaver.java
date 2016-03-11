@@ -7,6 +7,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashSet;
+import java.util.regex.Pattern;
+
 /**
  * Extracts all information from the bundle that is needed to create a tour structure. The bundle
  * is saved in an altered format, where each key is a section objectId. The keys point to a
@@ -57,6 +60,9 @@ public class BundleSaver extends Thread {
     private JSONObject json;
     private Context context;
 
+    private HashSet<String> imageURLs = new HashSet<>();
+    private HashSet<String> videoURLs = new HashSet<>();
+
     public BundleSaver(Context c, String bundleString, String keyid) {
         context = c;
         bundle = bundleString;
@@ -86,11 +92,6 @@ public class BundleSaver extends Thread {
                 for (int i = 0; i < depthZeroCount; ++i) {
                     String objectId = sections.getJSONObject(i).getString("objectId");
                     topSections.put(i, objectId);
-//                    JSONObject o = new JSONObject();
-//                    o.put("objectId", sections.getJSONObject(i).getString("objectId"));
-//                    o.put("title", sections.getJSONObject(i).getString("title"));
-//
-//                    topSections.put(i, o);
                 }
 
                 tourRoot.put("subsections", topSections);
@@ -113,6 +114,21 @@ public class BundleSaver extends Thread {
         } catch (JSONException je) {
             je.printStackTrace();
         }
+    }
+
+    /**
+     * @return all image URLs in the bundle JSON
+     */
+    public HashSet<String> getImageURLs() {
+        return imageURLs;
+    }
+
+    /**
+     *
+     * @return all video URLs in the bundle JSON
+     */
+    public HashSet<String> getVideoURLs() {
+        return videoURLs;
     }
 
     /**
@@ -175,12 +191,6 @@ public class BundleSaver extends Thread {
 
                 String objectId = subsection.getString("objectId");
                 array.put(i, objectId);
-
-                /*JSONObject o = new JSONObject();
-
-                o.put("objectId", subsection.getString("objectId"));
-                o.put("title", subsection.getString("title"));
-                array.put(i, o);*/
             }
 
             return array;
@@ -209,6 +219,7 @@ public class BundleSaver extends Thread {
                 o.put("title", poi.getString("title"));
                 array.put(i, o);
 
+                addURLs(poi.getJSONArray("post"));
                 FileManager.saveJSON(context, poi, keyID, String.format("poi/%s", id));
             }
 
@@ -217,5 +228,31 @@ public class BundleSaver extends Thread {
             je.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * Extracts the URLs from the "post" segment of a POI, and adds them to a Set to be used later
+     * in DownloadTourTask.
+     */
+    private void addURLs(JSONArray array) {
+        for (int i = 0; i < array.length(); ++i) {
+            try {
+                JSONObject postItem = array.getJSONObject(i);
+
+                if (postItem.has("url")) {
+                    String type = postItem.getString("type");
+                    String url = postItem.getString("url");
+
+                    if (type.equals("image")) {
+                        imageURLs.add(url);
+                    } else if (type.equals("video")) {
+                        videoURLs.add(url);
+                    }
+                }
+            } catch (JSONException je) {
+                je.printStackTrace();
+            }
+
+        }
     }
 }
