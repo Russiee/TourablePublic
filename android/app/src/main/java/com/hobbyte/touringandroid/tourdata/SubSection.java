@@ -98,6 +98,11 @@ public class SubSection extends TourItem implements Parcelable {
         return title;
     }
 
+    /**
+     * Checks for equality between two SubSection objects. Note that this <b>does not</b> check for
+     * equality between {@link #contents}. This is intentional, and done because implementing
+     * {@link Parcelable} on an abstract class is a) hard and b) not needed for our purposes.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -105,8 +110,7 @@ public class SubSection extends TourItem implements Parcelable {
 
         SubSection s = (SubSection) o;
 
-        // TODO: it's the `contents` that causes this to fail. Investigate
-        if (!objectID.equals(s.objectID) || !title.equals(s.title) || contents != s.contents ||
+        if (!objectID.equals(s.objectID) || !title.equals(s.title) ||
                 numSubSections != s.numSubSections || parent != s.parent) {
             return false;
         }
