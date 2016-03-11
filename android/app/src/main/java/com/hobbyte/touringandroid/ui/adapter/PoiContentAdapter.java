@@ -9,10 +9,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hobbyte.touringandroid.App;
+import com.hobbyte.touringandroid.io.DownloadTourTask;
 import com.hobbyte.touringandroid.tourdata.ListViewItem;
 import com.hobbyte.touringandroid.internet.LoadImageFromURL;
 import com.hobbyte.touringandroid.R;
-import com.hobbyte.touringandroid.ui.activity.StartActivity;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Nikita
@@ -20,8 +23,12 @@ import com.hobbyte.touringandroid.ui.activity.StartActivity;
 public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
     private static final String TAG = "PoiContentAdapter";
 
-    public static final int TEXT = 0;
-    public static final int IMG = 1;
+    public static final int HEADER = 0;
+    public static final int BODY = 1;
+    public static final int IMAGE = 2;
+    public static final int VIDEO = 3;
+
+    private static Pattern namePattern;
 
     private ListViewItem[] items;
 
@@ -41,6 +48,7 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
         super(context, 0, content);
         this.keyID = keyID;
         items = content;
+        namePattern = Pattern.compile(DownloadTourTask.FILE_NAME_PATTERN);
     }
 
     /**
@@ -54,18 +62,28 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
     public View getView(int position, View view, ViewGroup parent) {
         ListViewItem listViewItem = items[position];
         int listViewItemType = getItemViewType(position);
+        String url = "";
+
+        if (listViewItem.getUrl() != null) {
+            Matcher m = namePattern.matcher(listViewItem.getUrl());
+
+            if (m.matches()) {
+                url = m.group(1);
+            }
+        }
 
         if (view == null) {
-            if (listViewItemType == IMG) {
+            if (listViewItemType == IMAGE) {
                 view = LayoutInflater.from(getContext()).inflate(R.layout.poi_image, parent, false);
             } else {
                 view = LayoutInflater.from(getContext()).inflate(R.layout.poi_content, parent, false);
             }
         }
 
-        if (listViewItemType == IMG) {
+        if (listViewItemType == IMAGE) {
             ImageView imageView = (ImageView) view.findViewById(R.id.poiContentImageView);
-            new LoadImageFromURL(imageView, App.context).execute(listViewItem.getText(), keyID); //Load image in a separate thread
+
+            new LoadImageFromURL(imageView, App.context).execute(url, keyID); //Load image in a separate thread
             return view;
         } else {
             TextView contentView = (TextView) view.findViewById(R.id.poiContentTextView);

@@ -79,10 +79,12 @@ public class DownloadTourTask extends Thread {
 
         for (Iterator<String> i = imageURLs.iterator(); i.hasNext(); ) {
             String urlString = i.next();
+            Log.d(TAG, urlString);
             Matcher m = namePattern.matcher(urlString);
 
             if (m.matches()) {
                 String img = m.group(1);
+                Log.d(TAG, img);
                 saveFile(urlString, img, "image", 8192);
             }
 
