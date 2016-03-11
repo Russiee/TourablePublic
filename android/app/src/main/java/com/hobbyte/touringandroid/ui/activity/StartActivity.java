@@ -115,7 +115,7 @@ public class StartActivity extends AppCompatActivity {
             layout.addView(noToursText);
         } else {
             // fetches a cursor at position -1
-            Cursor c = dbHelper.getTours();
+            Cursor c = dbHelper.getTourDisplayInfo();
 
             Log.d(TAG, DatabaseUtils.dumpCursorToString(c)); // TODO remove this at some point
 
@@ -130,15 +130,16 @@ public class StartActivity extends AppCompatActivity {
                 RelativeLayout tour = (RelativeLayout) tourItem.findViewById(R.id.tourItem);
                 ImageView delete = (ImageView) tourItem.findViewById(R.id.deleteImage);
 
-                String name = c.getString(c.getColumnIndex(TourDBContract.TourList.COL_TOUR_NAME));
-                long expiryTime = c.getLong(c.getColumnIndex(TourDBContract.TourList.COL_DATE_EXPIRES_ON));
-                String expiryText = df.format(new Date(expiryTime));
-                final String keyID = c.getString(c.getColumnIndex(TourDBContract.TourList.COL_KEY_ID));
-                final String tourID = c.getString(c.getColumnIndex(TourDBContract.TourList.COL_TOUR_ID));
+                final String keyID = c.getString(0);
+                final String tourID = c.getString(1);
+                String name = c.getString(2);
+                long expiryTime = c.getLong(3);
+
                 tour.setTag(keyID);
-                Log.d(TAG, String.format("k: %s t: %s", keyID, tourID));
                 tourName.setText(name);
+                String expiryText = df.format(new Date(expiryTime));
                 expiryDate.setText(String.format("Expires %s", expiryText));
+
                 layout.addView(tourItem);
 
                 tour.setOnClickListener(new View.OnClickListener() {
