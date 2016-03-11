@@ -31,11 +31,12 @@
     </style>
 
 
-    <style name="summaryScreen" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="summaryScreen" parent="Theme.AppCompat.Light">
          <item name="android:textColor">@color/colorDarkText</item>
     </style>
 
     <style name="summaryScreenTitle" parent="summaryScreen">
+
         <item name="android:textSize">20sp</item>
          <item name="android:textColor">@color/colorDarkText</item>
     </style>
