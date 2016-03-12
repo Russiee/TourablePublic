@@ -15,9 +15,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /**
  * A simple {@link ListFragment} subclass.
  * Activities that contain this fragment must implement the
@@ -80,49 +77,41 @@ public class POIFragment extends ListFragment {
 
                 // TODO: all of this can go in a different class
                 listItems = new ListViewItem[post.length()];
-                Pattern p = Pattern.compile(FileManager.IMG_NAME);
 
                 for (int i = 0; i < post.length(); ++i) {
                     JSONObject item = post.getJSONObject(i);
+                    String text;
+                    String url;
                     int type;
-                    String text = "";
 
-                    String JSONtype = item.getString("type");
-
-                    switch (JSONtype) {
+                    switch (item.getString("type")) {
                         case "Header":
-                            type = PoiContentAdapter.HEADER;
                             text = item.getString("content");
+                            url = null;
+                            type = PoiContentAdapter.HEADER;
                             break;
                         case "body":
-                            type = PoiContentAdapter.BODY;
                             text = item.getString("content");
+                            url = null;
+                            type = PoiContentAdapter.BODY;
                             break;
                         case "image":
-                            type = PoiContentAdapter.IMG;
-                            Matcher m = p.matcher(item.getString("url"));
-
-                            if (m.matches()) {
-                                text = m.group(1);
-                            }
+                            text = item.getString("description");
+                            url = item.getString("url");
+                            type = PoiContentAdapter.IMAGE;
                             break;
-//                        case "video":
-//                            type = PoiContentAdapter.VIDEO;
-//                            Matcher ma = p.matcher(item.getString("url"));
-//
-//                            if (ma.matches()) {
-//                                text = ma.group(1);
-//                            }
-//                            break;
-                        case "quiz":
-                            type = PoiContentAdapter.QUIZ;
-                            text = "";
+                        case "video":
+                            text = item.getString("description");
+                            url = item.getString("url");
+                            type = PoiContentAdapter.VIDEO;
                             break;
                         default:
+                            text = "";
+                            url = null;
                             type = PoiContentAdapter.IGNORE_ITEM_VIEW_TYPE;
                     }
 
-                    listItems[i] = new ListViewItem(text, type);
+                    listItems[i] = new ListViewItem(text, type, url);
                 }
 
 
