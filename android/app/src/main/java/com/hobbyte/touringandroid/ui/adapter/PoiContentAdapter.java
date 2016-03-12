@@ -1,6 +1,8 @@
 package com.hobbyte.touringandroid.ui.adapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,12 +29,18 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
     public static final int BODY = 1;
     public static final int IMAGE = 2;
     public static final int VIDEO = 3;
+    public static final int QUIZ = 4;
 
     private static Pattern namePattern;
-
     private ListViewItem[] items;
 
     private String keyID;
+
+    public PoiContentAdapter(Context context, ListViewItem[] content, String keyID) {
+        super(context, 0, content);
+        this.keyID = keyID;
+        items = content;
+    }
 
     @Override
     public int getViewTypeCount() {
@@ -44,18 +52,12 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
         return items[position].getType();
     }
 
-    public PoiContentAdapter(Context context, ListViewItem[] content, String keyID) {
-        super(context, 0, content);
-        this.keyID = keyID;
-        items = content;
-        namePattern = Pattern.compile(DownloadTourTask.FILE_NAME_PATTERN);
-    }
-
     /**
      * Inflates a certain view depending on the type of ListViewItem (Normal text or Image URL)
+     *
      * @param position Position of item in the ItemList
-     * @param view View
-     * @param parent ParentView
+     * @param view     View
+     * @param parent   ParentView
      * @return the view in question
      */
     @Override
@@ -73,22 +75,48 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
         }
 
         if (view == null) {
-            if (listViewItemType == IMAGE) {
-                view = LayoutInflater.from(getContext()).inflate(R.layout.poi_image, parent, false);
-            } else {
-                view = LayoutInflater.from(getContext()).inflate(R.layout.poi_content, parent, false);
+            TextView contentView;
+
+            switch (listViewItemType) {
+
+                case HEADER:
+
+                    view = LayoutInflater.from(getContext()).inflate(R.layout.poi_content, parent, false);
+                    contentView = (TextView) view.findViewById(R.id.poiContentTextView);
+                    contentView.setTypeface(null, Typeface.BOLD);
+                    contentView.setText(listViewItem.getText() + "\n");
+
+                    return view;
+                case BODY:
+
+                    view = LayoutInflater.from(getContext()).inflate(R.layout.poi_content, parent, false);
+                    contentView = (TextView) view.findViewById(R.id.poiContentTextView);
+                    contentView.setText(listViewItem.getText() + "\n");
+
+                    return view;
+                case IMAGE:
+
+                    view = LayoutInflater.from(getContext()).inflate(R.layout.poi_image, parent, false);
+                    ImageView imageView = (ImageView) view.findViewById(R.id.poiContentImageView);
+                    new LoadImageFromURL(imageView, App.context).execute(listViewItem.getText(), keyID); //Load image in a separate thread
+
+                    return view;
+                case VIDEO:
+
+                    //break;
+                case QUIZ:
+
+                    //break;
+                default:
+                    Log.e(TAG, "Unknown type");
+                    view = LayoutInflater.from(getContext()).inflate(R.layout.poi_content, parent, false);
+                    contentView = (TextView) view.findViewById(R.id.poiContentTextView);
+                    contentView.setText("Error");
+
+                    return view;
             }
         }
 
-        if (listViewItemType == IMAGE) {
-            ImageView imageView = (ImageView) view.findViewById(R.id.poiContentImageView);
-
-            new LoadImageFromURL(imageView, App.context).execute(url, keyID); //Load image in a separate thread
-            return view;
-        } else {
-            TextView contentView = (TextView) view.findViewById(R.id.poiContentTextView);
-            contentView.setText(listViewItem.getText() + "\n");
-            return view;
-        }
+        return view;
     }
 }
