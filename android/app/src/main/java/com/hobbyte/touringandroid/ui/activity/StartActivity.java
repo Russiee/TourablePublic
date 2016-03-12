@@ -330,6 +330,7 @@ public class StartActivity extends AppCompatActivity {
 
             // if the server returns JSON, extract needed details
             if (keyJSON != null) {
+
                 String tourID;
                 String keyID;
                 String keyExpiryDate;
@@ -338,6 +339,11 @@ public class StartActivity extends AppCompatActivity {
                     tourID = keyJSON.getJSONObject("tour").getString("objectId");
                     keyID = keyJSON.getString("objectId");
                     keyExpiryDate = keyJSON.getString("expiresAt");
+
+                    FileManager.makeTourDirectories(keyID);
+                    FileManager.saveJSON(keyJSON, keyID, FileManager.KEY_JSON);
+                    Log.i(TAG, "KeyJSON saved");
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                     tourID = null;

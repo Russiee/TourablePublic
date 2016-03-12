@@ -38,14 +38,19 @@ public class SplashActivity extends AppCompatActivity {
     private class InitialisationTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
+
+            long appStartTime = System.currentTimeMillis();
+
             // TODO this doesn't check if key expiry dates have been updated
             UpdateChecker checker = new UpdateChecker(App.context);
 
             try {
+                checker.start();
                 checker.join();
-                // add a bit more time so if this process is really quick, it won't be
-                // an "immediate" change to the next activity, which feels a bit jarring
-                Thread.sleep(1000);
+
+                // makes it last at least one second, even if update takes less.
+                long timeToSleepFor = 1000 - (System.currentTimeMillis() - appStartTime);
+                Thread.sleep(timeToSleepFor < 0 ? 0 : timeToSleepFor);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

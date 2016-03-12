@@ -13,6 +13,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.StatFs;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -34,20 +35,15 @@ public class DownloadActivity extends AppCompatActivity {
 
     private static int IMAGES = 0;
     private static int VIDEO = 1;
-
+    private static ProgressHandler handler;
     private ProgressBar progressBar;
     private TextView bottomTextView;
-
     private TextView imageOptionCaptionEditText;
     private TextView videoOptionCaptionEditText;
     private TextView imageOptionSizeEditText;
     private TextView videoOptionSizeEditText;
-
     private Button downloadImagesButton;
     private Button downloadVideoButton;
-
-    private static ProgressHandler handler;
-
     private JSONObject tourJSON;
     private String keyID;
     private String tourID;
@@ -58,6 +54,7 @@ public class DownloadActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_download);
+
 
         SharedPreferences prefs = getSharedPreferences(
                 getString(R.string.preference_file_key),
@@ -74,7 +71,7 @@ public class DownloadActivity extends AppCompatActivity {
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setMax(100);
-//        bottomTextView = (TextView) findViewById(R.id.bottomText);
+        bottomTextView = (TextView) findViewById(R.id.bottomText);
 
         imageOptionCaptionEditText = (TextView) findViewById(R.id.imageOptionCaptionEditText);
         videoOptionCaptionEditText = (TextView) findViewById(R.id.videoOptionCaptionEditText);
@@ -90,10 +87,9 @@ public class DownloadActivity extends AppCompatActivity {
                 DownloadTourTask dThread = new DownloadTourTask(handler, keyID, tourID, false);
                 dThread.start();
 
-                progressBar.setVisibility(View.VISIBLE);
-
                 hasVideo = false;
-                changeUiAfterSelection("");
+                showProgressCard();
+                changeUiAfterSelection();
             }
         });
 
@@ -104,7 +100,9 @@ public class DownloadActivity extends AppCompatActivity {
                 dThread.start();
 
                 hasVideo = true;
-                changeUiAfterSelection(" & video");
+
+                showProgressCard();
+                changeUiAfterSelection();
             }
         });
 
@@ -120,15 +118,14 @@ public class DownloadActivity extends AppCompatActivity {
     }
 
     private void loadTourDescription() {
-        TextView txtTitle = (TextView) findViewById(R.id.txtTourTitle);
         TextView txtDescription = (TextView) findViewById(R.id.txtTourDescription);
 
         try {
-            txtTitle.setText(tourJSON.getString("title"));
+            ((Toolbar) findViewById(R.id.toolbar)).setTitle(tourJSON.getString("title"));
             txtDescription.setText(tourJSON.getString("description"));
         } catch (JSONException e) {
             e.printStackTrace();
-            txtTitle.setText("Error");
+            ((Toolbar) findViewById(R.id.toolbar)).setTitle("Error");
             txtDescription.setText("Error");
         }
     }
@@ -178,17 +175,22 @@ public class DownloadActivity extends AppCompatActivity {
         return statFs.getAvailableBlocksLong() * statFs.getBlockSizeLong();
     }
 
+    private void showProgressCard() {
+
+        (findViewById(R.id.downloadCard)).setVisibility(View.VISIBLE);
+        (findViewById(R.id.downloadLayout)).setVisibility(View.VISIBLE);
+        (findViewById(R.id.progressBar)).setVisibility(View.VISIBLE);
+        (findViewById(R.id.bottomText)).setVisibility(View.VISIBLE);
+
+    }
+
     /**
      * Changes the ui when a button is clicked so no more ui input can take place
-     *
-     * @param stuff what we are downloading
      */
-    private void changeUiAfterSelection(String stuff) {
+    private void changeUiAfterSelection() {
         downloadImagesButton.setEnabled(false);
         downloadVideoButton.setEnabled(false);
 
-        progressBar.setVisibility(View.VISIBLE);
-//        bottomTextView.setText(getResources().getString(R.string.download_activity_label));
     }
 
     private void updateProgress(float progress) {
@@ -196,10 +198,10 @@ public class DownloadActivity extends AppCompatActivity {
 
         progressBar.setProgress((int) progress);
 
-        /*bottomTextView.setText(String.format("%s%.1f%%",
+        bottomTextView.setText(String.format("%s%.1f%%",
                         getString(R.string.download_activity_label),
                         progress)
-        );*/
+        );
     }
 
     private void onDownloadFinished() {
@@ -265,29 +267,10 @@ public class DownloadActivity extends AppCompatActivity {
     }
 
     /**
-     * Downloads the JSON for a tour object on the server. It is used to get the tour title and
-     * description in this activity, plus in TourActivity.
-     */
-    private class FetchTourJSON extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... params) {
-            tourJSON = ServerAPI.getJSON(tourID, ServerAPI.TOUR);
-            FileManager.makeTourDirectories(getApplicationContext(), keyID);
-            FileManager.saveJSON(getApplicationContext(), tourJSON, keyID, FileManager.TOUR_JSON);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            loadTourDescription();
-        }
-    }
-
-    /**
      * Handles messages from a non-UI thread. In this case, it is used from a DownLoadTourThread to
      * notify the activity when progress is made with downloading tour media, and when the download
      * is finished.
-     * <p>
+     * <p/>
      * The use of static and a WeakReference are for preventing memory leaks (see
      * <a href="https://groups.google.com/forum/#!msg/android-developers/1aPZXZG6kWk/lIYDavGYn5UJ">
      * here</a>.
@@ -326,6 +309,24 @@ public class DownloadActivity extends AppCompatActivity {
                         break;
                 }
             }
+        }
+    }
+
+    /**
+     * Downloads the JSON for a tour object on the server. It is used to get the tour title and
+     * description in this activity, plus in TourActivity.
+     */
+    private class FetchTourJSON extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            tourJSON = ServerAPI.getJSON(tourID, ServerAPI.TOUR);
+            FileManager.saveJSON(getApplicationContext(), tourJSON, keyID, FileManager.TOUR_JSON);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            loadTourDescription();
         }
     }
 }

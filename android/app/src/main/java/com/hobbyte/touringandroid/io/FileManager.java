@@ -28,6 +28,7 @@ public class FileManager {
 
     public static final String TOUR_JSON = "tour";
     public static final String BUNDLE_JSON = "bundle";
+    public static final String KEY_JSON = "key";
 
 
     /**
@@ -46,7 +47,7 @@ public class FileManager {
      *
      * @param keyID    the keyID of the tour
      * @param filename the name of the file to be loaded
-     * @return a JSON preresentaion of the file
+     * @return a JSON representation of the file
      */
     public static JSONObject getJSON(Context context, String keyID, String filename) {
         Log.d(TAG, String.format("Loading JSON from %s/%s", keyID, filename));
@@ -79,7 +80,7 @@ public class FileManager {
      *
      * @param keyID the keyID of the tour. This is the unique identifier of the tour.
      */
-    public static void makeTourDirectories(Context context, String keyID) {
+    public static void makeTourDirectories(String keyID) {
 
         //...com.hobbyte.touring/files/
         File tourFolder = new File(App.context.getFilesDir(), keyID);

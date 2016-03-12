@@ -114,71 +114,40 @@
         android:orientation="vertical"
         android:layout_gravity="left"
         android:layout_weight="0.5"
-        android:background="#ffffff">
+        android:background="@color/colorPrimary">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="?android:attr/actionBarSize"
-            android:orientation="horizontal"
-            android:padding="18dp"
-            android:background="@color/colorPrimary">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/ic_menu_white_24dp"
-                android:tint="#ffffff" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="18dp"
-                android:paddingRight="18dp"
-                android:id="@+id/tourNameText"
-                android:textColor="#ffffff"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/divider" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/abc_action_bar_default_height_material"
             android:orientation="horizontal"
             android:id="@+id/homeLayout">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/ic_home_black_24dp"
-                android:tint="#757575"
-                android:layout_gravity="center_vertical"
-                android:padding="18dp"/>
+                android:src="@mipmap/ic_home_white"
+                android:layout_gravity="center_vertical" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="18dp"
-                android:paddingTop="18dp"
-                android:paddingRight="18dp"
-                android:textColor="@color/whiteText"
+                android:textColor="@color/colorWhiteText"
                 android:layout_gravity="center_vertical"
-                android:text="Home"/>
+                android:text="Home"
+                android:textStyle="bold"
+                android:textSize="18dp" />
 
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/divider" />
+            android:layout_height="wrap_content"
+            android:background="@color/colorTourElementDivider" />
 
         <ListView android:id="@+id/left_drawer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:choiceMode="singleChoice"
-            android:divider="@color/divider"
-            android:dividerHeight="1dp" />
+            android:headerDividersEnabled="false" />
     </LinearLayout>
 
 </android.support.v4.widget.DrawerLayout>
