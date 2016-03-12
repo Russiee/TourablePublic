@@ -11,11 +11,9 @@ import XCTest
 
 class TourUpdateManagerTests: XCTestCase {
 
-    
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
-        
     }
     
     override func tearDown() {
@@ -27,11 +25,13 @@ class TourUpdateManagerTests: XCTestCase {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
         let dateInString = "2016-02-24T12:32:06.952Z"
-        let date:NSDate = TourUpdateManager.sharedInstance.dateFromString(dateInString)
         let formatter = NSDateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'hh:mm:ss.SSSz"
+        formatter.dateFormat = "yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"
+       
+        let date = TourUpdateManager.sharedInstance.dateFromString(dateInString)
+
         let newDateInString = formatter.stringFromDate(date)
-        
+
         XCTAssertEqual(dateInString, newDateInString)
     }
 

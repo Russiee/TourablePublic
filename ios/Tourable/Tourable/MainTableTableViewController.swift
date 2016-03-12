@@ -27,7 +27,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         //TODO remove this, for demo use only
         let connection: Bool = ApiConnector.sharedInstance.isConnectedToNetwork()
         print("internet connection status: \(connection)")
-        // checkToursToDelete()
+        checkToursToDelete()
         tableView.tableFooterView = addTourButtonView
         tableView.contentInset = UIEdgeInsetsMake(50, 0, 0, 0)
         
@@ -135,8 +135,8 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     func checkToursToDelete() {
         for var indexRow = 0; indexRow < models.count; indexRow++ {
             TourUpdateManager.sharedInstance.getCurrentData(models[indexRow] as! String, tableRow: indexRow)
-            //Need to find a better way to do this, it is causing the tour to be downloaed twice.
-           // TourUpdateManager.sharedInstance.checkIfOutdatedAndDeleteProject()
+            // Need to find a better way to do this, it is causing the tour to be downloaed twice.
+            // TourUpdateManager.sharedInstance.checkIfOutdatedAndDeleteProject()
         }
     }
 

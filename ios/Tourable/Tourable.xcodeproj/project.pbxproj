@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		7A3988D01C849C1E006572E6 /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3988CF1C849C1E006572E6 /* Queue.swift */; };
 		7A432AB11C8B69AB007482F8 /* TourUpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A432AB01C8B69AB007482F8 /* TourUpdateManager.swift */; };
+		7A9118C81C945990008BF835 /* TourUpdateManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9118C71C945990008BF835 /* TourUpdateManagerTests.swift */; };
 		E5007F851C8B6ACA0041B31C /* TourDeleter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5007F841C8B6ACA0041B31C /* TourDeleter.swift */; };
 		E5012B8F1C8DDF3500A64038 /* POITableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5012B8E1C8DDF3500A64038 /* POITableViewController.swift */; };
 		E536DCBF1C6510FD00A7B2FC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E536DCBE1C6510FC00A7B2FC /* AppDelegate.swift */; };
@@ -16,7 +17,6 @@
 		E536DCC71C6510FD00A7B2FC /* Tourable.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E536DCC51C6510FD00A7B2FC /* Tourable.xcdatamodeld */; };
 		E536DCC91C6510FD00A7B2FC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E536DCC81C6510FD00A7B2FC /* Assets.xcassets */; };
 		E536DCCC1C6510FD00A7B2FC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E536DCCA1C6510FD00A7B2FC /* LaunchScreen.storyboard */; };
-		E536DCD71C6510FD00A7B2FC /* TourableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E536DCD61C6510FD00A7B2FC /* TourableTests.swift */; };
 		E536DCE21C6510FD00A7B2FC /* TourableUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E536DCE11C6510FD00A7B2FC /* TourableUITests.swift */; };
 		FA0A51701C772AAD00E4F733 /* bundleRouteConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0A516F1C772AAD00E4F733 /* bundleRouteConnector.swift */; };
 		FA0A51721C7747B400E4F733 /* tourSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0A51711C7747B400E4F733 /* tourSection.swift */; };
@@ -28,7 +28,6 @@
 		FA4D0F5F1C6A4D08007D79E3 /* TourIdParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4D0F5E1C6A4D08007D79E3 /* TourIdParser.swift */; };
 		FA4EBAC01C68CC1100E6E601 /* AddNewTourViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4EBABF1C68CC1100E6E601 /* AddNewTourViewController.swift */; };
 		FA56AD7B1C8C614B00F200B9 /* AlertViewBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56AD7A1C8C614B00F200B9 /* AlertViewBuilder.swift */; };
-		FA57DD201C6B7EDA002739FF /* DataCacheTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA57DD1F1C6B7EDA002739FF /* DataCacheTest.swift */; };
 		FA6FD5491C8A2D880033964F /* videoHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6FD5481C8A2D880033964F /* videoHandler.swift */; };
 		FA6FD54B1C8A2DCE0033964F /* MediaHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6FD54A1C8A2DCE0033964F /* MediaHelper.swift */; };
 		FA7936AC1C8A4C2B006AD406 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA7936AB1C8A4C2B006AD406 /* AVKit.framework */; };
@@ -46,20 +45,21 @@
 			containerPortal = E536DCB31C6510FC00A7B2FC /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = E536DCBA1C6510FC00A7B2FC;
-			remoteInfo = "Tourable";
+			remoteInfo = Tourable;
 		};
 		E536DCDE1C6510FD00A7B2FC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E536DCB31C6510FC00A7B2FC /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = E536DCBA1C6510FC00A7B2FC;
-			remoteInfo = "Tourable";
+			remoteInfo = Tourable;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		7A3988CF1C849C1E006572E6 /* Queue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Queue.swift; sourceTree = "<group>"; };
 		7A432AB01C8B69AB007482F8 /* TourUpdateManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TourUpdateManager.swift; sourceTree = "<group>"; };
+		7A9118C71C945990008BF835 /* TourUpdateManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TourUpdateManagerTests.swift; sourceTree = "<group>"; };
 		E5007F841C8B6ACA0041B31C /* TourDeleter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TourDeleter.swift; sourceTree = "<group>"; };
 		E5012B8E1C8DDF3500A64038 /* POITableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = POITableViewController.swift; sourceTree = "<group>"; };
 		E536DCBB1C6510FC00A7B2FC /* Tourable.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tourable.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -69,10 +69,9 @@
 		E536DCC81C6510FD00A7B2FC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E536DCCB1C6510FD00A7B2FC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E536DCCD1C6510FD00A7B2FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E536DCD21C6510FD00A7B2FC /* TourableTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "TourableTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		E536DCD61C6510FD00A7B2FC /* TourableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TourableTests.swift; sourceTree = "<group>"; };
+		E536DCD21C6510FD00A7B2FC /* TourableTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TourableTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E536DCD81C6510FD00A7B2FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E536DCDD1C6510FD00A7B2FC /* TourableUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "TourableUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E536DCDD1C6510FD00A7B2FC /* TourableUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TourableUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E536DCE11C6510FD00A7B2FC /* TourableUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TourableUITests.swift; sourceTree = "<group>"; };
 		E536DCE31C6510FD00A7B2FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FA0A516F1C772AAD00E4F733 /* bundleRouteConnector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = bundleRouteConnector.swift; sourceTree = "<group>"; };
@@ -85,7 +84,6 @@
 		FA4D0F5E1C6A4D08007D79E3 /* TourIdParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TourIdParser.swift; sourceTree = "<group>"; };
 		FA4EBABF1C68CC1100E6E601 /* AddNewTourViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNewTourViewController.swift; sourceTree = "<group>"; };
 		FA56AD7A1C8C614B00F200B9 /* AlertViewBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertViewBuilder.swift; sourceTree = "<group>"; };
-		FA57DD1F1C6B7EDA002739FF /* DataCacheTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataCacheTest.swift; sourceTree = "<group>"; };
 		FA6FD5481C8A2D880033964F /* videoHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = videoHandler.swift; sourceTree = "<group>"; };
 		FA6FD54A1C8A2DCE0033964F /* MediaHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaHelper.swift; sourceTree = "<group>"; };
 		FA7936AB1C8A4C2B006AD406 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
@@ -154,17 +152,16 @@
 				E536DCCD1C6510FD00A7B2FC /* Info.plist */,
 				E536DCC51C6510FD00A7B2FC /* Tourable.xcdatamodeld */,
 			);
-			path = "Tourable";
+			path = Tourable;
 			sourceTree = "<group>";
 		};
 		E536DCD51C6510FD00A7B2FC /* TourableTests */ = {
 			isa = PBXGroup;
 			children = (
-				E536DCD61C6510FD00A7B2FC /* TourableTests.swift */,
 				E536DCD81C6510FD00A7B2FC /* Info.plist */,
-				FA57DD1F1C6B7EDA002739FF /* DataCacheTest.swift */,
+				7A9118C71C945990008BF835 /* TourUpdateManagerTests.swift */,
 			);
-			path = "TourableTests";
+			path = TourableTests;
 			sourceTree = "<group>";
 		};
 		E536DCE01C6510FD00A7B2FC /* TourableUITests */ = {
@@ -173,7 +170,7 @@
 				E536DCE11C6510FD00A7B2FC /* TourableUITests.swift */,
 				E536DCE31C6510FD00A7B2FC /* Info.plist */,
 			);
-			path = "TourableUITests";
+			path = TourableUITests;
 			sourceTree = "<group>";
 		};
 		FA0A51751C774CD900E4F733 /* Model */ = {
@@ -246,7 +243,7 @@
 			dependencies = (
 			);
 			name = Tourable;
-			productName = "Tourable";
+			productName = Tourable;
 			productReference = E536DCBB1C6510FC00A7B2FC /* Tourable.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -263,8 +260,8 @@
 			dependencies = (
 				E536DCD41C6510FD00A7B2FC /* PBXTargetDependency */,
 			);
-			name = "TourableTests";
-			productName = "TourableTests";
+			name = TourableTests;
+			productName = TourableTests;
 			productReference = E536DCD21C6510FD00A7B2FC /* TourableTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
@@ -281,8 +278,8 @@
 			dependencies = (
 				E536DCDF1C6510FD00A7B2FC /* PBXTargetDependency */,
 			);
-			name = "TourableUITests";
-			productName = "TourableUITests";
+			name = TourableUITests;
+			productName = TourableUITests;
 			productReference = E536DCDD1C6510FD00A7B2FC /* TourableUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
@@ -395,8 +392,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FA57DD201C6B7EDA002739FF /* DataCacheTest.swift in Sources */,
-				E536DCD71C6510FD00A7B2FC /* TourableTests.swift in Sources */,
+				7A9118C81C945990008BF835 /* TourUpdateManagerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -535,7 +531,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
-				INFOPLIST_FILE = "Tourable/Info.plist";
+				INFOPLIST_FILE = Tourable/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Hobbyte.Tourable;
@@ -553,7 +549,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
-				INFOPLIST_FILE = "Tourable/Info.plist";
+				INFOPLIST_FILE = Tourable/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Hobbyte.Tourable;
@@ -566,10 +562,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				INFOPLIST_FILE = "TourableTests/Info.plist";
+				CLANG_ENABLE_MODULES = YES;
+				INFOPLIST_FILE = TourableTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Hobbyte.Alan-TouringTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Tourable.app/Tourable";
 			};
 			name = Debug;
@@ -578,7 +576,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				INFOPLIST_FILE = "TourableTests/Info.plist";
+				CLANG_ENABLE_MODULES = YES;
+				INFOPLIST_FILE = TourableTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Hobbyte.Alan-TouringTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -589,11 +588,11 @@
 		E536DCED1C6510FD00A7B2FC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = "TourableUITests/Info.plist";
+				INFOPLIST_FILE = TourableUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Hobbyte.Alan-TouringUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_TARGET_NAME = "Tourable";
+				TEST_TARGET_NAME = Tourable;
 				USES_XCTRUNNER = YES;
 			};
 			name = Debug;
@@ -601,11 +600,11 @@
 		E536DCEE1C6510FD00A7B2FC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = "TourableUITests/Info.plist";
+				INFOPLIST_FILE = TourableUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Hobbyte.Alan-TouringUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_TARGET_NAME = "Tourable";
+				TEST_TARGET_NAME = Tourable;
 				USES_XCTRUNNER = YES;
 			};
 			name = Release;

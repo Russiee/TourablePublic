@@ -32,21 +32,15 @@ public class TourUpdateManager {
 
 
    func getCurrentData(tourCodetoCheck: String, tableRow: Int) {
-        self.tourTableRow = tableRow
         self.tourCode = tourCodetoCheck
+        self.tourTableRow = tableRow
         self.currentMetadata = TourIdParser().getTourMetadata(tourCode)
-
-
-        downloadNewMetadata()
-        checkForUpdates()
-        //checkForOutdatedProject()
-
     }
 
     // download fresh metadata for the tour if there is internet connection
     func downloadNewMetadata() {
         if ApiConnector.sharedInstance.isConnectedToNetwork() {
-           ApiConnector.sharedInstance.initiateConnection(tourCode, isCheckingForUpdate: true)
+            ApiConnector.sharedInstance.initiateConnection(tourCode, isCheckingForUpdate: true)
             newMetadata = ApiConnector.sharedInstance.getTourMetadata(tourCode)
         }
     }
@@ -110,9 +104,13 @@ public class TourUpdateManager {
     
     // receive a string of format "yyyy-MM-dd'T'hh:mm:ss.SSSz" and returns an NSDate object
     func dateFromString(date: String) -> NSDate {
+        print("DAAAAAAATE", date)
         let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'hh:mm:ss.SSSz"
-        return dateFormatter.dateFromString(date)!
+        dateFormatter.formatterBehavior = .Behavior10_4
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"
+        let dateToReturn = dateFormatter.dateFromString(date)
+        print(dateToReturn)
+        return dateToReturn!
     }
     
     // trigger notification when there is an update avaiable
