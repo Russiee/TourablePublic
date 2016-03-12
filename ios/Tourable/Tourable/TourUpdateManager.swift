@@ -52,8 +52,8 @@ public class TourUpdateManager {
         
         if self.newMetadata != nil {
             
-            let currentDate = dateFromString(currentMetadata["updatedAt"] as! String)
-            let newDate = dateFromString(newMetadata["updatedAt"] as! String)
+            let currentDate = obtainDateFromString(currentMetadata["updatedAt"] as! String)
+            let newDate = obtainDateFromString(newMetadata["updatedAt"] as! String)
             
             let comparisonResultString = compareDates(currentDate, newDate: newDate)
             // check if the current date is less recent than the one in the metadata. If yes, ask the user to update tour.
@@ -75,11 +75,10 @@ public class TourUpdateManager {
         
         if self.newMetadata != nil {
             let todaysDate = NSDate()
-            let expiresDate = dateFromString(currentMetadata["expiresAt"] as! String)
+            let expiresDate = obtainDateFromString(currentMetadata["expiresAt"] as! String)
 
             let comparisonResulFromString = compareDates(todaysDate, newDate: expiresDate)
-            //if comparisonResulFromString == "descending" {
-            if false {
+            if comparisonResulFromString == "descending" {
                 print("today is \(todaysDate) and it is beyond expiry \(expiresDate). Therefore delete project")
                 TourDeleter().deleteTour(tourTableRow)
             } else if comparisonResulFromString == "same" {
@@ -103,7 +102,7 @@ public class TourUpdateManager {
     }
     
     // receive a string of format "yyyy-MM-dd'T'hh:mm:ss.SSSz" and returns an NSDate object
-    func dateFromString(date: String) -> NSDate {
+    func obtainDateFromString(date: String) -> NSDate {
         print("DAAAAAAATE", date)
         let dateFormatter = NSDateFormatter()
         dateFormatter.formatterBehavior = .Behavior10_4

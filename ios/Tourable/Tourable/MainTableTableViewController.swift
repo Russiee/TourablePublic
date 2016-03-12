@@ -136,7 +136,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         for var indexRow = 0; indexRow < models.count; indexRow++ {
             TourUpdateManager.sharedInstance.getCurrentData(models[indexRow] as! String, tableRow: indexRow)
             // Need to find a better way to do this, it is causing the tour to be downloaed twice.
-            // TourUpdateManager.sharedInstance.checkIfOutdatedAndDeleteProject()
+            TourUpdateManager.sharedInstance.checkIfOutdatedAndDeleteProject()
         }
     }
 
