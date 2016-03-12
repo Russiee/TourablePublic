@@ -94,7 +94,6 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
 
         if (view == null) {
             if (listViewItemType == IMAGE) {
-//                view = LayoutInflater.from(getContext()).inflate(R.layout.poi_content, parent, false);
                 view = LayoutInflater.from(getContext()).inflate(R.layout.poi_image, parent, false);
             } else if(listViewItemType == VIDEO) {
                 view = LayoutInflater.from(getContext()).inflate(R.layout.poi_video, parent, false);
@@ -200,8 +199,14 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
                 return view;
             case HEADER:
                 // TODO
+                if(view.findViewById(R.id.poiContentTextView) == null) {
+                    view = LayoutInflater.from(getContext()).inflate(R.layout.poi_content, parent, false);
+                }
                 contentView = (TextView) view.findViewById(R.id.poiContentTextView);
                 contentView.setText(listViewItem.getText() + "\n");
+                if(listViewItem.getText().length() == 0) {
+                    return new View(getContext());
+                }
                 return view;
             case BODY:
                 // TODO
