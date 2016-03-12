@@ -103,10 +103,6 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
 
         switch (listViewItemType) {
             case IMAGE:
-                /*contentView = (TextView) view.findViewById(R.id.poiContentTextView);
-                contentView.setText("An image should go here\n");
-                return view; */
-
                 ImageView imageView = (ImageView) view.findViewById(R.id.poiContentImageView);
                 TextView textView = (TextView) view.findViewById(R.id.poiContentImageDesc);
                 textView.setText(listViewItem.getText());
@@ -117,9 +113,6 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
                 return view;
 
             case VIDEO:
-                /*contentView = (TextView) view.findViewById(R.id.poiContentTextView);
-                contentView.setText("A video should go here\n");
-                return view;*/
                 final String filePath = getContext().getFilesDir() + "/" + String.format("%s/video/%s", keyID, filename);
                 textureView = (TextureView) view.findViewById(R.id.poiContentVideoView);
                 TextView videoDesc = (TextView) view.findViewById(R.id.poiContentVideoDesc);
