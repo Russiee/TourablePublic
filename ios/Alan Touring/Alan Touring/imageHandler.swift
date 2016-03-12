@@ -15,7 +15,6 @@ var countOfImages = 0;
 
 class imageHandler: NSObject {
     lazy var imageQueue = [String]()
-    lazy var imagesToDownload =  [String]()
     
     //making the TourIdParser a singleton to parse all tours from the API
     //in order to access TourIdParser methods call TourIdParser.shardInstance.METHOD()
@@ -131,6 +130,9 @@ class imageHandler: NSObject {
                 videoHandler.sharedInstance.downloadVideo(url)
             }
         }
+        
+        imageQueue.removeAll()
+        
     }
     
     
