@@ -241,7 +241,7 @@ class POITableViewController: UITableViewController {
                         //create TextView to store all our text
                         let text = UITextView(frame: CGRectMake(0, 0, width, 20 * lines))
                         //adds the "padding" you see on left and right hand side
-                        text.contentInset = UIEdgeInsetsMake(0, -16, 0, -16)
+                        text.contentInset = UIEdgeInsetsMake(0, 12, 0, 12)
                         //so Users cannot edit the tour text
                         text.editable = false
                         text.text = (row["description"] as! String)
@@ -291,11 +291,6 @@ class POITableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if poiViews[indexPath.row].isMemberOfClass(UIImageView){
-            let CurrentView = poiViews[indexPath.row] as! UIImageView
-            let image  = CurrentView.image!
-            
-        }
         return poiViews[indexPath.row].frame.height+10
     }
    

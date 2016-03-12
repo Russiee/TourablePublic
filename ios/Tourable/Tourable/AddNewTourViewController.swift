@@ -92,7 +92,7 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
         let alert = UIAlertController(title: "Tour Downloard", message: "Tour key is valid! You can now download this tour. If you download it without video you will need an internet connection during the tour.", preferredStyle: UIAlertControllerStyle.Alert)
         
         // add the actions (buttons)
-        alert.addAction(UIAlertAction(title: "Download without media (33kb)", style: UIAlertActionStyle.Default, handler: { action in
+        alert.addAction(UIAlertAction(title: "Download without media (Smaller)", style: UIAlertActionStyle.Default, handler: { action in
             imageHandler.sharedInstance.imageQueue = [String]()
             self.dismissViewControllerAnimated(true, completion: nil)
         }))
@@ -100,7 +100,7 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
             self.performSegueWithIdentifier("cancelAdd", sender: self)
             TourDeleter.sharedInstance.deleteTour(self.tourIndex!)
         }))
-        alert.addAction(UIAlertAction(title: "Download with media (15mb)", style: UIAlertActionStyle.Default, handler: { action in
+        alert.addAction(UIAlertAction(title: "Download with media (Larger)", style: UIAlertActionStyle.Default, handler: { action in
             imageHandler.sharedInstance.downloadMediaSet(imageHandler.sharedInstance.imageQueue)
             self.busyWheel.stopAnimating()
             self.hideButtonsForBusyWheel(false)
