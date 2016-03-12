@@ -17,6 +17,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/poiContentImageDesc"
         android:padding="7dp"
-        android:textColor="#000000"/>
+        android:textColor="#000000" />
 
 </LinearLayout>

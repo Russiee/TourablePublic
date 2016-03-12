@@ -3,8 +3,11 @@ package com.hobbyte.touringandroid.ui.adapter;
 import android.content.Context;
 import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.ThumbnailUtils;
+import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,8 +16,10 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.MediaController;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.hobbyte.touringandroid.App;
@@ -51,6 +56,15 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
 
     private TextureView textureView;
     private MediaPlayer player;
+    private AudioManager audio;
+
+    private ImageButton play;
+    private ImageButton replay;
+    private ImageButton mute;
+    private ImageButton max;
+    private SeekBar volume;
+
+    private String filePath;
 
     public PoiContentAdapter(Context context, ListViewItem[] content, String keyID) {
         super(context, 0, content);
@@ -115,87 +129,25 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
                 return view;
 
             case VIDEO:
-                final String filePath = getContext().getFilesDir() + "/" + String.format("%s/video/%s", keyID, filename);
+                filePath = getContext().getFilesDir() + "/" + String.format("%s/video/%s", keyID, filename);
                 textureView = (TextureView) view.findViewById(R.id.poiContentVideoView);
-                TextView videoDesc = (TextView) view.findViewById(R.id.poiContentVideoDesc);
-                videoDesc.setText(listViewItem.getText());
-                DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
+
+                DisplayMetrics metrics = App.context.getResources().getDisplayMetrics();
                 int height = metrics.heightPixels / 2;
                 int width = metrics.widthPixels;
                 textureView.setMinimumHeight(height);
                 textureView.setMinimumWidth(width);
 
-                textureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
-                    @Override
-                    public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-                        Surface s = new Surface(surface);
-                        try {
-                            if(player != null) {
-                                player.reset();
-                            } else {
-                                player = new MediaPlayer();
-                            }
-                            player.setDataSource(filePath);
-                            player.setSurface(s);
-                            player.prepareAsync();
-                            player.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
-                                @Override
-                                public void onBufferingUpdate(MediaPlayer mp, int percent) {
-                                    //Do nothing
-                                }
-                            });
-                            player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                                @Override
-                                public void onCompletion(MediaPlayer mp) {
-                                    //Do nothing
-                                }
-                            });
-                            player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                                @Override
-                                public void onPrepared(MediaPlayer mp) {
-                                    player.start();
-                                }
-                            });
-                            player.setOnVideoSizeChangedListener(new MediaPlayer.OnVideoSizeChangedListener() {
-                                @Override
-                                public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
-                                    //Do nothing
-                                }
-                            });
-                            player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                            player.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT);
-                        } catch (IllegalArgumentException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        } catch (SecurityException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        } catch (IllegalStateException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        }
-                    }
+                play = (ImageButton) view.findViewById(R.id.playButton);
+                replay = (ImageButton) view.findViewById(R.id.replayButtoon);
+                mute = (ImageButton) view.findViewById(R.id.muteButton);
+                max = (ImageButton) view.findViewById(R.id.maxVolButton);
+                volume = (SeekBar) view.findViewById(R.id.volumeControl);
+                audio = (AudioManager) App.context.getSystemService(Context.AUDIO_SERVICE);
 
-                    @Override
-                    public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-
-                    }
-
-                    @Override
-                    public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-                        player.stop();
-                        player.release();
-                        return true;
-                    }
-
-                    @Override
-                    public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-
-                    }
-                });
+                textureView.setSurfaceTextureListener(videoListener);
+                TextView videoDesc = (TextView) view.findViewById(R.id.poiContentVideoDesc);
+                videoDesc.setText(listViewItem.getText());
                 return view;
             case HEADER:
                 // TODO
@@ -218,45 +170,132 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
                 contentView.setText("Something went wrong\n");
                 return view;
         }
+    }
 
-        /*if (listViewItemType == IMAGE) {
-            ImageView imageView = (ImageView) view.findViewById(R.id.poiContentImageView);
+    private TextureView.SurfaceTextureListener videoListener = new TextureView.SurfaceTextureListener() {
+        @Override
+        public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+            Surface s = new Surface(surface);
+            try {
+                player = new MediaPlayer();
+                player.setDataSource(filePath);
+                player.setSurface(s);
+                player.prepareAsync();
+                player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                player.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT);
+                player.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
+                    @Override
+                    public void onBufferingUpdate(MediaPlayer mp, int percent) {
+                        //Do nothing
+                    }
+                });
+                player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        //Do nothing
+                    }
+                });
+                player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(final MediaPlayer mp) {
+                        play.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if(mp.isPlaying()) {
+                                    mp.pause();
+                                    play.setImageResource(R.mipmap.ic_play_arrow_white_36dp);
+                                } else {
+                                    mp.start();
+                                    play.setImageResource(R.mipmap.ic_pause_white_36dp);
+                                }
+                            }
+                        });
 
-            if (filename != null) {
-                new LoadImageFromURL(imageView, App.context).execute(filename, keyID); //Load image in a separate thread
+                        replay.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if(mp.isPlaying()) {
+                                    play.setImageResource(R.mipmap.ic_play_arrow_white_36dp);
+                                    mp.pause();
+                                    mp.seekTo(0);
+                                } else {
+                                    play.setImageResource(R.mipmap.ic_play_arrow_white_36dp);
+                                    mp.seekTo(1000);
+                                }
+                            }
+                        });
+                        mute.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                mp.setVolume(0.0f, 0.0f);
+                            }
+                        });
+                        max.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                mp.setVolume(1.0f, 1.0f);
+                            }
+                        });
+
+                        int maxVolume = audio.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+                        int currVolume = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
+                        volume.setMax(maxVolume);
+                        volume.setProgress(currVolume);
+                        volume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                            @Override
+                            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                                audio.setStreamVolume(AudioManager.STREAM_MUSIC, progress, 0);
+                            }
+
+                            @Override
+                            public void onStartTrackingTouch(SeekBar seekBar) {
+
+                            }
+
+                            @Override
+                            public void onStopTrackingTouch(SeekBar seekBar) {
+
+                            }
+                        });
+                    }
+                });
+
+                player.setOnVideoSizeChangedListener(new MediaPlayer.OnVideoSizeChangedListener() {
+                    @Override
+                    public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
+                        //Do nothing
+                    }
+                });
+            } catch (IllegalArgumentException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (SecurityException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IllegalStateException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
-            return view;
-        } else {
-            contentView = (TextView) view.findViewById(R.id.poiContentTextView);
-            contentView.setText(listViewItem.getText() + "\n");
-            return view;
-        }*/
-    }
-
-    private void adjustAspectRatio(int videoWidth, int videoHeight) {
-        int width = textureView.getWidth();
-        int height = textureView.getHeight();
-        double aspectRatio = (double) videoHeight / videoWidth;
-
-        int newWidth, newHeight;
-        if (height > (int) (width * aspectRatio)) {
-            // limited by narrow width; restrict height
-            newWidth = width;
-            newHeight = (int) (width * aspectRatio);
-        } else {
-            // limited by short height; restrict width
-            newWidth = (int) (height / aspectRatio);
-            newHeight = height;
         }
-        int x = (width - newWidth) / 2;
-        int y = (height - newHeight) / 2;
 
-        Matrix transform = new Matrix();
-        textureView.getTransform(transform);
-        transform.setScale((float) newWidth / width, (float) newHeight / height);
-        transform.postTranslate(x, y);
-        textureView.setTransform(transform);
-    }
+        @Override
+        public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
 
+        }
 
+        @Override
+        public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+            player.stop();
+            player.release();
+            return true;
+        }
+
+        @Override
+        public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+
+        }
+    };
 }
