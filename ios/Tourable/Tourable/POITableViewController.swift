@@ -12,8 +12,8 @@ import AVKit
 
 class POITableViewController: UITableViewController {
 
-    var poiID = ""
-    var superSectionID = ""
+    var poiID = "ZUiJcyXQyG"
+    var superSectionID = "xI21AHATXD"
     var POIList = [String]()
     var poiViews = [UIView]()
     var videoList = [NSURL]()
@@ -68,7 +68,6 @@ class POITableViewController: UITableViewController {
         self.tableView.clipsToBounds = true
         
         self.navigationController?.setToolbarHidden(false, animated: false)
-        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -128,8 +127,6 @@ class POITableViewController: UITableViewController {
         let width = UIScreen.mainScreen().bounds.size.width
         let height = UIScreen.mainScreen().bounds.size.height
         
-        var viewArray = [UIView]()
-        var headerArray = [UIView]()
         for row in post{
             
             let types = (row as! NSDictionary).allKeys as! [NSString]
@@ -137,115 +134,44 @@ class POITableViewController: UITableViewController {
                 switch row["type"] as! String{
                     
                 case "Header" :
-                    if viewArray.count == 0{
-                        //If the first item is an image
-                        let view1 = UIView(frame: CGRectMake(0, 0, width, 40))
                         
-                        let label = UILabel(frame: view1.bounds)
-                        label.font = label.font.fontWithSize(30)
+                        let label = UITextView(frame: CGRectMake(0, 0, width, 40))
+                        label.contentInset = UIEdgeInsetsMake(0, 8, 0, -16)
+                        label.editable = false
+                        label.font = UIFont.boldSystemFontOfSize(30)
                         label.text = (row["content"] as! String)
-                        label.sizeToFit()
-                        print("LOLOLOLOLOL \(label.frame.height)")
                         
+                        label.sizeToFit()
                         label.textAlignment = NSTextAlignment.Center
                         label.contentMode = .ScaleAspectFill
-                        label.center = view1.center
-                        view1.addSubview(label)
-                        
-                        viewArray.append(view1)
-                        headerArray.append(view1)
-                        view1.contentMode = .ScaleAspectFit
-                        view1.hidden = false
-                        view1.setNeedsDisplay()
                         poiViews.append(label)
                         
-                    } else {
-                        //for all subsequent images
-                        //Set the position of the image to start at the bottom of the last image + offset
-                        
-                        let view2 = UILabel(frame: CGRectMake(0, 0, width, 40))
-                        let label = UILabel(frame: view2.bounds)
-                        label.font = label.font.fontWithSize(30)
-                        label.text = (row["content"] as! String)
-                        
-                        label.textAlignment = NSTextAlignment.Center
-                        label.center = view2.center
-                        view2.addSubview(label)
-                        
-                        
-                        viewArray.append(view2)
-                        headerArray.append(view2)
-                        view2.contentMode = .ScaleAspectFit
-                        view2.hidden = false
-                        view2.setNeedsDisplay()
-                        view2.userInteractionEnabled = true
-                        poiViews.append(view2)
-                    }
                     
-                case "body":
-                    if viewArray.count == 0{
+                case "body" :
                         
                         let chars: CGFloat = CGFloat((row["content"] as! String).characters.count)
                         let lines: CGFloat = chars/30
-                        let view1 = UIView(frame: CGRectMake(0, 0, width, 25 * lines))
-                        let label = UILabel(frame: view1.bounds)
+                        let label = UITextView(frame: CGRectMake(0, 0, width, 25 * lines))
+                        label.contentInset = UIEdgeInsetsMake(0, 8, 0, -16)
+                        label.editable = false
+                        label.font = UIFont.systemFontOfSize(20)
                         label.text = (row["content"] as! String)
-                        //label.lineBreakMode = .ByWordWrapping // or NSLineBreakMode.ByWordWrapping
-                        label.numberOfLines = 0
-                        
-                        label.textAlignment = NSTextAlignment.Center
-                        label.center = view1.center
-                        view1.addSubview(label)
-                        
-                        viewArray.append(view1)
-                        headerArray.append(view1)
-                        view1.contentMode = .ScaleAspectFit
-                        view1.hidden = false
-                        view1.setNeedsDisplay()
+                       
                         poiViews.append(label)
                         
-                    } else {
-                        //for all subsequent images
-                        //Set the position of the image to start at the bottom of the last image + offset
-                        
-                        // TODO FIND A METHOD TO DO THIS BETTER
-                        let chars: CGFloat = CGFloat((row["content"] as! String).characters.count)
-                        let lines: CGFloat = chars/30
-                        let view2 = UILabel(frame: CGRectMake(0, 0, width, 25 * lines))
-                        let label = UILabel(frame: view2.frame)
-                        label.text = (row["content"] as! String)
-                        // label.lineBreakMode = .ByWordWrapping // or NSLineBreakMode.ByWordWrapping
-                        label.numberOfLines = 0
-                        
-                        label.textAlignment = NSTextAlignment.Center
-                        label.center = view2.center
-                        view2.addSubview(label)
-                        
-                        viewArray.append(view2)
-                        headerArray.append(view2)
-                        view2.contentMode = .ScaleAspectFit
-                        view2.hidden = false
-                        view2.setNeedsDisplay()
-                        poiViews.append(label)
-                        
-                    }
                     
                 case "image" :
 
                         var img: UIImage?
                         if let imageAtRow : String? = row["url"] as? String{
                             img = imageHandler.sharedInstance.loadImageFromPath(imageAtRow)
-                            //print("!!!!!!!!!!the loaded image \(row["url"])!!!!!!!!!!!!")
                     
                         } else {
                             img = UIImage()
                         }
                 
-                        if viewArray.count == 0{
-                            //If the first item is an image
                     
                             let imageView1 = UIImageView(frame: CGRectMake(0, 0, width, height/2))
-                            viewArray.append(imageView1)
                             imageView1.image = img
                             imageView1.contentMode = .ScaleAspectFit
                             imageView1.setNeedsDisplay()
@@ -253,54 +179,17 @@ class POITableViewController: UITableViewController {
                             
                             let chars: CGFloat = CGFloat((row["description"] as! String).characters.count)
                             let lines: CGFloat = chars/30
-                            let view2 = UILabel(frame: CGRectMake(0, 0, width-10, 35 * lines))
-                            let label = UILabel(frame: view2.frame)
+                            let label = UITextView(frame: CGRectMake(0, 0, width, 55 * lines))
+                            label.contentInset = UIEdgeInsetsMake(0, 8, 0, -16)
+                            label.editable = false
+                            label.font = UIFont.italicSystemFontOfSize(16)
                             label.text = (row["description"] as! String)
-                            // label.lineBreakMode = .ByWordWrapping // or NSLineBreakMode.ByWordWrapping
-                            label.numberOfLines = 0
+                        
                             
-                            label.textAlignment = NSTextAlignment.Left
-                            label.center = view2.center
-                            view2.addSubview(label)
-                            
-                            viewArray.append(view2)
-                            headerArray.append(view2)
-                            view2.contentMode = .ScaleAspectFit
-                            view2.hidden = false
-                            view2.setNeedsDisplay()
+                            label.contentMode = .ScaleAspectFit
                             poiViews.append(label)
-                        } else {
-                            //CLEAN
                     
-                            //for all subsequent images
-                            //Set the position of the image to start at the bottom of the last image + offset
                     
-                            let imageView2 = UIImageView(frame: CGRectMake(0, 0, width, height/2))
-                            viewArray.append(imageView2)
-                            imageView2.image = img
-                            imageView2.contentMode = .ScaleAspectFit
-                            imageView2.setNeedsDisplay()
-                            poiViews.append(imageView2)
-                            
-                            let chars: CGFloat = CGFloat((row["description"] as! String).characters.count)
-                            let lines: CGFloat = chars/30
-                            let view2 = UILabel(frame: CGRectMake(0, 0, width-10, 35 * lines))
-                            let label = UILabel(frame: view2.frame)
-                            label.text = (row["description"] as! String)
-                            // label.lineBreakMode = .ByWordWrapping // or NSLineBreakMode.ByWordWrapping
-                            label.numberOfLines = 0
-                            
-                            label.textAlignment = NSTextAlignment.Left
-                            label.center = view2.center
-                            view2.addSubview(label)
-                            
-                            viewArray.append(view2)
-                            headerArray.append(view2)
-                            view2.contentMode = .ScaleAspectFit
-                            view2.hidden = false
-                            view2.setNeedsDisplay()
-                            poiViews.append(label)
-                        }
                  case "video":
                     print("video m8")
                     var err: NSError? = nil
@@ -311,10 +200,9 @@ class POITableViewController: UITableViewController {
                         let imgGenerator = AVAssetImageGenerator(asset: asset)
                         let cgImage = try imgGenerator.copyCGImageAtTime(CMTimeMake(0, 1), actualTime: nil)
                         let uiImage = UIImage(CGImage: cgImage)
-                       // let imageView = UIImageView(image: uiImage)
+                        // let imageView = UIImageView(image: uiImage)
                         let imageView = UIImageView(frame: CGRectMake(0, 0, width, height/2))
                         imageView.userInteractionEnabled = true
-                        
 
                         recognizer.addTarget(self, action: "videoThumbnailTapped")
                         
@@ -322,29 +210,23 @@ class POITableViewController: UITableViewController {
                         imageView.addGestureRecognizer(recognizer)
                         
                         imageView.image = uiImage
-                        viewArray.append(imageView)
                         imageView.contentMode = .ScaleAspectFit
                         imageView.setNeedsDisplay()
                         poiViews.append(imageView)
                         
                         let chars: CGFloat = CGFloat((row["description"] as! String).characters.count)
                         let lines: CGFloat = chars/30
-                        let view2 = UILabel(frame: CGRectMake(0, 0, width-10, 35 * lines))
-                        let label = UILabel(frame: view2.frame)
-                        label.text = (row["description"] as! String)
-                        // label.lineBreakMode = .ByWordWrapping // or NSLineBreakMode.ByWordWrapping
-                        label.numberOfLines = 0
-                        
-                        label.textAlignment = NSTextAlignment.Left
-                        label.center = view2.center
-                        view2.addSubview(label)
-                        
-                        viewArray.append(view2)
-                        headerArray.append(view2)
-                        view2.contentMode = .ScaleAspectFit
-                        view2.hidden = false
-                        view2.setNeedsDisplay()
-                        poiViews.append(label)
+                        //create TextView to store all our text
+                        let text = UITextView(frame: CGRectMake(0, 0, width, 35 * lines))
+                        //adds the "padding" you see on left and right hand side
+                        text.contentInset = UIEdgeInsetsMake(0, 8, 0, -16)
+                        //so Users cannot edit the tour text
+                        text.editable = false
+                        text.text = (row["description"] as! String)
+                        //descriptions are in Italics
+                        text.font = UIFont.italicSystemFontOfSize(16)
+                        text.contentMode = .ScaleAspectFill
+                        poiViews.append(text)
                         // lay out this image view, or if it already exists, set its image property to uiImage
                     } catch let error as NSError {
                         print("Error generating thumbnail: \(error)")
@@ -355,6 +237,7 @@ class POITableViewController: UITableViewController {
             }
         }
     }
+    
     func videoThumbnailTapped(){
         let url = videoList[0]
         do{
