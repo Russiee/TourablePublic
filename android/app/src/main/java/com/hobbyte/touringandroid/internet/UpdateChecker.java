@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.hobbyte.touringandroid.R;
+import com.hobbyte.touringandroid.io.FileManager;
 import com.hobbyte.touringandroid.io.TourDBManager;
 
 import org.json.JSONObject;
@@ -31,13 +32,13 @@ public class UpdateChecker extends Thread {
 
         for (Object[] row : keys) {
             String keyID = (String) row[0];
-            String tourID = (String) row[1];
 
-            JSONObject tour = ServerAPI.getJSON(tourID, ServerAPI.TOUR);
+            JSONObject keyJSON = ServerAPI.getJSON(keyID, ServerAPI.KEY);
+            FileManager.saveJSON(keyJSON, keyID, ServerAPI.KEY);
 
             try {
                 // TODO: change this when tour version numbers are implemented
-                String version = tour.getString("updatedAt");
+                String version = keyJSON.getString("updatedAt");
 
                 if (TourDBManager.convertStampToMillis(version)[0] > (long) row[2]) {
                     toUpdate.add(keyID);

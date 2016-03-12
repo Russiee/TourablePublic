@@ -25,11 +25,6 @@
         android:layout_height="match_parent"
         android:padding="@dimen/activity_horizontal_margin">
 
-        <Space
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:layout_gravity="center_horizontal" />
-
         <android.support.v7.widget.CardView
                 xmlns:card_view="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/infoCard"
@@ -84,7 +79,7 @@
                     <TextView
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:text="New Text"
+                        android:text="@string/summary_activity_estimated_time"
                         android:id="@+id/txtEstimatedTime"
                         android:padding="12dp" />
 
@@ -97,7 +92,7 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="New Text"
+                            android:text="@string/summary_activity_version_is_current"
                             android:id="@+id/txtVersion"
                             android:layout_weight="1"
                             android:padding="12dp" />
@@ -116,7 +111,7 @@
                     <TextView
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:text="New Text"
+                        android:text="@string/summary_activity_expires_in"
                         android:id="@+id/txtExpiry"
                         android:padding="12dp" />
 

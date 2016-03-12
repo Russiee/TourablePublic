@@ -33,7 +33,13 @@
     <string name="download_activity_not_enough_space">Not enough space</string>
 
     <string name="summary_activity_start_tour">Open tour</string>
-    <string name="summary_activity_update_tour">Update tour</string>
+    <string name="summary_activity_update_tour">Update</string>
+    <string name="summary_activity_estimated_time">Estimated time:</string>
+    <string name="summary_activity_version_is_current">Your version is current</string>
+    <string name="summary_activity_new_version_is_available">A new version is available</string>
+    <string name="summary_activity_expires_in">Tour key expires in </string>
+    <string name="summary_activity_expires_in_day">days</string>
+    <string name="summary_activity_expires_in_days">day </string>
 
     <string name="msg_no_internet">No internet connection</string>
     <string name="msg_invalid_key">Invalid tour key</string>
