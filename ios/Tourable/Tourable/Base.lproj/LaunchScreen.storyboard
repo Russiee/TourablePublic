@@ -17,28 +17,26 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash-2" translatesAutoresizingMaskIntoConstraints="NO" id="98u-d5-c0Y">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Team Hobbyte" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1SD-l7-soc">
-                                <rect key="frame" x="244" y="318" width="112" height="21"/>
+                                <rect key="frame" x="244" y="524" width="112" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tour App" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="csv-h8-mGG">
-                                <rect key="frame" x="265" y="289" width="70" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.94117647059999998" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" red="0.08235294118" green="0.1647058824" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="tintColor" red="0.08235294118" green="0.1647058824" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="1SD-l7-soc" firstAttribute="top" secondItem="csv-h8-mGG" secondAttribute="bottom" constant="8" symbolic="YES" id="2pH-vC-bdl"/>
-                            <constraint firstItem="csv-h8-mGG" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="6ER-VD-utT"/>
-                            <constraint firstItem="csv-h8-mGG" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="269" id="9DS-QK-18c"/>
-                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="1SD-l7-soc" secondAttribute="bottom" constant="261" id="AP8-m9-fQb"/>
-                            <constraint firstItem="csv-h8-mGG" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="PrC-t6-hMC"/>
-                            <constraint firstItem="1SD-l7-soc" firstAttribute="centerX" secondItem="csv-h8-mGG" secondAttribute="centerX" id="bid-oc-MOJ"/>
+                            <constraint firstItem="98u-d5-c0Y" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="0M8-we-uh0"/>
+                            <constraint firstItem="1SD-l7-soc" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="504" id="30d-x4-V2f"/>
+                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="1SD-l7-soc" secondAttribute="bottom" constant="55" id="5cV-kh-t6y"/>
+                            <constraint firstItem="98u-d5-c0Y" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="Kd7-I8-2Y0"/>
+                            <constraint firstItem="98u-d5-c0Y" firstAttribute="bottom" secondItem="xb3-aO-Qok" secondAttribute="top" id="Ny8-rk-DMJ"/>
+                            <constraint firstItem="1SD-l7-soc" firstAttribute="centerX" secondItem="98u-d5-c0Y" secondAttribute="centerX" id="beP-IO-bqE"/>
+                            <constraint firstAttribute="trailing" secondItem="98u-d5-c0Y" secondAttribute="trailing" id="j8K-RQ-Vkd"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -47,4 +45,7 @@
             <point key="canvasLocation" x="53" y="375"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="splash-2" width="750" height="1334"/>
+    </resources>
 </document>

@@ -16,7 +16,7 @@ class NavViewController: UINavigationController, UIViewControllerTransitioningDe
         //set nav bar colour
         UINavigationBar.appearance().barTintColor = UIColor(red: 21/255.0, green: 42.0/255.0, blue: 74.0/255.0, alpha: 1.0)
         //set navigation button colour
-        UINavigationBar.appearance().tintColor = UIColor(red: 216/255.0, green: 220/255.0, blue: 224/255.0, alpha: 1.0)
+        UINavigationBar.appearance().tintColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.64)
         //set title colour
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName : UIColor.whiteColor()]
         

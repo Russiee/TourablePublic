@@ -88,7 +88,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
             let empty_state_button_UI = UIImage(named: "empty_state_button")
             addTourButton.setBackgroundImage(empty_state_button_UI, forState: .Normal)
             addTourButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-            self.view.backgroundColor = UIColor(red: 7/255, green: 62/255, blue: 117/255, alpha: 1.0)
+            self.view.backgroundColor = UIColor(red: 22/255, green: 43/255, blue: 73/255, alpha: 1.0)
            // addTourButton.layer.cornerRadius = 3
            // addTourButton.layer.borderWidth = 1
             let  empty_state_image = UIImage(named: "empty_tv_placeholder")
