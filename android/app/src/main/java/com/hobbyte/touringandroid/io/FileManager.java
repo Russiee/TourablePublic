@@ -185,7 +185,7 @@ public class FileManager {
      * @param keyID   the key ID for a specific tour
      */
     public static void removeTour(Context context, String keyID) {
-        TourDBManager dbHelper = TourDBManager.getInstance(context);
+        TourDBManager dbHelper = TourDBManager.getInstance(context.getApplicationContext());
         dbHelper.deleteTour(keyID);
 
         deleteTourFiles(context, keyID);

@@ -96,7 +96,7 @@ public class StartActivity extends AppCompatActivity {
         hideInput();
 
         // leaving a database instance open across activities is BAD!!
-        TourDBManager.getInstance(this).close();
+        TourDBManager.getInstance(getApplicationContext()).close();
 
         super.onPause();
     }
@@ -105,7 +105,7 @@ public class StartActivity extends AppCompatActivity {
      * If the user has tours saved to the device, show their names and expiry information.
      */
     private void loadPreviousTours() {
-        TourDBManager dbHelper = TourDBManager.getInstance(this);
+        TourDBManager dbHelper = TourDBManager.getInstance(getApplicationContext());
 
         LinearLayout layout = (LinearLayout) findViewById(R.id.previousToursLayout);
 
@@ -115,9 +115,9 @@ public class StartActivity extends AppCompatActivity {
             layout.addView(noToursText);
         } else {
             // fetches a cursor at position -1
-            Cursor c = dbHelper.getTours();
+            Cursor c = dbHelper.getTourDisplayInfo();
 
-            Log.d(TAG, DatabaseUtils.dumpCursorToString(c));
+            Log.d(TAG, DatabaseUtils.dumpCursorToString(c)); // TODO remove this at some point
 
             DateFormat df = DateFormat.getDateInstance();
 
@@ -130,15 +130,16 @@ public class StartActivity extends AppCompatActivity {
                 RelativeLayout tour = (RelativeLayout) tourItem.findViewById(R.id.tourItem);
                 ImageView delete = (ImageView) tourItem.findViewById(R.id.deleteImage);
 
-                String name = c.getString(c.getColumnIndex(TourDBContract.TourList.COL_TOUR_NAME));
-                long expiryTime = c.getLong(c.getColumnIndex(TourDBContract.TourList.COL_DATE_EXPIRES_ON));
-                String expiryText = df.format(new Date(expiryTime));
-                final String keyID = c.getString(c.getColumnIndex(TourDBContract.TourList.COL_KEY_ID));
-                final String tourID = c.getString(c.getColumnIndex(TourDBContract.TourList.COL_TOUR_ID));
+                final String keyID = c.getString(0);
+                final String tourID = c.getString(1);
+                String name = c.getString(2);
+                long expiryTime = c.getLong(3);
+
                 tour.setTag(keyID);
-                Log.d(TAG, String.format("k: %s t: %s", keyID, tourID));
                 tourName.setText(name);
+                String expiryText = df.format(new Date(expiryTime));
                 expiryDate.setText(String.format("Expires %s", expiryText));
+
                 layout.addView(tourItem);
 
                 tour.setOnClickListener(new View.OnClickListener() {
@@ -247,7 +248,7 @@ public class StartActivity extends AppCompatActivity {
         String tourKey = textKey.getText().toString();
 
         // check if key has already been used
-        boolean exists = TourDBManager.getInstance(this).doesTourExist(tourKey);
+        boolean exists = TourDBManager.getInstance(getApplicationContext()).doesTourExist(tourKey);
 
         if (exists) {
             showToast(getString(R.string.msg_tour_exists));
@@ -277,7 +278,7 @@ public class StartActivity extends AppCompatActivity {
      * @param keyID tour to start
      */
     private void goToTour(String keyID, String tourID) {
-        TourDBManager.getInstance(this).updateAccessedTime(keyID);
+        TourDBManager.getInstance(getApplicationContext()).updateAccessedTime(keyID);
         Intent intent = new Intent(this, SummaryActivity.class);
         intent.putExtra(SummaryActivity.KEY_ID, keyID);
         intent.putExtra(SummaryActivity.TOUR_ID, tourID);
@@ -293,7 +294,7 @@ public class StartActivity extends AppCompatActivity {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        FileManager.removeTour(this, keyID);
+        FileManager.removeTour(getApplicationContext(), keyID);
         this.recreate();
         return true;
     }

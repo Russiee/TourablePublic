@@ -39,7 +39,7 @@ public class TourDBManager extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "TourData.db";
 
-    public static final String dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS";
+    public static final String dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
     private static TourDBManager tdbmInstance;
     private SQLiteDatabase db;
@@ -66,17 +66,18 @@ public class TourDBManager extends SQLiteOpenHelper {
     private static final String SQL_ROW_COUNT =
             "SELECT COUNT(" + TourList.COL_TOUR_ID + ") FROM " + TourList.TABLE_NAME;
 
-    private static final String SQL_GET_TOURS =
-            "SELECT * FROM " + TourList.TABLE_NAME +
-                    " ORDER BY " + TourList.COL_DATE_LAST_ACCESSED + " DESC";
-
     /*=============================================
         DATABASE METHODS
      =============================================*/
 
+    /**
+     * Returns the Singleton instance of this class, through which the database can be queried.
+     * For the Context parameter, please use {@link Activity#getApplicationContext()} or
+     * {@link com.hobbyte.touringandroid.App#context} instead of an Activity instance.
+     */
     public static synchronized TourDBManager getInstance(Context context) {
         if (tdbmInstance == null) {
-            tdbmInstance = new TourDBManager(context.getApplicationContext());
+            tdbmInstance = new TourDBManager(context);
         }
 
         return tdbmInstance;
@@ -143,11 +144,18 @@ public class TourDBManager extends SQLiteOpenHelper {
     /**
      * Fetches every row in the table, ordered by when tours were last access by the user.
      *
-     * @return a Cursor at position -1
+     * @return a {@link Cursor} at position -1
      */
-    public Cursor getTours() {
+    public Cursor getTourDisplayInfo() {
         open(false);
-        return db.rawQuery(SQL_GET_TOURS, null);
+
+        String[] cols = {
+                TourList.COL_KEY_ID, TourList.COL_TOUR_ID,
+                TourList.COL_TOUR_NAME, TourList.COL_DATE_EXPIRES_ON
+        };
+        String orderBy = TourList.COL_DATE_LAST_ACCESSED + " DESC";
+
+        return db.query(TourList.TABLE_NAME, cols, null, null, null, null, orderBy);
     }
 
     /**
@@ -192,6 +200,21 @@ public class TourDBManager extends SQLiteOpenHelper {
         values.put(TourList.COL_HAS_VIDEO, video);
 
         db.insert(TourList.TABLE_NAME, null, values);
+    }
+
+    /**
+     * Fetches all columns for a single tour.
+     *
+     * @param keyID the ID of a tour key (not the tour ID itself)
+     * @return a {@link Cursor} at position -1
+     */
+    public Cursor getRow(String keyID) {
+        open(false);
+
+        String where = TourList.COL_KEY_ID + " = ?";
+        String[] whereArgs = {keyID};
+
+        return db.query(TourList.TABLE_NAME, null, where, whereArgs, null, null, null);
     }
 
     /**
@@ -316,7 +339,6 @@ public class TourDBManager extends SQLiteOpenHelper {
      */
     public boolean dbIsEmpty() {
         open(false);
-        SQLiteDatabase db = tdbmInstance.getReadableDatabase();
 
         Cursor c = db.rawQuery(SQL_ROW_COUNT, null);
         c.moveToFirst();
@@ -324,6 +346,15 @@ public class TourDBManager extends SQLiteOpenHelper {
         c.close();
 
         return count == 0;
+    }
+
+    /**
+     * Deletes all rows in the table.
+     */
+    public void clearTable() {
+        open(true);
+
+        db.delete(TourList.TABLE_NAME, null, null);
     }
 
     /**
