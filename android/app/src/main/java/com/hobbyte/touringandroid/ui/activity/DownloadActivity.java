@@ -270,7 +270,7 @@ public class DownloadActivity extends AppCompatActivity {
     private class FetchTourJSON extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
-            tourJSON = FileManager.getJSON(keyID, ServerAPI.TOUR);
+            tourJSON = ServerAPI.getJSON(tourID, ServerAPI.TOUR);
             FileManager.saveJSON(getApplicationContext(), tourJSON, keyID, FileManager.TOUR_JSON);
             return null;
         }
