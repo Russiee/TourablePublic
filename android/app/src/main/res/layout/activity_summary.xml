@@ -103,7 +103,6 @@
                             android:layout_height="wrap_content"
                             android:visibility="gone"
                             android:text="@string/summary_activity_update_tour"
-                            android:onClick="doTourUpdate"
                             android:textColor="@color/colorWhiteText" />
 
                     </LinearLayout>
