@@ -62,7 +62,7 @@
 		7A432AB01C8B69AB007482F8 /* TourUpdateManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TourUpdateManager.swift; sourceTree = "<group>"; };
 		E5007F841C8B6ACA0041B31C /* TourDeleter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TourDeleter.swift; sourceTree = "<group>"; };
 		E5012B8E1C8DDF3500A64038 /* POITableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = POITableViewController.swift; sourceTree = "<group>"; };
-		E536DCBB1C6510FC00A7B2FC /* Alan Touring.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Alan Touring.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E536DCBB1C6510FC00A7B2FC /* Tourable.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tourable.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E536DCBE1C6510FC00A7B2FC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E536DCC31C6510FD00A7B2FC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E536DCC61C6510FD00A7B2FC /* Alan_Touring.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Alan_Touring.xcdatamodel; sourceTree = "<group>"; };
@@ -298,7 +298,7 @@
 				TargetAttributes = {
 					E536DCBA1C6510FC00A7B2FC = {
 						CreatedOnToolsVersion = 7.2;
-						DevelopmentTeam = P2UWE6LM7U;
+						DevelopmentTeam = YX29X4YYJJ;
 					};
 					E536DCD11C6510FD00A7B2FC = {
 						CreatedOnToolsVersion = 7.2;
@@ -537,7 +537,7 @@
 				INFOPLIST_FILE = "Alan Touring/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Hobbyte.Alan-Touring";
+				PRODUCT_BUNDLE_IDENTIFIER = com.Hobbyte.Tourable;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -553,7 +553,7 @@
 				INFOPLIST_FILE = "Alan Touring/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Hobbyte.Alan-Touring";
+				PRODUCT_BUNDLE_IDENTIFIER = com.Hobbyte.Tourable;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
