@@ -106,14 +106,14 @@ public class POIFragment extends ListFragment {
                                 text = m.group(1);
                             }
                             break;
-                        case "video":
-                            type = PoiContentAdapter.VIDEO;
-                            Matcher ma = p.matcher(item.getString("url"));
-
-                            if (ma.matches()) {
-                                text = ma.group(1);
-                            }
-                            break;
+//                        case "video":
+//                            type = PoiContentAdapter.VIDEO;
+//                            Matcher ma = p.matcher(item.getString("url"));
+//
+//                            if (ma.matches()) {
+//                                text = ma.group(1);
+//                            }
+//                            break;
                         case "quiz":
                             type = PoiContentAdapter.QUIZ;
                             text = "";
