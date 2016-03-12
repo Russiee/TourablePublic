@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.hobbyte.touringandroid.App;
 import com.hobbyte.touringandroid.io.DownloadTourTask;
+import com.hobbyte.touringandroid.io.ImageLoadingTask;
 import com.hobbyte.touringandroid.tourdata.ListViewItem;
 import com.hobbyte.touringandroid.internet.LoadImageFromURL;
 import com.hobbyte.touringandroid.R;
@@ -79,8 +80,7 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
 
         if (view == null) {
             if (listViewItemType == IMAGE) {
-                view = LayoutInflater.from(getContext()).inflate(R.layout.poi_content, parent, false);
-//                view = LayoutInflater.from(getContext()).inflate(R.layout.poi_image, parent, false);
+                view = LayoutInflater.from(getContext()).inflate(R.layout.poi_image, parent, false);
             } else {
                 view = LayoutInflater.from(getContext()).inflate(R.layout.poi_content, parent, false);
             }
@@ -88,16 +88,13 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
 
         switch (listViewItemType) {
             case IMAGE:
-                contentView = (TextView) view.findViewById(R.id.poiContentTextView);
-                contentView.setText("An image should go here\n");
-                return view;
-
-                /*ImageView imageView = (ImageView) view.findViewById(R.id.poiContentImageView);
+                ImageView imageView = (ImageView) view.findViewById(R.id.poiContentImageView);
 
                 if (filename != null) {
-                    new LoadImageFromURL(imageView, App.context).execute(filename, keyID); //Load image in a separate thread
+                    final ImageLoadingTask task = new ImageLoadingTask(imageView);
+                    task.execute(filename, keyID);
                 }
-                return view;*/
+                return view;
 
             case VIDEO:
                 contentView = (TextView) view.findViewById(R.id.poiContentTextView);
