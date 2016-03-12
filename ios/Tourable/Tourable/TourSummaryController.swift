@@ -65,7 +65,7 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
         tableView.tableFooterView = UIView(frame: CGRectZero)
         tableView.rowHeight = 60.0
          // code that checks for updates. not working atm.
-        // tourManager.checkForUpdates()
+        TourUpdateManager.sharedInstance.checkForUpdates()
     }
     
     //Takes the data from the tuple and formats it for presentation in the tableView

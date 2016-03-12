@@ -28,7 +28,7 @@ class TourUpdateManagerTests: XCTestCase {
         let formatter = NSDateFormatter()
         formatter.dateFormat = "yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"
        
-        let date = TourUpdateManager.sharedInstance.dateFromString(dateInString)
+        let date = TourUpdateManager.sharedInstance.obtainDateFromString(dateInString)
 
         let newDateInString = formatter.stringFromDate(date)
 
