@@ -87,18 +87,39 @@ public class POIFragment extends ListFragment {
                     int type;
                     String text = "";
 
-                    if (item.has("type")) {
-                        type = PoiContentAdapter.TEXT;
-                        text = item.getString("content");
-                    } else if (item.has("url")) {
-                        type = PoiContentAdapter.IMG;
-                        Matcher m = p.matcher(item.getString("url"));
+                    String JSONtype = item.getString("type");
 
-                        if (m.matches()) {
-                            text = m.group(1);
-                        }
-                    } else {
-                        type = PoiContentAdapter.IGNORE_ITEM_VIEW_TYPE;
+                    switch (JSONtype) {
+                        case "Header":
+                            type = PoiContentAdapter.HEADER;
+                            text = item.getString("content");
+                            break;
+                        case "body":
+                            type = PoiContentAdapter.BODY;
+                            text = item.getString("content");
+                            break;
+                        case "image":
+                            type = PoiContentAdapter.IMG;
+                            Matcher m = p.matcher(item.getString("url"));
+
+                            if (m.matches()) {
+                                text = m.group(1);
+                            }
+                            break;
+//                        case "video":
+//                            type = PoiContentAdapter.VIDEO;
+//                            Matcher ma = p.matcher(item.getString("url"));
+//
+//                            if (ma.matches()) {
+//                                text = ma.group(1);
+//                            }
+//                            break;
+                        case "quiz":
+                            type = PoiContentAdapter.QUIZ;
+                            text = "";
+                            break;
+                        default:
+                            type = PoiContentAdapter.IGNORE_ITEM_VIEW_TYPE;
                     }
 
                     listItems[i] = new ListViewItem(text, type);
