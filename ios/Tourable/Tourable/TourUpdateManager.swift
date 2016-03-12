@@ -103,13 +103,11 @@ public class TourUpdateManager {
     
     // receive a string of format "yyyy-MM-dd'T'hh:mm:ss.SSSz" and returns an NSDate object
     func obtainDateFromString(date: String) -> NSDate {
-        print("DAAAAAAATE", date)
+        let enUSPOSIXLocale: NSLocale = NSLocale(localeIdentifier: "en_US")
         let dateFormatter = NSDateFormatter()
-        dateFormatter.formatterBehavior = .Behavior10_4
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"
-        let dateToReturn = dateFormatter.dateFromString(date)
-        print(dateToReturn)
-        return dateToReturn!
+        dateFormatter.locale = enUSPOSIXLocale
+        dateFormatter.dateFormat = "YYYY-MM-dd'T'HH:mm:ss.SSS'Z'"
+        return dateFormatter.dateFromString(date)!
     }
     
     // trigger notification when there is an update avaiable
