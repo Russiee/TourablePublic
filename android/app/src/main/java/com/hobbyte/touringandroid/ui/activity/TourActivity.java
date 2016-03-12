@@ -55,7 +55,6 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
     private DrawerLayout navLayout;
     private ListView navList;
     private ArrayList<TourItem> topLevelContents;
-    private TextView tourName;
     private ActionBarDrawerToggle navToggle;
 
     private Tour tour;
@@ -65,7 +64,7 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
 
     private LinkedList<SubSection> backStack;
 
-    private Boolean backtoSummary;
+    private Boolean backToSummary;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +78,7 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
         //Created my own backstack to save the subsections previously clicked on and added to Toolbar
         backStack = new LinkedList<>();
 
-        backtoSummary = false; //Checks whether back has been pressed at Root, and whether warning given to press back again
+        backToSummary = false; //Checks whether back has been pressed at Root, and whether warning given to press back again
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(title);
@@ -99,15 +98,15 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
      */
     @Override
     public void onBackPressed() {
-        if (backStack.size() > 1 && !backtoSummary) {
+        if (backStack.size() > 1 && !backToSummary) {
             currentSection = backStack.getLast();
             backStack.removeLast();
-            backtoSummary = false;
+            backToSummary = false;
             loadCurrentSection();
-        } else if (!backtoSummary) {
+        } else if (!backToSummary) {
             Toast.makeText(getApplicationContext(), "Please press back again to exit", Toast.LENGTH_SHORT).show();
-            backtoSummary = true;
-        } else if (backtoSummary) {
+            backToSummary = true;
+        } else if (backToSummary) {
             super.onBackPressed();
         }
     }
@@ -141,7 +140,7 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
     private void loadCurrentSection() {
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
-        backtoSummary = false;
+        backToSummary = false;
         SectionFragment fragment = SectionFragment.newInstance(currentSection.getContents());
 
         if (manager.getBackStackEntryCount() < 0) {
@@ -222,9 +221,6 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
     private void setupNavDrawer() {
         navLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navList = (ListView) findViewById(R.id.left_drawer);
-        tourName = (TextView) findViewById(R.id.tourNameText);
-
-        tourName.setText(tour.getRoot().getTitle());
 
         topLevelContents = currentSection.getContents();
 

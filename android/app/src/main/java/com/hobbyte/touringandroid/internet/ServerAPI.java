@@ -27,6 +27,8 @@ public class ServerAPI {
     public static final String KEY_VALIDATION = "/key/verify/";
     public static final String BUNDLE = "/bundle/";
     public static final String TOUR = "/tour/";
+    public static final String KEY = "/key/";
+
 
 
 

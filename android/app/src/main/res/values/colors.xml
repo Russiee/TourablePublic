@@ -12,5 +12,8 @@
     <color name="colorDarkText">#0c1727</color>
     <color name="colorWhiteText">#deffffff</color>
     <color name="colorTourElementDivider">#22e2e2e2</color>
+
+    <color name="red">#fe6050</color>
+
 </resources>
 

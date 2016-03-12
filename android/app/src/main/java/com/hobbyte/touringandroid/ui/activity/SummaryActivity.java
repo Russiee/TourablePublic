@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +15,7 @@ import com.hobbyte.touringandroid.R;
 import com.hobbyte.touringandroid.io.FileManager;
 import com.hobbyte.touringandroid.io.TourDBManager;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Set;
@@ -41,29 +43,24 @@ public class SummaryActivity extends AppCompatActivity {
 
         Log.d(TAG, String.format("k: %s t: %s", keyID, tourID));
 
-        SharedPreferences prefs = getApplicationContext().getSharedPreferences(
-                getString(R.string.preference_file_key),
-                Context.MODE_PRIVATE);
-        Set<String> toUpdate = prefs.getStringSet(getString(R.string.prefs_tours_to_update), null);
-
-        loadTourDescription();
         displayTourInfo();
+        displayVersionAndUpdate();
+        displayExpiry();
 
-        if (true) {
-//     if (toUpdate != null && toUpdate.contains(keyID)) {
-            updateButton = (Button) findViewById(R.id.updateTourButton);
-            updateButton.setVisibility(View.VISIBLE);
-            ((TextView) findViewById(R.id.txtVersion)).setText("Your version is old");
-        }
-
-
-
-        ((Button) findViewById(R.id.buttonStartTour)).setOnClickListener(new View.OnClickListener() {
+        (findViewById(R.id.buttonStartTour)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openTourActivity();
             }
         });
+
+        (findViewById(R.id.updateTourButton)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                doTourUpdate();
+            }
+        });
+
 
     }
 
@@ -75,19 +72,6 @@ public class SummaryActivity extends AppCompatActivity {
         super.onPause();
     }
 
-    /**
-     * Sets the information on the summary screen
-     */
-    private void displayTourInfo() {
-        TextView time = (TextView) findViewById(R.id.txtEstimatedTime);
-        TextView version = (TextView) findViewById(R.id.txtVersion);
-        TextView expiry = (TextView) findViewById(R.id.txtExpiry);
-
-        time.setText("Estimated time: n/a");
-        version.setText("Your version is current");
-        expiry.setText("Your key expires in " + 23 + " days");
-
-    }
 
     public void openTourActivity() {
         Intent intent = new Intent(this, TourActivity.class);
@@ -97,25 +81,78 @@ public class SummaryActivity extends AppCompatActivity {
         this.finish();
     }
 
-    private void loadTourDescription() {
+    private void displayTourInfo() {
+
         JSONObject tourJSON = FileManager.getJSON(getApplicationContext(), keyID, FileManager.TOUR_JSON);
 
-        TextView txtTitle = (TextView) findViewById(R.id.txtTourTitle);
-        android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         TextView txtDescription = (TextView) findViewById(R.id.txtTourDescription);
+        TextView timeTourTakes = (TextView) findViewById(R.id.txtEstimatedTime);
 
         try {
-            title = tourJSON.getString("title");
-            toolbar.setTitle(title);
+
+            toolbar.setTitle(tourJSON.getString("title"));
             txtDescription.setText(tourJSON.getString("description"));
-        } catch (Exception e) {
+            timeTourTakes.setText("Estimated time: No value from api");
+
+        } catch (JSONException e) {
             e.printStackTrace();
-            txtTitle.setText("Error");
+            toolbar.setTitle("Error");
             txtDescription.setText("Error");
         }
     }
 
-    public void doTourUpdate(View v) {
+    private void displayVersionAndUpdate() {
+
+        Context context = getApplicationContext();
+        SharedPreferences prefs = context.getSharedPreferences(
+                context.getString(R.string.preference_file_key),
+                context.MODE_PRIVATE);
+
+        Set<String> updateSet = prefs.getStringSet(context.getString(R.string.prefs_tours_to_update), null);
+
+        if (updateSet != null) {
+            for (String s : updateSet) {
+                if (s.equals(keyID)) {
+                    displayUpdateOption();
+                    break;
+                }
+            }
+        }
+    }
+
+    private void displayUpdateOption() {
+
+        TextView version = (TextView) findViewById(R.id.txtVersion);
+        version.setText(getApplicationContext().getString(
+                R.string.summary_activity_new_version_is_available));
+
+        Button updateButton = (Button) findViewById(R.id.updateTourButton);
+        updateButton.setVisibility(View.VISIBLE);
+
+    }
+
+    private void displayExpiry() {
+
+        JSONObject keyJSON = FileManager.getJSON(getApplicationContext(),
+                keyID, FileManager.KEY_JSON);
+
+            try {
+
+                String expiryDateString = keyJSON.getString("expiresAt");
+
+                TextView txtExpiry = (TextView) findViewById(R.id.txtExpiry);
+                txtExpiry.setText("Expiry needs implementing");
+                //TODO implement this
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+    }
+
+
+
+    public void doTourUpdate() {
         //TODO open download dialog
     }
 
