@@ -108,8 +108,8 @@
                             <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6DD-cZ-3vf">
                                 <rect key="frame" x="179" y="325" width="243" height="54"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="243" id="4ep-wh-KsU"/>
-                                    <constraint firstAttribute="height" constant="54" id="LVa-PO-ZH8"/>
+                                    <constraint firstAttribute="height" constant="54" id="Xh8-tG-YEj"/>
+                                    <constraint firstAttribute="width" constant="243" id="avt-ka-aQw"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="18"/>
                                 <state key="normal" title="Begin Tour" backgroundImage="generic_button">
@@ -120,19 +120,18 @@
                                     <segue destination="YdX-AY-UmE" kind="show" identifier="goToTourSections" id="d1o-YK-Yz6"/>
                                 </connections>
                             </button>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="redraw" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" canCancelContentTouches="NO" bouncesZoom="NO" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mTv-Im-kld">
-                                <rect key="frame" x="20" y="8" width="560" height="57"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="redraw" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" canCancelContentTouches="NO" bouncesZoom="NO" editable="NO" text="At run time, the text here will be replaced with the tour information." translatesAutoresizingMaskIntoConstraints="NO" id="mTv-Im-kld">
+                                <rect key="frame" x="0.0" y="8" width="600" height="57"/>
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="57" id="6UQ-v8-Zgs"/>
+                                    <constraint firstAttribute="height" constant="57" id="BND-qn-toa"/>
                                 </constraints>
-                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                 <color key="textColor" red="0.027450980390000001" green="0.24313725489999999" blue="0.45882352939999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="tableView2" alwaysBounceVertical="YES" scrollEnabled="NO" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="m9X-WR-BhL">
-                                <rect key="frame" x="0.0" y="161" width="600" height="128"/>
+                                <rect key="frame" x="0.0" y="73" width="600" height="244"/>
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="separatorColor" red="0.94117647059999998" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="sectionIndexBackgroundColor" red="0.94117647059999998" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
@@ -141,7 +140,7 @@
                                         <rect key="frame" x="0.0" y="28" width="600" height="70"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="AIS-jg-lGy" id="SGs-Pq-8sd">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="69.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="70"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -153,15 +152,15 @@
                         </subviews>
                         <color key="backgroundColor" red="0.94117647059999998" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="6DD-cZ-3vf" firstAttribute="top" secondItem="m9X-WR-BhL" secondAttribute="bottom" constant="36" id="2rN-RZ-xDu"/>
-                            <constraint firstItem="mTv-Im-kld" firstAttribute="top" secondItem="AcZ-3T-jdS" secondAttribute="bottom" constant="8" symbolic="YES" id="SyL-11-o1R"/>
+                            <constraint firstItem="6DD-cZ-3vf" firstAttribute="top" secondItem="m9X-WR-BhL" secondAttribute="bottom" constant="8" symbolic="YES" id="2hZ-he-Ypz"/>
+                            <constraint firstItem="mTv-Im-kld" firstAttribute="leading" secondItem="gDk-oh-3PA" secondAttribute="leading" id="CQU-Aa-EHS"/>
+                            <constraint firstItem="mTv-Im-kld" firstAttribute="trailing" secondItem="m9X-WR-BhL" secondAttribute="trailing" id="Kjq-9Z-9Hr"/>
                             <constraint firstItem="WLy-3d-JbQ" firstAttribute="top" secondItem="6DD-cZ-3vf" secondAttribute="bottom" constant="113" id="WhK-Cy-760"/>
-                            <constraint firstItem="m9X-WR-BhL" firstAttribute="top" secondItem="mTv-Im-kld" secondAttribute="bottom" constant="96" id="YsF-F1-5gA"/>
-                            <constraint firstItem="m9X-WR-BhL" firstAttribute="leading" secondItem="mTv-Im-kld" secondAttribute="leading" constant="-20" id="jvM-jO-Vg3"/>
-                            <constraint firstItem="mTv-Im-kld" firstAttribute="leading" secondItem="gDk-oh-3PA" secondAttribute="leadingMargin" id="kCl-dm-4dS"/>
-                            <constraint firstItem="mTv-Im-kld" firstAttribute="trailing" secondItem="gDk-oh-3PA" secondAttribute="trailingMargin" id="lhw-7Y-Ays"/>
-                            <constraint firstItem="mTv-Im-kld" firstAttribute="centerX" secondItem="6DD-cZ-3vf" secondAttribute="centerX" id="msk-bd-RWd"/>
-                            <constraint firstItem="m9X-WR-BhL" firstAttribute="trailing" secondItem="mTv-Im-kld" secondAttribute="trailing" constant="20" id="tMP-YS-MFO"/>
+                            <constraint firstItem="mTv-Im-kld" firstAttribute="centerX" secondItem="6DD-cZ-3vf" secondAttribute="centerX" id="ZAC-K4-0Ow"/>
+                            <constraint firstItem="mTv-Im-kld" firstAttribute="top" secondItem="AcZ-3T-jdS" secondAttribute="bottom" constant="8" symbolic="YES" id="cdO-0Q-eb3"/>
+                            <constraint firstAttribute="trailing" secondItem="mTv-Im-kld" secondAttribute="trailing" id="gZM-EV-q81"/>
+                            <constraint firstItem="m9X-WR-BhL" firstAttribute="top" secondItem="mTv-Im-kld" secondAttribute="bottom" constant="8" symbolic="YES" id="mkJ-iz-OmE"/>
+                            <constraint firstItem="mTv-Im-kld" firstAttribute="leading" secondItem="m9X-WR-BhL" secondAttribute="leading" id="sMv-NW-pwK"/>
                         </constraints>
                     </view>
                     <toolbarItems/>
@@ -385,12 +384,12 @@
             <objects>
                 <tableViewController id="w6Y-H8-yy9" customClass="POITableViewController" customModule="Tourable" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="A0j-vj-qfP">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="556"/>
+                        <rect key="frame" x="0.0" y="64" width="600" height="492"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="poiCells" id="4CT-F0-Vcd">
-                                <rect key="frame" x="0.0" y="92" width="600" height="44"/>
+                                <rect key="frame" x="0.0" y="28" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4CT-F0-Vcd" id="led-cN-rct">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
@@ -498,6 +497,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="d1o-YK-Yz6"/>
-        <segue reference="ayd-fJ-4bi"/>
+        <segue reference="0Qs-YK-3Mw"/>
     </inferredMetricsTieBreakers>
 </document>
