@@ -89,7 +89,7 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
         
         //saveTourButton.setTitle("Downloading...", forState: .Normal)
         //saveTourButton.enabled = false
-        let alert = UIAlertController(title: "Notice", message: "Tour key is valid! You can now download this tour. If you download it without video you will need an internet connection during the tour.", preferredStyle: UIAlertControllerStyle.Alert)
+        let alert = UIAlertController(title: "Tour Downloard", message: "Tour key is valid! You can now download this tour. If you download it without video you will need an internet connection during the tour.", preferredStyle: UIAlertControllerStyle.Alert)
         
         // add the actions (buttons)
         alert.addAction(UIAlertAction(title: "Download without media (33kb)", style: UIAlertActionStyle.Default, handler: { action in

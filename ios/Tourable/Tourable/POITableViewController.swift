@@ -60,6 +60,7 @@ class POITableViewController: UITableViewController {
         getPOIS()
         createToolBar()
         let pointToDisplay = POIParser().getTourSection(poiID)
+        self.title = pointToDisplay.title
         print(pointToDisplay.post)
         createSubviews(pointToDisplay.post)
         //reloads the tableViewData so that the Views are shown, potential move to viewWillAppear the createSubViews method
@@ -129,34 +130,38 @@ class POITableViewController: UITableViewController {
         
         for row in post{
             
-            let types = (row as! NSDictionary).allKeys as! [NSString]
-            
                 switch row["type"] as! String{
                     
                 case "Header" :
                         
                         let label = UITextView(frame: CGRectMake(0, 0, width, 40))
-                        label.contentInset = UIEdgeInsetsMake(0, 8, 0, -16)
+                        label.contentInset = UIEdgeInsetsMake(0, 12, 0, 12)
                         label.editable = false
-                        label.font = UIFont.boldSystemFontOfSize(30)
-                        label.text = (row["content"] as! String)
+                        label.font = UIFont.boldSystemFontOfSize(18)
+                        label.text = "\(row["content"] as! String) "
                         
                         label.sizeToFit()
                         label.textAlignment = NSTextAlignment.Center
                         label.contentMode = .ScaleAspectFill
+                        label.backgroundColor = UIColor.groupTableViewBackgroundColor()
                         poiViews.append(label)
-                        
+                        label.scrollEnabled = false
+                    
                     
                 case "body" :
                         
                         let chars: CGFloat = CGFloat((row["content"] as! String).characters.count)
-                        let lines: CGFloat = chars/30
-                        let label = UITextView(frame: CGRectMake(0, 0, width, 25 * lines))
-                        label.contentInset = UIEdgeInsetsMake(0, 8, 0, -16)
+                        var lines: CGFloat = chars/40
+                        if lines < 2{
+                            lines = 2
+                        }
+                        let label = UITextView(frame: CGRectMake(0, 0, width, 20 * lines))
+                        label.contentInset = UIEdgeInsetsMake(0, 12, 0, 12)
                         label.editable = false
-                        label.font = UIFont.systemFontOfSize(20)
+                        label.font = UIFont.systemFontOfSize(14)
                         label.text = (row["content"] as! String)
-                       
+                        label.scrollEnabled = false
+                        label.backgroundColor = UIColor.groupTableViewBackgroundColor()
                         poiViews.append(label)
                         
                     
@@ -170,29 +175,37 @@ class POITableViewController: UITableViewController {
                             img = UIImage()
                         }
                 
-                    
-                            let imageView1 = UIImageView(frame: CGRectMake(0, 0, width, height/2))
+                
+                            let  h_fact = width / (img?.size.width)!
+                            let new_height = (img?.size.height)! * h_fact
+                            let new_width = (img?.size.width)! * h_fact
+
+                           let imageView1 = UIImageView(frame: CGRectMake(0, 0, new_width, new_height))
+                        
                             imageView1.image = img
                             imageView1.contentMode = .ScaleAspectFit
                             imageView1.setNeedsDisplay()
                             poiViews.append(imageView1)
                             
                             let chars: CGFloat = CGFloat((row["description"] as! String).characters.count)
-                            let lines: CGFloat = chars/30
-                            let label = UITextView(frame: CGRectMake(0, 0, width, 55 * lines))
-                            label.contentInset = UIEdgeInsetsMake(0, 8, 0, -16)
+                            var lines: CGFloat = chars/40
+                            if lines < 2{
+                                lines = 2
+                            }
+                            let label = UITextView(frame: CGRectMake(0, 0, width, 20 * lines))
+                            label.contentInset = UIEdgeInsetsMake(0, 12, 0, 12)
                             label.editable = false
                             label.font = UIFont.italicSystemFontOfSize(16)
                             label.text = (row["description"] as! String)
                         
-                            
-                            label.contentMode = .ScaleAspectFit
+                            label.scrollEnabled = false
+                            label.contentMode = .ScaleAspectFill
+                            label.backgroundColor = UIColor.groupTableViewBackgroundColor()
                             poiViews.append(label)
                     
                     
                  case "video":
                     print("video m8")
-                    var err: NSError? = nil
                     do {
                         let videoURL = videoHandler.sharedInstance.loadVideoPath(row["url"] as! String)!
                         videoList.append(videoURL)
@@ -201,31 +214,40 @@ class POITableViewController: UITableViewController {
                         let cgImage = try imgGenerator.copyCGImageAtTime(CMTimeMake(0, 1), actualTime: nil)
                         let uiImage = UIImage(CGImage: cgImage)
                         // let imageView = UIImageView(image: uiImage)
-                        let imageView = UIImageView(frame: CGRectMake(0, 0, width, height/2))
-                        imageView.userInteractionEnabled = true
+                        
+                        
+                        let  h_fact = width / (uiImage.size.width)
+                        let new_height = uiImage.size.height * h_fact
+                        let new_width = uiImage.size.width * h_fact
+                        
+                        let imageView = UIImageView(frame: CGRectMake(0, 0, new_width, new_height))
 
+                        imageView.userInteractionEnabled = true
                         recognizer.addTarget(self, action: "videoThumbnailTapped")
-                        
-                        //finally, this is where we add the gesture recognizer, so it actually functions correctly
                         imageView.addGestureRecognizer(recognizer)
-                        
+                        imageView.clipsToBounds = true
                         imageView.image = uiImage
                         imageView.contentMode = .ScaleAspectFit
                         imageView.setNeedsDisplay()
                         poiViews.append(imageView)
                         
                         let chars: CGFloat = CGFloat((row["description"] as! String).characters.count)
-                        let lines: CGFloat = chars/30
+                        var lines: CGFloat = chars/40
+                        if lines < 2{
+                            lines = 2
+                        }
                         //create TextView to store all our text
-                        let text = UITextView(frame: CGRectMake(0, 0, width, 35 * lines))
+                        let text = UITextView(frame: CGRectMake(0, 0, width, 20 * lines))
                         //adds the "padding" you see on left and right hand side
-                        text.contentInset = UIEdgeInsetsMake(0, 8, 0, -16)
+                        text.contentInset = UIEdgeInsetsMake(0, -16, 0, -16)
                         //so Users cannot edit the tour text
                         text.editable = false
                         text.text = (row["description"] as! String)
                         //descriptions are in Italics
-                        text.font = UIFont.italicSystemFontOfSize(16)
+                        text.font = UIFont.italicSystemFontOfSize(14)
                         text.contentMode = .ScaleAspectFill
+                        text.scrollEnabled = false
+                        text.backgroundColor = UIColor.groupTableViewBackgroundColor()
                         poiViews.append(text)
                         // lay out this image view, or if it already exists, set its image property to uiImage
                     } catch let error as NSError {
@@ -235,6 +257,9 @@ class POITableViewController: UITableViewController {
                 default:
                     print("something is wrong")
             }
+            
+            
+            
         }
     }
     
@@ -263,7 +288,17 @@ class POITableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return poiViews[indexPath.row].frame.height
+        if poiViews[indexPath.row].isMemberOfClass(UIImageView){
+            let CurrentView = poiViews[indexPath.row] as! UIImageView
+            let image  = CurrentView.image!
+            print(image.scale)
+            print(image.size.height)
+            print(CurrentView.frame.height)
+            print(CurrentView.bounds.height)
+            print("HEREEEE")
+            
+        }
+        return poiViews[indexPath.row].frame.height+10
     }
    
     //used to display a video when it is tapped on screen.
