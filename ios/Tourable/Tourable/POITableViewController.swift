@@ -135,7 +135,7 @@ class POITableViewController: UITableViewController {
                 case "Header" :
                         
                         let label = UITextView(frame: CGRectMake(0, 0, width, 40))
-                        label.contentInset = UIEdgeInsetsMake(0, 12, 0, 12)
+                        label.contentInset = UIEdgeInsetsMake(10, 12, 0, 12)
                         label.editable = false
                         label.font = UIFont.boldSystemFontOfSize(18)
                         label.text = "\(row["content"] as! String) "
@@ -143,6 +143,7 @@ class POITableViewController: UITableViewController {
                         label.sizeToFit()
                         label.textAlignment = NSTextAlignment.Center
                         label.contentMode = .ScaleAspectFill
+                        label.textColor = UIColor(red: 22/255, green: 43/255, blue: 73/255, alpha: 1.0)
                         label.backgroundColor = UIColor.groupTableViewBackgroundColor()
                         poiViews.append(label)
                         label.scrollEnabled = false
@@ -161,6 +162,7 @@ class POITableViewController: UITableViewController {
                         label.font = UIFont.systemFontOfSize(14)
                         label.text = (row["content"] as! String)
                         label.scrollEnabled = false
+                        label.textColor = UIColor(red: 74/255, green: 95/255, blue: 126/255, alpha: 1.0)
                         label.backgroundColor = UIColor.groupTableViewBackgroundColor()
                         poiViews.append(label)
                         
@@ -200,12 +202,12 @@ class POITableViewController: UITableViewController {
                         
                             label.scrollEnabled = false
                             label.contentMode = .ScaleAspectFill
+                            label.textColor = UIColor(red: 74/255, green: 95/255, blue: 126/255, alpha: 1.0)
                             label.backgroundColor = UIColor.groupTableViewBackgroundColor()
                             poiViews.append(label)
                     
                     
                  case "video":
-                    print("video m8")
                     do {
                         let videoURL = videoHandler.sharedInstance.loadVideoPath(row["url"] as! String)!
                         videoList.append(videoURL)
@@ -247,6 +249,7 @@ class POITableViewController: UITableViewController {
                         text.font = UIFont.italicSystemFontOfSize(14)
                         text.contentMode = .ScaleAspectFill
                         text.scrollEnabled = false
+                        text.textColor = UIColor(red: 74/255, green: 95/255, blue: 126/255, alpha: 1.0)
                         text.backgroundColor = UIColor.groupTableViewBackgroundColor()
                         poiViews.append(text)
                         // lay out this image view, or if it already exists, set its image property to uiImage
@@ -291,11 +294,6 @@ class POITableViewController: UITableViewController {
         if poiViews[indexPath.row].isMemberOfClass(UIImageView){
             let CurrentView = poiViews[indexPath.row] as! UIImageView
             let image  = CurrentView.image!
-            print(image.scale)
-            print(image.size.height)
-            print(CurrentView.frame.height)
-            print(CurrentView.bounds.height)
-            print("HEREEEE")
             
         }
         return poiViews[indexPath.row].frame.height+10

@@ -24,8 +24,8 @@ class TourSectionsController: UITableViewController {
         //tourSummaryLabel.removeFromSuperview()
         self.clearsSelectionOnViewWillAppear = false
         let tour = tourDataParser().getTourSection(superTableId)
+        self.title = tour.title as String 
         let subsectionArray = tour.getSubSections()
-        print(tour.description)
         tourSummaryTextView.text = tour.description
         poiArray = tour.getPointsOfInterest()
         var tourTitles = [String: String]()
