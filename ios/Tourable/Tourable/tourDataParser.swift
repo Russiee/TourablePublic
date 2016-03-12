@@ -71,6 +71,7 @@ class tourDataParser{
     }
 
     func saveNewTour(data: NSDictionary){
+        print("saving data from save toooour")
         saveTourSection(data)
         //Saves the top level tour which maps to the key stored in the metadata.
         let tourTopLevelSection = (data["sections"]as! NSArray)[0] as! NSDictionary

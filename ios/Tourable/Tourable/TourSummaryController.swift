@@ -67,8 +67,6 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
         //make the table only as big as the number of nows.
         tableView.tableFooterView = UIView(frame: CGRectZero)
         tableView.rowHeight = 60.0
-         // code that checks for updates. not working atm.
-        TourUpdateManager.sharedInstance.checkForUpdates()
     }
     
     //Takes the data from the tuple and formats it for presentation in the tableView
@@ -82,7 +80,7 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
         let estimatedTime = "Estimated time: \(summaryData.timeHours) hour \(summaryData.timeMins) minutes"
         //checks the update status of the tour
         if summaryData.isCurrent {
-            updateStatus = "Your version is current"
+            updateStatus = "The tour is up-to-date"
         }else{
             updateStatus = "An update is available"
         }

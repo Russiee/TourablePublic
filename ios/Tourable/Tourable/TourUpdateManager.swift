@@ -47,20 +47,22 @@ public class TourUpdateManager {
 
     // check for updates comparing freshly downloaded metadata with current stored one
     // if there are updates the user is asked if he wants to download them
-    func checkForUpdates() {
+    func isTourUpToDate() -> Bool {
         downloadNewMetadata()
         
         if self.newMetadata != nil {
-            
             let currentDate = obtainDateFromString(currentMetadata["updatedAt"] as! String)
             let newDate = obtainDateFromString(newMetadata["updatedAt"] as! String)
             
-             let comparisonResultString = compareDates(currentDate, newDate: newDate)
-            // check if the current date is less recent than the one in the metadata. If yes, ask the user to update tour.
+            let comparisonResultString = compareDates(currentDate, newDate: newDate)
+            
+            // check if the current date is less recent than the one in the metadata ("ascending"). If yes, ask the user to update tour.
             if comparisonResultString == "ascending" {
-                //self.triggerUpdateAvailableNotification()
+                print("current date \(currentDate) is less recent than the last updated \(newDate), therefore update triggered here")
+                return false
             }
         }
+        return true
     }
 
     // check if a project is out to date comparing metadata with current today's date.
@@ -121,20 +123,25 @@ public class TourUpdateManager {
         }
         notify()
     }
+    
     //get the current status of the tour from the latest data on the api. Returns a tuple
     func getTourStatusInfo() -> (timeHours: Int,timeMins: Int, isCurrent: Bool, expiresIn: Int){
-    
-        //place holder information, this will need implementation
+        
+        
+        var isTourUptodate = true
+        isTourUptodate = self.isTourUpToDate()
+        
+        //place holder information, this will need implementation=
         let timeHours = 1
         let timeMins = 30
-        let isCurrent = true
         let expiresIn = 7
-        return (timeHours, timeMins, isCurrent, expiresIn)
+        return (timeHours, timeMins, isTourUptodate, expiresIn)
     }
 
     // called from the tourSummary when the user confirms to download the updates
     func triggerUpdate() {
-        TourDeleter().deleteTour(tourCode)
+        print("triggering update")
+        TourDeleter.sharedInstance.deleteTour(tourTableRow)
         ApiConnector.sharedInstance.initiateConnection(tourCode, isCheckingForUpdate: false)
     }
 }

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		7A432AB11C8B69AB007482F8 /* TourUpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A432AB01C8B69AB007482F8 /* TourUpdateManager.swift */; };
 		7A9118C81C945990008BF835 /* TourUpdateManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9118C71C945990008BF835 /* TourUpdateManagerTests.swift */; };
+		7A9118C91C94B8DE008BF835 /* tourDataParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0A51731C77482D00E4F733 /* tourDataParser.swift */; };
 		E5007F851C8B6ACA0041B31C /* TourDeleter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5007F841C8B6ACA0041B31C /* TourDeleter.swift */; };
 		E5012B8F1C8DDF3500A64038 /* POITableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5012B8E1C8DDF3500A64038 /* POITableViewController.swift */; };
 		E536DCBF1C6510FD00A7B2FC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E536DCBE1C6510FC00A7B2FC /* AppDelegate.swift */; };
@@ -441,6 +442,7 @@
 				FAD0BB5D1C9D767000FEC01A /* POIParserTests.swift in Sources */,
 				FA5C8ED71C9D9CB4002F554C /* ImageHandlerTests.swift in Sources */,
 				E591E5EB1CA14779000F6DBD /* POIConnectorTests.swift in Sources */,
+				7A9118C91C94B8DE008BF835 /* tourDataParser.swift in Sources */,
 				7A9118C81C945990008BF835 /* TourUpdateManagerTests.swift in Sources */,
 				FAB946A21CA039F4003A09F9 /* TourDeleterTests.swift in Sources */,
 				E58E7C891CA03D5000D6D654 /* BundleRouteConnectorTests.swift in Sources */,
