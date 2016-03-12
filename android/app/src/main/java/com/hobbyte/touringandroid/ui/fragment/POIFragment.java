@@ -2,6 +2,7 @@ package com.hobbyte.touringandroid.ui.fragment;
 
 import android.os.Bundle;
 import android.app.ListFragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import com.hobbyte.touringandroid.R;
 import com.hobbyte.touringandroid.io.FileManager;
 import com.hobbyte.touringandroid.tourdata.ListViewItem;
+import com.hobbyte.touringandroid.ui.activity.TourActivity;
 import com.hobbyte.touringandroid.ui.adapter.PoiContentAdapter;
 
 import org.json.JSONArray;
@@ -87,6 +89,9 @@ public class POIFragment extends ListFragment {
                     switch (item.getString("type")) {
                         case "Header":
                             text = item.getString("content");
+                            if(text.equals(((AppCompatActivity) getActivity()).getSupportActionBar().getTitle().toString())) {
+                                text = "";
+                            }
                             url = null;
                             type = PoiContentAdapter.HEADER;
                             break;
@@ -110,7 +115,6 @@ public class POIFragment extends ListFragment {
                             url = null;
                             type = PoiContentAdapter.IGNORE_ITEM_VIEW_TYPE;
                     }
-
                     listItems[i] = new ListViewItem(text, type, url);
                 }
 
