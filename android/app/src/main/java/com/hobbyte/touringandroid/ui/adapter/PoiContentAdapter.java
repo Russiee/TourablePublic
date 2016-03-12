@@ -19,12 +19,14 @@ import com.hobbyte.touringandroid.tourdata.ListViewItem;
  * @author Nikita
  */
 public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
+    private static final String TAG = "PoiContentAdapter";
+
     public static final int HEADER = 0;
     public static final int BODY = 1;
     public static final int IMG = 2;
     public static final int VIDEO = 3;
     public static final int QUIZ = 4;
-    private static final String TAG = "PoiContentAdapter";
+
     private ListViewItem[] items;
 
     private String keyID;
