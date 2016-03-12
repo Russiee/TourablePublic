@@ -153,7 +153,10 @@ public class SummaryActivity extends AppCompatActivity {
 
 
     public void doTourUpdate() {
-        //TODO open download dialog
+        //TODO replace this when we have a download dialog
+        Intent intent = new Intent(this, DownloadActivity.class);
+        startActivity(intent);
+        this.finish();
     }
 
 }
