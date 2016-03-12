@@ -36,6 +36,8 @@ public class LoadImageFromURL extends AsyncTask<String, Void, Bitmap> {
         if(file.exists()) {
             bm = BitmapFactory.decodeFile(file.getAbsolutePath());
             Log.d(TAG, "DOES EXIST!");
+        } else {
+            Log.w(TAG, String.format("Could not find file %s", imgPath));
         }
         return bm;
     }

@@ -1,12 +1,15 @@
 package com.hobbyte.touringandroid.io;
 
 import android.content.Context;
+import android.os.Parcelable;
 import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.HashSet;
 import java.util.regex.Pattern;
 
@@ -63,10 +66,13 @@ public class BundleSaver extends Thread {
     private HashSet<String> imageURLs = new HashSet<>();
     private HashSet<String> videoURLs = new HashSet<>();
 
+    private Pattern whitespace;
+
     public BundleSaver(Context c, String bundleString, String keyid) {
         context = c;
         bundle = bundleString;
         keyID = keyid;
+        whitespace = Pattern.compile("\\s+");
     }
 
     @Override
@@ -241,7 +247,18 @@ public class BundleSaver extends Thread {
 
                 if (postItem.has("url")) {
                     String type = postItem.getString("type");
-                    String url = postItem.getString("url");
+                    String url;
+
+                    try {
+                        url = URLDecoder.decode(postItem.getString("url"), "UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        Log.e(TAG, e.getMessage());
+                        url = postItem.getString("url");
+                    }
+
+                    url = whitespace.matcher(url).replaceAll("+");
+                    postItem.put("url", url);
+//                    String url = postItem.getString("url");
 
                     if (type.equals("image")) {
                         imageURLs.add(url);
