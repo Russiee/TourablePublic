@@ -39,7 +39,7 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
 
     @Override
     public int getViewTypeCount() {
-        return 2;
+        return 4;
     }
 
     @Override
@@ -71,12 +71,6 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
 
         if (listViewItem.getUrl() != null) {
             Matcher m = namePattern.matcher(listViewItem.getUrl());
-            try {
-                Log.d(TAG, URLEncoder.encode(listViewItem.getUrl(), "UTF-8"));
-            } catch (Exception e) {
-                Log.w(TAG, e.getMessage());
-            }
-
             if (m.matches()) {
                 filename = m.group(1);
             }

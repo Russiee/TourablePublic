@@ -35,6 +35,7 @@
 
     <string name="summary_activity_start_tour">Open tour</string>
     <string name="summary_activity_update_tour">Update tour</string>
+    <string name="enter_tour_text">Enter the provided tour key: </string>
 
     <string name="msg_no_internet">No internet connection</string>
     <string name="msg_invalid_key">Invalid tour key</string>
