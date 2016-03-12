@@ -39,8 +39,6 @@ class TourSectionsController: UITableViewController {
  
         }
 
-
-        NSLineBreakMode.ByWordWrapping
         tourSummaryTextView.sizeToFit()
         tourSummaryTextView.sizeToFit()
 
@@ -53,16 +51,19 @@ class TourSectionsController: UITableViewController {
             poiKeys.append(poiData.title as String)
         }
 
+        models = tourTitles
+        checkStateOfScreen()
         tableView.reloadInputViews()
         tableView.reloadData()
         self.reloadInputViews()
-        models = tourTitles
-        checkStateOfScreen()
            }
     
     //to check if should be emptry screen when cancelling a tour download
     override func viewWillAppear(animated: Bool) {
         checkStateOfScreen()
+    }
+    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return tourSummaryTextView.frame.height// return height which is greater than your image's height.
     }
     
     override func didReceiveMemoryWarning() {
