@@ -6,6 +6,8 @@
     tools:context="com.hobbyte.touringandroid.ui.fragment.POIFragment"
     android:background="#ffffff">
 
+    <!--<android.support.v7.widget.R-->
+
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"

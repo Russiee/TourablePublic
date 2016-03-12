@@ -32,7 +32,8 @@ public class DownloadTourTask extends Thread {
     public static final String STATE = "downloadState";
     public static final String PROGRESS = "downloadProgress";
 
-    public static final String FILE_NAME_PATTERN = "https?:\\/\\/[-\\w\\.\\/]*\\/([\\p{Punct}\\w]*\\.(jpe?g|png|mp4))";
+    public static final String FILE_NAME_PATTERN = "https?:\\/\\/[-\\w\\.\\/]*\\/(.+\\.(jpe?g|png|mp4))";
+//    public static final String FILE_NAME_PATTERN = "https?:\\/\\/[-\\w\\.\\/]*\\/([\\p{Punct}\\w]+\\.(jpe?g|png|mp4))";
 
     private String keyID;
     private String tourID;
@@ -86,6 +87,8 @@ public class DownloadTourTask extends Thread {
                 String img = m.group(1);
                 Log.d(TAG, img);
                 saveFile(urlString, img, "image", 8192);
+            } else {
+                Log.d(TAG, "Could not match " + urlString);
             }
 
             informActivity(++count / total);

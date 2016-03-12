@@ -1,6 +1,7 @@
 package com.hobbyte.touringandroid.ui.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import com.hobbyte.touringandroid.tourdata.ListViewItem;
 import com.hobbyte.touringandroid.internet.LoadImageFromURL;
 import com.hobbyte.touringandroid.R;
 
+import java.net.URLEncoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,6 +31,7 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
     public static final int VIDEO = 3;
 
     private static Pattern namePattern;
+    private static final String FILE_NAME_PATTERN = "https?:\\/\\/[-\\w\\.\\/]*\\/(.+\\.(jpe?g|png|mp4))";
 
     private ListViewItem[] items;
 
@@ -48,7 +51,7 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
         super(context, 0, content);
         this.keyID = keyID;
         items = content;
-        namePattern = Pattern.compile(DownloadTourTask.FILE_NAME_PATTERN);
+        namePattern = Pattern.compile(FILE_NAME_PATTERN);
     }
 
     /**
@@ -62,33 +65,76 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
     public View getView(int position, View view, ViewGroup parent) {
         ListViewItem listViewItem = items[position];
         int listViewItemType = getItemViewType(position);
-        String url = "";
+        String filename = null;
+
+        TextView contentView;
 
         if (listViewItem.getUrl() != null) {
             Matcher m = namePattern.matcher(listViewItem.getUrl());
+            try {
+                Log.d(TAG, URLEncoder.encode(listViewItem.getUrl(), "UTF-8"));
+            } catch (Exception e) {
+                Log.w(TAG, e.getMessage());
+            }
 
             if (m.matches()) {
-                url = m.group(1);
+                filename = m.group(1);
             }
         }
 
         if (view == null) {
             if (listViewItemType == IMAGE) {
-                view = LayoutInflater.from(getContext()).inflate(R.layout.poi_image, parent, false);
+                view = LayoutInflater.from(getContext()).inflate(R.layout.poi_content, parent, false);
+//                view = LayoutInflater.from(getContext()).inflate(R.layout.poi_image, parent, false);
             } else {
                 view = LayoutInflater.from(getContext()).inflate(R.layout.poi_content, parent, false);
             }
         }
 
-        if (listViewItemType == IMAGE) {
+        switch (listViewItemType) {
+            case IMAGE:
+                contentView = (TextView) view.findViewById(R.id.poiContentTextView);
+                contentView.setText("An image should go here\n");
+                return view;
+
+                /*ImageView imageView = (ImageView) view.findViewById(R.id.poiContentImageView);
+
+                if (filename != null) {
+                    new LoadImageFromURL(imageView, App.context).execute(filename, keyID); //Load image in a separate thread
+                }
+                return view;*/
+
+            case VIDEO:
+                contentView = (TextView) view.findViewById(R.id.poiContentTextView);
+                contentView.setText("A video should go here\n");
+                return view;
+            case HEADER:
+                // TODO
+                contentView = (TextView) view.findViewById(R.id.poiContentTextView);
+                contentView.setText(listViewItem.getText() + "\n");
+                return view;
+            case BODY:
+                // TODO
+                contentView = (TextView) view.findViewById(R.id.poiContentTextView);
+                contentView.setText(listViewItem.getText() + "\n");
+                return view;
+            default:
+                contentView = (TextView) view.findViewById(R.id.poiContentTextView);
+                contentView.setText("Something went wrong\n");
+                return view;
+        }
+
+        /*if (listViewItemType == IMAGE) {
             ImageView imageView = (ImageView) view.findViewById(R.id.poiContentImageView);
 
-            new LoadImageFromURL(imageView, App.context).execute(url, keyID); //Load image in a separate thread
+            if (filename != null) {
+                new LoadImageFromURL(imageView, App.context).execute(filename, keyID); //Load image in a separate thread
+            }
             return view;
         } else {
-            TextView contentView = (TextView) view.findViewById(R.id.poiContentTextView);
+            contentView = (TextView) view.findViewById(R.id.poiContentTextView);
             contentView.setText(listViewItem.getText() + "\n");
             return view;
-        }
+        }*/
     }
 }
