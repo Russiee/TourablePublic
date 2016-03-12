@@ -59,7 +59,7 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
         if progress == 1.0{
             //Allow user to leave page, hide download status
             downloadStatusLabel.hidden = true
-            self.dismissViewControllerAnimated(true, completion: nil)
+            self.performSegueWithIdentifier("cancelAdd", sender: self)
         }
         
     }
