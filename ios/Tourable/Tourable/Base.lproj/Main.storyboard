@@ -6,10 +6,10 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--About View Controller-->
         <scene sceneID="apU-ed-RTP">
             <objects>
-                <viewController id="5ld-DC-wWd" sceneMemberID="viewController">
+                <viewController id="5ld-DC-wWd" customClass="AboutViewController" customModule="Tourable" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="w8S-57-Azo"/>
                         <viewControllerLayoutGuide type="bottom" id="doJ-sw-NeJ"/>
@@ -49,7 +49,7 @@
                                         <color key="textColor" red="0.94117647059999998" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Daniel Baryshnikov" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4jh-Da-hga">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Daniil Baryshnikov" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4jh-Da-hga">
                                         <rect key="frame" x="8" y="287" width="145" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" red="0.94117647059999998" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
@@ -70,6 +70,20 @@
                                         <color key="textColor" red="0.94117647059999998" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VxF-K3-IZG">
+                                        <rect key="frame" x="211" y="372" width="179" height="51"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="179" id="ekW-pb-2GU"/>
+                                            <constraint firstAttribute="height" constant="51" id="pEL-6g-NhH"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                        <state key="normal" title="Support site" backgroundImage="empty_state_button">
+                                            <color key="titleColor" red="0.94117647059999998" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="supportButtonPressed:" destination="5ld-DC-wWd" eventType="touchUpInside" id="gdt-P8-fDS"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.08235294118" green="0.1647058824" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -79,9 +93,11 @@
                                     <constraint firstItem="GjX-AI-4Gv" firstAttribute="centerY" secondItem="qcu-5I-xGz" secondAttribute="centerY" id="6Ea-nc-2QV"/>
                                     <constraint firstItem="N9R-20-wee" firstAttribute="leading" secondItem="um5-By-00j" secondAttribute="leading" id="FCb-w6-Jyw"/>
                                     <constraint firstItem="N9R-20-wee" firstAttribute="top" secondItem="bPD-uF-rkP" secondAttribute="bottom" constant="8" symbolic="YES" id="I6p-V4-pW2"/>
+                                    <constraint firstItem="VxF-K3-IZG" firstAttribute="top" secondItem="EAl-03-uh6" secondAttribute="bottom" constant="8" symbolic="YES" id="KQI-Qf-vdv"/>
                                     <constraint firstAttribute="trailing" secondItem="3XG-l8-w04" secondAttribute="trailing" id="LIl-7g-UTp"/>
                                     <constraint firstItem="um5-By-00j" firstAttribute="top" secondItem="N9R-20-wee" secondAttribute="bottom" constant="8" symbolic="YES" id="ReQ-m2-VP6"/>
                                     <constraint firstItem="3XG-l8-w04" firstAttribute="centerX" secondItem="qcu-5I-xGz" secondAttribute="centerX" id="ScJ-Qe-a9q"/>
+                                    <constraint firstItem="VxF-K3-IZG" firstAttribute="centerX" secondItem="EAl-03-uh6" secondAttribute="centerX" id="WEf-8r-1Jm"/>
                                     <constraint firstItem="bPD-uF-rkP" firstAttribute="top" secondItem="3XG-l8-w04" secondAttribute="bottom" constant="8" id="YuM-YW-FbZ"/>
                                     <constraint firstItem="N9R-20-wee" firstAttribute="leading" secondItem="bPD-uF-rkP" secondAttribute="leading" id="f8A-vQ-8hJ"/>
                                     <constraint firstItem="bPD-uF-rkP" firstAttribute="leading" secondItem="qcu-5I-xGz" secondAttribute="leading" constant="8" id="fsh-bI-2lD"/>
@@ -561,6 +577,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="empty_state_button" width="433" height="111"/>
         <image name="generic_button" width="433" height="112"/>
         <image name="header" width="750" height="198"/>
     </resources>
