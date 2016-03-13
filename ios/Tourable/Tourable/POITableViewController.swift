@@ -170,13 +170,9 @@ class POITableViewController: UITableViewController {
                 case "image" :
 
                         var img: UIImage?
-                        if let imageAtRow : String? = row["url"] as? String{
+                        let imageAtRow : String? = row["url"] as? String
                             img = imageHandler.sharedInstance.loadImageFromPath(imageAtRow)
                     
-                        } else {
-                            img = UIImage()
-                        }
-                
                 
                             let  h_fact = width / (img?.size.width)!
                             let new_height = (img?.size.height)! * h_fact

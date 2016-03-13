@@ -81,10 +81,15 @@ class imageHandler: NSObject {
         }else{
             let fileName = String(name!.hash)
             let path = mediaHelper.sharedInstance.fileInDocumentsDirectory(fileName,fileType: ".jpg")
-            let image = UIImage(contentsOfFile: path)
+            var image = UIImage(contentsOfFile: path)
             
             if image == nil {
                 print("missing image at: \(path)")
+                if let url  = NSURL(string: name!),
+                    data = NSData(contentsOfURL: url)
+                {
+                    image = UIImage(data: data)
+                }
             } else {
                 // this is just for you to see the path in case you want to go to the directory, using Finder.
                 print("Loading image from path: \(path)")
