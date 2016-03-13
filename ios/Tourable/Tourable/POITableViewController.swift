@@ -215,20 +215,19 @@ class POITableViewController: UITableViewController {
                         let imgGenerator = AVAssetImageGenerator(asset: asset)
                         let cgImage = try imgGenerator.copyCGImageAtTime(CMTimeMake(0, 1), actualTime: nil)
                         let uiImage = UIImage(CGImage: cgImage)
-                        // let imageView = UIImageView(image: uiImage)
-                        
                         
                         let  h_fact = width / (uiImage.size.width)
                         let new_height = uiImage.size.height * h_fact
                         let new_width = uiImage.size.width * h_fact
                         
+                        let previewImage = createPreviewImage(uiImage, Width: new_width, Height: new_height)
+                        
                         let imageView = UIImageView(frame: CGRectMake(0, 0, new_width, new_height))
-
                         imageView.userInteractionEnabled = true
                         recognizer.addTarget(self, action: "videoThumbnailTapped")
                         imageView.addGestureRecognizer(recognizer)
                         imageView.clipsToBounds = true
-                        imageView.image = uiImage
+                        imageView.image = previewImage
                         imageView.contentMode = .ScaleAspectFit
                         imageView.setNeedsDisplay()
                         poiViews.append(imageView)
@@ -265,6 +264,32 @@ class POITableViewController: UITableViewController {
             
         }
     }
+    
+    //a function to resize the preview image of the video and overlay the play button
+    func createPreviewImage(image: UIImage, Width: CGFloat, Height: CGFloat) -> UIImage{
+        let widthScale = Width / image.size.width
+        let newWidth = image.size.width * widthScale
+        let heightScale = Height / image.size.height
+        let newHeight = image.size.height * heightScale
+        
+        UIGraphicsBeginImageContext(CGSizeMake(newWidth, newHeight))
+        image.drawInRect(CGRectMake(0, 0, newWidth, newHeight))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        let newSize = CGSizeMake(Width, Height) // set this to what you need
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0)
+        
+        newImage.drawInRect(CGRect(origin: CGPointZero, size: newSize))
+        
+        (UIImage(named: "PlayButton"))!.drawInRect(CGRect(origin: CGPointZero, size: newSize))
+        
+        let finalImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return finalImage
+    }
+
     
     func videoThumbnailTapped(){
         let url = videoList[0]
