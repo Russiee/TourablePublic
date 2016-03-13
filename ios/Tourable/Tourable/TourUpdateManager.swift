@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class TourUpdateManager {
+public class TourUpdateManager: NSObject {
 
     var tourTableRow: Int!
     var tourCode: String!
@@ -54,8 +54,8 @@ public class TourUpdateManager {
             let currentDate = obtainDateFromString(currentMetadata["updatedAt"] as! String)
             let newDate = obtainDateFromString(newMetadata["updatedAt"] as! String)
             
-            let comparisonResultString = compareDates(currentDate, newDate: newDate)
-            
+            //let comparisonResultString = compareDates(currentDate, newDate: newDate)
+            let comparisonResultString = compareDates(currentDate, newDate: NSDate())
             // check if the current date is less recent than the one in the metadata ("ascending"). If yes, ask the user to update tour.
             if comparisonResultString == "ascending" {
                 print("current date \(currentDate) is less recent than the last updated \(newDate), therefore update triggered here")
@@ -140,8 +140,14 @@ public class TourUpdateManager {
 
     // called from the tourSummary when the user confirms to download the updates
     func triggerUpdate() {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedValid", name: validIdNotificationKey, object: nil)
         print("triggering update")
         TourDeleter.sharedInstance.deleteTour(tourTableRow)
         ApiConnector.sharedInstance.initiateConnection(tourCode, isCheckingForUpdate: false)
+    }
+    
+    func NotifiedValid(){
+        sleep(1)
+        imageHandler.sharedInstance.downloadMediaSet(imageHandler.sharedInstance.imageQueue)
     }
 }
