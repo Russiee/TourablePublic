@@ -52,6 +52,9 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
     private TextView rightPOI;
     private TextView leftPOI;
 
+    private TextView sectionDescription;
+    private TextView navText;
+
     private DrawerLayout navLayout;
     private ListView navList;
     private ArrayList<TourItem> topLevelContents;
@@ -83,6 +86,8 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(title);
         toolbar.setNavigationIcon(R.mipmap.ic_menu_white_24dp);
+
+        sectionDescription = (TextView) findViewById(R.id.sectionDescription);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -153,6 +158,8 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
         transaction.commit();
         poiNavigation.setVisibility(View.INVISIBLE);
         toolbar.setTitle(currentSection.getTitle());
+        sectionDescription.setText(currentSection.getDescription());
+        navText.setText(toolbar.getTitle());
     }
 
     /**
@@ -173,7 +180,9 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
         poiNavigation.setVisibility(View.VISIBLE);
         setPoiNavText(poi);
         currentPOI = poi;
+        sectionDescription.setText("");
         toolbar.setTitle(poi.getTitle());
+        navText.setText(toolbar.getTitle());
     }
 
     private class TourBuilderTask extends AsyncTask<Void, Void, Boolean> {
@@ -221,7 +230,8 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
     private void setupNavDrawer() {
         navLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navList = (ListView) findViewById(R.id.left_drawer);
-
+        navText = (TextView) findViewById(R.id.tourNameText);
+        navText.setText(toolbar.getTitle());
         topLevelContents = currentSection.getContents();
 
         LinearLayout home = (LinearLayout) findViewById(R.id.homeLayout);

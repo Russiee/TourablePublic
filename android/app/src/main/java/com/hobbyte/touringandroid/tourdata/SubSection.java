@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class SubSection extends TourItem implements Parcelable {
     
     private final String title;
+    private final String description;
     private final SubSection parent;
 
     /** This lets the object skip over any SubSections in `contents`. See {@link #getPOI(int)}*/
@@ -23,9 +24,10 @@ public class SubSection extends TourItem implements Parcelable {
      *  with SubSections first, and POIs after. */
     private ArrayList<TourItem> contents = new ArrayList<>();
     
-    public SubSection(SubSection parent, String title, String objectID, int numSubSections) {
+    public SubSection(SubSection parent, String title, String description, String objectID, int numSubSections) {
         super(objectID);
         this.title = title;
+        this.description = description;
         this.parent = parent;
         this.numSubSections = numSubSections;
     }
@@ -70,6 +72,11 @@ public class SubSection extends TourItem implements Parcelable {
     public String getTitle() {
         return title;
     }
+
+    /**
+     * Get the SubSection's description, as described in the JSON.
+     */
+    public String getDescription() { return description; }
 
     /**
      * Get this object's parent section.
@@ -125,6 +132,7 @@ public class SubSection extends TourItem implements Parcelable {
     public SubSection(Parcel in) {
         super(in.readString());
         title = in.readString();
+        description = in.readString();
         numSubSections = in.readInt();
         parent = (SubSection) in.readValue(SubSection.class.getClassLoader());
     }
@@ -133,6 +141,7 @@ public class SubSection extends TourItem implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(objectID);
         dest.writeString(title);
+        dest.writeString(description);
         dest.writeInt(numSubSections);
         dest.writeValue(parent);
     }
