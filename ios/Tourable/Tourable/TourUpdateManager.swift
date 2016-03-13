@@ -55,11 +55,11 @@ public class TourUpdateManager {
             let currentDate = obtainDateFromString(currentMetadata["updatedAt"] as! String)
             let newDate = obtainDateFromString(newMetadata["updatedAt"] as! String)
             
-            let comparisonResultString = compareDates(currentDate, newDate: newDate)
+             let comparisonResultString = compareDates(currentDate, newDate: newDate)
             // check if the current date is less recent than the one in the metadata. If yes, ask the user to update tour.
             if comparisonResultString == "ascending" {
                 print("current date \(currentDate) is less recent than the last updated \(newDate), therefore update triggered here")
-                self.triggerUpdateAvailableNotification()
+                //self.triggerUpdateAvailableNotification()
             }
         }
     }
@@ -129,7 +129,7 @@ public class TourUpdateManager {
         //place holder information, this will need implementation
         let timeHours = 1
         let timeMins = 30
-        let isCurrent = false
+        let isCurrent = true
         let expiresIn = 7
         return (timeHours, timeMins, isCurrent, expiresIn)
     }
