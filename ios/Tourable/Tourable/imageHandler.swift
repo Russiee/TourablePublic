@@ -81,7 +81,7 @@ class imageHandler: NSObject {
         }else{
             let fileName = String(name!.hash)
             let path = mediaHelper.sharedInstance.fileInDocumentsDirectory(fileName,fileType: ".jpg")
-            var image = UIImage(contentsOfFile: path)
+            let image = UIImage(contentsOfFile: path)
             
             if image == nil {
                 print("error loading image")

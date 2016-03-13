@@ -114,7 +114,7 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
     func setTourInfomation(){
         let dataId = TourIdParser().getTourMetadata(tourIdForSummary)["objectId"] as! String
         let tour = tourDataParser().getTourSection(dataId)
-        tourTitleLabel.text = tour.title as String
+        self.title = tour.title as String
         tourDescriptionLabel.text =  tour.description
     }
     
