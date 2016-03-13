@@ -3,12 +3,14 @@ package com.hobbyte.touringandroid.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.hobbyte.touringandroid.R;
@@ -26,7 +28,8 @@ public class SummaryActivity extends AppCompatActivity {
     public static final String TOUR_ID = "tourID";
     private static final String TAG = "SummaryActivity";
     private Button openButton;
-    private Button updateButton;
+    private ImageButton updateButton;
+    private TextView updateText;
 
     private String keyID;
     private String tourID;
@@ -42,6 +45,7 @@ public class SummaryActivity extends AppCompatActivity {
         tourID = intent.getStringExtra(TOUR_ID);
 
         Log.d(TAG, String.format("k: %s t: %s", keyID, tourID));
+
 
         displayTourInfo();
         displayVersionAndUpdate();
@@ -104,6 +108,9 @@ public class SummaryActivity extends AppCompatActivity {
 
     private void displayVersionAndUpdate() {
 
+        updateButton = (ImageButton) findViewById(R.id.updateTourButton);
+        updateText = (TextView) findViewById(R.id.updateTourText);
+
         Context context = getApplicationContext();
         SharedPreferences prefs = context.getSharedPreferences(
                 context.getString(R.string.preference_file_key),
@@ -118,6 +125,9 @@ public class SummaryActivity extends AppCompatActivity {
                     break;
                 }
             }
+        } else {
+            updateButton.setImageResource(R.mipmap.ic_check_black_24dp);
+            updateText.setVisibility(View.GONE);
         }
     }
 
@@ -127,8 +137,9 @@ public class SummaryActivity extends AppCompatActivity {
         version.setText(getApplicationContext().getString(
                 R.string.summary_activity_new_version_is_available));
 
-        Button updateButton = (Button) findViewById(R.id.updateTourButton);
-        updateButton.setVisibility(View.VISIBLE);
+        updateText.setVisibility(View.VISIBLE);
+        updateButton.setImageResource(R.mipmap.ic_get_app_black_24dp);
+
 
     }
 

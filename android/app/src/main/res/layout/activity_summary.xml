@@ -25,33 +25,13 @@
         android:layout_height="match_parent"
         android:padding="@dimen/activity_horizontal_margin">
 
-        <android.support.v7.widget.CardView
-                xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/infoCard"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                card_view:cardCornerRadius="4dp"
-                android:elevation="8dp"
-                android:visibility="visible"
-                android:layout_gravity="center_vertical">
-
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-
-                    <TextView
-                        android:id="@+id/txtTourDescription"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="clip_vertical"
-                        style="@style/summaryScreen"
-                        android:padding="16dp" />
-                </LinearLayout>
-
-                </android.support.v7.widget.CardView>
+        <TextView
+            android:id="@+id/txtTourDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="clip_vertical"
+            style="@style/summaryScreen"
+            android:padding="16dp" />
 
         <Space
                 android:layout_width="match_parent"
@@ -97,13 +77,29 @@
                             android:layout_weight="1"
                             android:padding="12dp" />
 
-                        <Button
-                            android:id="@+id/updateTourButton"
+                        <LinearLayout
+                            android:orientation="horizontal"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:visibility="gone"
-                            android:text="@string/summary_activity_update_tour"
-                            android:textColor="@color/colorWhiteText" />
+                            android:id="@+id/updateTour"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/summary_activity_update_tour"
+                                android:id="@+id/updateTourText"
+                                android:padding="12dp"
+                                android:visibility="gone"/>
+                            <ImageButton
+                                android:id="@+id/updateTourButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@mipmap/ic_check_black_24dp"
+                                android:tint="#00ff0f"
+                                android:background="@null"
+                                android:visibility="visible"/>
+                        </LinearLayout>
 
                     </LinearLayout>
 
