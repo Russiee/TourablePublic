@@ -96,6 +96,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
             empty_state_label.contentMode = .ScaleAspectFit
             tableView.backgroundView = empty_state_label
             tableView.separatorStyle = UITableViewCellSeparatorStyle.None
+            self.tableView.scrollEnabled = false
         } else {
          
             addTourButtonView.frame = CGRectMake(0 , 0, self.view.frame.width, self.view.frame.height*0.8-tableView.bounds.height)
@@ -107,6 +108,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
             self.view.backgroundColor = UIColor.groupTableViewBackgroundColor()
             tableView.backgroundView = nil
             tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
+            self.tableView.scrollEnabled = true
         }
         
     }
