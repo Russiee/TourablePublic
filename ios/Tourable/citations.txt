@@ -1,1 +1,3 @@
 https://icons8.com/license/ - tick mark
+https://github.com/natelyman/SwiftImageLoader/blob/master/LICENSE - async image loader
+

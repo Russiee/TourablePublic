@@ -84,12 +84,8 @@ class imageHandler: NSObject {
             var image = UIImage(contentsOfFile: path)
             
             if image == nil {
-                print("missing image at: \(path)")
-                if let url  = NSURL(string: name!),
-                    data = NSData(contentsOfURL: url)
-                {
-                    image = UIImage(data: data)
-                }
+                return nil
+
             } else {
                 // this is just for you to see the path in case you want to go to the directory, using Finder.
                 print("Loading image from path: \(path)")
