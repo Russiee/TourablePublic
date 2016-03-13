@@ -23,12 +23,11 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         models = tourParser.getAllTours()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "Notified", name: TableUpdateNotificationKey, object: nil)
         self.clearsSelectionOnViewWillAppear = false
-        checkStateOfScreen()
         //TODO remove this, for demo use only
         let connection: Bool = ApiConnector.sharedInstance.isConnectedToNetwork()
         print("internet connection status: \(connection)")
         checkToursToDelete()
-        tableView.tableFooterView = addTourButtonView
+        
         tableView.contentInset = UIEdgeInsetsMake(50, 0, 0, 0)
         
     }
@@ -38,6 +37,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         //makes sure Tool bar is visible again after coming back from Tour
         self.navigationController?.setToolbarHidden(true, animated: false)
         checkStateOfScreen()
+        tableView.tableFooterView = addTourButtonView
     }
 
     override func didReceiveMemoryWarning() {
@@ -96,6 +96,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
             empty_state_label.contentMode = .ScaleAspectFit
             tableView.backgroundView = empty_state_label
             tableView.separatorStyle = UITableViewCellSeparatorStyle.None
+            self.tableView.scrollEnabled = false
         } else {
          
             addTourButtonView.frame = CGRectMake(0 , 0, self.view.frame.width, self.view.frame.height*0.8-tableView.bounds.height)
@@ -107,6 +108,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
             self.view.backgroundColor = UIColor.groupTableViewBackgroundColor()
             tableView.backgroundView = nil
             tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
+            self.tableView.scrollEnabled = true
         }
         
     }
