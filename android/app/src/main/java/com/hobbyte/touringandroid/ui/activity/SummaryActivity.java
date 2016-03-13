@@ -3,6 +3,7 @@ package com.hobbyte.touringandroid.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -127,6 +128,7 @@ public class SummaryActivity extends AppCompatActivity {
             }
         } else {
             updateButton.setImageResource(R.mipmap.ic_check_black_24dp);
+            updateButton.setColorFilter(Color.parseColor("#00ff0f"));
             updateText.setVisibility(View.GONE);
         }
     }
@@ -138,7 +140,9 @@ public class SummaryActivity extends AppCompatActivity {
                 R.string.summary_activity_new_version_is_available));
 
         updateText.setVisibility(View.VISIBLE);
+        updateText.setTextColor(Color.CYAN);
         updateButton.setImageResource(R.mipmap.ic_get_app_black_24dp);
+        updateButton.setColorFilter(Color.CYAN);
 
 
     }
