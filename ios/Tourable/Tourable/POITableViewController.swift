@@ -210,11 +210,17 @@ class POITableViewController: UITableViewController {
                             
                         })
                     }else{
+                    
+                        let  h_fact = width / (img?.size.width)!
+                        let new_height = (img?.size.height)! * h_fact
+                        let new_width = (img?.size.width)! * h_fact
+                        
+                        imageView1 = UIImageView(frame: CGRectMake(0, 0, new_width, new_height))
                         imageView1.image = img
                         imageView1.contentMode = .ScaleAspectFit
                         imageView1.setNeedsDisplay()
-                        poiViews.append(imageView1)
-                    
+                        self.poiViews.append(imageView1)
+                        
                         let chars: CGFloat = CGFloat((row["description"] as! String).characters.count)
                         var lines: CGFloat = chars/40
                         if lines < 2{
@@ -225,12 +231,12 @@ class POITableViewController: UITableViewController {
                         label.editable = false
                         label.font = UIFont.italicSystemFontOfSize(16)
                         label.text = (row["description"] as! String)
-                    
+                        
                         label.scrollEnabled = false
                         label.contentMode = .ScaleAspectFill
                         label.textColor = UIColor(red: 74/255, green: 95/255, blue: 126/255, alpha: 1.0)
                         label.backgroundColor = UIColor.groupTableViewBackgroundColor()
-                        poiViews.append(label)
+                        self.poiViews.append(label)
                         }
                     
                  case "video":
