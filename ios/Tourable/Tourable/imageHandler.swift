@@ -81,13 +81,14 @@ class imageHandler: NSObject {
         }else{
             let fileName = String(name!.hash)
             let path = mediaHelper.sharedInstance.fileInDocumentsDirectory(fileName,fileType: ".jpg")
-            let image = UIImage(contentsOfFile: path)
+            var image = UIImage(contentsOfFile: path)
             
             if image == nil {
-                print("missing image at: \(path)")
+                print("error loading image")
+
             } else {
                 // this is just for you to see the path in case you want to go to the directory, using Finder.
-                print("Loading image from path: \(path)")
+                print("Loading image ok")
             }
             return image
         }
@@ -95,18 +96,13 @@ class imageHandler: NSObject {
     func queueImage(urls: [String]){
         imageQueue.appendContentsOf(urls)
     }
-    func savePlaceholders(urls: [String]){
-        for url in urls {
-            print("save placeholder of create logic for online viewing here for url \(url)")
-            print("****DO NOT DELETE THIS MESSAGE UNTIL IMPLEMENTED****")
-        }
-    }
-    
+
     //called just once in pointOfInterest.swift
     func downloadMediaSet(urls: [String]){
        
         countOfImages = countOfImages + urls.count
-
+        print(urls.count)
+        print("number of images")
         for url in urls {
             
             if(url.characters.last == "g"){
@@ -119,11 +115,9 @@ class imageHandler: NSObject {
                     guard let data = data where error == nil else {
                         return
                     }
-                    //print(response?.suggestedFilename ?? "")
                     
                     let image = UIImage(data: data)
                     self.saveImage(image!, name: imageUrl)
-                    //HOW TO GET HERE THE FINAL DOWNLOADED IMAGE
                 }
                 }
             }else{

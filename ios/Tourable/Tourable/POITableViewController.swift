@@ -155,6 +155,8 @@ class POITableViewController: UITableViewController {
                         var lines: CGFloat = chars/40
                         if lines < 2{
                             lines = 2
+                        }else{
+                            lines = lines+1
                         }
                         let label = UITextView(frame: CGRectMake(0, 0, width, 20 * lines))
                         label.contentInset = UIEdgeInsetsMake(0, 12, 0, 12)
@@ -165,30 +167,28 @@ class POITableViewController: UITableViewController {
                         label.textColor = UIColor(red: 74/255, green: 95/255, blue: 126/255, alpha: 1.0)
                         label.backgroundColor = UIColor.groupTableViewBackgroundColor()
                         poiViews.append(label)
-                        
+                    
                     
                 case "image" :
-
-                        var img: UIImage?
-                        if let imageAtRow : String? = row["url"] as? String{
-                            img = imageHandler.sharedInstance.loadImageFromPath(imageAtRow)
                     
-                        } else {
-                            img = UIImage()
-                        }
-                
-                
-                            let  h_fact = width / (img?.size.width)!
-                            let new_height = (img?.size.height)! * h_fact
-                            let new_width = (img?.size.width)! * h_fact
-
-                           let imageView1 = UIImageView(frame: CGRectMake(0, 0, new_width, new_height))
-                        
+                    var img: UIImage?
+                    let imageAtRow : String? = row["url"] as? String
+                    var imageView1 = UIImageView()
+                    img = imageHandler.sharedInstance.loadImageFromPath(imageAtRow)
+                    if img == nil{
+                        ImageLoader.sharedLoader.imageForUrl((row["url"] as? String)!, completionHandler:{(image: UIImage?, url: String) in
+                            print("in here!")
+                            let img = image
+                            let  h_fact = width / (image?.size.width)!
+                            let new_height = (image?.size.height)! * h_fact
+                            let new_width = (image?.size.width)! * h_fact
+                            
+                            imageView1 = UIImageView(frame: CGRectMake(0, 0, new_width, new_height))
                             imageView1.image = img
                             imageView1.contentMode = .ScaleAspectFit
                             imageView1.setNeedsDisplay()
-                            poiViews.append(imageView1)
-                            
+                            self.poiViews.append(imageView1)
+
                             let chars: CGFloat = CGFloat((row["description"] as! String).characters.count)
                             var lines: CGFloat = chars/40
                             if lines < 2{
@@ -199,13 +199,45 @@ class POITableViewController: UITableViewController {
                             label.editable = false
                             label.font = UIFont.italicSystemFontOfSize(16)
                             label.text = (row["description"] as! String)
-                        
+                            
                             label.scrollEnabled = false
                             label.contentMode = .ScaleAspectFill
                             label.textColor = UIColor(red: 74/255, green: 95/255, blue: 126/255, alpha: 1.0)
                             label.backgroundColor = UIColor.groupTableViewBackgroundColor()
-                            poiViews.append(label)
+                            self.poiViews.append(label)
+                            self.tableView.reloadInputViews()
+                            self.tableView.reloadData()
+                            
+                        })
+                    }else{
                     
+                        let  h_fact = width / (img?.size.width)!
+                        let new_height = (img?.size.height)! * h_fact
+                        let new_width = (img?.size.width)! * h_fact
+                        
+                        imageView1 = UIImageView(frame: CGRectMake(0, 0, new_width, new_height))
+                        imageView1.image = img
+                        imageView1.contentMode = .ScaleAspectFit
+                        imageView1.setNeedsDisplay()
+                        self.poiViews.append(imageView1)
+                        
+                        let chars: CGFloat = CGFloat((row["description"] as! String).characters.count)
+                        var lines: CGFloat = chars/40
+                        if lines < 2{
+                            lines = 2
+                        }
+                        let label = UITextView(frame: CGRectMake(0, 0, width, 20 * lines))
+                        label.contentInset = UIEdgeInsetsMake(0, 12, 0, 12)
+                        label.editable = false
+                        label.font = UIFont.italicSystemFontOfSize(16)
+                        label.text = (row["description"] as! String)
+                        
+                        label.scrollEnabled = false
+                        label.contentMode = .ScaleAspectFill
+                        label.textColor = UIColor(red: 74/255, green: 95/255, blue: 126/255, alpha: 1.0)
+                        label.backgroundColor = UIColor.groupTableViewBackgroundColor()
+                        self.poiViews.append(label)
+                        }
                     
                  case "video":
                     do {
