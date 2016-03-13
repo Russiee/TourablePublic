@@ -7,21 +7,24 @@
         android:padding="8dp"
         android:showDividers="beginning">
 
-        <ImageView
-            android:layout_width="66dp"
-            android:layout_height="66dp"
-            android:id="@+id/imageView"
-            android:src="@mipmap/ic_face_black_36dp"
-            android:layout_gravity="center_horizontal"/>
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/no_tours_exist"
             android:gravity="center_horizontal"
             android:fontFamily="sans-serif-thin"
-            android:textSize="18sp">
+            android:textSize="18sp"
+            android:paddingBottom="28dp"
+            android:textColor="#ffffff">
         </TextView>
+
+        <ImageView
+            android:layout_width="66dp"
+            android:layout_height="66dp"
+            android:id="@+id/imageView"
+            android:src="@mipmap/empty_state"
+            android:layout_gravity="center_horizontal"
+            android:paddingBottom="18dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -35,14 +38,15 @@
                 android:text="@string/no_tours_click"
                 android:gravity="center_horizontal"
                 android:fontFamily="sans-serif-thin"
-                android:padding="4dp"/>
+                android:padding="4dp"
+                android:textColor="#ffffff"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/no_tours_cross"
                 android:gravity="center_horizontal"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/colorWhiteText"
                 android:fontFamily="sans-serif-thin"
                 android:textSize="25sp" />
 
@@ -52,7 +56,8 @@
                 android:text="@string/no_tours_help"
                 android:gravity="center_horizontal"
                 android:fontFamily="sans-serif-thin"
-                android:padding="4dp"/>
+                android:padding="4dp"
+                android:textColor="#ffffff"/>
 
         </LinearLayout>
     </LinearLayout>

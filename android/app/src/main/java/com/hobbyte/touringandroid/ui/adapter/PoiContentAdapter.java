@@ -1,15 +1,10 @@
 package com.hobbyte.touringandroid.ui.adapter;
 
 import android.content.Context;
-import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
-import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.media.ThumbnailUtils;
-import android.provider.MediaStore;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.TextureView;
@@ -18,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.MediaController;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -29,10 +23,7 @@ import com.hobbyte.touringandroid.tourdata.ListViewItem;
 import com.hobbyte.touringandroid.internet.LoadImageFromURL;
 import com.hobbyte.touringandroid.R;
 
-import org.w3c.dom.Text;
-
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -112,6 +113,7 @@ public class StartActivity extends AppCompatActivity {
             // no tours saved, so show the empty text
             View noToursText = getLayoutInflater().inflate(R.layout.text_no_tours, layout, false);
             layout.addView(noToursText);
+            layout.getRootView().setBackgroundColor(Color.parseColor("#162b49"));
         } else {
             // fetches a cursor at position -1
             Cursor c = dbHelper.getTourDisplayInfo();

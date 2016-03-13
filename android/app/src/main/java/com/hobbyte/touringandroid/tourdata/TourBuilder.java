@@ -38,7 +38,7 @@ public class TourBuilder extends Thread {
             // SubSections know how many of their contents are SubSections, as opposed to POIs.
             int numSubSections = subsectionIDs.length();
 
-            root = new SubSection(null, rootJSON.getString("title"), rootID, numSubSections);
+            root = new SubSection(null, rootJSON.getString("title"), rootJSON.getString("description"), rootID, numSubSections);
 
             for (int i = 0; i < numSubSections; ++i) {
                 parseSections(root, subsectionIDs.getString(i));
@@ -65,19 +65,20 @@ public class TourBuilder extends Thread {
             JSONObject subsectionJSON = bundle.getJSONObject(subsectionID);
 
             String title = subsectionJSON.getString("title");
+            String description = subsectionJSON.getString("description");
             SubSection subsection;
 
             if (subsectionJSON.has("subsections")) {
                 JSONArray subSectionIDs = subsectionJSON.getJSONArray("subsections");
                 int numSubSections = subSectionIDs.length();
 
-                subsection = new SubSection(parent, title, subsectionID, numSubSections);
+                subsection = new SubSection(parent, title, description, subsectionID, numSubSections);
 
                 for (int j = 0; j < numSubSections; ++j) {
                     parseSections(subsection, subSectionIDs.getString(j));
                 }
             } else {
-                subsection = new SubSection(parent, title, subsectionID, 0);
+                subsection = new SubSection(parent, title, description, subsectionID, 0);
             }
 
             parent.addItem(subsection);
