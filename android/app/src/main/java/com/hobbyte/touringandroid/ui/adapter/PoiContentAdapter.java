@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +18,7 @@ import android.widget.TextView;
 import com.hobbyte.touringandroid.App;
 import com.hobbyte.touringandroid.tourdata.ListViewItem;
 import com.hobbyte.touringandroid.R;
+import com.hobbyte.touringandroid.ui.fragment.POIFragment;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -100,8 +100,8 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
             case IMAGE:
                 ImageView imageView = (ImageView) view.findViewById(R.id.poiContentImageView);
 
-                if (filename != null && cancelPotentialWork(filename, imageView)) {
-                    final ImageLoadingTask task = new ImageLoadingTask(filename, imageView);
+                if (filename != null && taskNotAlreadyRunning(imageView)) {
+                    final ImageLoadingTask task = new ImageLoadingTask(imageView);
                     final ASyncDrawable aSyncDrawable = new ASyncDrawable(App.context.getResources(), loadingBitmap, task);
                     imageView.setImageDrawable(aSyncDrawable);
                     task.execute(filename, keyID);
@@ -131,24 +131,19 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
     }
 
     /**
-     *
+     * Checks whether there is already an ImageLoadingTask associated with this ImageView. If there
+     * is, then there's no need to
      * @param imageView
      * @return
      */
-    private static boolean cancelPotentialWork(String filename, ImageView imageView) {
+    // TODO
+    private static boolean taskNotAlreadyRunning(ImageView imageView) {
         final ImageLoadingTask task = getImageLoadingTask(imageView);
 
         if (task != null) {
-            Log.d(TAG, "ImageLoading task was already there");
-
-            if (!filename.equals(task.imgName)) {
-                Log.w(TAG, "Different filenames!");
-            }
-//            task.cancel(true);
-            return false;
+            Log.d(TAG, "already loading image");
         }
-
-        return true;
+        return task == null;
     }
 
     private static ImageLoadingTask getImageLoadingTask(ImageView imageView) {
@@ -188,18 +183,9 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
         private static final String TAG = "ImageLoadingTask";
 
         private final WeakReference<ImageView> weakImageView;
-        private final String imgName;
 
-        private int width;
-        private int height;
-
-        public ImageLoadingTask(String filename, ImageView imageView) {
-            imgName = filename;
+        public ImageLoadingTask(ImageView imageView) {
             weakImageView = new WeakReference<>(imageView);
-
-            DisplayMetrics metrics = App.context.getResources().getDisplayMetrics();
-            width = metrics.widthPixels;
-            height = metrics.heightPixels / 2;
         }
 
         @Override
@@ -252,11 +238,14 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
 
             Bitmap sampledBM = BitmapFactory.decodeFile(file.getAbsolutePath(), options);
 
+            int height = POIFragment.SCREEN_HEIGHT / 2;
             int scaleHeight = (sampledBM.getHeight() > height) ? height : sampledBM.getHeight();
 
             // sampling the file isn't creating the dimensions we want, so have to scale it as well
             return Bitmap.createScaledBitmap(
-                    BitmapFactory.decodeFile(file.getAbsolutePath(), options), width, scaleHeight, true);
+                    BitmapFactory.decodeFile(file.getAbsolutePath(), options),
+                    POIFragment.SCREEN_WIDTH, scaleHeight, true
+            );
 
             // if we don't want to mess with the image aspect ratio, use this
 //        return BitmapFactory.decodeFile(file.getAbsolutePath(), options);
@@ -267,8 +256,11 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
             final int imgWidth = options.outWidth;
             int sampleSize = 1;
 
-            if (imgHeight > height || imgWidth > width) {
-                while ((imgHeight / sampleSize > height) && (imgWidth / sampleSize > width)) {
+            int height = POIFragment.SCREEN_HEIGHT / 2;
+
+            if (imgHeight > height || imgWidth > POIFragment.SCREEN_WIDTH) {
+                while ((imgHeight / sampleSize > height) &&
+                        (imgWidth / sampleSize > POIFragment.SCREEN_WIDTH)) {
                     sampleSize *= 2;
                 }
             }
