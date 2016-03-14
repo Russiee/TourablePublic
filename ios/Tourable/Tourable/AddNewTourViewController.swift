@@ -131,5 +131,6 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
         downloadBackground.hidden = true
         downloadStatusLabel.hidden = visibility
         tourDescriptionLabel.hidden = visibility
+        self.navigationController?.navigationBarHidden = !visibility
     }
 }
