@@ -174,13 +174,29 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorTourElementDivider" />
+            android:background="#0a000000" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/abc_action_bar_default_height_material"
+            android:orientation="horizontal"
+            android:padding="18dp"
+            android:id="@+id/TopLevelSection" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorWhiteText"
+                android:id="@+id/TopLevelSectionText"
+                android:layout_gravity="center_vertical" />
+        </LinearLayout>
 
         <ListView android:id="@+id/left_drawer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:choiceMode="singleChoice"
             android:headerDividersEnabled="false" />
+
     </LinearLayout>
 
 </android.support.v4.widget.DrawerLayout>

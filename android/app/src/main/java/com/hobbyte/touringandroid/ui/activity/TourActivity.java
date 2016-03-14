@@ -158,6 +158,7 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
         transaction.commit();
         poiNavigation.setVisibility(View.INVISIBLE);
         toolbar.setTitle(currentSection.getTitle());
+        sectionDescription.setVisibility(View.VISIBLE);
         sectionDescription.setText(currentSection.getDescription());
         navText.setText(toolbar.getTitle());
     }
@@ -180,7 +181,7 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
         poiNavigation.setVisibility(View.VISIBLE);
         setPoiNavText(poi);
         currentPOI = poi;
-        sectionDescription.setText("");
+        sectionDescription.setVisibility(View.GONE);
         toolbar.setTitle(poi.getTitle());
         navText.setText(toolbar.getTitle());
     }
@@ -232,7 +233,20 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
         navList = (ListView) findViewById(R.id.left_drawer);
         navText = (TextView) findViewById(R.id.tourNameText);
         navText.setText(toolbar.getTitle());
-        topLevelContents = currentSection.getContents();
+
+        TextView topLevelText = (TextView) findViewById(R.id.TopLevelSectionText);
+        LinearLayout topLevel = (LinearLayout) findViewById(R.id.TopLevelSection);
+        topLevel.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                backStack.addLast(currentSection);
+                currentSection = tour.getRoot();
+                loadCurrentSection();
+                navLayout.closeDrawers();
+            }
+        });
+
+        topLevelText.setText(tour.getRoot().getTitle());
+        topLevelContents = tour.getRoot().getContents();
 
         LinearLayout home = (LinearLayout) findViewById(R.id.homeLayout);
         home.setOnClickListener(new View.OnClickListener() {
@@ -241,6 +255,8 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
                 startActivity(intent);
             }
         });
+
+
         navList.setAdapter(new ArrayAdapter<>(this, R.layout.nav_drawer_item, topLevelContents));
 
         navList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
