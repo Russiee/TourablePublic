@@ -5,6 +5,14 @@ import android.graphics.SurfaceTexture;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.util.DisplayMetrics;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.TextureView;
@@ -17,13 +25,12 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.hobbyte.touringandroid.App;
-import com.hobbyte.touringandroid.io.DownloadTourTask;
-import com.hobbyte.touringandroid.io.ImageLoadingTask;
 import com.hobbyte.touringandroid.tourdata.ListViewItem;
-import com.hobbyte.touringandroid.internet.LoadImageFromURL;
 import com.hobbyte.touringandroid.R;
 
 import java.io.IOException;
+import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -42,6 +49,7 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
     private static Pattern namePattern;
     private static final String FILE_NAME_PATTERN = "https?:\\/\\/[-\\w\\.\\/]*\\/(.+\\.(jpe?g|png|mp4))";
     private ListViewItem[] items;
+    private Bitmap loadingBitmap;
 
     private String keyID;
 
@@ -62,6 +70,10 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
         this.keyID = keyID;
         items = content;
         namePattern = Pattern.compile(FILE_NAME_PATTERN);
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.RGB_565;
+        loadingBitmap = BitmapFactory.decodeResource(App.context.getResources(), R.drawable.empty_photo);
     }
 
     @Override
@@ -113,8 +125,10 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
                 TextView textView = (TextView) view.findViewById(R.id.poiContentImageDesc);
                 textView.setText(listViewItem.getText());
 
-                if (filename != null) {
-                    final ImageLoadingTask task = new ImageLoadingTask(imageView);
+                if (filename != null && cancelPotentialWork(filename, imageView)) {
+                    final ImageLoadingTask task = new ImageLoadingTask(filename, imageView);
+                    final ASyncDrawable aSyncDrawable = new ASyncDrawable(App.context.getResources(), loadingBitmap, task);
+                    imageView.setImageDrawable(aSyncDrawable);
                     task.execute(filename, keyID);
                 }
                 return view;
@@ -289,4 +303,151 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
 
         }
     };
+
+    /**
+     *
+     * @param imageView
+     * @return
+     */
+    private static boolean cancelPotentialWork(String filename, ImageView imageView) {
+        final ImageLoadingTask task = getImageLoadingTask(imageView);
+
+        if (task != null) {
+            Log.d(TAG, "ImageLoading task was already there");
+
+            if (!filename.equals(task.imgName)) {
+                Log.w(TAG, "Different filenames!");
+            }
+//            task.cancel(true);
+            return false;
+        }
+
+        return true;
+    }
+
+    private static ImageLoadingTask getImageLoadingTask(ImageView imageView) {
+        if (imageView != null) {
+            final Drawable drawable = imageView.getDrawable();
+
+            if (drawable instanceof ASyncDrawable) {
+                final ASyncDrawable aSyncDrawable = (ASyncDrawable) imageView.getDrawable();
+                return aSyncDrawable.getImageLoadingTask();
+            }
+        }
+
+        return null;
+    }
+
+    private static class ASyncDrawable extends BitmapDrawable {
+        private final WeakReference<ImageLoadingTask> imageTaskReference;
+
+        public ASyncDrawable(Resources res, Bitmap bitmap, ImageLoadingTask task) {
+            super(res, bitmap);
+            imageTaskReference = new WeakReference<ImageLoadingTask>(task);
+        }
+
+        public ImageLoadingTask getImageLoadingTask() {
+            return imageTaskReference.get();
+        }
+    }
+
+    /**
+     * ASynchronously loads a saved image file into a {@link Bitmap}, which in turn gets placed in an
+     * {@link ImageView}. The file is sampled to save memory.
+     * <p>
+     * Largely inspired by the Android <a href="https://developer.android.com/training/displaying-bitmaps/load-bitmap.html">
+     * training guides</a>.
+     */
+    private class ImageLoadingTask extends AsyncTask<String, Void, Bitmap> {
+        private static final String TAG = "ImageLoadingTask";
+
+        private final WeakReference<ImageView> weakImageView;
+        private final String imgName;
+
+        private int width;
+        private int height;
+
+        public ImageLoadingTask(String filename, ImageView imageView) {
+            imgName = filename;
+            weakImageView = new WeakReference<>(imageView);
+
+            DisplayMetrics metrics = App.context.getResources().getDisplayMetrics();
+            width = metrics.widthPixels;
+            height = metrics.heightPixels / 2;
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            String imgPath = params[0];
+            String keyID = params[1];
+            File file = new File(App.context.getFilesDir(), String.format("%s/image/%s", keyID, imgPath));
+
+            if (file.exists()) {
+                return getSampledBitmap(file);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            if (isCancelled()) {
+                bitmap = null;
+            }
+
+            ImageView imageView = getAttachedImageView();
+
+            if (imageView != null && bitmap != null) {
+                imageView.setImageBitmap(bitmap);
+            }
+        }
+
+        private ImageView getAttachedImageView() {
+            final ImageView imageView = weakImageView.get();
+            final ImageLoadingTask task = getImageLoadingTask(imageView);
+
+            if (this == task) {
+                return imageView;
+            }
+
+            return null;
+        }
+
+        private Bitmap getSampledBitmap(File file) {
+            // first decode the image to get the raw pixel dimensions
+            final BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(file.getAbsolutePath(), options);
+
+            // then calculate the factor by which we can sub-sample the actual image, and load the
+            // sub-sampled bitmap
+            options.inSampleSize = calculateSampleSize(options);
+            options.inJustDecodeBounds = false;
+
+            Bitmap sampledBM = BitmapFactory.decodeFile(file.getAbsolutePath(), options);
+
+            int scaleHeight = (sampledBM.getHeight() > height) ? height : sampledBM.getHeight();
+
+            // sampling the file isn't creating the dimensions we want, so have to scale it as well
+            return Bitmap.createScaledBitmap(
+                    BitmapFactory.decodeFile(file.getAbsolutePath(), options), width, scaleHeight, true);
+
+            // if we don't want to mess with the image aspect ratio, use this
+//        return BitmapFactory.decodeFile(file.getAbsolutePath(), options);
+        }
+
+        private int calculateSampleSize(BitmapFactory.Options options) {
+            final int imgHeight = options.outHeight;
+            final int imgWidth = options.outWidth;
+            int sampleSize = 1;
+
+            if (imgHeight > height || imgWidth > width) {
+                while ((imgHeight / sampleSize > height) && (imgWidth / sampleSize > width)) {
+                    sampleSize *= 2;
+                }
+            }
+
+            return sampleSize;
+        }
+    }
 }
