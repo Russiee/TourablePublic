@@ -62,6 +62,7 @@ public class DownloadActivity extends AppCompatActivity {
         );
 
         keyID = prefs.getString(getString(R.string.prefs_current_key), null);
+        System.out.println(keyID +  prefs.getString("CURRENT_KEY_ID", null));
         tourID = prefs.getString(getString(R.string.prefs_current_tour), null);
         expiresAt = prefs.getString(getString(R.string.prefs_current_expiry), null);
 

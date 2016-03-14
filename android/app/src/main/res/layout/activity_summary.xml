@@ -90,7 +90,8 @@
                                 android:text="@string/summary_activity_update_tour"
                                 android:id="@+id/updateTourText"
                                 android:padding="12dp"
-                                android:visibility="gone"/>
+                                android:visibility="gone"
+                                android:layout_gravity="center_vertical" />
                             <ImageButton
                                 android:id="@+id/updateTourButton"
                                 android:layout_width="wrap_content"
@@ -98,7 +99,8 @@
                                 android:src="@mipmap/ic_check_black_24dp"
                                 android:tint="#00ff0f"
                                 android:background="@null"
-                                android:visibility="visible"/>
+                                android:visibility="visible"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
 
                     </LinearLayout>

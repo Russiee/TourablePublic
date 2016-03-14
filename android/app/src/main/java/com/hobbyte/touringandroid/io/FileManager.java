@@ -125,6 +125,7 @@ public class FileManager {
     public static void saveJSON(Context context, JSONObject jsonObject, String keyID, String filename) {
         Log.d(TAG, "Saving " + filename);
 
+        System.out.println(keyID + " " + context.getFilesDir().toString());
         File tourFolder = new File(context.getFilesDir(), keyID);
         File tourFile = new File(tourFolder, filename);
 

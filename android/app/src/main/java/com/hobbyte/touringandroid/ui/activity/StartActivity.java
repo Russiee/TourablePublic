@@ -114,8 +114,14 @@ public class StartActivity extends AppCompatActivity {
             View noToursText = getLayoutInflater().inflate(R.layout.text_no_tours, layout, false);
             layout.addView(noToursText);
             layout.getRootView().setBackgroundColor(Color.parseColor("#162b49"));
+            textKey.setTextColor(Color.WHITE);
+            textKey.setHintTextColor(Color.WHITE);
+            ( (TextView) (findViewById(R.id.entryTextView))).setTextColor(Color.WHITE);
         } else {
             // fetches a cursor at position -1
+            textKey.setTextColor(getResources().getColor(R.color.colorDarkText));
+            textKey.setHintTextColor(getResources().getColor(R.color.colorDarkText));
+            ( (TextView) (findViewById(R.id.entryTextView))).setTextColor(getResources().getColor(R.color.colorDarkText));
             Cursor c = dbHelper.getTourDisplayInfo();
 
             Log.d(TAG, DatabaseUtils.dumpCursorToString(c)); // TODO remove this at some point
@@ -138,7 +144,7 @@ public class StartActivity extends AppCompatActivity {
 
                 tour.setTag(keyID);
                 tourName.setText(name);
-                String expiryText = df.format(new Date(expiryTime));
+                final String expiryText = df.format(new Date(expiryTime));
                 expiryDate.setText(String.format("Expires %s", expiryText));
 
                 layout.addView(tourItem);
@@ -146,7 +152,7 @@ public class StartActivity extends AppCompatActivity {
                 tour.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        goToTour(keyID, tourID);
+                        goToTour(keyID, tourID, expiryText);
                     }
                 });
 
@@ -278,11 +284,22 @@ public class StartActivity extends AppCompatActivity {
      *
      * @param keyID tour to start
      */
-    private void goToTour(String keyID, String tourID) {
+    private void goToTour(String keyID, String tourID, String expiryTime) {
         TourDBManager.getInstance(getApplicationContext()).updateAccessedTime(keyID);
         Intent intent = new Intent(this, SummaryActivity.class);
         intent.putExtra(SummaryActivity.KEY_ID, keyID);
         intent.putExtra(SummaryActivity.TOUR_ID, tourID);
+
+        SharedPreferences prefs = getApplicationContext().getSharedPreferences(
+                getString(R.string.preference_file_key),
+                Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(getString(R.string.prefs_current_tour), tourID);
+        editor.putString(getString(R.string.prefs_current_key), keyID);
+        editor.putString(getString(R.string.prefs_current_expiry), expiryTime);
+        editor.apply();
+
         startActivity(intent);
     }
 

@@ -13,6 +13,7 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.TextureView;
@@ -28,6 +29,7 @@ import com.hobbyte.touringandroid.App;
 import com.hobbyte.touringandroid.tourdata.ListViewItem;
 import com.hobbyte.touringandroid.R;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -82,7 +84,7 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
     }
 
     @Override
-    public int getItemViewType(int position) {
+        public int getItemViewType(int position) {
         return items[position].getType();
     }
 
@@ -135,24 +137,33 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
 
             case VIDEO:
                 filePath = getContext().getFilesDir() + "/" + String.format("%s/video/%s", keyID, filename);
-                textureView = (TextureView) view.findViewById(R.id.poiContentVideoView);
+                File file = new File(filePath);
+                if(!file.exists()) {
+                    view = LayoutInflater.from(getContext()).inflate(R.layout.poi_content, parent, false);
+                    contentView = (TextView) view.findViewById(R.id.poiContentTextView);
+                    contentView.setText("This contains a video." + "\n" + "Download this tour with Media to see this Video!" + "\n");
+                    contentView.setGravity(Gravity.CENTER_HORIZONTAL);
+                } else {
+                    System.out.println(filePath);
+                    textureView = (TextureView) view.findViewById(R.id.poiContentVideoView);
 
-                DisplayMetrics metrics = App.context.getResources().getDisplayMetrics();
-                int height = metrics.heightPixels / 2;
-                int width = metrics.widthPixels;
-                textureView.setMinimumHeight(height);
-                textureView.setMinimumWidth(width);
+                    DisplayMetrics metrics = App.context.getResources().getDisplayMetrics();
+                    int height = metrics.heightPixels / 2;
+                    int width = metrics.widthPixels;
+                    textureView.setMinimumHeight(height);
+                    textureView.setMinimumWidth(width);
 
-                play = (ImageButton) view.findViewById(R.id.playButton);
-                replay = (ImageButton) view.findViewById(R.id.replayButtoon);
-                mute = (ImageButton) view.findViewById(R.id.muteButton);
-                max = (ImageButton) view.findViewById(R.id.maxVolButton);
-                volume = (SeekBar) view.findViewById(R.id.volumeControl);
-                audio = (AudioManager) App.context.getSystemService(Context.AUDIO_SERVICE);
+                    play = (ImageButton) view.findViewById(R.id.playButton);
+                    replay = (ImageButton) view.findViewById(R.id.replayButtoon);
+                    mute = (ImageButton) view.findViewById(R.id.muteButton);
+                    max = (ImageButton) view.findViewById(R.id.maxVolButton);
+                    volume = (SeekBar) view.findViewById(R.id.volumeControl);
+                    audio = (AudioManager) App.context.getSystemService(Context.AUDIO_SERVICE);
 
-                textureView.setSurfaceTextureListener(videoListener);
-                TextView videoDesc = (TextView) view.findViewById(R.id.poiContentVideoDesc);
-                videoDesc.setText(listViewItem.getText());
+                    textureView.setSurfaceTextureListener(videoListener);
+                    TextView videoDesc = (TextView) view.findViewById(R.id.poiContentVideoDesc);
+                    videoDesc.setText(listViewItem.getText());
+                }
                 return view;
             case HEADER:
                 // TODO
@@ -233,12 +244,14 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
                             @Override
                             public void onClick(View v) {
                                 mp.setVolume(0.0f, 0.0f);
+                                volume.setProgress(0);
                             }
                         });
                         max.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 mp.setVolume(1.0f, 1.0f);
+                                volume.setProgress(audio.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
                             }
                         });
 

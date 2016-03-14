@@ -32,10 +32,19 @@ public class TourItemAdapter extends ArrayAdapter<TourItem> {
         }
 
         TextView subsectionView = (TextView) view.findViewById(R.id.SubSectionTextView);
+        TextView separator = (TextView) view.findViewById(R.id.separator);
 
         if (selected.getType() == TourItem.TYPE_SUBSECTION) {
+            if(position == 0) {
+                separator.setVisibility(View.VISIBLE);
+                separator.setText("SUBSECTIONS");
+            }
             subsectionView.setText(selected.getTitle());
         } else {
+            if((position != 0) && getItem(position-1).getType() == TourItem.TYPE_SUBSECTION) {
+                separator.setVisibility(View.VISIBLE);
+                separator.setText("POINTS OF INTEREST");
+            }
             subsectionView.setText(selected.getTitle());
             subsectionView.setTextColor(Color.parseColor("#F44336"));
         }

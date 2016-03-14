@@ -24,7 +24,7 @@ public class PointOfInterestTest {
 
     @Before
     public void setup() {
-        parent = new SubSection(null, "poop", "poop123", 0);
+        parent = new SubSection(null, "poop", "this", "poop123", 0);
         poi = new PointOfInterest(parent, "POI Title", "poiabc123", -1);
         parent.addItem(poi);
     }

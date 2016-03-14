@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hobbyte.touringandroid.R;
@@ -29,6 +30,8 @@ public class SummaryActivity extends AppCompatActivity {
     public static final String TOUR_ID = "tourID";
     private static final String TAG = "SummaryActivity";
     private Button openButton;
+
+    private LinearLayout updateTour;
     private ImageButton updateButton;
     private TextView updateText;
 
@@ -59,10 +62,14 @@ public class SummaryActivity extends AppCompatActivity {
             }
         });
 
-        (findViewById(R.id.updateTourButton)).setOnClickListener(new View.OnClickListener() {
+        (findViewById(R.id.updateTour)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                doTourUpdate();
+                if(v.getTag().equals("ToUpdate")) {
+                    doTourUpdate();
+                } else if(v.getTag().equals("Updated")) {
+                    //Do nothing
+                }
             }
         });
 
@@ -111,6 +118,7 @@ public class SummaryActivity extends AppCompatActivity {
 
         updateButton = (ImageButton) findViewById(R.id.updateTourButton);
         updateText = (TextView) findViewById(R.id.updateTourText);
+        updateTour = (LinearLayout) findViewById(R.id.updateTour);
 
         Context context = getApplicationContext();
         SharedPreferences prefs = context.getSharedPreferences(
@@ -129,6 +137,7 @@ public class SummaryActivity extends AppCompatActivity {
         } else {
             updateButton.setImageResource(R.mipmap.ic_check_black_24dp);
             updateButton.setColorFilter(Color.parseColor("#00ff0f"));
+            updateTour.setTag("Updated");
             updateText.setVisibility(View.GONE);
         }
     }
@@ -140,9 +149,10 @@ public class SummaryActivity extends AppCompatActivity {
                 R.string.summary_activity_new_version_is_available));
 
         updateText.setVisibility(View.VISIBLE);
-        updateText.setTextColor(Color.CYAN);
+        updateText.setTextColor(getResources().getColor(R.color.colorPrimaryLight));
         updateButton.setImageResource(R.mipmap.ic_get_app_black_24dp);
-        updateButton.setColorFilter(Color.CYAN);
+        updateButton.setColorFilter(getResources().getColor(R.color.colorPrimaryLight));
+        updateTour.setTag("ToUpdate");
 
 
     }
