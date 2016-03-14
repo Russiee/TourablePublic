@@ -49,8 +49,9 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
         do {
             let request: NSURLRequest = NSURLRequest(URL: NSURL(string: urlPath)!)
             let connection: NSURLConnection = NSURLConnection(request: request, delegate: self, startImmediately: false)!
-            connection.start()
+             connection.start()
         }
+        //This is a lie, it does throw!
         catch let err as NSError{
             //Need to let user know if the tourID they entered was faulty here
             print(err.description)

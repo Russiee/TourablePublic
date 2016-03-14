@@ -16,9 +16,9 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
     var downloadedImages: Float = 0.0
     let newCancelButton = UIBarButtonItem()
     
+
+    @IBOutlet weak var downloadBackground: UIImageView!
     @IBOutlet weak var busyWheel: UIActivityIndicatorView!
-    @IBOutlet weak var ProgressBar: UIProgressView!
-    @IBOutlet weak var tourTitleLabel: UILabel!
     @IBOutlet weak var downloadStatusLabel: UILabel!
     @IBOutlet weak var tourDescriptionLabel: UILabel!
     
@@ -37,29 +37,35 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
         
         let newCancelButton = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "cancelDownload")
         self.navigationItem.setLeftBarButtonItem(newCancelButton, animated: false)
-        ProgressBar.setProgress(0.0, animated: true)
         downloadStatusLabel.text = ""
     }
     
     //Lets the UI know that another image is due to be downloaded.
     func NotifiedDownloading() {
-        totalImagesToDownload++
+            totalImagesToDownload++
+        
+    
     }
     
     //Lets UI know that an image has been downloaded: progress bar incremented.
     func NotifiedFinishedDownloading(){
-        
+
+        self.busyWheel.startAnimating()
+        self.busyWheel.hidden = false
+            downloadBackground.hidden = false
         downloadedImages++
         //Get progress as fraction of 1
         let progress = (downloadedImages/totalImagesToDownload)
         downloadStatusLabel.text = "Downloading Media: \(Int(downloadedImages)) of \(Int(totalImagesToDownload))"
-        ProgressBar.setProgress(progress, animated: true)
+
  
         //I.e progess = 100%
         if progress == 1.0{
             //Allow user to leave page, hide download status
             downloadStatusLabel.hidden = true
             self.performSegueWithIdentifier("cancelAdd", sender: self)
+            //self.busyWheel.stopAnimating()
+            //self.busyWheel.hidden = true
         }
         
     }
@@ -114,15 +120,15 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
     func setTourInfomation(){
         let dataId = TourIdParser().getTourMetadata(tourIdForSummary)["objectId"] as! String
         let tour = tourDataParser().getTourSection(dataId)
-        tourTitleLabel.text = tour.title as String
+        self.title = tour.title as String
         tourDescriptionLabel.text =  tour.description
     }
     
     //Method for hiding all other items in the view besides teh busy wheel. 
     //Visibility:True = hides all items
     func hideButtonsForBusyWheel(visibility: Bool){
-        tourTitleLabel.hidden = visibility
-        ProgressBar.hidden = visibility
+
+        downloadBackground.hidden = true
         downloadStatusLabel.hidden = visibility
         tourDescriptionLabel.hidden = visibility
     }

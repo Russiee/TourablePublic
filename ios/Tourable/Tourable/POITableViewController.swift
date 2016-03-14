@@ -126,7 +126,6 @@ class POITableViewController: UITableViewController {
     func createSubviews(post: NSArray){
         
         let width = UIScreen.mainScreen().bounds.size.width
-        let height = UIScreen.mainScreen().bounds.size.height
         
         for row in post{
             
@@ -241,7 +240,7 @@ class POITableViewController: UITableViewController {
                     
                  case "video":
                     do {
-                        let videoURL = videoHandler.sharedInstance.loadVideoPath(row["url"] as! String)!
+                        let videoURL = videoHandler.sharedInstance.loadVideoPath(row["url"] as? String)!
                         videoList.append(videoURL)
                         let asset = AVURLAsset(URL: videoURL, options: nil)
                         let imgGenerator = AVAssetImageGenerator(asset: asset)

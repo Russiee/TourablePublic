@@ -27,6 +27,8 @@ class TourSectionsController: UITableViewController {
         self.title = tour.title as String 
         let subsectionArray = tour.getSubSections()
         tourSummaryTextView.text = tour.description
+         //tourSummaryTextView.contentInset = UIEdgeInsetsMake(-10, 0, 10, 0)
+        tourSummaryTextView.scrollEnabled = false
         poiArray = tour.getPointsOfInterest()
         var tourTitles = [String: String]()
         let tdp = tourDataParser.init()
