@@ -77,7 +77,6 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
             if !isUpdating {
                 _ = TourIdParser().addTourMetaData(jsonResult)
             }
-            print("finished loading")
             self.triggerValidKeyNotification()
         }
         catch let err as NSError{
@@ -120,7 +119,6 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
             object: nil)
         func notify() {
             NSNotificationCenter.defaultCenter().postNotificationName(validIdNotificationKey, object: self)
-            print("Valid key notify called")
         }
         notify()
     }
@@ -132,7 +130,6 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
         let trimmedTourId = tourId.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
 
         if trimmedTourId.containsString(" ") || trimmedTourId.containsString("/")||trimmedTourId.containsString("\"")||trimmedTourId.containsString("\\"){
-            print("the tour id input must not contain whitespaces.")
             //not possible to return nil so returns blank.
              tourIdForSummary = ""
              return ""

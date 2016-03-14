@@ -65,7 +65,6 @@ public class TourDeleter {
         for subsection in section{
             objectIDs.append(subsection["objectId"] as! String)
             let keys = subsection.allKeys
-            //print(keys)
             for value in keys{
                 if value as! String == "pois"{
                     let POIS = subsection["pois"] as! NSArray

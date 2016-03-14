@@ -46,7 +46,6 @@ class videoHandler {
         let path = mediaHelper.sharedInstance.fileInDocumentsDirectory(fileHash, fileType: ".mp4")
         //write the file to disk at the specified path.
         let result = videoData.writeToFile(path, atomically: true)
-        print("save of video worked: \(result)")
         //returns success status.
         return result
     }

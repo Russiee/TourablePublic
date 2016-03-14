@@ -43,7 +43,6 @@ public class TourIdParser {
         //Duplicates the array, creating a mutable version that the new tourId can be added to.
         var newArray : [AnyObject] = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! [[String: String]]
         newArray.append([tourTitle : tourId])
-        print(newArray)
         saveArray(newArray)
     }
     
@@ -107,8 +106,6 @@ public class TourIdParser {
         let tours = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! NSMutableArray
         var tourTitles = [String]()
         if(tours.count != 0){
-        print("\(tours) the dict of tours we have saved")
-        print("\(tours[0].allKeys[0])")
         for tour in tours{
             tourTitles.append(tour.allKeys[0] as! String)
         }

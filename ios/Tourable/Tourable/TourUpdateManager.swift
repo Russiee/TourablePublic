@@ -58,7 +58,6 @@ public class TourUpdateManager {
              let comparisonResultString = compareDates(currentDate, newDate: newDate)
             // check if the current date is less recent than the one in the metadata. If yes, ask the user to update tour.
             if comparisonResultString == "ascending" {
-                print("current date \(currentDate) is less recent than the last updated \(newDate), therefore update triggered here")
                 //self.triggerUpdateAvailableNotification()
             }
         }
@@ -79,7 +78,6 @@ public class TourUpdateManager {
 
             let comparisonResulFromString = compareDates(todaysDate, newDate: expiresDate)
             if comparisonResulFromString == "descending" {
-                print("today is \(todaysDate) and it is beyond expiry \(expiresDate). Therefore delete project")
                 TourDeleter().deleteTour(tourTableRow)
             } else if comparisonResulFromString == "same" {
                 // warn the user that the this is the last day they can open the project

@@ -40,7 +40,7 @@ class imageHandler: NSObject {
             object: nil)
         func notify() {
             NSNotificationCenter.defaultCenter().postNotificationName(endDownloadKey, object: self)
-            print("image download complete notify called")
+
         }
         notify()
     }
@@ -52,7 +52,6 @@ class imageHandler: NSObject {
             object: nil)
         func notify() {
             NSNotificationCenter.defaultCenter().postNotificationName(beginDownloadKey, object: self)
-            print("image download notify called")
         }
         notify()
     }
@@ -68,7 +67,6 @@ class imageHandler: NSObject {
         let jpgImageData = UIImageJPEGRepresentation(image, 1.0)
     
         let result = jpgImageData!.writeToFile(path, atomically: true)
-        //print("if true, saved image: \(result)")
         countOfImages--
         triggerDownloadCompleteNotify()
         return result
@@ -83,13 +81,6 @@ class imageHandler: NSObject {
             let path = mediaHelper.sharedInstance.fileInDocumentsDirectory(fileName,fileType: ".jpg")
             let image = UIImage(contentsOfFile: path)
             
-            if image == nil {
-                print("error loading image")
-
-            } else {
-                // this is just for you to see the path in case you want to go to the directory, using Finder.
-                print("Loading image ok")
-            }
             return image
         }
     }
@@ -101,8 +92,7 @@ class imageHandler: NSObject {
     func downloadMediaSet(urls: [String]){
        
         countOfImages = countOfImages + urls.count
-        print(urls.count)
-        print("number of images")
+
         for url in urls {
             
             if(url.characters.last == "g"){
