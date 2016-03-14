@@ -216,6 +216,10 @@ class TourSectionsController: UITableViewController {
             newViewController.superSectionID = superTableId
         }
         tableView.deselectRowAtIndexPath(tableView.indexPathForSelectedRow!, animated: true)
+
+        let backButton = UIBarButtonItem()
+        backButton.title = "Back"
+        navigationItem.backBarButtonItem = backButton
     }
     
  override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
