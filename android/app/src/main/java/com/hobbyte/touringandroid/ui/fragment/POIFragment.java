@@ -3,10 +3,13 @@ package com.hobbyte.touringandroid.ui.fragment;
 import android.os.Bundle;
 import android.app.ListFragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.hobbyte.touringandroid.App;
 import com.hobbyte.touringandroid.R;
 import com.hobbyte.touringandroid.io.FileManager;
 import com.hobbyte.touringandroid.tourdata.ListViewItem;
@@ -30,6 +33,9 @@ public class POIFragment extends ListFragment {
 
     private static final String PARAM_OBJECTID = "objectID";
     private static final String PARAM_KEYID = "keyId";
+
+    public static int SCREEN_HEIGHT;
+    public static int SCREEN_WIDTH;
 
     private String objectID;
     private JSONObject poiJSON;
@@ -63,6 +69,8 @@ public class POIFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setScreenDimensions();
+
         if (getArguments() != null) {
             objectID = getArguments().getString(PARAM_OBJECTID);
             String keyID = getArguments().getString(PARAM_KEYID);
@@ -115,10 +123,9 @@ public class POIFragment extends ListFragment {
                             url = null;
                             type = PoiContentAdapter.IGNORE_ITEM_VIEW_TYPE;
                     }
+
                     listItems[i] = new ListViewItem(text, type, url);
                 }
-
-
             } catch (JSONException je) {
                 je.printStackTrace();
             }
@@ -141,13 +148,9 @@ public class POIFragment extends ListFragment {
         return inflater.inflate(R.layout.fragment_poi, container, false);
     }
 
-    /*@Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
+    private void setScreenDimensions() {
+        DisplayMetrics metrics = App.context.getResources().getDisplayMetrics();
+        SCREEN_WIDTH = metrics.widthPixels;
+        SCREEN_HEIGHT = metrics.heightPixels;
     }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-    }*/
 }
