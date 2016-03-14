@@ -169,7 +169,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
                 
                 //checks if the tour already exists. If not:
                 // passes the entered tourId into the tourParser
-                let tours = TourIdParser.sharedInstance.getAllTours()
+                let tours = TourIdParser.sharedInstance.getAllTourIDs()
                 if tours.contains(Field!.text!){
                     //Tour already exists
                     AlertViewBuilder.sharedInstance.showWarningAlert("Tour Add Error", message: "A tour with that key already exists")
