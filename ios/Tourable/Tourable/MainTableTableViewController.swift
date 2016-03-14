@@ -12,7 +12,8 @@ import Foundation
 
 class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
    
-    var models = NSMutableArray()
+    var tourTitles = [String]()
+    var tourIDs = [String]()
     var tourParser = TourIdParser()
     
     @IBOutlet weak var addTourButton: UIButton!
@@ -20,7 +21,8 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        models = tourParser.getAllTours()
+        tourTitles = tourParser.getAllTours()
+        tourIDs = tourParser.getAllTourIDs()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "Notified", name: TableUpdateNotificationKey, object: nil)
         self.clearsSelectionOnViewWillAppear = false
         //TODO remove this, for demo use only
@@ -48,7 +50,8 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     
     func Notified() {
         checkStateOfScreen()
-        models = tourParser.getAllTours()
+        tourTitles = tourParser.getAllTours()
+        tourIDs = tourParser.getAllTourIDs()
         tableView.reloadData()
     }
 
@@ -60,14 +63,14 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     }
 
     override func viewDidAppear(animated: Bool) {
-        models = tourParser.getAllTours()
+        tourTitles = tourParser.getAllTours()
         tableView.reloadData()
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         
-        return models.count
+        return tourTitles.count
     }
 
     
@@ -75,7 +78,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         let cell = tableView.dequeueReusableCellWithIdentifier("tableCell", forIndexPath: indexPath)
 
         // Configure the cell...
-        cell.textLabel?.text = models.objectAtIndex(indexPath.row) as? String
+        cell.textLabel?.text = tourTitles[indexPath.row]
         return cell
     }
 
@@ -83,7 +86,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     // a function to tell change the background image when loading the app AND when deleting a cell results in no tours left
     func checkStateOfScreen(){
          tableView.rowHeight = 60.0
-        if models.count == 0 {
+        if tourTitles.count == 0 {
          
             addTourButtonView.frame = CGRectMake(0 , 0, self.view.frame.width, self.view.frame.height * 0.7)
             let empty_state_button_UI = UIImage(named: "empty_state_button")
@@ -122,7 +125,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         
     }
     @IBAction func saveTourDetail(segue:UIStoryboardSegue) {
-        self.models = self.tourParser.getAllTours()
+        self.tourTitles = self.tourParser.getAllTours()
         tableView.reloadData()
     }
     
@@ -136,8 +139,8 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     
     // triggerd in ViewDidLoad, it iterates the list of tours and deletes the outdated one.
     func checkToursToDelete() {
-        for var indexRow = 0; indexRow < models.count; indexRow++ {
-            TourUpdateManager.sharedInstance.getCurrentData(models[indexRow] as! String, tableRow: indexRow)
+        for var indexRow = 0; indexRow < tourTitles.count; indexRow++ {
+            TourUpdateManager.sharedInstance.getCurrentData(tourIDs[indexRow], tableRow: indexRow)
             // Need to find a better way to do this, it is causing the tour to be downloaed twice.
             TourUpdateManager.sharedInstance.checkIfOutdatedAndDeleteProject()
         }
@@ -167,7 +170,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
                 //checks if the tour already exists. If not:
                 // passes the entered tourId into the tourParser
                 let tours = TourIdParser.sharedInstance.getAllTours()
-                if tours.containsObject(Field!.text!){
+                if tours.contains(Field!.text!){
                     //Tour already exists
                     AlertViewBuilder.sharedInstance.showWarningAlert("Tour Add Error", message: "A tour with that key already exists")
                 }else{
@@ -195,7 +198,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
             
             TourDeleter.sharedInstance.deleteMediaInTour(indexPath.row)
             TourDeleter.sharedInstance.deleteTour(indexPath.row)
-            models = tourParser.getAllTours()
+            tourTitles = tourParser.getAllTours()
             checkStateOfScreen()
             //Reload Table
             tableView.reloadData()
@@ -215,7 +218,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         if segue.identifier == "toTableSummary" {
             if let destination = segue.destinationViewController as? TourSummaryController {
                 if let tourIndex = tableView.indexPathForSelectedRow?.row {
-                    destination.tourId = models[tourIndex] as! String
+                    destination.tourId = tourIDs[tourIndex] as! String
                     destination.tableRow = tourIndex
                     tableView.deselectRowAtIndexPath(tableView.indexPathForSelectedRow!, animated: true)
                 }
@@ -224,7 +227,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
 
         if segue.identifier == "goToAddTour" {
             if let destination = (segue.destinationViewController as! UINavigationController).topViewController as? addNewTourViewController {
-                destination.tourIndex = models.count
+                destination.tourIndex = tourTitles.count
                 
             }
         }

@@ -14,6 +14,9 @@ public class TourIdParser {
 
     //making the TourIdParser a singleton to parse all tours from the API
     //in order to access TourIdParser methods call TourIdParser.shardInstance.METHOD()
+    
+    //static let sharedInstance = TourIdParser()
+    
     class var sharedInstance: TourIdParser {
         struct Static {
             static var onceToken: dispatch_once_t = 0
@@ -28,7 +31,7 @@ public class TourIdParser {
 
     func deleteTourIdAtRow(row: Int) {
         //remove from "Array"
-        var newArray : [AnyObject] = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! [AnyObject]
+        var newArray : [AnyObject] = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! [[String: String]]
         //remove from Metadata
         newArray.removeAtIndex(row)
         saveArray(newArray)
@@ -36,10 +39,11 @@ public class TourIdParser {
    
     
     //Adds a new tourId to the array
-    func updateArray(tourId: String){
+    func updateArray(tourId: String, tourTitle: String){
         //Duplicates the array, creating a mutable version that the new tourId can be added to.
-        var newArray : [AnyObject] = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! NSMutableArray as [AnyObject]
-        newArray.append(tourId)
+        var newArray : [AnyObject] = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! [[String: String]]
+        newArray.append([tourTitle : tourId])
+        print(newArray)
         saveArray(newArray)
     }
     
@@ -67,8 +71,6 @@ public class TourIdParser {
         NSUserDefaults.standardUserDefaults().setObject(tourDict, forKey: tourCode as! String)
         NSUserDefaults.standardUserDefaults().synchronize()
 
-        self.updateArray(tourCode as! String)
-
         //Give objectId of tour as param
 
 
@@ -76,9 +78,11 @@ public class TourIdParser {
         let bundleRoute = bundleRouteConnector()
         bundleRoute.startConnection(tourDict["objectId"] as! String)
         
-        let MYDAMNDATA = bundleRoute.getJSONResult()
-        tourDataParser().saveNewTour(MYDAMNDATA)
+        let tourData = bundleRoute.getJSONResult()
+        tourDataParser().saveNewTour(tourData)
         //bundleRoute.getAllPOIs((MYDAMNDATA["sections"]) as! NSArray)
+        let tourTitle = tourData["title"]
+        self.updateArray(tourCode as! String, tourTitle: tourTitle as! String)
 
         NSNotificationCenter.defaultCenter().addObserver (
             self,
@@ -99,7 +103,30 @@ public class TourIdParser {
     }
 
     //method for getting tourIds that have been added for checking the table updates.
-    public func getAllTours() -> NSMutableArray {
-        return NSUserDefaults.standardUserDefaults().objectForKey("Array") as! NSMutableArray
+    public func getAllTours() -> [String] {
+        let tours = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! NSMutableArray
+        var tourTitles = [String]()
+        if(tours.count != 0){
+        print("\(tours) the dict of tours we have saved")
+        print("\(tours[0].allKeys[0])")
+        for tour in tours{
+            tourTitles.append(tour.allKeys[0] as! String)
+        }
+        }
+        return tourTitles
     }
+    
+    public func getAllTourIDs() -> [String] {
+        var tours = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! NSMutableArray
+        var tourIDs = [String]()
+        if(tours.count != 0){
+        for tour in tours{
+            let key = tour.allKeys[0] as! String
+            tourIDs.append(tour[key] as! String)
+        }
+        }
+        return tourIDs
+    }
+    
+    
 }
