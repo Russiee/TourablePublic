@@ -110,8 +110,7 @@ public class TourIdParser {
         print("\(tours) the dict of tours we have saved")
         print("\(tours[0].allKeys[0])")
         for tour in tours{
-            let key = tour.allKeys[0] as! String
-            tourTitles.append(tour[key] as! String)
+            tourTitles.append(tour.allKeys[0] as! String)
         }
         }
         return tourTitles
