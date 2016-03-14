@@ -131,7 +131,6 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
                     contentView.setText("This contains a video." + "\n" + "Download this tour with Media to see this Video!" + "\n");
                     contentView.setGravity(Gravity.CENTER_HORIZONTAL);
                 } else {
-                    System.out.println(filePath);
                     textureView = (TextureView) view.findViewById(R.id.poiContentVideoView);
 
                     DisplayMetrics metrics = App.context.getResources().getDisplayMetrics();
@@ -146,6 +145,79 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
                     max = (ImageButton) view.findViewById(R.id.maxVolButton);
                     volume = (SeekBar) view.findViewById(R.id.volumeControl);
                     audio = (AudioManager) App.context.getSystemService(Context.AUDIO_SERVICE);
+
+                    play.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if(player.isPlaying()) {
+                                player.pause();
+                                play.setImageResource(R.mipmap.ic_play_arrow_white_36dp);
+                            } else {
+                                player.start();
+                                play.setImageResource(R.mipmap.ic_pause_white_36dp);
+                            }
+                        }
+                    });
+
+                    replay.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            player.stop();
+                            player.reset();
+                            try {
+                                player.setDataSource(filePath);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                player.prepareAsync();
+                            } catch (IllegalStateException e) {
+                                e.printStackTrace();
+                            }
+                            player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                                @Override
+                                public void onPrepared(MediaPlayer mediaPlayer) {
+                                    mediaPlayer.seekTo(0);
+                                    play.setImageResource(R.mipmap.ic_play_arrow_white_36dp);
+                                }
+                            });
+                        }
+                    });
+                    mute.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            player.setVolume(0.0f, 0.0f);
+                            volume.setProgress(0);
+                        }
+                    });
+                    max.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            player.setVolume(1.0f, 1.0f);
+                            volume.setProgress(audio.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
+                        }
+                    });
+
+                    int maxVolume = audio.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+                    int currVolume = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
+                    volume.setMax(maxVolume);
+                    volume.setProgress(currVolume);
+                    volume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                        @Override
+                        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                            audio.setStreamVolume(AudioManager.STREAM_MUSIC, progress, 0);
+                        }
+
+                        @Override
+                        public void onStartTrackingTouch(SeekBar seekBar) {
+
+                        }
+
+                        @Override
+                        public void onStopTrackingTouch(SeekBar seekBar) {
+
+                        }
+                    });
 
                     textureView.setSurfaceTextureListener(videoListener);
                     TextView videoDesc = (TextView) view.findViewById(R.id.poiContentVideoDesc);
@@ -186,6 +258,7 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
                 player.prepareAsync();
                 player.setAudioStreamType(AudioManager.STREAM_MUSIC);
                 player.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT);
+                player.setLooping(false);
                 player.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
                     @Override
                     public void onBufferingUpdate(MediaPlayer mp, int percent) {
@@ -195,73 +268,30 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
                 player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override
                     public void onCompletion(MediaPlayer mp) {
-                        //Do nothing
+                        play.setImageResource(R.mipmap.ic_play_arrow_white_36dp);
+                        mp.reset();
+                        try {
+                            mp.setDataSource(filePath);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            mp.prepareAsync();
+                        } catch (IllegalStateException e) {
+                            e.printStackTrace();
+                        }
+                        mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                            @Override
+                            public void onPrepared(MediaPlayer mediaPlayer) {
+                                mediaPlayer.seekTo(0);
+                            }
+                        });
                     }
                 });
                 player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                     @Override
                     public void onPrepared(final MediaPlayer mp) {
-                        play.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if(mp.isPlaying()) {
-                                    mp.pause();
-                                    play.setImageResource(R.mipmap.ic_play_arrow_white_36dp);
-                                } else {
-                                    mp.start();
-                                    play.setImageResource(R.mipmap.ic_pause_white_36dp);
-                                }
-                            }
-                        });
-
-                        replay.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if(mp.isPlaying()) {
-                                    play.setImageResource(R.mipmap.ic_play_arrow_white_36dp);
-                                    mp.pause();
-                                    mp.seekTo(0);
-                                } else {
-                                    play.setImageResource(R.mipmap.ic_play_arrow_white_36dp);
-                                    mp.seekTo(0);
-                                }
-                            }
-                        });
-                        mute.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                mp.setVolume(0.0f, 0.0f);
-                                volume.setProgress(0);
-                            }
-                        });
-                        max.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                mp.setVolume(1.0f, 1.0f);
-                                volume.setProgress(audio.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
-                            }
-                        });
-
-                        int maxVolume = audio.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-                        int currVolume = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
-                        volume.setMax(maxVolume);
-                        volume.setProgress(currVolume);
-                        volume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                            @Override
-                            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                                audio.setStreamVolume(AudioManager.STREAM_MUSIC, progress, 0);
-                            }
-
-                            @Override
-                            public void onStartTrackingTouch(SeekBar seekBar) {
-
-                            }
-
-                            @Override
-                            public void onStopTrackingTouch(SeekBar seekBar) {
-
-                            }
-                        });
+                        mp.seekTo(0);
                     }
                 });
 

@@ -46,7 +46,6 @@ public class TourItemAdapter extends ArrayAdapter<TourItem> {
                 separator.setText("POINTS OF INTEREST");
             }
             subsectionView.setText(selected.getTitle());
-            subsectionView.setTextColor(Color.parseColor("#F44336"));
         }
         return view;
     }
