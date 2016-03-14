@@ -26,7 +26,7 @@ public class SubSectionTest {
     @Before
     public void setup() {
         // imitate construction and initialisation as it should happen in TourBuilder
-        section = new SubSection(null, "Title", "abc123", 1);
+        section = new SubSection(null, "Title", "Description", "abc123", 1);
         section.addItem(subsection);
         section.addItem(poi1);
         section.addItem(poi2);

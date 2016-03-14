@@ -24,6 +24,11 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.google.android.exoplayer.ExoPlayer;
+import com.google.android.exoplayer.FrameworkSampleSource;
+import com.google.android.exoplayer.MediaCodecVideoTrackRenderer;
+import com.google.android.exoplayer.SampleSource;
+import com.google.android.exoplayer.TrackRenderer;
 import com.hobbyte.touringandroid.App;
 import com.hobbyte.touringandroid.tourdata.ListViewItem;
 import com.hobbyte.touringandroid.R;
@@ -236,7 +241,7 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
                                     mp.seekTo(0);
                                 } else {
                                     play.setImageResource(R.mipmap.ic_play_arrow_white_36dp);
-                                    mp.seekTo(1000);
+                                    mp.seekTo(0);
                                 }
                             }
                         });
@@ -306,8 +311,11 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
 
         @Override
         public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-            player.stop();
-            player.release();
+            if (player != null) {
+                player.stop();
+                player.release();
+                player = null;
+            }
             return true;
         }
 
