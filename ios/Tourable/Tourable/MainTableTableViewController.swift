@@ -27,7 +27,6 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         self.clearsSelectionOnViewWillAppear = false
         //TODO remove this, for demo use only
         let connection: Bool = ApiConnector.sharedInstance.isConnectedToNetwork()
-        print("internet connection status: \(connection)")
         //Only commented out for now as API has early date set hence always deletes the tours! ONLY TEMPORARY!
         //checkToursToDelete()
         
@@ -176,7 +175,6 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
                 }else{
                     if ApiConnector.sharedInstance.isConnectedToNetwork(){
                     //Tour does not exist. Procede.
-                        print("here")
                     ApiConnector.sharedInstance.initiateConnection(Field!.text!, isCheckingForUpdate: false)
                     // goes to the AddNewTourPage
                     performSegueWithIdentifier("goToAddTour", sender: self)

@@ -108,7 +108,7 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
         }))
         alert.addAction(UIAlertAction(title: "Download with media (Larger)", style: UIAlertActionStyle.Default, handler: { action in
             imageHandler.sharedInstance.downloadMediaSet(imageHandler.sharedInstance.imageQueue)
-            self.busyWheel.stopAnimating()
+            //self.busyWheel.stopAnimating()
             self.hideButtonsForBusyWheel(false)
         }))
         

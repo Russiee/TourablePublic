@@ -27,7 +27,7 @@ class POITableViewController: UITableViewController {
     @IBOutlet var NextPOIButton: UIBarButtonItem!
     
     @IBAction func PreviousPOI(sender: UIBarButtonItem) {
-        print("clicked prevousPOI")
+
         let Z = POIList.indexOf(poiID)!
         //print(Z)
         
@@ -35,7 +35,7 @@ class POITableViewController: UITableViewController {
         poiViews = []
         self.tableView.reloadData()
         viewDidLoad()
-        print("previous POi now displaying")
+
     }
     
     @IBAction func PreviousSection(sender: UIBarButtonItem) {
@@ -43,14 +43,14 @@ class POITableViewController: UITableViewController {
     }
     
     @IBAction func NextPOI(sender: UIBarButtonItem) {
-        print("clicked next POI")
+
         let Z = POIList.indexOf(poiID)!
         
         poiID = (POIList)[Z + 1]
         poiViews=[]
         self.tableView.reloadData()
         viewDidLoad()
-        print("next poi now displaying")
+
     }
     
     
@@ -61,7 +61,6 @@ class POITableViewController: UITableViewController {
         createToolBar()
         let pointToDisplay = POIParser().getTourSection(poiID)
         self.title = pointToDisplay.title
-        print(pointToDisplay.post)
         createSubviews(pointToDisplay.post)
         //reloads the tableViewData so that the Views are shown, potential move to viewWillAppear the createSubViews method
         self.tableView.reloadData()
@@ -176,7 +175,6 @@ class POITableViewController: UITableViewController {
                     img = imageHandler.sharedInstance.loadImageFromPath(imageAtRow)
                     if img == nil{
                         ImageLoader.sharedLoader.imageForUrl((row["url"] as? String)!, completionHandler:{(image: UIImage?, url: String) in
-                            print("in here!")
                             let img = image
                             let  h_fact = width / (image?.size.width)!
                             let new_height = (image?.size.height)! * h_fact

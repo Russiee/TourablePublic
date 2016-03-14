@@ -28,9 +28,7 @@ class bundleRouteConnector: NSObject, NSURLConnectionDelegate{
             do {
                 self.jsonResultFromAPI = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
                 //passing through the array of sections
-                
-                //print("---------------------------------")
-                //print(((self.jsonResultFromAPI["sections"])![0]!)["subsections"])
+
             }
             catch let err as NSError{
                 //Need to let user know if the tourID they entered was faulty here
