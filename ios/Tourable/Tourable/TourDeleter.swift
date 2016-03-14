@@ -31,8 +31,13 @@ public class TourDeleter {
         
         //gets tour at the row we want to delete
         let arrayOfTours = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! [AnyObject]
+        var tourIDs = [String]()
+        for tours in arrayOfTours{
+            let key = tours.allKeys[0] as! String
+            tourIDs.append(tours[key] as! String)
+        }
         //gets the pointer of the tour
-        let tourPointer = NSUserDefaults.standardUserDefaults().objectForKey(arrayOfTours[pos] as! String)
+        let tourPointer = NSUserDefaults.standardUserDefaults().objectForKey(tourIDs[pos])
         //setting the Tour ID to tourPointer ObjectId
         let tourID = tourPointer!["objectId"] as! String
         //get the tour from UserDefaults
@@ -95,9 +100,14 @@ public class TourDeleter {
     //deletes the media files in the tour. Currently only .jpg s
     func deleteMediaInTour(pos: Int){
         //gets tour at the row we want to delete
-        let arrayOfTours = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! [AnyObject]
+        let arrayOfTours = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! NSMutableArray
+        var tourIDs = [String]()
+        for tours in arrayOfTours{
+            let key = tours.allKeys[0] as! String
+            tourIDs.append(tours[key] as! String)
+        }
         //gets the pointer of the tour
-        let tourPointer = NSUserDefaults.standardUserDefaults().objectForKey(arrayOfTours[pos] as! String)
+        let tourPointer = NSUserDefaults.standardUserDefaults().objectForKey(tourIDs[pos])
         //setting the Tour ID to tourPointer ObjectId
         let tourID = tourPointer!["objectId"] as! String
         //get the tour from UserDefaults

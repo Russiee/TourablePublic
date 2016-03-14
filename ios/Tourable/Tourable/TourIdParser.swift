@@ -105,11 +105,14 @@ public class TourIdParser {
     //method for getting tourIds that have been added for checking the table updates.
     public func getAllTours() -> [String] {
         let tours = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! NSMutableArray
+        var tourTitles = [String]()
+        if(tours.count != 0){
         print("\(tours) the dict of tours we have saved")
         print("\(tours[0].allKeys[0])")
-        var tourTitles = [String]()
         for tour in tours{
-            tourTitles.append(tour.allKeys[0] as! String)
+            let key = tour.allKeys[0] as! String
+            tourTitles.append(tour[key] as! String)
+        }
         }
         return tourTitles
     }
@@ -117,9 +120,11 @@ public class TourIdParser {
     public func getAllTourIDs() -> [String] {
         var tours = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! NSMutableArray
         var tourIDs = [String]()
+        if(tours.count != 0){
         for tour in tours{
             let key = tour.allKeys[0] as! String
             tourIDs.append(tour[key] as! String)
+        }
         }
         return tourIDs
     }
