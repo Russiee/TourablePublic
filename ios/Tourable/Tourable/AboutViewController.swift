@@ -22,6 +22,11 @@ class AboutViewController: UIViewController {
         }
     }
     
+    @IBAction func icons8ButtonPressed(sender: AnyObject) {
+        if let requestUrl = NSURL(string: "https://icons8.com") {
+            UIApplication.sharedApplication().openURL(requestUrl)
+        }
+    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
