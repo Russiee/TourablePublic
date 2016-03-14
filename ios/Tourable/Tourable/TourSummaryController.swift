@@ -98,7 +98,11 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
         if segue.identifier == "goToTourSections" {
             let destinationVC = segue.destinationViewController as! TourSectionsController
             let topLayerTourInfo = tourDataParser.init().getTourSection(objectId)
-            destinationVC.superTableId = topLayerTourInfo.sectionId 
+            destinationVC.superTableId = topLayerTourInfo.sectionId
+
+            let backButton = UIBarButtonItem()
+            backButton.title = "Back"
+            navigationItem.backBarButtonItem  = backButton
         }
     }
     
