@@ -35,8 +35,6 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
         self.busyWheel.startAnimating()
         self.hideButtonsForBusyWheel(true)
         
-        let newCancelButton = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "cancelDownload")
-        self.navigationItem.setLeftBarButtonItem(newCancelButton, animated: false)
         downloadStatusLabel.text = ""
     }
     
@@ -49,6 +47,9 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
     
     //Lets UI know that an image has been downloaded: progress bar incremented.
     func NotifiedFinishedDownloading(){
+        let newCancelButton = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "cancelDownload")
+        self.navigationItem.setLeftBarButtonItem(newCancelButton, animated: false)
+
 
         self.busyWheel.startAnimating()
         self.busyWheel.hidden = false
@@ -92,6 +93,9 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
     
     //Called if the tourId if valid. Stops the busy wheel and shows the download settings.
     func NotifiedValid(){
+        let newCancelButton = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "cancelDownload")
+        self.navigationItem.setLeftBarButtonItem(newCancelButton, animated: false)
+
         
         //saveTourButton.setTitle("Downloading...", forState: .Normal)
         //saveTourButton.enabled = false
@@ -131,6 +135,5 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
         downloadBackground.hidden = true
         downloadStatusLabel.hidden = visibility
         tourDescriptionLabel.hidden = visibility
-        self.navigationController?.navigationBarHidden = !visibility
     }
 }
