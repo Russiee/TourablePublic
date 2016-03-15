@@ -520,9 +520,9 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
 
             // if the sampled image is over a certain height, use half the screen height
             int height = POIFragment.SCREEN_HEIGHT / 2;
-            boolean squishPhoto = sampledBM.getHeight() > height;
+            boolean resizePhoto = sampledBM.getHeight() > height || sampledBM.getWidth() < POIFragment.SCREEN_WIDTH;
 
-            if (squishPhoto) {
+            if (resizePhoto) {
                 return Bitmap.createScaledBitmap(sampledBM, POIFragment.SCREEN_WIDTH, height, true);
             } else {
                 return sampledBM;
