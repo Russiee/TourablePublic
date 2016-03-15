@@ -8,7 +8,7 @@
     <color name="colorAccentLight">#fa89d6fa</color>
     <color name="colorAccentDark">#fa077bb0</color>
 
-    <color name="colorLightBackground">#f3f2f2</color>
+    <color name="colorLightBackground">#F9F9F9</color>
     <color name="colorDarkText">#0c1727</color>
     <color name="colorWhiteText">#deffffff</color>
     <color name="colorTourElementDivider">#22e2e2e2</color>

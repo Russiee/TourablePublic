@@ -20,6 +20,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 /**
  * A simple {@link ListFragment} subclass.
  * Activities that contain this fragment must implement the
@@ -92,6 +94,8 @@ public class POIFragment extends ListFragment {
                     JSONObject item = post.getJSONObject(i);
                     String text;
                     String url;
+                    ArrayList option;
+                    String solution;
                     int type;
 
                     switch (item.getString("type")) {
@@ -101,30 +105,51 @@ public class POIFragment extends ListFragment {
                                 text = "";
                             }
                             url = null;
+                            option = null;
+                            solution = null;
                             type = PoiContentAdapter.HEADER;
                             break;
                         case "body":
                             text = item.getString("content");
                             url = null;
+                            option = null;
+                            solution = null;
                             type = PoiContentAdapter.BODY;
                             break;
                         case "image":
                             text = item.getString("description");
                             url = item.getString("url");
+                            option = null;
+                            solution = null;
                             type = PoiContentAdapter.IMAGE;
                             break;
                         case "video":
                             text = item.getString("description");
                             url = item.getString("url");
+                            option = null;
+                            solution = null;
                             type = PoiContentAdapter.VIDEO;
+                            break;
+                        case "quiz":
+                            text = item.getString("question");
+                            url = null;
+                            option = new ArrayList<>();
+                            JSONArray optAr = item.getJSONArray("options");
+                            for(int j = 0; j < optAr.length(); j++) {
+                                option.add(optAr.getString(j));
+                            }
+                            solution = item.getString("solution");
+                            type = PoiContentAdapter.QUIZ;
                             break;
                         default:
                             text = "";
                             url = null;
+                            option = null;
+                            solution = null;
                             type = PoiContentAdapter.IGNORE_ITEM_VIEW_TYPE;
                     }
 
-                    listItems[i] = new ListViewItem(text, type, url);
+                    listItems[i] = new ListViewItem(text, type, url, option, solution);
                 }
             } catch (JSONException je) {
                 je.printStackTrace();

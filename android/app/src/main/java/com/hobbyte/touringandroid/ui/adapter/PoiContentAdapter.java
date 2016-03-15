@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.SurfaceTexture;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.text.Layout;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.content.res.Resources;
@@ -27,6 +28,7 @@ import android.widget.TextView;
 import com.hobbyte.touringandroid.App;
 import com.hobbyte.touringandroid.tourdata.ListViewItem;
 import com.hobbyte.touringandroid.R;
+import com.hobbyte.touringandroid.tourdata.Quiz;
 import com.hobbyte.touringandroid.ui.fragment.POIFragment;
 import com.hobbyte.touringandroid.ui.util.ImageCache;
 
@@ -55,6 +57,7 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
     public static final int BODY = 1;
     public static final int IMAGE = 2;
     public static final int VIDEO = 3;
+    public static final int QUIZ = 4;
 
     private static Pattern namePattern;
     private static final String FILE_NAME_PATTERN = "https?:\\/\\/[-\\w\\.\\/]*\\/(.+\\.(jpe?g|png|mp4))";
@@ -94,7 +97,7 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
      */
     @Override
     public int getViewTypeCount() {
-        return 4;
+        return 5;
     }
 
     @Override
@@ -130,11 +133,14 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
                 view = LayoutInflater.from(getContext()).inflate(R.layout.poi_image, parent, false);
             } else if (listViewItemType == VIDEO) {
                 view = LayoutInflater.from(getContext()).inflate(R.layout.poi_video, parent, false);
+            } else if (listViewItemType == HEADER) {
+                view = LayoutInflater.from(getContext()).inflate(R.layout.poi_header, parent, false);
+            } else if (listViewItemType == QUIZ) {
+                view = LayoutInflater.from(getContext()).inflate(R.layout.poi_quiz, parent, false);
             } else {
-                view = LayoutInflater.from(getContext()).inflate(R.layout.poi_content, parent, false);
+                    view = LayoutInflater.from(getContext()).inflate(R.layout.poi_content, parent, false);
+                }
             }
-        }
-
         switch (listViewItemType) {
             case IMAGE:
                 ImageView imageView = (ImageView) view.findViewById(R.id.poiContentImageView);
@@ -251,10 +257,10 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
                 return view;
             case HEADER:
                 // TODO
-                if (view.findViewById(R.id.poiContentTextView) == null) {
-                    view = LayoutInflater.from(getContext()).inflate(R.layout.poi_content, parent, false);
+                if (view.findViewById(R.id.poiHeaderTextView) == null) {
+                    view = LayoutInflater.from(getContext()).inflate(R.layout.poi_header, parent, false);
                 }
-                contentView = (TextView) view.findViewById(R.id.poiContentTextView);
+                contentView = (TextView) view.findViewById(R.id.poiHeaderTextView);
                 contentView.setText(listViewItem.getText() + "\n");
                 if (listViewItem.getText().length() == 0) {
                     return new View(getContext());
@@ -264,6 +270,11 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
                 // TODO
                 contentView = (TextView) view.findViewById(R.id.poiContentTextView);
                 contentView.setText(listViewItem.getText() + "\n");
+                return view;
+            case QUIZ:
+                contentView = (TextView) view.findViewById(R.id.quizTitle);
+                contentView.append(listViewItem.getText() + "\n");
+                new Quiz(listViewItem.getText(), listViewItem.getOption(), listViewItem.getSolution(), view);
                 return view;
             default:
                 contentView = (TextView) view.findViewById(R.id.poiContentTextView);
