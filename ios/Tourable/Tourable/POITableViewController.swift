@@ -16,6 +16,8 @@ class POITableViewController: UITableViewController {
     var superSectionID = "xI21AHATXD"
     var POIList = [String]()
     var poiViews = [UIView]()
+    var nextNavigationView = [UIView]()
+    var previousNavigationView = [UIView]()
     var videoList = [NSURL]()
     let recognizer = UITapGestureRecognizer()
     var player = AVPlayer()
@@ -24,8 +26,8 @@ class POITableViewController: UITableViewController {
     @IBOutlet var PreviousPoiButton: UIBarButtonItem!
     
     @IBOutlet var PreviousSectionButton: UIBarButtonItem!
+
     
-    @IBOutlet var NextPOIButton: UIBarButtonItem!
     
     @IBAction func PreviousPOI(sender: UIBarButtonItem) {
 
@@ -37,10 +39,6 @@ class POITableViewController: UITableViewController {
         self.tableView.reloadData()
         viewDidLoad()
 
-    }
-    
-    @IBAction func PreviousSection(sender: UIBarButtonItem) {
-            self.navigationController?.popViewControllerAnimated(true)
     }
     
     @IBAction func NextPOI(sender: UIBarButtonItem) {
@@ -59,16 +57,17 @@ class POITableViewController: UITableViewController {
         super.viewDidLoad()
 
         getPOIS()
-        createToolBar()
         let pointToDisplay = POIParser().getTourSection(poiID)
         self.title = pointToDisplay.title
+        print(pointToDisplay.post)
         createSubviews(pointToDisplay.post)
+        print(poiViews.count)
+        createNavigationViews()
         //reloads the tableViewData so that the Views are shown, potential move to viewWillAppear the createSubViews method
         self.tableView.reloadData()
         self.tableView.separatorStyle = UITableViewCellSeparatorStyle.None
         self.tableView.clipsToBounds = true
         
-        self.navigationController?.setToolbarHidden(false, animated: false)
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -84,25 +83,29 @@ class POITableViewController: UITableViewController {
         }
     }
     
-    func createToolBar(){
-        PreviousPoiButton.enabled = true; NextPOIButton.enabled = true; PreviousSectionButton.enabled = true
+    func createNavigationViews(){
         
         if(POIList.count > 1){
             if(POIList.indexOf(poiID) == 0){
-                PreviousPoiButton.enabled = false
+                let nextPOI = UILabel(frame: CGRectMake(0,0,UIScreen.mainScreen().bounds.size.width, 43))
+                nextPOI.text = "Go to next POI ()"
+                nextPOI.font = UIFont.systemFontOfSize(16)
+                nextNavigationView.append(nextPOI)
             }
             else if(POIList.indexOf(poiID) == (POIList.count - 1)){
-                NextPOIButton.enabled = false
+                let previousPOI = UILabel(frame: CGRectMake(0,0,UIScreen.mainScreen().bounds.size.width, 43))
+                previousPOI.text = "Go to previous POI ()"
+                previousPOI.font = UIFont.systemFontOfSize(16)
+                previousNavigationView.append(previousPOI)
             }
             else{
-                PreviousSectionButton.enabled = false
+
             }
         }
         else{
-            PreviousPoiButton.enabled = false
-            NextPOIButton.enabled = false
+
+
         }
-        
         
     }
 
@@ -341,7 +344,9 @@ class POITableViewController: UITableViewController {
         }
     }
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("poiCells", forIndexPath: indexPath)
+        var cell:UITableViewCell = UITableViewCell()
+        if(indexPath.row < poiViews.count - 1){
+        cell = tableView.dequeueReusableCellWithIdentifier("poiCells", forIndexPath: indexPath)
 
         // Configure the cell...
         //gets rid of subviews before adding new ones to make sure no overlaps occur
@@ -352,8 +357,67 @@ class POITableViewController: UITableViewController {
         //adding the contents of the post into our tableView
         cell.contentView.addSubview(poiViews[indexPath.row])
         cell.selectionStyle = UITableViewCellSelectionStyle.None
+        } else if (indexPath.row < (poiViews.count + nextNavigationView.count + previousNavigationView.count) - 1){
+            var navigationToAdd: UIView
+            if(nextNavigationView.count != 0){
+            cell = tableView.dequeueReusableCellWithIdentifier("NextPOI", forIndexPath: indexPath)
+            navigationToAdd = nextNavigationView[0]
+            }
+            else {
+            cell = tableView.dequeueReusableCellWithIdentifier("PreviousPOI", forIndexPath: indexPath)
+            navigationToAdd = previousNavigationView[0]
+            }
+            
+            for view in cell.contentView.subviews {
+                view.removeFromSuperview()
+                
+            }
+            
+            cell.contentView.addSubview(navigationToAdd)
+            print("adding navigation cells")
+            
+        }
+        else if (indexPath.row < (poiViews.count + nextNavigationView.count + previousNavigationView.count) - 1){
+            cell = tableView.dequeueReusableCellWithIdentifier("PreviousPOI", forIndexPath: indexPath)
+            
+            for view in cell.contentView.subviews {
+                view.removeFromSuperview()
+                
+            }
+            cell.contentView.addSubview(previousNavigationView[0])
+            print("adding navigation cells")
+        }
         
+        print(indexPath.row)
         return cell
+    }
+    
+    override func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
+        let nonActionCells = poiViews.count
+            if(indexPath.row == nonActionCells - 1 ){
+                print("i got here")
+                let Z = POIList.indexOf(poiID)!
+                if(nextNavigationView.count != 0){
+                poiID = POIList[Z + 1]
+                poiViews=[]
+                self.tableView.reloadData()
+                viewDidLoad()
+                }
+                else{
+                    poiID = (POIList)[Z - 1]
+                    poiViews = []
+                    self.tableView.reloadData()
+                    viewDidLoad()
+                    
+                }
+                if(indexPath.row == nonActionCells ){
+                    poiID = (POIList)[Z - 1]
+                    poiViews = []
+                    self.tableView.reloadData()
+                    viewDidLoad()
+                }
+            }
+        
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -392,14 +456,5 @@ class POITableViewController: UITableViewController {
         
     }
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
