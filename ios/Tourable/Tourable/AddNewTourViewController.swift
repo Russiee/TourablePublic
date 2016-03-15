@@ -14,7 +14,7 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
     var tourIndex: Int?
     var totalImagesToDownload: Float = 0.0
     var downloadedImages: Float = 0.0
-    let newCancelButton = UIBarButtonItem()
+    var newCancelButton = UIBarButtonItem()
     
 
     @IBOutlet weak var downloadBackground: UIImageView!
@@ -35,6 +35,8 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
         self.busyWheel.startAnimating()
         self.hideButtonsForBusyWheel(true)
         
+        newCancelButton = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: nil)
+        self.navigationItem.setLeftBarButtonItem(newCancelButton, animated: false)
         downloadStatusLabel.text = ""
     }
     
@@ -47,10 +49,7 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
     
     //Lets UI know that an image has been downloaded: progress bar incremented.
     func NotifiedFinishedDownloading(){
-        let newCancelButton = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "cancelDownload")
-        self.navigationItem.setLeftBarButtonItem(newCancelButton, animated: false)
-
-
+        newCancelButton.action = "cancelDownload"
         self.busyWheel.startAnimating()
         self.busyWheel.hidden = false
             downloadBackground.hidden = false
@@ -93,10 +92,7 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
     
     //Called if the tourId if valid. Stops the busy wheel and shows the download settings.
     func NotifiedValid(){
-        let newCancelButton = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "cancelDownload")
-        self.navigationItem.setLeftBarButtonItem(newCancelButton, animated: false)
-
-        
+        newCancelButton.action = "cancelDownload"
         //saveTourButton.setTitle("Downloading...", forState: .Normal)
         //saveTourButton.enabled = false
         let alert = UIAlertController(title: "Tour Downloard", message: "Tour key is valid! You can now download this tour. If you download it without video you will need an internet connection during the tour.", preferredStyle: UIAlertControllerStyle.Alert)
