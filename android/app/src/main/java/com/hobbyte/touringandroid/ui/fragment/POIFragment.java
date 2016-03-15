@@ -13,7 +13,6 @@ import com.hobbyte.touringandroid.App;
 import com.hobbyte.touringandroid.R;
 import com.hobbyte.touringandroid.io.FileManager;
 import com.hobbyte.touringandroid.tourdata.ListViewItem;
-import com.hobbyte.touringandroid.ui.activity.TourActivity;
 import com.hobbyte.touringandroid.ui.adapter.PoiContentAdapter;
 
 import org.json.JSONArray;
@@ -74,11 +73,6 @@ public class POIFragment extends ListFragment {
         setScreenDimensions();
 
         if (getArguments() != null) {
-
-            final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-
-//            Log.d(TAG, String.format("Max memory %dkB %d MB", maxMemory, maxMemory/1024));
-
             objectID = getArguments().getString(PARAM_OBJECTID);
             String keyID = getArguments().getString(PARAM_KEYID);
 

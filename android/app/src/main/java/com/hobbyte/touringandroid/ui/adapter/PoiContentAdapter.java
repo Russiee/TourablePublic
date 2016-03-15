@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.SurfaceTexture;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.text.Layout;
 import android.util.DisplayMetrics;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -25,11 +24,6 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.google.android.exoplayer.ExoPlayer;
-import com.google.android.exoplayer.FrameworkSampleSource;
-import com.google.android.exoplayer.MediaCodecVideoTrackRenderer;
-import com.google.android.exoplayer.SampleSource;
-import com.google.android.exoplayer.TrackRenderer;
 import com.hobbyte.touringandroid.App;
 import com.hobbyte.touringandroid.tourdata.ListViewItem;
 import com.hobbyte.touringandroid.R;
@@ -39,7 +33,6 @@ import com.hobbyte.touringandroid.ui.util.ImageCache;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -288,96 +281,6 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
         }
     }
 
-    private TextureView.SurfaceTextureListener videoListener = new TextureView.SurfaceTextureListener() {
-        @Override
-        public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-            Surface s = new Surface(surface);
-            try {
-                player = new MediaPlayer();
-                player.setDataSource(filePath);
-                player.setSurface(s);
-                player.prepareAsync();
-                player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                player.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT);
-                player.setLooping(false);
-                player.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
-                    @Override
-                    public void onBufferingUpdate(MediaPlayer mp, int percent) {
-                        //Do nothing
-                    }
-                });
-                player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                    @Override
-                    public void onCompletion(MediaPlayer mp) {
-                        play.setImageResource(R.mipmap.ic_play_arrow_white_36dp);
-                        mp.reset();
-                        try {
-                            mp.setDataSource(filePath);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        try {
-                            mp.prepareAsync();
-                        } catch (IllegalStateException e) {
-                            e.printStackTrace();
-                        }
-                        mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                            @Override
-                            public void onPrepared(MediaPlayer mediaPlayer) {
-                                mediaPlayer.seekTo(0);
-                            }
-                        });
-                    }
-                });
-                player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                    @Override
-                    public void onPrepared(final MediaPlayer mp) {
-                        mp.seekTo(0);
-                    }
-                });
-
-                player.setOnVideoSizeChangedListener(new MediaPlayer.OnVideoSizeChangedListener() {
-                    @Override
-                    public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
-                        //Do nothing
-                    }
-                });
-            } catch (IllegalArgumentException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (SecurityException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (IllegalStateException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-
-        }
-
-        @Override
-        public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-            if (player != null) {
-                player.stop();
-                player.release();
-                player = null;
-            }
-            return true;
-        }
-
-        @Override
-        public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-
-        }
-    };
-
     /**
      * First checks that the requested image hasn't already been loaded and saved in the cache. If
      * this is not the case, then start an {@link AsyncTask} to load the image, if one hasn't
@@ -560,4 +463,94 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
             return sampleSize;
         }
     }
+
+    private TextureView.SurfaceTextureListener videoListener = new TextureView.SurfaceTextureListener() {
+        @Override
+        public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+            Surface s = new Surface(surface);
+            try {
+                player = new MediaPlayer();
+                player.setDataSource(filePath);
+                player.setSurface(s);
+                player.prepareAsync();
+                player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                player.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT);
+                player.setLooping(false);
+                player.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
+                    @Override
+                    public void onBufferingUpdate(MediaPlayer mp, int percent) {
+                        //Do nothing
+                    }
+                });
+                player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        play.setImageResource(R.mipmap.ic_play_arrow_white_36dp);
+                        mp.reset();
+                        try {
+                            mp.setDataSource(filePath);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            mp.prepareAsync();
+                        } catch (IllegalStateException e) {
+                            e.printStackTrace();
+                        }
+                        mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                            @Override
+                            public void onPrepared(MediaPlayer mediaPlayer) {
+                                mediaPlayer.seekTo(0);
+                            }
+                        });
+                    }
+                });
+                player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(final MediaPlayer mp) {
+                        mp.seekTo(0);
+                    }
+                });
+
+                player.setOnVideoSizeChangedListener(new MediaPlayer.OnVideoSizeChangedListener() {
+                    @Override
+                    public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
+                        //Do nothing
+                    }
+                });
+            } catch (IllegalArgumentException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (SecurityException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IllegalStateException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
+
+        }
+
+        @Override
+        public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+            if (player != null) {
+                player.stop();
+                player.release();
+                player = null;
+            }
+            return true;
+        }
+
+        @Override
+        public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+
+        }
+    };
 }
