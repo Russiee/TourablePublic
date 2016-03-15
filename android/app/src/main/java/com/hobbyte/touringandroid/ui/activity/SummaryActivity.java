@@ -162,26 +162,13 @@ public class SummaryActivity extends AppCompatActivity {
 
     private void displayExpiry() {
 
-        JSONObject keyJSON = FileManager.getJSON(getApplicationContext(),
-                keyID, FileManager.KEY_JSON);
-
-            try {
-
-                String expiryDateString = keyJSON.getString("expiresAt");
-                System.out.println(expiryDateString);
-
-                SharedPreferences prefs = getApplicationContext().getSharedPreferences(
-                        getString(R.string.preference_file_key),
-                        Context.MODE_PRIVATE);
-                String expiryText = prefs.getString(App.context.getString(R.string.prefs_tours_to_update), null);
-
-                TextView txtExpiry = (TextView) findViewById(R.id.txtExpiry);
-                txtExpiry.setText(expiryText);
-                //TODO implement this
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        SharedPreferences prefs = getApplicationContext().getSharedPreferences(
+                getString(R.string.preference_file_key),
+                Context.MODE_PRIVATE);
+        String expiryText = prefs.getString(App.context.getString(R.string.prefs_current_expiry), null);
+        TextView txtExpiry = (TextView) findViewById(R.id.txtExpiry);
+        txtExpiry.setText("Expires on: " + expiryText);
+        //TODO implement this
     }
 
 
