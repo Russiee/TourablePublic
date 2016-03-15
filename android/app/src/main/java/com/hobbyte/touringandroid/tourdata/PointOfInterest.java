@@ -1,75 +1,121 @@
 package com.hobbyte.touringandroid.tourdata;
 
-import java.io.Serializable;
-import java.util.ArrayList;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
- * Created by Nikita on 08/02/2016.
+ * Backend representation of a POI. It has fields for its title, objectId (from the JSON), and its
+ * parent SubSection. This class implements Parcelable so that PointOfInterest instances can be
+ * passed from TourActivity to a SectionFragment instance.
  */
-public class PointOfInterest implements Serializable{
+public class PointOfInterest extends TourItem implements Parcelable {
 
-    //Implements serializable for easy of transfer in intents
-    private String name;
-    private String description;
-    private String header;
-    private String body;
-    private String url;
-    private String urlDescription;
-    private ArrayList<String> content;
+    private final String title;
+    private final SubSection parent;
 
-    /**
-     * Create a Point Of Interest based on it's name, description and specific information strings already prepared
-     * containing the format of:
-     * Header
-     * Body
-     * URL
-     * URL Description
-     * @param name
-     * @param description
-     * @param header
-     * @param body
-     * @param url
-     * @param urlDescription
-     */
-    public PointOfInterest(String name, String description, String header, String body, String url, String urlDescription) {
-        this.description = description;
-        this.name = name;
-        this.header = header;
-        this.body = body;
-        this.url = url;
-        this.urlDescription = urlDescription;
-        content = new ArrayList<>();
-        content.add(header);
-        content.add(body);
-        content.add(url);
-        content.add(urlDescription);
+    /** The index of the following POI in the parent's list of POIs. */
+    private final int nextIndex;
+
+    public PointOfInterest(SubSection parent, String title, String objectID, int nextIndex) {
+        super(objectID);
+        this.title = title;
+        this.nextIndex = nextIndex;
+        this.parent = parent;
     }
 
     /**
-     * Creates a very rough tester to see if POI implements correctly
+     * Get the SubSection's title, as described in the JSON.
      */
-    public PointOfInterest() {
-        this.name = "Temp POI Name";
-        this.description = "Temp POI Description";
-        this.header = "Hello i'm a header";
-        this.body = "Hello, this is body?";
-        this.url = "http://i.imgur.com/Ucwvp1x.jpg";
-        this.urlDescription = "#soReal";
+    public String getTitle() {
+        return title;
     }
 
     /**
-     * Returns a string with information line by line.
-     * @return string containing information line by line
+     * Get this SubSection's objectId, as described in the JSON.
      */
+    public String getObjectID() {
+        return objectID;
+    }
+
+    /**
+     * Get this object's parent section.
+     */
+    public SubSection getParent() {
+        return parent;
+    }
+
+    /**
+     * Used when casting {@link TourItem} objects.
+     */
+    public int getType() {
+        return TourItem.TYPE_POI;
+    }
+
+    /**
+     * Used in a {@link com.hobbyte.touringandroid.ui.fragment.POIFragment} to navigate to the next
+     * point of interest. {@link #nextIndex} will be -1 if this is the final POI in the section.
+     */
+    public PointOfInterest getNextPOI() {
+        if (nextIndex == -1) return null;
+
+        return parent.getPOI(nextIndex);
+    }
+
+    // currently used for debugging purposes
+    @Override
     public String toString() {
-        return header + "\n\n" + body + "\n\n" + url + "\n\n" + urlDescription;
+        return title;
     }
 
-    public String getName() {
-        return name;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PointOfInterest)) return false;
+
+        PointOfInterest poi = (PointOfInterest) o;
+
+        if (!objectID.equals(poi.objectID) || !title.equals(poi.title) ||
+                nextIndex != poi.nextIndex || !parent.equals(poi.parent)) {
+            return false;
+        }
+
+        return true;
     }
 
-    public ArrayList<String> getContent() {
-        return content;
+    /* ======================================================
+    *          STUFF FOR PARCELABLE
+    *  ======================================================*/
+
+    public PointOfInterest(Parcel in) {
+        super(in.readString());
+        title = in.readString();
+        nextIndex = in.readInt();
+        parent = (SubSection) in.readValue(SubSection.class.getClassLoader());
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(objectID);
+        dest.writeString(title);
+        dest.writeInt(nextIndex);
+        dest.writeValue(parent);
+    }
+
+    public static final Parcelable.Creator<PointOfInterest> CREATOR
+            = new Parcelable.Creator<PointOfInterest>() {
+        @Override
+        public PointOfInterest createFromParcel(Parcel in) {
+            return new PointOfInterest(in);
+        }
+
+        @Override
+        public PointOfInterest[] newArray(int size) {
+            return new PointOfInterest[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 }

@@ -1,26 +1,35 @@
 package com.hobbyte.touringandroid.ui.activity;
 
-import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
-import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.internal.view.ContextThemeWrapper;
 import android.util.Log;
-import android.view.Gravity;
+import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
+import com.hobbyte.touringandroid.App;
 import com.hobbyte.touringandroid.R;
 import com.hobbyte.touringandroid.internet.ServerAPI;
+import com.hobbyte.touringandroid.io.FileManager;
 import com.hobbyte.touringandroid.io.TourDBContract;
 import com.hobbyte.touringandroid.io.TourDBManager;
 import com.hobbyte.touringandroid.ui.BackAwareEditText;
@@ -35,28 +44,32 @@ import java.util.Date;
  * @author Jonathan
  * @author Max
  * @author Nikita
- *
- * The opening actiivty of the app.
- * Displays previously downloaded tours and provides functionality to add new tours.
+ *         <p/>
+ *         The opening actiivty of the app.
+ *         Displays previously downloaded tours and provides functionality to add new tours.
  */
-public class StartActivity extends Activity {
+public class StartActivity extends AppCompatActivity {
     private static final String TAG = "StartActivity";
-
-    public static Context CONTEXT;
 
     //for animations
     private static boolean FADE_IN = true;
     private static boolean FADE_OUT = false;
+    private boolean inputPhase = false;
 
     private LinearLayout keyEntryLayout;
     private LinearLayout previousToursLayout;
     private BackAwareEditText textKey;
+    private Button submitButton;
+
+    private String keyID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-        CONTEXT = getApplicationContext();
+
+//        FileManager.removeTour(getApplicationContext(), "APd4HhtBm9");
+//        new UpdateChecker(getApplicationContext()).start();
 
         //get references for animations
         keyEntryLayout = (LinearLayout) findViewById(R.id.keyEntryLayout);
@@ -64,7 +77,8 @@ public class StartActivity extends Activity {
         textKey = (BackAwareEditText) findViewById(R.id.textEnterTour);
         textKey.setCallBackClass(this);
 
-        //make the FAB do something
+
+        // make the FAB do something
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,33 +92,39 @@ public class StartActivity extends Activity {
 
     @Override
     protected void onPause() {
-        //need this so if user switches app and come back, the input fields do not show
+        // need this so if user switches app and come back, the input fields do not show
         hideInput();
-        super.onPause();
-    }
 
-    public static Context getContext() {
-        return CONTEXT;
+        // leaving a database instance open across activities is BAD!!
+        TourDBManager.getInstance(getApplicationContext()).close();
+
+        super.onPause();
     }
 
     /**
      * If the user has tours saved to the device, show their names and expiry information.
      */
     private void loadPreviousTours() {
-        TourDBManager dbHelper = new TourDBManager(this);
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        TourDBManager dbHelper = TourDBManager.getInstance(getApplicationContext());
 
         LinearLayout layout = (LinearLayout) findViewById(R.id.previousToursLayout);
 
-        if (dbHelper.dbIsEmpty(db)) {
+        if (dbHelper.dbIsEmpty()) {
             // no tours saved, so show the empty text
             View noToursText = getLayoutInflater().inflate(R.layout.text_no_tours, layout, false);
             layout.addView(noToursText);
+            layout.getRootView().setBackgroundColor(Color.parseColor("#162b49"));
+            textKey.setTextColor(Color.WHITE);
+            textKey.setHintTextColor(Color.WHITE);
+            ( (TextView) (findViewById(R.id.entryTextView))).setTextColor(Color.WHITE);
         } else {
-            // fetches a cursor pointing at the first row in the db
-            Cursor c = dbHelper.getTours(db);
+            // fetches a cursor at position -1
+            textKey.setTextColor(getResources().getColor(R.color.colorDarkText));
+            textKey.setHintTextColor(getResources().getColor(R.color.colorDarkText));
+            ( (TextView) (findViewById(R.id.entryTextView))).setTextColor(getResources().getColor(R.color.colorDarkText));
+            Cursor c = dbHelper.getTourDisplayInfo();
 
-            Log.d(TAG, DatabaseUtils.dumpCursorToString(c));
+            Log.d(TAG, DatabaseUtils.dumpCursorToString(c)); // TODO remove this at some point
 
             DateFormat df = DateFormat.getDateInstance();
 
@@ -114,46 +134,80 @@ public class StartActivity extends Activity {
 
                 TextView tourName = (TextView) tourItem.findViewById(R.id.textTourName);
                 TextView expiryDate = (TextView) tourItem.findViewById(R.id.textTourExpiry);
+                RelativeLayout tour = (RelativeLayout) tourItem.findViewById(R.id.tourItem);
+                ImageView delete = (ImageView) tourItem.findViewById(R.id.deleteImage);
 
-                String name = c.getString(c.getColumnIndex(TourDBContract.TourList.COL_TOUR_NAME));
-                long expiryTime = c.getLong(c.getColumnIndex(TourDBContract.TourList.COL_DATE_EXPIRES_ON));
-                String expiryText = df.format(new Date(expiryTime));
-                final String keyID = c.getString(c.getColumnIndex(TourDBContract.TourList.COL_TOUR_ID)); // TODO: this should be changed to COL_KEY_ID
+                final String keyID = c.getString(0);
+                final String tourID = c.getString(1);
+                String name = c.getString(2);
+                long expiryTime = c.getLong(3);
 
+                tour.setTag(keyID);
                 tourName.setText(name);
-                expiryDate.setText(expiryText);
+                final String expiryText = df.format(new Date(expiryTime));
+                expiryDate.setText(String.format("Expires %s", expiryText));
+
                 layout.addView(tourItem);
 
-                tourItem.setOnClickListener(new View.OnClickListener() {
+                tour.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        goToTour(keyID);
+                        goToTour(keyID, tourID, expiryText);
+                    }
+                });
+
+                delete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new AlertDialog.Builder(new ContextThemeWrapper(StartActivity.this, R.style.dialogTheme)).setTitle("Delete tour").setMessage("Are you sure you want to delete this tour?")
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface d, int temp) {
+                                        FileManager.removeTour(App.context, keyID);
+                                        finish();
+                                        startActivity(getIntent());
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface d, int temp) {
+                                        // do nothing
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert).show();
+                    }
+                });
+
+                tour.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        System.out.println(v.getTag().toString());
+                        registerForContextMenu(v);
+                        openContextMenu(v);
+                        return true;
                     }
                 });
             }
 
             c.close();
-
         }
-
-        db.close();
-
     }
-
 
     /**
      * Hides the input box, shows the existing tours table
      */
     public void hideInput() {
-        fade(keyEntryLayout, FADE_OUT);
-        fade(previousToursLayout, FADE_IN);
-        textKey.clearFocus();
+        if (inputPhase) {
+            fade(keyEntryLayout, FADE_OUT);
+            fade(previousToursLayout, FADE_IN);
+            textKey.clearFocus();
+            inputPhase = false;
+        }
     }
 
     /**
      * Shows input box, keyboard and hides the existing tours table
      */
     private void showInput() {
+        inputPhase = true;
         //layout.xml defines the layout as invisible. Otherwise it shows when the app is loaded.
         keyEntryLayout.setVisibility(View.VISIBLE);
 
@@ -179,8 +233,9 @@ public class StartActivity extends Activity {
      * @param fadeIn true if transparent to opaque, false if opaque to transparent
      */
     private void fade(View view, boolean fadeIn) {
-        //current alpha --> opaque or transparent
-        AlphaAnimation a = new AlphaAnimation(view.getAlpha(), fadeIn ? 1.0f : 0.0f);
+        //opaque or transparent --> opaque or transparent
+        //the first one would be view.getAlpha() but apparently the alpha given by anim
+        AlphaAnimation a = new AlphaAnimation(fadeIn ? 0.0f : 1.0f, fadeIn ? 1.0f : 0.0f);
         a.setDuration(400); //system 'medium' animation time
         a.setFillAfter(true); //so alpha sticks
         view.startAnimation(a); //run
@@ -189,18 +244,18 @@ public class StartActivity extends Activity {
     /**
      * Checks if the provided tour key is valid. If so, continue to the next activity, otherwise
      * inform the user that the key was invalid.
+     *
      * @param v the submit button
      */
     public void checkTourKey(View v) {
         // current valid key: KCL-1010
+        if (textKey.length() < 3)
+            return; // TODO ask if there's a minimum Key length. Otherwise do 0
 
         String tourKey = textKey.getText().toString();
 
         // check if key has already been used
-        TourDBManager dbHelper = new TourDBManager(this);
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        boolean exists = dbHelper.doesTourExist(db, tourKey);
-        db.close();
+        boolean exists = TourDBManager.getInstance(getApplicationContext()).doesTourExist(tourKey);
 
         if (exists) {
             showToast(getString(R.string.msg_tour_exists));
@@ -220,22 +275,47 @@ public class StartActivity extends Activity {
      * download options for the tour media.
      */
     private void goToTourDownload() {
-        textKey.setText("");
-
         Intent intent = new Intent(this, DownloadActivity.class);
         startActivity(intent);
     }
 
     /**
-     * Moves the app to the summary acitivity, ready to start the tour
-     * @param tourId tour to start
+     * Moves the app to the {@link SummaryActivity}, ready to start the tour
+     *
+     * @param keyID tour to start
      */
-    private void goToTour(final String tourId) {
+    private void goToTour(String keyID, String tourID, String expiryTime) {
+        TourDBManager.getInstance(getApplicationContext()).updateAccessedTime(keyID);
         Intent intent = new Intent(this, SummaryActivity.class);
-        intent.putExtra(SummaryActivity.KEY_ID, tourId);
+        intent.putExtra(SummaryActivity.KEY_ID, keyID);
+        intent.putExtra(SummaryActivity.TOUR_ID, tourID);
+
+        SharedPreferences prefs = getApplicationContext().getSharedPreferences(
+                getString(R.string.preference_file_key),
+                Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(getString(R.string.prefs_current_tour), tourID);
+        editor.putString(getString(R.string.prefs_current_key), keyID);
+        editor.putString(getString(R.string.prefs_current_expiry), expiryTime);
+        editor.apply();
+
         startActivity(intent);
     }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.add(0, v.getId(), 0, "Delete");
+        keyID = v.getTag().toString();
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        FileManager.removeTour(getApplicationContext(), keyID);
+        this.recreate();
+        return true;
+    }
 
     /**
      * Shows a Toast message at the bottom of the screen.
@@ -244,7 +324,6 @@ public class StartActivity extends Activity {
      */
     private void showToast(String message) {
         Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.BOTTOM, 0, 20);
         toast.show();
     }
 
@@ -255,6 +334,13 @@ public class StartActivity extends Activity {
     private class KeyCheckTask extends AsyncTask<String, Void, Boolean> {
 
         @Override
+        protected void onPreExecute() {
+            submitButton = (Button) findViewById(R.id.buttonSubmitKey);
+            submitButton.setEnabled(false);
+            textKey.setEnabled(false);
+        }
+
+        @Override
         protected Boolean doInBackground(String... params) {
             String key = params[0];
 
@@ -262,6 +348,7 @@ public class StartActivity extends Activity {
 
             // if the server returns JSON, extract needed details
             if (keyJSON != null) {
+
                 String tourID;
                 String keyID;
                 String keyExpiryDate;
@@ -270,21 +357,16 @@ public class StartActivity extends Activity {
                     tourID = keyJSON.getJSONObject("tour").getString("objectId");
                     keyID = keyJSON.getString("objectId");
                     keyExpiryDate = keyJSON.getString("expiresAt");
+
+                    FileManager.makeTourDirectories(keyID);
+                    FileManager.saveJSON(keyJSON, keyID, FileManager.KEY_JSON);
+                    Log.i(TAG, "KeyJSON saved");
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                     tourID = null;
                     keyID = null;
                     keyExpiryDate = null;
-                }
-
-                // check if key has already been used
-                TourDBManager dbHelper = new TourDBManager(getApplicationContext());
-                SQLiteDatabase db = dbHelper.getReadableDatabase();
-                boolean exists = dbHelper.doesTourExist(db, keyID);
-                db.close();
-
-                if (exists) {
-                    return null;
                 }
 
                 SharedPreferences prefs = getApplicationContext().getSharedPreferences(
@@ -311,14 +393,15 @@ public class StartActivity extends Activity {
 
         @Override
         protected void onPostExecute(Boolean isValid) {
-            if (isValid == null) {
-                showToast(getString(R.string.msg_tour_exists));
-            } else if (isValid) {
+            textKey.setText("");
+            submitButton.setEnabled(true);
+            textKey.setEnabled(true);
+
+            if (isValid) {
                 goToTourDownload();
             } else {
                 showToast(getString(R.string.msg_invalid_key));
             }
-            textKey.setText("");
         }
     }
 }

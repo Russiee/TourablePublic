@@ -1,38 +1,46 @@
 package com.hobbyte.touringandroid.ui.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.media.Image;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.hobbyte.touringandroid.tourdata.PointOfInterest;
+import com.hobbyte.touringandroid.App;
 import com.hobbyte.touringandroid.R;
-import com.hobbyte.touringandroid.tourdata.SubSection;
-import com.hobbyte.touringandroid.tourdata.Tour;
 import com.hobbyte.touringandroid.io.FileManager;
+import com.hobbyte.touringandroid.io.TourDBManager;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.Set;
 
-public class SummaryActivity extends Activity {
-
-    private static final String TAG = "SummaryActivity";
+public class SummaryActivity extends AppCompatActivity {
 
     public static final String KEY_ID = "keyID";
+    public static final String TOUR_ID = "tourID";
+    private static final String TAG = "SummaryActivity";
+    private Button openButton;
+
+    private LinearLayout updateTour;
+    private ImageButton updateButton;
+    private TextView updateText;
 
     private String keyID;
-
-    private Pattern p;
-    private Context context;
-    private Tour tour;
+    private String tourID;
+    private String title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,209 +49,135 @@ public class SummaryActivity extends Activity {
 
         Intent intent = getIntent();
         keyID = intent.getStringExtra(KEY_ID);
-        context = getApplicationContext();
-        p = Pattern.compile("https?:\\/\\/[\\w\\.\\/]*\\/(\\w*\\.(jpe?g|png))");
-        Thread thread = new Thread() {
+        tourID = intent.getStringExtra(TOUR_ID);
+
+        Log.d(TAG, String.format("k: %s t: %s", keyID, tourID));
+
+
+        displayTourInfo();
+        displayVersionAndUpdate();
+        displayExpiry();
+
+        (findViewById(R.id.buttonStartTour)).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void run() {
-                    tour = allocateTourSections(FileManager.getTourJSON(keyID), context);
+            public void onClick(View v) {
+                openTourActivity();
             }
-        };
-        thread.start();
-        loadTourDescription();
+        });
+
+        (findViewById(R.id.updateTour)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(v.getTag().equals("ToUpdate")) {
+                    doTourUpdate();
+                } else if(v.getTag().equals("Updated")) {
+                    //Do nothing
+                }
+            }
+        });
+
+
     }
 
-    public void openTourActivity(View v) {
-        // start tour
+    @Override
+    protected void onPause() {
+        // leaving a database instance open across activities is BAD!!
+        TourDBManager.getInstance(getApplicationContext()).close();
+
+        super.onPause();
+    }
+
+
+    public void openTourActivity() {
         Intent intent = new Intent(this, TourActivity.class);
-        intent.putExtra(TourActivity.EXTRA_MESSAGE_SUB, tour.getSubSections());
-        intent.putExtra(SummaryActivity.KEY_ID, keyID);
+        intent.putExtra(TourActivity.INTENT_KEY_ID, keyID);
+        intent.putExtra(TourActivity.INTENT_TITLE, title);
         startActivity(intent);
+        this.finish();
     }
 
-    private void loadTourDescription() {
-        JSONObject tourJSON = FileManager.getTourJSON(keyID);
+    private void displayTourInfo() {
 
-        TextView txtTitle = (TextView) findViewById(R.id.txtTourTitle);
+        JSONObject tourJSON = FileManager.getJSON(getApplicationContext(), keyID, FileManager.TOUR_JSON);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         TextView txtDescription = (TextView) findViewById(R.id.txtTourDescription);
+        TextView timeTourTakes = (TextView) findViewById(R.id.txtEstimatedTime);
 
         try {
-            txtTitle.setText(tourJSON.getString("title"));
+
+            toolbar.setTitle(tourJSON.getString("title"));
             txtDescription.setText(tourJSON.getString("description"));
-        } catch (Exception e) {
+            timeTourTakes.setText("Estimated time: No value from api");
+
+        } catch (JSONException e) {
             e.printStackTrace();
-            txtTitle.setText("Error");
+            toolbar.setTitle("Error");
             txtDescription.setText("Error");
         }
     }
 
-    /**
-     * Method takes in the Tour ID retrieved by the Key, gets the bundle from the tourId,
-     * then retrieves id's of every subsection from this tour url
-     * @param json
-     * @return
-     */
-    public Tour allocateTourSections(JSONObject json, Context context) {
-        try {
+    private void displayVersionAndUpdate() {
 
-            String name;
-            String description;
-            ArrayList<SubSection> subList = new ArrayList<SubSection>();
-            name = json.getString("title");
-            description = json.getString("description");
-            JSONArray jsonArr = json.getJSONArray("sections");
-            for (int i = 0; i < jsonArr.length(); i++) {
-                String objectId = jsonArr.getJSONObject(i).getString("objectId");
-                JSONObject jobj = FileManager.getObjectJSON(keyID, "section", objectId, context);
-                if (jobj == null) {
-                    continue;
-                } else {
-                SubSection sub = allocateSectionPOIs(jobj);
-                if (sub != null) {
-                    subList.add(sub);
-                } else {
-                    continue;
+        updateButton = (ImageButton) findViewById(R.id.updateTourButton);
+        updateText = (TextView) findViewById(R.id.updateTourText);
+        updateTour = (LinearLayout) findViewById(R.id.updateTour);
+
+        Context context = getApplicationContext();
+        SharedPreferences prefs = context.getSharedPreferences(
+                context.getString(R.string.preference_file_key),
+                context.MODE_PRIVATE);
+
+        Set<String> updateSet = prefs.getStringSet(context.getString(R.string.prefs_tours_to_update), null);
+
+        if (updateSet != null) {
+            for (String s : updateSet) {
+                if (s.equals(keyID)) {
+                    displayUpdateOption();
+                    break;
                 }
             }
-            }
-            Log.d(TAG, "Created tour!");
-            return new Tour(keyID, name, description, subList);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Log.e(TAG, "Something went wrong with allocating Tour!");
-            return null;
+        } else {
+            updateButton.setImageResource(R.mipmap.ic_check_black_24dp);
+            updateButton.setColorFilter(Color.parseColor("#00ff0f"));
+            updateTour.setTag("Updated");
+            updateText.setVisibility(View.GONE);
         }
     }
 
-    /**
-     * Method takes in a subsection id identified in the previous method,
-     * opens a connection to the url of said subsection id,
-     * then retrieves id's of Points of Interest and opens a method to them, creating a subsection
-     * @param json
-     * @return Subsection
-     */
-    public SubSection allocateSectionPOIs(JSONObject json) {
-        try {
-            String name;
-            String description;
+    private void displayUpdateOption() {
 
-            ArrayList<PointOfInterest> poiList = new ArrayList<PointOfInterest>();
-            ArrayList<SubSection> subList = new ArrayList<SubSection>();
+        TextView version = (TextView) findViewById(R.id.txtVersion);
+        version.setText(getApplicationContext().getString(
+                R.string.summary_activity_new_version_is_available));
 
-            Log.d(TAG, "Valid section");
-            name = json.getString("title");
-            description = json.getString("description");
+        updateText.setVisibility(View.VISIBLE);
+        updateText.setTextColor(getResources().getColor(R.color.colorPrimaryLight));
+        updateButton.setImageResource(R.mipmap.ic_get_app_black_24dp);
+        updateButton.setColorFilter(getResources().getColor(R.color.colorPrimaryLight));
+        updateTour.setTag("ToUpdate");
 
-            if(json.getJSONArray("subsections").length() == 0) {
 
-                JSONArray jsonArr = json.getJSONArray("pois");
-
-                System.out.println(jsonArr.toString());
-                //TODO: Get rid once api fixed
-
-                for (int i = 0; i < jsonArr.length(); i++) {
-
-                    if (!jsonArr.getString(0).contains(":")) {
-                        return null;
-                    }
-                    System.out.println(jsonArr.length());
-                    String objectId = jsonArr.getJSONObject(i).getString("objectId");
-                    System.out.println(objectId);
-                    JSONObject jobj = FileManager.getObjectJSON(keyID, "poi", objectId, this);
-                    if(jobj == null) {
-                        continue;
-                    } else {
-                        PointOfInterest poi = allocatePOIs(jobj);
-                        if (poi != null) {
-                            poiList.add(poi);
-                        } else {
-                            System.out.println(objectId + "is null");
-                            continue;
-                        }
-                    }
-                }
-                return new SubSection(name, description, poiList);
-
-            } else {
-
-                JSONArray jsonArr = json.getJSONArray("subsections");
-                for (int i = 0; i < jsonArr.length(); i++) {
-                    if(!jsonArr.getString(0).contains(":")) {
-                        return null;
-                    }
-                    String objectId = jsonArr.getJSONObject(i).getString("objectId");
-                    SubSection sub = allocateSectionPOIs(FileManager.getObjectJSON(keyID, "section", objectId, this));
-                    if (sub != null) {
-                        subList.add(sub);
-                    } else {
-                        continue;
-                    }
-                }
-                return new SubSection(name, description, false, subList);
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Log.e(TAG, "Something went wrong with retrieving sections!");
-            return null;
-        }
     }
 
-    /**
-     * Retrieves information regarding the POI of the POI id passed to the constructor
-     * Creates point of interest from this and passes back to caller
-     * @param json JSONObject of the PointOfInterest
-     * @return PointOfInterest
-     */
-    public PointOfInterest allocatePOIs(JSONObject json) {
-        try {
+    private void displayExpiry() {
 
-            String name;
-            String description;
-            String header;
-            String body;
-            String image;
-            String imageDesc;
-
-            Log.d(TAG, "Valid POI");
-
-            JSONArray jsonArr = json.getJSONArray("post");
-
-            name = json.getString("title");
-            description = json.getString("description");
-            header = "";
-            body = "";
-            image = "";
-            imageDesc = "";
-            for (int i = 0; i < jsonArr.length(); i++) {
-                JSONObject temp = jsonArr.getJSONObject(i);
-                if (temp.has("url")) {
-                    Matcher m = p.matcher(temp.getString("url"));
-                    if (m.matches()) {
-                        String img = m.group(1);
-                        image = img;
-                        imageDesc = temp.getString("description");
-                    }
-                } else if (temp.has("type")) {
-                    if ((temp.getString("type")).equals("Header")) {
-                        header = temp.getString("content");
-                    } else {
-                        body = temp.getString("content");
-                    }
-                } else if ((temp.getString(" type")).equals("Header")) {
-                    Log.d(TAG, "Used ' type'");
-                    header = temp.getString(" content");
-                } else {
-                    body = temp.getString("content");
-                }
-            }
-            return new PointOfInterest(name, description, header, body, image, imageDesc);
-
-        }catch(JSONException e) {
-            e.printStackTrace();
-            Log.e(TAG, "Something went wrong with retrieving POIs!");
-            return null;
-        }
+        SharedPreferences prefs = getApplicationContext().getSharedPreferences(
+                getString(R.string.preference_file_key),
+                Context.MODE_PRIVATE);
+        String expiryText = prefs.getString(App.context.getString(R.string.prefs_current_expiry), null);
+        TextView txtExpiry = (TextView) findViewById(R.id.txtExpiry);
+        txtExpiry.setText("Expires on: " + expiryText);
+        //TODO implement this
     }
+
+
+
+    public void doTourUpdate() {
+        //TODO replace this when we have a download dialog
+        Intent intent = new Intent(this, DownloadActivity.class);
+        startActivity(intent);
+        this.finish();
+    }
+
 }

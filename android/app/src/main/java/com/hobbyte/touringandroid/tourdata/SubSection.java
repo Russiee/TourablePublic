@@ -1,87 +1,166 @@
 package com.hobbyte.touringandroid.tourdata;
 
-import java.io.Serializable;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 
 /**
- * @author Nikita
+ * Backend representation of a SubSection. It has fields for its title, its parent SubSection, as
+ * well as any child subsections or points of interest that it may contain. This class implements
+ * Parcelable so that SubSection instances can be passed from TourActivity to a SectionFragment
+ * instance.
  */
-public class SubSection implements Serializable {
+public class SubSection extends TourItem implements Parcelable {
+    
+    private final String title;
+    private final String description;
+    private final SubSection parent;
 
-    //Todo: Implement method for adding subsections as arraylist instead of POIs
-    //Serializable implemented for easy of transfer via Intents
-    private ArrayList<PointOfInterest> listOfPOI;
-    private ArrayList<SubSection> listOfSub;
-    private String name;
-    private String description;
-    private boolean hasPOI; //To check whether this has subsections nested within or if it ends with a POI
+    /** This lets the object skip over any SubSections in `contents`. See {@link #getPOI(int)}*/
+    private final int numSubSections;
 
-    /**
-     * Create subsection with arraylist of points of interest contained within and its name
-     * @param name of subsection
-     * @param poi PointsOfInterest contained within subsection
-     */
-    public SubSection(String name, String description, ArrayList<PointOfInterest> poi) {
-        this.name = name;
+    /** Holds all child SubSections and POIs. From the way the JSON is parsed, this will be filled
+     *  with SubSections first, and POIs after. */
+    private ArrayList<TourItem> contents = new ArrayList<>();
+    
+    public SubSection(SubSection parent, String title, String description, String objectID, int numSubSections) {
+        super(objectID);
+        this.title = title;
         this.description = description;
-        this.hasPOI = true;
-        listOfPOI = poi;
-    }
-
-    public SubSection(String name, String description, Boolean bool, ArrayList<SubSection> sub) {
-        this.name = name;
-        this.description = description;
-        this.hasPOI = bool;
-        listOfSub = sub;
+        this.parent = parent;
+        this.numSubSections = numSubSections;
     }
 
     /**
-     * Very rough guideline for checking if subsection is created
+     * Add a {@link SubSection} or {@link PointOfInterest} to {@link #contents}.
      */
-    public SubSection() {
-        this.name = "Temp Subsection Name";
-        this.description = "Temp Subsection Description";
-        this.hasPOI = true;
-        listOfPOI = new ArrayList<PointOfInterest>();
-        listOfPOI.add(new PointOfInterest());
+    public void addItem(TourItem item) {
+        contents.add(item);
     }
 
     /**
-     * Add a point of interest to the subsection
-     * @param poi to be added
+     * @return the list of this object's {@link SubSection}s and {@link PointOfInterest}s.
      */
-    public void addPointOfInterest(PointOfInterest poi) {
-        listOfPOI.add(poi);
+    public ArrayList<TourItem> getContents() {
+        return contents;
     }
 
     /**
-     * Return arraylist of points of interest
-     * @return
+     * Returns the {@link PointOfInterest} at a given index, relative to the first POI in
+     * {@link #contents}.
      */
-    public ArrayList<PointOfInterest> getPOIs() {
-        return listOfPOI;
+    public PointOfInterest getPOI(int i) {
+        return (PointOfInterest) contents.get(numSubSections + i);
     }
 
     /**
-     * Return a specific point of interest based on index
-     * @param index of point of interest to be returned
-     * @return point of interest
+     * Returns the {@link SubSection} at a given index. Will throw an error if `i` is a legal index
+     * but points to what is actually a {@link PointOfInterest}.
      */
-    public PointOfInterest getPointOfInterest(int index) {
-        return listOfPOI.get(index);
+    public SubSection getSubSection(int i) throws ArrayIndexOutOfBoundsException {
+        if (i >= numSubSections && i < contents.size()) throw new ArrayIndexOutOfBoundsException(
+                "There are only " + numSubSections + " in this SubSection!"
+        );
+
+        return (SubSection) contents.get(i);
     }
 
+    /**
+     * Get the SubSection's title, as described in the JSON.
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * Get the SubSection's description, as described in the JSON.
+     */
+    public String getDescription() { return description; }
+
+    /**
+     * Get this object's parent section.
+     */
+    public SubSection getParent() {
+        return parent;
+    }
+
+    /**
+     * Get this SubSection's objectId, as described in the JSON.
+     */
+    public String getObjectID() {
+        return objectID;
+    }
+
+    /**
+     * Used when casting {@link TourItem} objects.
+     */
+    public int getType() {
+        return TourItem.TYPE_SUBSECTION;
+    }
+
+    // currently used for debugging purposes
+    @Override
     public String toString() {
-        return name;
+        return title;
     }
 
     /**
-     * Check whether Subsection has nested subsections within or if it contains POI (So is a final end)
-     * @return
+     * Checks for equality between two SubSection objects. Note that this <b>does not</b> check for
+     * equality between {@link #contents}. This is intentional, and done because implementing
+     * {@link Parcelable} on an abstract class is a) hard and b) not needed for our purposes.
      */
-    public boolean isHasPOI() {
-        return hasPOI;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SubSection)) return false;
+
+        SubSection s = (SubSection) o;
+
+        if (!objectID.equals(s.objectID) || !title.equals(s.title) ||
+                numSubSections != s.numSubSections || parent != s.parent) {
+            return false;
+        }
+
+        return true;
     }
 
-    public ArrayList<SubSection> getListOfSub() { return listOfSub; }
+    /* ======================================================
+    *          STUFF FOR PARCELABLE
+    *  ======================================================*/
+
+    public SubSection(Parcel in) {
+        super(in.readString());
+        title = in.readString();
+        description = in.readString();
+        numSubSections = in.readInt();
+        parent = (SubSection) in.readValue(SubSection.class.getClassLoader());
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(objectID);
+        dest.writeString(title);
+        dest.writeString(description);
+        dest.writeInt(numSubSections);
+        dest.writeValue(parent);
+    }
+
+    public static final Parcelable.Creator<SubSection> CREATOR
+            = new Parcelable.Creator<SubSection>() {
+        @Override
+        public SubSection createFromParcel(Parcel in) {
+            return new SubSection(in);
+        }
+
+        @Override
+        public SubSection[] newArray(int size) {
+            return new SubSection[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 }

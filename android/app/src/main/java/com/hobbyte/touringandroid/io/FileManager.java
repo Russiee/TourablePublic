@@ -2,21 +2,19 @@ package com.hobbyte.touringandroid.io;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.util.Log;
 
-import com.hobbyte.touringandroid.ui.activity.StartActivity;
+import com.hobbyte.touringandroid.App;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,28 +22,44 @@ import java.util.regex.Pattern;
  * A class with static methods for doing IO with the device's internal storage.
  */
 public class FileManager {
+    private static final String TAG = "FileManager";
 
     public static final String IMG_NAME = "https?:\\/\\/[\\w\\.\\/]*\\/(\\w*\\.(jpe?g|png))";
 
-    /**
-     * Loads a saved tour JSON file for a given tour.
-     *
-     * @param keyID the tour key used to download the tour
-     * @return a JSONObject of the top-level tour
-     */
-    public static JSONObject getTourJSON(String keyID) {
-        // load saved JSON into JSON object and return it
+    public static final String TOUR_JSON = "tour";
+    public static final String BUNDLE_JSON = "bundle";
+    public static final String KEY_JSON = "key";
 
-        // temporary
+
+    /**
+     * Loads a json from the tour directory, using StartActivity's application context.
+     *
+     * @param keyID    the keyID of the tour
+     * @param filename the name of the file to be loaded
+     * @return a JSON preresentaion of the file
+     */
+    public static JSONObject getJSON(String keyID, String filename) {
+        return getJSON(App.context, keyID, filename);
+    }
+
+    /**
+     * Loads a json from the tour directory.
+     *
+     * @param keyID    the keyID of the tour
+     * @param filename the name of the file to be loaded
+     * @return a JSON representation of the file
+     */
+    public static JSONObject getJSON(Context context, String keyID, String filename) {
+        Log.d(TAG, String.format("Loading JSON from %s/%s", keyID, filename));
         try {
-            File tourFolder = new File(StartActivity.getContext().getFilesDir(), keyID);
-            File tourJson = new File(tourFolder, "tour");
+            File tourFolder = new File(context.getFilesDir(), keyID);
+            File tourJson = new File(tourFolder, filename);
 
             StringBuilder text = new StringBuilder();
             BufferedReader in = new BufferedReader(new FileReader(tourJson));
             String line;
 
-            while((line = in.readLine()) != null) {
+            while ((line = in.readLine()) != null) {
                 text.append(line);
                 text.append("\n");
             }
@@ -62,78 +76,77 @@ public class FileManager {
     }
 
     /**
-     * Loads a saved JSON File for a given Tours Section or POI
-     * @param keyID the tour key used to download the tour
-     * @param object the level of section, Section or Point Of Interest
-     * @param objectId The id of the object whose JSON to retrieve
-     * @param context The context of the calling activity
-     * @return JSONObject for the Level of Section required
+     * Creates the folders that the app will store the tour data in
+     *
+     * @param keyID the keyID of the tour. This is the unique identifier of the tour.
      */
-    public static JSONObject getObjectJSON(String keyID, String object, String objectId, Context context) {
+    public static void makeTourDirectories(String keyID) {
 
-        try {
-            File tourFolder = new File(context.getFilesDir(), keyID);
-            File iDFolder = new File(tourFolder, object);
-            File objectJson = new File(iDFolder, objectId);
+        //...com.hobbyte.touring/files/
+        File tourFolder = new File(App.context.getFilesDir(), keyID);
+        boolean foldersCreatedSuccessfully = tourFolder.mkdir();
 
-            if(!objectJson.exists()) {
-                return null;
-            }
+        //...com.hobbyte.touring/files/keyID/poi/
+        File poiFolder = new File(tourFolder, "poi");
+        foldersCreatedSuccessfully = poiFolder.mkdir() && foldersCreatedSuccessfully;
 
-            StringBuilder text = new StringBuilder();
-            BufferedReader in = new BufferedReader(new FileReader(objectJson));
-            String line;
+        //...com.hobbyte.touring/files/keyID/image/
+        File imageFolder = new File(tourFolder, "image");
+        foldersCreatedSuccessfully = imageFolder.mkdir() && foldersCreatedSuccessfully;
 
-            while((line = in.readLine()) != null) {
-                text.append(line);
-                text.append("\n");
-            }
-            in.close();
+        //...com.hobbyte.touring/files/keyID/video/
+        File videoFolder = new File(tourFolder, "video");
+        foldersCreatedSuccessfully = videoFolder.mkdir() && foldersCreatedSuccessfully;
 
-            return new JSONObject(text.toString());
+        //logging
+        if (foldersCreatedSuccessfully) Log.i(TAG, "folders created successfully");
+        else Log.e(TAG, "error creating folders");
 
+    }
+
+    /**
+     * Saves a JSONObject to the local (internal) storage, using StartActivity's application context.
+     *
+     * @param keyID      keyID of the tour
+     * @param jsonObject the object to store
+     * @param filename   the name of this JSON. BUNDLE_JSON or TOUR_JSON
+     */
+    public static void saveJSON(JSONObject jsonObject, String keyID, String filename) {
+        saveJSON(App.context, jsonObject, keyID, filename);
+    }
+
+    /**
+     * Saves a JSONObject to the local (internal) storage.
+     *
+     * @param keyID      keyID of the tour
+     * @param jsonObject the object to store
+     * @param filename   the name of this JSON. BUNDLE_JSON or TOUR_JSON
+     */
+    public static void saveJSON(Context context, JSONObject jsonObject, String keyID, String filename) {
+        Log.d(TAG, "Saving " + filename);
+
+        System.out.println(keyID + " " + context.getFilesDir().toString());
+        File tourFolder = new File(context.getFilesDir(), keyID);
+        File tourFile = new File(tourFolder, filename);
+
+        try (FileWriter fw = new FileWriter(tourFile)){
+            fw.write(jsonObject.toString());
         } catch (IOException e) {
-            System.out.println("Error opening file...");
+            Log.w(TAG, "Something went wrong when saving " + filename);
             e.printStackTrace();
-            return null;
-        } catch (JSONException jex) {
-            jex.printStackTrace();
-            return null;
         }
     }
+
     /**
      * Saves an image given by a URL to the device.
-     * <p>
+     * <p/>
      * This method MUST NOT be called from within the main thread.
      *
-     * @param context the calling Activity
-     * @param keyID a tour key ID
+     * @param keyID     a tour key ID
      * @param urlString a URL to an image file
+     * @return true if the file was saved successfully
      */
-    public static void saveImage(Context context, String keyID, String urlString) {
-        HttpURLConnection connection = null;
-        Bitmap bitmap = null;
-
-        try {
-            URL url = new URL(urlString);
-            connection = (HttpURLConnection) url.openConnection();
-            connection.connect();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        if (connection != null) {
-            // download image into a bitmap
-            try (BufferedInputStream bis = new BufferedInputStream(connection.getInputStream())) {
-                bitmap = BitmapFactory.decodeStream(bis);
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                connection.disconnect();
-            }
-        }
-
-        if (bitmap != null) {
+    public static boolean saveImage(Context context, Bitmap bitmap, String urlString, String keyID) {
             // extract image file name and save it on device
             Matcher m = Pattern.compile(IMG_NAME).matcher(urlString);
 
@@ -141,23 +154,53 @@ public class FileManager {
                 String img = m.group(1);
                 File file = new File(context.getFilesDir(), String.format("%s/image/%s", keyID, img));
 
+                Log.d(TAG, "Saving image " + img);
                 try (FileOutputStream fos = new FileOutputStream(file)) {
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
                 } catch (Exception e) {
                     e.printStackTrace();
+                    return false;
                 }
             }
-        }
+
+        return true;
     }
 
     /**
-     * Deletes all files associated with a tour.
+     * Saves an video given by a URL to the device.
+     * <p/>
+     * This method MUST NOT be called from within the main thread.
+     *
+     * @param keyID     a tour key ID
+     * @param urlString a URL to an video file
+     */
+    public static void saveVideo(String keyID, String urlString) {
+        //TODO
+    }
+
+    /**
+     * Completely removes a tour from the device, deleting both its row in the local DB and all
+     * downloaded files.
+     *
+     * @param context the calling Activity
+     * @param keyID   the key ID for a specific tour
+     */
+    public static void removeTour(Context context, String keyID) {
+        TourDBManager dbHelper = TourDBManager.getInstance(context.getApplicationContext());
+        dbHelper.deleteTour(keyID);
+
+        deleteTourFiles(context, keyID);
+    }
+
+    /**
+     * Deletes all downloaded files for a particular tour.
      *
      * @param context the calling Activity
      * @param keyID the key ID for a specific tour
      */
     public static void deleteTourFiles(Context context, String keyID) {
-        DeleteTourTask task = new DeleteTourTask();
-        task.execute(context.getFilesDir(), keyID);
+        Log.d(TAG, "Deleting tour files for " + keyID);
+        DeleteTourTask task = new DeleteTourTask(context, keyID);
+        task.start();
     }
 }

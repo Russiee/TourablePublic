@@ -1,65 +1,57 @@
 package com.hobbyte.touringandroid.tourdata;
 
-import java.util.ArrayList;
+import android.util.Log;
 
 /**
- * @author Nikita
- *
- * Holds all data about a tour
+ * Contains the structure of a tour. The root {@link SubSection} holds references to all other
+ * {@link SubSection}s and {@link PointOfInterest}s. It is essentially a Tree structure.
  */
 public class Tour {
+    private static final String TAG = "Tour";
 
-    private String keyID;
-    private String name;
-    private String description;
-    private ArrayList<SubSection> listOfSubSections;
+    private final SubSection root;
+    private SubSection currentSection;
+
+    public Tour(SubSection root) {
+        this.root = root;
+        currentSection = root;
+    }
+
+    public SubSection getRoot() {
+        return root;
+    }
+
+    public SubSection getCurrentSection() {
+        return currentSection;
+    }
 
     /**
-     * Create a tour based on specific subsections already defined
-     *
-     * @param name        of tour
-     * @param subsections to be added
+     * Debugging method allowing us to visually confirm that the Tour was created properly. Use
+     * depth = 0 if calling this from TourActivity.
      */
-    public Tour(String keyId, String name, String description, ArrayList<SubSection> subsections) {
+    public void printTour(TourItem item, int depth) {
+        if (item.getType() == TourItem.TYPE_SUBSECTION) {
+            SubSection s = (SubSection) item;
 
-        this.keyID = keyId;
-        this.name = name;
-        this.description = description;
-        listOfSubSections = new ArrayList<SubSection>();
-        for (SubSection s : subsections) {
-            listOfSubSections.add(s);
+            Log.d(TAG, String.format("%s %s", steps(depth), s));
+
+            for (TourItem t : s.getContents()) {
+                printTour(t, depth + 1);
+            }
+        } else {
+            PointOfInterest p = (PointOfInterest) item;
+            Log.d(TAG, String.format("%s %s", steps(depth), p));
         }
     }
 
-    /**
-     * Very very rough template again for checking if created
-     */
-    public Tour() {
-        this.name = "Temp Tour Name";
-        this.description = "Temporary Description";
-        listOfSubSections = new ArrayList<SubSection>();
-        listOfSubSections.add(new SubSection());
+    private String steps(int depth) {
+        StringBuilder sb = new StringBuilder("");
+
+        for (int i = 0; i < depth; ++i) {
+            sb.append("-");
+        }
+
+        return sb.toString();
     }
 
-    /**
-     * Add subsections to tour if needed
-     *
-     * @param sub subsections to be added
-     */
-    public void addSubSection(SubSection sub) {
-        listOfSubSections.add(sub);
-    }
-
-    /**
-     * Retrieve ArrayList of Subsections within this tour
-     *
-     * @return ArrayList
-     */
-    public ArrayList<SubSection> getSubSections() {
-        return listOfSubSections;
-    }
-
-    public String toString() {
-        return name;
-    }
 }

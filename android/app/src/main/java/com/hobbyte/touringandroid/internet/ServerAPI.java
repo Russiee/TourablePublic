@@ -1,6 +1,8 @@
 package com.hobbyte.touringandroid.internet;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
@@ -8,6 +10,7 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -20,13 +23,13 @@ import java.net.URL;
 public class ServerAPI {
     private static final String TAG = "ServerAPI";
 
-    //    private static final String KEY_VALIDATION = "https://192.168.56.1:3000/api/v1/key/verify/";
     private static final String BASE_URl = "https://touring-api.herokuapp.com/api/v1";
     public static final String KEY_VALIDATION = "/key/verify/";
+    public static final String BUNDLE = "/bundle/";
     public static final String TOUR = "/tour/";
-    public static final String BUNDLE = "/bundle/"; // TODO: this needs to change to ...v1/bundle/
-    public static final String SECTION = "/section/";
-    public static final String POI = "/poi/";
+    public static final String KEY = "/key/";
+
+
 
 
     /**
@@ -46,19 +49,19 @@ public class ServerAPI {
 
             int response = connection.getResponseCode();
 
-            StringBuilder jsonString = new StringBuilder("");
-            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String line = in.readLine();
-
-            while (line != null) {
-                jsonString.append(line);
-                line = in.readLine();
-            }
-
-            in.close();
-            connection.disconnect();
-
             if (response == 200) {
+                StringBuilder jsonString = new StringBuilder("");
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String line = in.readLine();
+
+                while (line != null) {
+                    jsonString.append(line);
+                    line = in.readLine();
+                }
+
+                in.close();
+                connection.disconnect();
+
                 Log.d(TAG, "Valid key: " + tourKey);
                 JSONObject json = new JSONObject(jsonString.toString());
                 String tourID = json.getJSONObject("tour").getString("objectId");
@@ -66,6 +69,7 @@ public class ServerAPI {
                 return json;
             } else {
                 Log.d(TAG, "Invalid key: " + tourKey);
+                connection.disconnect();
                 return null;
             }
         } catch (JSONException jex) {
@@ -159,6 +163,47 @@ public class ServerAPI {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static Bitmap downloadBitmap(String urlString) {
+        Log.d(TAG, "Preparing to download image at " + urlString);
+        HttpURLConnection connection = null;
+        Bitmap bitmap = null;
+
+        try {
+            URL url = new URL(urlString);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.connect();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (connection != null) {
+            // download image into a bitmap
+            try (BufferedInputStream bis = new BufferedInputStream(connection.getInputStream())) {
+
+                bitmap = BitmapFactory.decodeStream(bis);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                connection.disconnect();
+            }
+        }
+        return bitmap;
+    }
+
+    public static HttpURLConnection getConnection(String urlString) {
+        HttpURLConnection connection = null;
+
+        try {
+            URL url = new URL(urlString);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.connect();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return connection;
     }
 
     /**
