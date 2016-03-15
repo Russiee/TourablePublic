@@ -32,7 +32,7 @@ public class DownloadTourTask extends Thread {
     public static final String STATE = "downloadState";
     public static final String PROGRESS = "downloadProgress";
 
-    public static final String FILE_NAME_PATTERN = "https?:\\/\\/[-\\w\\.\\/]*\\/(.+\\.(jpe?g|png|mp4))";
+    public static final String FILE_NAME_PATTERN = "https?:\\/\\/[-\\w\\.\\/]*\\/(.+\\.(jpe?g|png|avi|mp4))";
 //    public static final String FILE_NAME_PATTERN = "https?:\\/\\/[-\\w\\.\\/]*\\/([\\p{Punct}\\w]+\\.(jpe?g|png|mp4))";
 
     private String keyID;

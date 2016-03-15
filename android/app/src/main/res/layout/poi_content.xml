@@ -5,5 +5,5 @@
     android:layout_height="fill_parent"
     android:id="@+id/poiContentTextView"
     android:textColor="@color/colorDarkText"
-    android:background="#ffffff"
-    android:padding="16dp" />
+    android:padding="16dp"
+    android:background="@color/colorLightBackground"/>

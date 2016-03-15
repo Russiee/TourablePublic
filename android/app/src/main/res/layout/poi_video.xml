@@ -4,7 +4,8 @@
     android:id="@+id/poiContentVideoLayout"
     android:orientation="vertical"
     android:paddingTop="16dp"
-    android:paddingBottom="16dp">
+    android:paddingBottom="16dp"
+    android:background="@color/colorLightBackground">
 
     <TextureView
         android:layout_width="wrap_content" android:layout_height="wrap_content"

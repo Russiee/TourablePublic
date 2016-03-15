@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.hobbyte.touringandroid.App;
 import com.hobbyte.touringandroid.R;
 import com.hobbyte.touringandroid.io.FileManager;
 import com.hobbyte.touringandroid.io.TourDBManager;
@@ -22,6 +23,8 @@ import com.hobbyte.touringandroid.io.TourDBManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.Set;
 
 public class SummaryActivity extends AppCompatActivity {
@@ -165,9 +168,15 @@ public class SummaryActivity extends AppCompatActivity {
             try {
 
                 String expiryDateString = keyJSON.getString("expiresAt");
+                System.out.println(expiryDateString);
+
+                SharedPreferences prefs = getApplicationContext().getSharedPreferences(
+                        getString(R.string.preference_file_key),
+                        Context.MODE_PRIVATE);
+                String expiryText = prefs.getString(App.context.getString(R.string.prefs_tours_to_update), null);
 
                 TextView txtExpiry = (TextView) findViewById(R.id.txtExpiry);
-                txtExpiry.setText("Expiry needs implementing");
+                txtExpiry.setText(expiryText);
                 //TODO implement this
 
             } catch (JSONException e) {
