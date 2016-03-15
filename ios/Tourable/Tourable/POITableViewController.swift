@@ -19,7 +19,8 @@ class POITableViewController: UITableViewController {
     var videoList = [NSURL]()
     let recognizer = UITapGestureRecognizer()
     var player = AVPlayer()
-
+    let width = UIScreen.mainScreen().bounds.size.width
+    
     @IBOutlet var PreviousPoiButton: UIBarButtonItem!
     
     @IBOutlet var PreviousSectionButton: UIBarButtonItem!
@@ -150,13 +151,13 @@ class POITableViewController: UITableViewController {
                 case "body" :
                         
                         let chars: CGFloat = CGFloat((row["content"] as! String).characters.count)
-                        var lines: CGFloat = chars/40
+                        var lines: CGFloat = chars/60
                         if lines < 2{
                             lines = 2
                         }else{
                             lines = lines+1
                         }
-                        let label = UITextView(frame: CGRectMake(0, 0, width, 20 * lines))
+                        let label = UITextView(frame: CGRectMake(0, 0, width, 26 * lines))
                         label.contentInset = UIEdgeInsetsMake(0, 12, 0, 12)
                         label.editable = false
                         label.font = UIFont.systemFontOfSize(14)
@@ -187,11 +188,13 @@ class POITableViewController: UITableViewController {
                             self.poiViews.append(imageView1)
 
                             let chars: CGFloat = CGFloat((row["description"] as! String).characters.count)
-                            var lines: CGFloat = chars/40
+                            var lines: CGFloat = chars/60
                             if lines < 2{
                                 lines = 2
+                            }else{
+                                lines = lines + 1
                             }
-                            let label = UITextView(frame: CGRectMake(0, 0, width, 20 * lines))
+                            let label = UITextView(frame: CGRectMake(0, 0, width, 26 * lines))
                             label.contentInset = UIEdgeInsetsMake(0, 12, 0, 12)
                             label.editable = false
                             label.font = UIFont.italicSystemFontOfSize(16)
@@ -219,11 +222,13 @@ class POITableViewController: UITableViewController {
                         self.poiViews.append(imageView1)
                         
                         let chars: CGFloat = CGFloat((row["description"] as! String).characters.count)
-                        var lines: CGFloat = chars/40
+                        var lines: CGFloat = chars/60
                         if lines < 2{
                             lines = 2
+                        }else{
+                            lines = lines + 1
                         }
-                        let label = UITextView(frame: CGRectMake(0, 0, width, 20 * lines))
+                        let label = UITextView(frame: CGRectMake(0, 0, width, 26 * lines))
                         label.contentInset = UIEdgeInsetsMake(0, 12, 0, 12)
                         label.editable = false
                         label.font = UIFont.italicSystemFontOfSize(16)
@@ -262,12 +267,14 @@ class POITableViewController: UITableViewController {
                         poiViews.append(imageView)
                         
                         let chars: CGFloat = CGFloat((row["description"] as! String).characters.count)
-                        var lines: CGFloat = chars/40
+                        var lines: CGFloat = chars/52
                         if lines < 2{
                             lines = 2
+                        }else{
+                            lines = lines + 1
                         }
                         //create TextView to store all our text
-                        let text = UITextView(frame: CGRectMake(0, 0, width, 20 * lines))
+                        let text = UITextView(frame: CGRectMake(0, 0, width, 26 * lines))
                         //adds the "padding" you see on left and right hand side
                         text.contentInset = UIEdgeInsetsMake(0, 12, 0, 12)
                         //so Users cannot edit the tour text
@@ -310,8 +317,13 @@ class POITableViewController: UITableViewController {
         UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0)
         
         newImage.drawInRect(CGRect(origin: CGPointZero, size: newSize))
+        let playButton = UIImage(named: "PlayButton")
         
-        (UIImage(named: "PlayButton"))!.drawInRect(CGRect(origin: CGPointZero, size: newSize))
+        let  h_fact = width / (playButton!.size.width)
+        let new_height = playButton!.size.height * h_fact
+        let new_width = playButton!.size.width * h_fact
+        
+        (UIImage(named: "PlayButton"))!.drawInRect(CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: new_width-1, height: new_height-1)))
         
         let finalImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
