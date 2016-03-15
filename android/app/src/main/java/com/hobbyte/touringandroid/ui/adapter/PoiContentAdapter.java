@@ -520,16 +520,13 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
 
             // if the sampled image is over a certain height, use half the screen height
             int height = POIFragment.SCREEN_HEIGHT / 2;
-            int scaleHeight = (sampledBM.getHeight() > height) ? height : sampledBM.getHeight();
+            boolean squishPhoto = sampledBM.getHeight() > height;
 
-            // sampling the file isn't creating the dimensions we want, so have to scale it as well
-            return Bitmap.createScaledBitmap(
-                    BitmapFactory.decodeFile(file.getAbsolutePath(), options),
-                    POIFragment.SCREEN_WIDTH, scaleHeight, true
-            );
-
-            // if we don't want to mess with the image aspect ratio, use this
-//        return BitmapFactory.decodeFile(file.getAbsolutePath(), options);
+            if (squishPhoto) {
+                return Bitmap.createScaledBitmap(sampledBM, POIFragment.SCREEN_WIDTH, height, true);
+            } else {
+                return sampledBM;
+            }
         }
 
         /**
