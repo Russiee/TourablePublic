@@ -20,6 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hobbyte.touringandroid.App;
 import com.hobbyte.touringandroid.R;
 import com.hobbyte.touringandroid.io.FileManager;
 import com.hobbyte.touringandroid.tourdata.PointOfInterest;
@@ -72,29 +73,31 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tour);
+            setContentView(R.layout.activity_tour);
+            App app = (App) this.getApplicationContext();
+            app.setCurrentActivity(this);
 
-        Intent intent = getIntent();
-        keyID = intent.getStringExtra(INTENT_KEY_ID);
-        String title = intent.getStringExtra(INTENT_TITLE);
+            Intent intent = getIntent();
+            keyID = intent.getStringExtra(INTENT_KEY_ID);
+            String title = intent.getStringExtra(INTENT_TITLE);
 
-        //Created my own backstack to save the subsections previously clicked on and added to Toolbar
-        backStack = new LinkedList<>();
+            //Created my own backstack to save the subsections previously clicked on and added to Toolbar
+            backStack = new LinkedList<>();
 
-        backToSummary = false; //Checks whether back has been pressed at Root, and whether warning given to press back again
+            backToSummary = false; //Checks whether back has been pressed at Root, and whether warning given to press back again
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(title);
-        toolbar.setNavigationIcon(R.mipmap.ic_menu_white_24dp);
+            toolbar = (Toolbar) findViewById(R.id.toolbar);
+            toolbar.setTitle(title);
+            toolbar.setNavigationIcon(R.mipmap.ic_menu_white_24dp);
 
-        sectionDescription = (TextView) findViewById(R.id.sectionDescription);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+            sectionDescription = (TextView) findViewById(R.id.sectionDescription);
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
 
-        TourBuilderTask tbt = new TourBuilderTask();
-        tbt.execute();
-    }
+            TourBuilderTask tbt = new TourBuilderTask();
+            tbt.execute();
+        }
 
     /**
      * Listens for a back button press and displays previously opened fragment

@@ -100,8 +100,10 @@ public class POIFragment extends ListFragment {
                     switch (item.getString("type")) {
                         case "Header":
                             text = item.getString("content");
-                            if(text.equals(((AppCompatActivity) getActivity()).getSupportActionBar().getTitle().toString())) {
-                                text = "";
+                            if(((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+                                if (text.equals(((AppCompatActivity) getActivity()).getSupportActionBar().getTitle().toString())) {
+                                    text = "";
+                                }
                             }
                             url = null;
                             option = null;

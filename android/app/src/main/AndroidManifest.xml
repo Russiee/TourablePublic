@@ -31,7 +31,8 @@
 
         <activity
             android:name=".ui.activity.TourActivity"
-            android:label="@string/title_activity_tour"/>
+            android:label="@string/title_activity_tour"
+            android:configChanges="orientation|screenSize|keyboardHidden" />/>
 
         <activity
             android:name=".ui.activity.SummaryActivity"
