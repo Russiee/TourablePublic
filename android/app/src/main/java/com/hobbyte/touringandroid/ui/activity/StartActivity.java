@@ -110,7 +110,6 @@ public class StartActivity extends AppCompatActivity {
 
         // leaving a database instance open across activities is BAD!!
         TourDBManager.getInstance(getApplicationContext()).close();
-
         super.onPause();
     }
 
