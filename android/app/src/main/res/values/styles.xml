@@ -9,11 +9,11 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/colorLightBackground</item>
-        <item name="colorButtonNormal">@color/colorAccent</item>
+        <item name="colorButtonNormal">#D8D9DE</item>
         <item name="android:textColor">@color/colorDarkText</item>
         <item name="android:textAppearance">@color/colorDarkText</item>
         <item name="android:fontFamily">"sans-serif-thin"</item>
-        <item name="android:textColorPrimary">@color/colorDarkText</item>
+        <item name="android:textColorPrimary">@color/colorPrimary</item>
         <item name="android:textColorSecondary">@color/primary_text_disabled_material_dark</item>
         <item name="android:textColorSecondaryInverse">@color/colorDarkText</item>
     </style>

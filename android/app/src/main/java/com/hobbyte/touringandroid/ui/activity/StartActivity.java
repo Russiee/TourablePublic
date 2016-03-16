@@ -12,8 +12,10 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.internal.view.ContextThemeWrapper;
+import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -61,7 +63,10 @@ public class StartActivity extends AppCompatActivity {
     private BackAwareEditText textKey;
     private Button submitButton;
 
+    private String tourID;
     private String keyID;
+
+    private Button fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,9 +82,8 @@ public class StartActivity extends AppCompatActivity {
         textKey = (BackAwareEditText) findViewById(R.id.textEnterTour);
         textKey.setCallBackClass(this);
 
-
         // make the FAB do something
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (Button) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,9 +137,7 @@ public class StartActivity extends AppCompatActivity {
                 View tourItem = getLayoutInflater().inflate(R.layout.text_tour_item, layout, false);
 
                 TextView tourName = (TextView) tourItem.findViewById(R.id.textTourName);
-                TextView expiryDate = (TextView) tourItem.findViewById(R.id.textTourExpiry);
-                RelativeLayout tour = (RelativeLayout) tourItem.findViewById(R.id.tourItem);
-                ImageView delete = (ImageView) tourItem.findViewById(R.id.deleteImage);
+                LinearLayout tour = (LinearLayout) tourItem.findViewById(R.id.tourItem);
 
                 final String keyID = c.getString(0);
                 final String tourID = c.getString(1);
@@ -145,7 +147,6 @@ public class StartActivity extends AppCompatActivity {
                 tour.setTag(keyID);
                 tourName.setText(name);
                 final String expiryText = df.format(new Date(expiryTime));
-                expiryDate.setText(String.format("Expires %s", expiryText));
 
                 layout.addView(tourItem);
 
@@ -153,26 +154,6 @@ public class StartActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         goToTour(keyID, tourID, expiryText);
-                    }
-                });
-
-                delete.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        new AlertDialog.Builder(new ContextThemeWrapper(StartActivity.this, R.style.dialogTheme)).setTitle("Delete tour").setMessage("Are you sure you want to delete this tour?")
-                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface d, int temp) {
-                                        FileManager.removeTour(App.context, keyID);
-                                        finish();
-                                        startActivity(getIntent());
-                                    }
-                                })
-                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface d, int temp) {
-                                        // do nothing
-                                    }
-                                })
-                                .setIcon(android.R.drawable.ic_dialog_alert).show();
                     }
                 });
 
@@ -208,12 +189,26 @@ public class StartActivity extends AppCompatActivity {
      */
     private void showInput() {
         inputPhase = true;
-        //layout.xml defines the layout as invisible. Otherwise it shows when the app is loaded.
-        keyEntryLayout.setVisibility(View.VISIBLE);
-
-        fade(keyEntryLayout, FADE_IN);
-        fade(previousToursLayout, FADE_OUT);
-
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View view = inflater.inflate(R.layout.add_tour_dialog, null);
+        builder.setView(view);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                BackAwareEditText tourText = (BackAwareEditText) view.findViewById(R.id.textKey);
+                String key = tourText.getText().toString();
+                checkTourKey(key);
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
         showKeyboard();
     }
 
@@ -245,18 +240,14 @@ public class StartActivity extends AppCompatActivity {
      * Checks if the provided tour key is valid. If so, continue to the next activity, otherwise
      * inform the user that the key was invalid.
      *
-     * @param v the submit button
      */
-    public void checkTourKey(View v) {
+    public void checkTourKey(String tourKey) {
         // current valid key: KCL-1010
-        if (textKey.length() < 3)
+        if (tourKey.length() < 3)
             return; // TODO ask if there's a minimum Key length. Otherwise do 0
-
-        String tourKey = textKey.getText().toString();
 
         // check if key has already been used
         boolean exists = TourDBManager.getInstance(getApplicationContext()).doesTourExist(tourKey);
-
         if (exists) {
             showToast(getString(R.string.msg_tour_exists));
             textKey.setText("");
@@ -349,8 +340,6 @@ public class StartActivity extends AppCompatActivity {
             // if the server returns JSON, extract needed details
             if (keyJSON != null) {
 
-                String tourID;
-                String keyID;
                 String keyExpiryDate;
 
                 try {
@@ -398,10 +387,50 @@ public class StartActivity extends AppCompatActivity {
             textKey.setEnabled(true);
 
             if (isValid) {
-                goToTourDownload();
+                //goToTourDownload();
+                showDownloadDialog();
             } else {
                 showToast(getString(R.string.msg_invalid_key));
             }
         }
+    }
+
+    private void showDownloadDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View view = inflater.inflate(R.layout.dialog_download, null);
+        Button noMedia = (Button) view.findViewById(R.id.download_without_media);
+        noMedia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(StartActivity.this, SummaryActivity.class);
+                intent.putExtra(SummaryActivity.KEY_ID, keyID);
+                intent.putExtra(SummaryActivity.TOUR_ID, tourID);
+                intent.putExtra(SummaryActivity.DOWNLOAD, true);
+                intent.putExtra(SummaryActivity.MEDIA, false);
+                startActivity(intent);
+            }
+        });
+        Button media = (Button) view.findViewById(R.id.download_with_media);
+        media.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(StartActivity.this, SummaryActivity.class);
+                intent.putExtra(SummaryActivity.KEY_ID, keyID);
+                intent.putExtra(SummaryActivity.TOUR_ID, tourID);
+                intent.putExtra(SummaryActivity.DOWNLOAD, true);
+                intent.putExtra(SummaryActivity.MEDIA, true);
+                startActivity(intent);
+            }
+        });
+        builder.setView(view);
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }
