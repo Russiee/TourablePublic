@@ -76,6 +76,8 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
     private String keyID;
     private String filePath;
 
+    private Quiz quiz;
+
     public PoiContentAdapter(Context context, ListViewItem[] content, String keyID) {
         super(context, 0, content);
         this.keyID = keyID;
@@ -197,8 +199,10 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
                 return view;
             case QUIZ:
                 contentView = (TextView) view.findViewById(R.id.quizTitle);
-                contentView.append(listViewItem.getText() + "\n");
-                new Quiz(listViewItem.getText(), listViewItem.getOption(), listViewItem.getSolution(), view);
+                contentView.setText("Quiz: " + listViewItem.getText() + "\n");
+                if(quiz == null) {
+                    quiz = new Quiz(listViewItem.getOption(), listViewItem.getSolution(), view);
+                }
                 return view;
             default:
                 contentView = (TextView) view.findViewById(R.id.poiContentTextView);

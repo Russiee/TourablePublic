@@ -21,7 +21,7 @@
     <string name="submit_key_button_text">Submit</string>
     <string name="no_tours_exist">You haven\'t added any tours yet.</string>
     <string name="poi_first_text">Current placeholder text</string>
-    <string name="download_text">Your tour key is valid! You can now download </string>
+    <string name="download_text">Your tour key is valid! You can now download your tour!</string>
 
     <string name="download_option_image">Download just Images</string>
     <string name="download_option_video">Download with Video</string>

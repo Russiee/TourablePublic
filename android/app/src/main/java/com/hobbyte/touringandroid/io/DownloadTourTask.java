@@ -78,23 +78,24 @@ public class DownloadTourTask extends Thread {
         float total = (float) imageURLs.size() + 2 * videoURLs.size(); // make video files fill more progress
         float count = 0.0f;
 
-        for (Iterator<String> i = imageURLs.iterator(); i.hasNext(); ) {
-            String urlString = i.next();
-            Log.d(TAG, urlString);
-            Matcher m = namePattern.matcher(urlString);
+        if (getVideo) {
 
-            if (m.matches()) {
-                String img = m.group(1);
-                Log.d(TAG, img);
-                saveFile(urlString, img, "image", 8192);
-            } else {
-                Log.d(TAG, "Could not match " + urlString);
+            for (Iterator<String> i = imageURLs.iterator(); i.hasNext(); ) {
+                String urlString = i.next();
+                Log.d(TAG, urlString);
+                Matcher m = namePattern.matcher(urlString);
+
+                if (m.matches()) {
+                    String img = m.group(1);
+                    Log.d(TAG, img);
+                    saveFile(urlString, img, "image", 8192);
+                } else {
+                    Log.d(TAG, "Could not match " + urlString);
+                }
+
+                informActivity(++count / total);
             }
 
-            informActivity(++count / total);
-        }
-
-        if (getVideo) {
             for (Iterator<String> i = videoURLs.iterator(); i.hasNext(); ) {
                 String urlString = i.next();
                 Matcher m = namePattern.matcher(urlString);

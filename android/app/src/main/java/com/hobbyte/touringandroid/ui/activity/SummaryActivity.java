@@ -1,6 +1,7 @@
 package com.hobbyte.touringandroid.ui.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -9,15 +10,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -41,7 +42,6 @@ public class SummaryActivity extends AppCompatActivity {
     public static final String DOWNLOAD = "download";
     public static final String MEDIA = "media";
     private static final String TAG = "SummaryActivity";
-    private Button openButton;
 
     private static ProgressHandler handler;
 
@@ -51,7 +51,6 @@ public class SummaryActivity extends AppCompatActivity {
 
     private String keyID;
     private String tourID;
-    private String title;
     private Boolean withMedia;
     private Boolean doDownload;
 
@@ -109,7 +108,6 @@ public class SummaryActivity extends AppCompatActivity {
     public void openTourActivity() {
         Intent intent = new Intent(this, TourActivity.class);
         intent.putExtra(TourActivity.INTENT_KEY_ID, keyID);
-        intent.putExtra(TourActivity.INTENT_TITLE, title);
         startActivity(intent);
         this.finish();
     }
@@ -168,8 +166,6 @@ public class SummaryActivity extends AppCompatActivity {
         updateButton.setImageResource(R.mipmap.ic_get_app_black_24dp);
         updateButton.setColorFilter(getResources().getColor(R.color.colorPrimaryLight));
         updateTour.setTag("ToUpdate");
-
-
     }
 
     private void displayExpiry() {
@@ -181,15 +177,6 @@ public class SummaryActivity extends AppCompatActivity {
         TextView txtExpiry = (TextView) findViewById(R.id.txtExpiry);
         txtExpiry.setText("Expires on: " + expiryText);
         //TODO implement this
-    }
-
-
-
-    public void doTourUpdate() {
-        //TODO replace this when we have a download dialog
-        Intent intent = new Intent(this, DownloadActivity.class);
-        startActivity(intent);
-        this.finish();
     }
 
     public void executeDownload() {
@@ -318,7 +305,7 @@ public class SummaryActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (v.getTag().equals("ToUpdate")) {
-                    doTourUpdate();
+                    showDownloadDialog();
                 } else if (v.getTag().equals("Updated")) {
                     //Do nothing
                 }
@@ -336,5 +323,44 @@ public class SummaryActivity extends AppCompatActivity {
     }
 
 
+    private void showDownloadDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View view = inflater.inflate(R.layout.dialog_download, null);
+        Button noMedia = (Button) view.findViewById(R.id.download_without_media);
+        noMedia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SummaryActivity.this, SummaryActivity.class);
+                intent.putExtra(SummaryActivity.KEY_ID, keyID);
+                intent.putExtra(SummaryActivity.TOUR_ID, tourID);
+                intent.putExtra(SummaryActivity.DOWNLOAD, true);
+                intent.putExtra(SummaryActivity.MEDIA, false);
+                startActivity(intent);
+            }
+        });
+        Button media = (Button) view.findViewById(R.id.download_with_media);
+        media.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SummaryActivity.this, SummaryActivity.class);
+                intent.putExtra(SummaryActivity.KEY_ID, keyID);
+                intent.putExtra(SummaryActivity.TOUR_ID, tourID);
+                intent.putExtra(SummaryActivity.DOWNLOAD, true);
+                intent.putExtra(SummaryActivity.MEDIA, true);
+                startActivity(intent);
+            }
+        });
+        builder.setView(view);
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+    }
 
 }

@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class Quiz {
 
-    private String title, solution;
+    private int solution;
     private ArrayList<String> options;
     public View v;
     private TextView correctView;
@@ -21,14 +21,13 @@ public class Quiz {
 
     /**
      * Contains the structure for the Quiz
-     * @param title the Question set by the Quiz
      * @param option ArrayList of provided Options to choose from
      * @param solution Correct solution for Question
      * @param v The view to add the Quiz to
      */
-    public Quiz(String title, ArrayList<String> option, String solution, View v) {
-        this.title = title;
+    public Quiz(ArrayList<String> option, int solution, View v) {
         this.options = option;
+        System.out.println("Quiz launched once");
         this.solution = solution;
         this.v = v;
         setupQuiz();
@@ -39,13 +38,15 @@ public class Quiz {
      * //TODO: Finish documentation
      */
     private void setupQuiz() {
+        System.out.println("Quiz set up once");
         LinearLayout layout = (LinearLayout) v.findViewById(R.id.optionsLayout);
         LayoutInflater inflater = LayoutInflater.from(v.getContext());
+        System.out.println(options.size());
         optionsList = new ArrayList<>();
         for(int i = 0; i < options.size(); i++) {
             TextView quizOption = (TextView) inflater.inflate(R.layout.quiz_option, layout, false);
             quizOption.setText(options.get(i));
-            if(options.get(i).equals(solution)) {
+            if(i == solution) {
                 correctView = quizOption;
             }
             quizOption.setOnClickListener(new View.OnClickListener() {

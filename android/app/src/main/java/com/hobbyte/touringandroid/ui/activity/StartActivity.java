@@ -130,6 +130,11 @@ public class StartActivity extends AppCompatActivity {
             textKey.setTextColor(Color.WHITE);
             textKey.setHintTextColor(Color.WHITE);
             ( (TextView) (findViewById(R.id.entryTextView))).setTextColor(Color.WHITE);
+            findViewById(R.id.divider).setVisibility(View.GONE);
+            fab.setBackgroundColor(Color.parseColor("#37435B"));
+            fab.setTextColor(Color.parseColor("#D2DBEC"));
+            fab.setText("Add Tour");
+            getSupportActionBar().hide();
         } else {
             // fetches a cursor at position -1
             textKey.setTextColor(getResources().getColor(R.color.colorDarkText));
@@ -271,15 +276,6 @@ public class StartActivity extends AppCompatActivity {
     }
 
     /**
-     * Called from KeyCheckTask when a valid key is entered. It takes the user to an Activity with
-     * download options for the tour media.
-     */
-    private void goToTourDownload() {
-        Intent intent = new Intent(this, DownloadActivity.class);
-        startActivity(intent);
-    }
-
-    /**
      * Moves the app to the {@link SummaryActivity}, ready to start the tour
      *
      * @param keyID tour to start
@@ -396,7 +392,6 @@ public class StartActivity extends AppCompatActivity {
             textKey.setEnabled(true);
 
             if (isValid) {
-                //goToTourDownload();
                 showDownloadDialog();
             } else {
                 showToast(getString(R.string.msg_invalid_key));
@@ -408,6 +403,14 @@ public class StartActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
         final View view = inflater.inflate(R.layout.dialog_download, null);
+        builder.setView(view);
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+        final AlertDialog dialog = builder.create();
         Button noMedia = (Button) view.findViewById(R.id.download_without_media);
         noMedia.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -418,6 +421,7 @@ public class StartActivity extends AppCompatActivity {
                 intent.putExtra(SummaryActivity.DOWNLOAD, true);
                 intent.putExtra(SummaryActivity.MEDIA, false);
                 startActivity(intent);
+                dialog.cancel();
             }
         });
         Button media = (Button) view.findViewById(R.id.download_with_media);
@@ -430,16 +434,9 @@ public class StartActivity extends AppCompatActivity {
                 intent.putExtra(SummaryActivity.DOWNLOAD, true);
                 intent.putExtra(SummaryActivity.MEDIA, true);
                 startActivity(intent);
-            }
-        });
-        builder.setView(view);
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int id) {
                 dialog.cancel();
             }
         });
-        AlertDialog dialog = builder.create();
         dialog.show();
     }
 }
