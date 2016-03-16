@@ -13,6 +13,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.internal.view.ContextThemeWrapper;
 import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -68,6 +69,8 @@ public class StartActivity extends AppCompatActivity {
 
     private Button fab;
 
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +85,10 @@ public class StartActivity extends AppCompatActivity {
         textKey = (BackAwareEditText) findViewById(R.id.textEnterTour);
         textKey.setCallBackClass(this);
 
+        toolbar = (Toolbar) findViewById(R.id.toolbarStart);
+        toolbar.setTitle("Your Tours");
+        setSupportActionBar(toolbar);
+
         // make the FAB do something
         fab = (Button) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -90,6 +97,8 @@ public class StartActivity extends AppCompatActivity {
                 showInput();
             }
         });
+
+
 
         loadPreviousTours();
     }
