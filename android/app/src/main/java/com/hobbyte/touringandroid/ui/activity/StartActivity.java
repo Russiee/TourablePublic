@@ -86,7 +86,7 @@ public class StartActivity extends AppCompatActivity {
         textKey.setCallBackClass(this);
 
         toolbar = (Toolbar) findViewById(R.id.toolbarStart);
-        toolbar.setTitle("Your Tours");
+        ((TextView)toolbar.findViewById(R.id.toolbar_title)).setText("Your Tours");
         setSupportActionBar(toolbar);
 
         // make the FAB do something

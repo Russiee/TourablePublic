@@ -68,13 +68,16 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
 
             toolbar = (Toolbar) findViewById(R.id.toolbar);
             toolbar.setTitle(title);
-            toolbar.setNavigationIcon(R.mipmap.ic_menu_white_24dp);
+            toolbar.setNavigationIcon(R.mipmap.ic_keyboard_backspace_white_36dp);
 
             sectionDescription = (TextView) findViewById(R.id.sectionDescription);
             setSupportActionBar(toolbar);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setHomeButtonEnabled(true);
-
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onBackPressed();
+                }
+            });
             TourBuilderTask tbt = new TourBuilderTask();
             tbt.execute();
         }
