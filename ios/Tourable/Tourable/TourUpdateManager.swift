@@ -49,13 +49,13 @@ public class TourUpdateManager: NSObject {
     // if there are updates the user is asked if he wants to download them
     func isTourUpToDate() -> Bool {
         downloadNewMetadata()
-        
+
         if self.newMetadata != nil {
             let currentDate = obtainDateFromString(currentMetadata["updatedAt"] as! String)
             let newDate = obtainDateFromString(newMetadata["updatedAt"] as! String)
-            
-            //let comparisonResultString = compareDates(currentDate, newDate: newDate)
-            let comparisonResultString = compareDates(currentDate, newDate: NSDate())
+
+            let comparisonResultString = compareDates(currentDate, newDate: newDate)
+
             // check if the current date is less recent than the one in the metadata ("ascending"). If yes, ask the user to update tour.
             if comparisonResultString == "ascending" {
                 print("current date \(currentDate) is less recent than the last updated \(newDate), therefore update triggered here")
@@ -124,7 +124,7 @@ public class TourUpdateManager: NSObject {
         notify()
     }
     
-    //get the current status of the tour from the latest data on the api. Returns a tuple
+    // get the current status of the tour from the latest data on the api. Returns a tuple
     func getTourStatusInfo() -> (timeHours: Int,timeMins: Int, isCurrent: Bool, expiresIn: Int){
         
         
@@ -148,6 +148,9 @@ public class TourUpdateManager: NSObject {
     
     func NotifiedValid(){
         sleep(1)
+        // re-download images
         imageHandler.sharedInstance.downloadMediaSet(imageHandler.sharedInstance.imageQueue)
+        // save newly downloaded metadata.
+        TourIdParser.sharedInstance.addTourMetaData(newMetadata)
     }
 }
