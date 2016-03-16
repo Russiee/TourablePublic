@@ -29,29 +29,9 @@ class POITableViewController: UITableViewController {
 
     
     
-    @IBAction func PreviousPOI(sender: UIBarButtonItem) {
-
-        let Z = POIList.indexOf(poiID)!
-        //print(Z)
-        
-        poiID = (POIList)[Z - 1]
-        poiViews = []
-        self.tableView.reloadData()
-        viewDidLoad()
-
+    @IBAction func GoBackToStart(sender: UIButton) {
+        print("button pressed")
     }
-    
-    @IBAction func NextPOI(sender: UIBarButtonItem) {
-
-        let Z = POIList.indexOf(poiID)!
-        
-        poiID = (POIList)[Z + 1]
-        poiViews=[]
-        self.tableView.reloadData()
-        viewDidLoad()
-
-    }
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -86,28 +66,64 @@ class POITableViewController: UITableViewController {
     func createNavigationViews(){
         nextNavigationView = []
         previousNavigationView = []
+        let Z = POIList.indexOf(poiID)!
+        
+        //if only poi in the list then wont add any labels for navigation
         if(POIList.count > 1){
+            
+            //case where the poi is first in the list
             if(POIList.indexOf(poiID) == 0){
-                let nextPOI = UILabel(frame: CGRectMake(0,0,UIScreen.mainScreen().bounds.size.width, 43))
-                nextPOI.text = "Go to next POI ()"
-                nextPOI.font = UIFont.systemFontOfSize(16)
-                nextPOI.userInteractionEnabled = true
-                nextNavigationView.append(nextPOI)
+                //get the next POI
+                let nextPOIID = POIList[Z + 1]
+                //get the next POI's title so display
+                let nextPOITitle = (NSUserDefaults.standardUserDefaults().objectForKey(nextPOIID))!["title"] as! String
+                print(nextPOITitle)
+                let nextPOILabel = UILabel(frame: CGRectMake(0,0,UIScreen.mainScreen().bounds.size.width, 43))
+                nextPOILabel.text = "Go to next POI (\(nextPOITitle))"
+                nextPOILabel.font = UIFont.systemFontOfSize(16)
+                nextPOILabel.userInteractionEnabled = true
+                nextNavigationView.append(nextPOILabel)
             }
+                
+                //case where poi is last in the list
             else if(POIList.indexOf(poiID) == (POIList.count - 1)){
-                let previousPOI = UILabel(frame: CGRectMake(0,0,UIScreen.mainScreen().bounds.size.width, 43))
-                previousPOI.text = "Go to previous POI ()"
-                previousPOI.font = UIFont.systemFontOfSize(16)
-                previousPOI.userInteractionEnabled = true
-                previousNavigationView.append(previousPOI)
+                //get the previous POI
+                let previousPOIID = POIList[Z - 1]
+                //get the previous POI's title so display
+                let previousPOITitle = (NSUserDefaults.standardUserDefaults().objectForKey(previousPOIID))!["title"] as! String
+                print(previousPOITitle)
+                let previousPOILabel = UILabel(frame: CGRectMake(0,0,UIScreen.mainScreen().bounds.size.width, 43))
+                previousPOILabel.text = "Go to previous POI (\(previousPOITitle))"
+                previousPOILabel.font = UIFont.systemFontOfSize(16)
+                previousPOILabel.userInteractionEnabled = true
+                previousNavigationView.append(previousPOILabel)
             }
+                
+                //case where the poi has pois on either side of it in the POIList
             else{
+                //get the next POI
+                let nextPOIID = POIList[Z + 1]
+                //getting next POI's title to display
+                let nextPOITitle = (NSUserDefaults.standardUserDefaults().objectForKey(nextPOIID))!["title"] as! String
+                print(nextPOITitle)
+                let nextPOILabel = UILabel(frame: CGRectMake(0,0,UIScreen.mainScreen().bounds.size.width, 43))
+                nextPOILabel.text = "Go to next POI (\(nextPOITitle))"
+                nextPOILabel.font = UIFont.systemFontOfSize(16)
+                nextPOILabel.userInteractionEnabled = true
+                nextNavigationView.append(nextPOILabel)
+                
+                //get the previous POI
+                let previousPOIID = POIList[Z - 1]
+                //get the previous POI's title to display
+                let previousPOITitle = (NSUserDefaults.standardUserDefaults().objectForKey(previousPOIID))!["title"] as! String
+                print(previousPOITitle)
+                let previousPOILabel = UILabel(frame: CGRectMake(0,0,UIScreen.mainScreen().bounds.size.width, 43))
+                previousPOILabel.text = "Go to previous POI (\(previousPOITitle))"
+                previousPOILabel.font = UIFont.systemFontOfSize(16)
+                previousPOILabel.userInteractionEnabled = true
+                previousNavigationView.append(previousPOILabel)
 
             }
-        }
-        else{
-
-
         }
         
     }
