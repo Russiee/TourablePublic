@@ -475,6 +475,7 @@
         <!--Table View Controller-->
         <scene sceneID="iBR-5g-kVt">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wVd-8W-bdG" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tableViewController id="w6Y-H8-yy9" customClass="POITableViewController" customModule="Tourable" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" autoresizesSubviews="NO" contentMode="scaleAspectFit" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="A0j-vj-qfP">
                         <rect key="frame" x="0.0" y="64" width="600" height="536"/>
@@ -493,18 +494,18 @@
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="NextPOI" id="z77-09-r1N">
+                            <tableViewCell clipsSubviews="YES" tag="999" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="NextPOI" id="5u1-rt-TPD">
                                 <rect key="frame" x="0.0" y="72" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="z77-09-r1N" id="kxs-iE-QJE">
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5u1-rt-TPD" id="t83-oJ-ba9">
                                     <rect key="frame" x="0.0" y="0.0" width="567" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="PreviousPOI" id="CPl-co-72l">
+                            <tableViewCell clipsSubviews="YES" tag="998" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="PreviousPOI" id="lTA-9x-jJJ">
                                 <rect key="frame" x="0.0" y="116" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="CPl-co-72l" id="4z0-7y-gdh">
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lTA-9x-jJJ" id="WFm-55-d7C">
                                     <rect key="frame" x="0.0" y="0.0" width="567" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
@@ -519,7 +520,6 @@
                     <navigationItem key="navigationItem" id="N3v-Wq-uSZ"/>
                     <nil key="simulatedBottomBarMetrics"/>
                 </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="wVd-8W-bdG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1707" y="806"/>
         </scene>
