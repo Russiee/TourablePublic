@@ -485,28 +485,28 @@
                         <color key="sectionIndexBackgroundColor" red="0.94117647059999998" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="sectionIndexTrackingBackgroundColor" red="0.94117647059999998" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
                         <view key="tableFooterView" contentMode="scaleToFill" id="oBU-ga-rIa">
-                            <rect key="frame" x="0.0" y="160" width="600" height="73"/>
+                            <rect key="frame" x="0.0" y="160" width="600" height="113"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CdP-TR-qf7">
-                                    <rect key="frame" x="179" y="10" width="243" height="53"/>
+                                    <rect key="frame" x="179" y="30" width="243" height="53"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="53" id="9zl-MZ-2C3"/>
                                         <constraint firstAttribute="width" constant="243" id="kBD-5u-7xi"/>
                                     </constraints>
                                     <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="15"/>
-                                    <state key="normal" title="Go back to the start" backgroundImage="generic_button">
+                                    <state key="normal" title="Back to overview" backgroundImage="generic_button">
                                         <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                     </state>
                                     <connections>
-                                        <action selector="GoBackToStart:" destination="w6Y-H8-yy9" eventType="touchUpInside" id="0F4-GT-pQL"/>
+                                        <action selector="BackToOverView" destination="w6Y-H8-yy9" eventType="touchUpInside" id="OsO-Mk-DZy"/>
                                     </connections>
                                 </button>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstItem="CdP-TR-qf7" firstAttribute="centerX" secondItem="oBU-ga-rIa" secondAttribute="centerX" id="P1e-k8-fpI"/>
-                                <constraint firstItem="CdP-TR-qf7" firstAttribute="top" secondItem="oBU-ga-rIa" secondAttribute="top" constant="10" id="zHV-9v-ic5"/>
+                                <constraint firstItem="CdP-TR-qf7" firstAttribute="top" secondItem="oBU-ga-rIa" secondAttribute="top" constant="30" id="zHV-9v-ic5"/>
                             </constraints>
                         </view>
                         <prototypes>

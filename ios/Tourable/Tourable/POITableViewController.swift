@@ -29,9 +29,11 @@ class POITableViewController: UITableViewController {
 
     
     
-    @IBAction func GoBackToStart(sender: UIButton) {
-        print("button pressed")
+    @IBAction func BackToOverView() {
+        print("go back to overview")
+        self.navigationController?.popViewControllerAnimated(true)
     }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
