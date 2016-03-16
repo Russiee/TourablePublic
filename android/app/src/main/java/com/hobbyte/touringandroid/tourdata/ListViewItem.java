@@ -11,9 +11,9 @@ public class ListViewItem {
     private String url;
     private int type;
     private ArrayList<String> option;
-    private String solution;
+    private int solution;
 
-    public ListViewItem(String text, int type, String url, ArrayList<String> option, String solution) {
+    public ListViewItem(String text, int type, String url, ArrayList<String> option, int solution) {
         this.text = text;
         this.type = type;
         this.url = url;
@@ -35,7 +35,7 @@ public class ListViewItem {
 
     public ArrayList<String> getOption() { return option; }
 
-    public String getSolution() { return solution; }
+    public int getSolution() { return solution; }
     /*public void setText(String text) {
         this.text = text;
     }*/

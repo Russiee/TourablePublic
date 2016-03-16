@@ -166,7 +166,7 @@ public class POIFragment extends ListFragment {
                 String text;
                 String url;
                 ArrayList option;
-                String solution;
+                int solution;
                 int type;
 
                 switch (item.getString("type")) {
@@ -179,28 +179,28 @@ public class POIFragment extends ListFragment {
                         }
                         url = null;
                         option = null;
-                        solution = null;
+                        solution = 0;
                         type = PoiContentAdapter.HEADER;
                         break;
                     case "body":
                         text = item.getString("content");
                         url = null;
                         option = null;
-                        solution = null;
+                        solution = 0;
                         type = PoiContentAdapter.BODY;
                         break;
                     case "image":
                         text = item.getString("description");
                         url = item.getString("url");
                         option = null;
-                        solution = null;
+                        solution = 0;
                         type = PoiContentAdapter.IMAGE;
                         break;
                     case "video":
                         text = item.getString("description");
                         url = item.getString("url");
                         option = null;
-                        solution = null;
+                        solution = 0;
                         type = PoiContentAdapter.VIDEO;
                         break;
                     case "quiz":
@@ -208,17 +208,18 @@ public class POIFragment extends ListFragment {
                         url = null;
                         option = new ArrayList<>();
                         JSONArray optAr = item.getJSONArray("options");
+                        System.out.println(optAr.length());
                         for(int j = 0; j < optAr.length(); j++) {
                             option.add(optAr.getString(j));
                         }
-                        solution = item.getString("solution");
+                        solution = item.getInt("solution");
                         type = PoiContentAdapter.QUIZ;
                         break;
                     default:
                         text = "";
                         url = null;
                         option = null;
-                        solution = null;
+                        solution = 0;
                         type = PoiContentAdapter.IGNORE_ITEM_VIEW_TYPE;
                 }
 
