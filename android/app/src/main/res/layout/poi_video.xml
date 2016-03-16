@@ -1,25 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:id="@+id/poiContentVideoLayout"
-    android:orientation="vertical"
     android:paddingTop="16dp"
     android:paddingBottom="16dp"
     android:background="@color/colorLightBackground">
 
     <ImageView
         android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:id="@+id/poiContentVideoView">
+        android:id="@+id/poiContentVideoView"
+        android:layout_centerInParent="true">
 
     </ImageView>
+
+    <ImageView
+        android:id="@+id/imagePlayIcon"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        android:src="@mipmap/ic_play_circle_filled_black_48dp"
+        android:layout_centerInParent="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/poiContentVideoDesc"
         android:padding="16dp"
+        android:layout_marginTop="30dp"
         android:textColor="#000000"
-        android:textStyle="italic"/>
+        android:textStyle="italic"
+        android:layout_below="@+id/poiContentVideoView"
+        android:paddingTop="30dp" />
 
-</LinearLayout>
+</RelativeLayout>
