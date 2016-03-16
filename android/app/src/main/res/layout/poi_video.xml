@@ -7,58 +7,12 @@
     android:paddingBottom="16dp"
     android:background="@color/colorLightBackground">
 
-    <TextureView
+    <ImageView
         android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:id="@+id/poiContentVideoView">
 
-    </TextureView>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/playButton"
-            android:src="@mipmap/ic_play_arrow_white_36dp"
-            android:background="#000000"/>
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/replayButtoon"
-            android:src="@mipmap/ic_replay_white_36dp"
-            android:background="#000000"/>
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/muteButton"
-            android:src="@mipmap/ic_volume_off_white_36dp"
-            android:background="#000000"/>
-
-        <SeekBar
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/volumeControl"
-            android:max="100"
-            android:layout_weight="1"
-            android:progress="50"
-            android:scrollIndicators="end"
-            android:thumbTint="#ffffff"
-            android:background="#000000" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/maxVolButton"
-            android:src="@mipmap/ic_volume_up_white_36dp"
-            android:background="#000000" />
-
-    </LinearLayout>
+    </ImageView>
 
     <TextView
         android:layout_width="wrap_content"

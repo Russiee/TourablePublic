@@ -1,5 +1,6 @@
 package com.hobbyte.touringandroid;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 
@@ -9,10 +10,18 @@ import android.content.Context;
 public class App extends Application {
 
     public static Context context;
+    private Activity currentActivity = null;
 
     @Override
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
+    }
+
+    public Activity getCurrentActivity(){
+        return currentActivity;
+    }
+    public void setCurrentActivity(Activity currentActivity){
+        this.currentActivity = currentActivity;
     }
 }
