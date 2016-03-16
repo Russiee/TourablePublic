@@ -21,7 +21,7 @@ class TourUpdateManagerTests: XCTestCase {
         super.tearDown()
     }
 
-    func testExample() {
+    func testCreatedDateFromString() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
         let dateInString = "2016-02-24T12:32:06.952Z"
@@ -33,6 +33,14 @@ class TourUpdateManagerTests: XCTestCase {
         let newDateInString = formatter.stringFromDate(date)
 
         XCTAssertEqual(dateInString, newDateInString)
+    }
+    
+    
+    func testCompareSameDates() {
+        let dateNow = NSDate()
+        let resultComparison = TourUpdateManager.sharedInstance.compareDates(dateNow, newDate: dateNow)
+        XCTAssertEqual("same", resultComparison)
+        
     }
 
     func testPerformanceExample() {

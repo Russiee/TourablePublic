@@ -138,9 +138,8 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     
     // triggerd in ViewDidLoad, it iterates the list of tours and deletes the outdated one.
     func checkToursToDelete() {
-        for var indexRow = 0; indexRow < tourTitles.count; indexRow++ {
-            TourUpdateManager.sharedInstance.getCurrentData(tourIDs[indexRow], tableRow: indexRow)
-            // Need to find a better way to do this, it is causing the tour to be downloaed twice.
+        for var indexRow = 0; indexRow < models.count; indexRow++ {
+            TourUpdateManager.sharedInstance.getCurrentData(models[indexRow] as! String, tableRow: indexRow)
             TourUpdateManager.sharedInstance.checkIfOutdatedAndDeleteProject()
         }
     }
