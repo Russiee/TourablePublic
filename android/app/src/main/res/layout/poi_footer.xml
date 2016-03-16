@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff">
+
+    <View
+        android:paddingLeft="18dp"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#D9DDE1" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="18dp"
+        android:id="@+id/leftLayout">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/previousPOIFooter"
+            android:textColor="@color/colorPrimary"
+            android:text="Go to previous POI"
+            android:layout_weight="1"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_chevron_right_black_24dp"
+            android:tint="#D9DDE1"/>
+
+    </LinearLayout>
+
+    <View
+        android:paddingLeft="18dp"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#D9DDE1" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="18dp"
+        android:id="@+id/rightLayout">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/nextPOIFooter"
+            android:textColor="@color/colorPrimary"
+            android:text="Go to next POI "
+            android:layout_weight="1"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_chevron_right_black_24dp"
+            android:tint="#D9DDE1"/>
+
+    </LinearLayout>
+
+    <View
+        android:paddingLeft="18dp"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#D9DDE1" />
+
+</LinearLayout>

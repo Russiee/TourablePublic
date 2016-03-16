@@ -5,18 +5,10 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,24 +39,12 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
 
     private Toolbar toolbar;
 
-    private RelativeLayout poiNavigation;
-    private LinearLayout rightLayout;
-    private LinearLayout leftLayout;
-    private TextView rightPOI;
-    private TextView leftPOI;
-
     private TextView sectionDescription;
-    private TextView navText;
-
-    private DrawerLayout navLayout;
-    private ListView navList;
-    private ArrayList<TourItem> topLevelContents;
-    private ActionBarDrawerToggle navToggle;
 
     private Tour tour;
     private SubSection currentSection;
-    private PointOfInterest previousPOI;
-    private PointOfInterest currentPOI;
+    public PointOfInterest previousPOI;
+    public PointOfInterest currentPOI;
 
     private LinkedList<SubSection> backStack;
 
@@ -159,11 +139,9 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
         }
 
         transaction.commit();
-        poiNavigation.setVisibility(View.INVISIBLE);
         toolbar.setTitle(currentSection.getTitle());
         sectionDescription.setVisibility(View.VISIBLE);
         sectionDescription.setText(currentSection.getDescription());
-        navText.setText(toolbar.getTitle());
     }
 
     /**
@@ -171,22 +149,19 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
      *
      * @param poi
      */
-    private void loadPointOfInterest(PointOfInterest poi) {
+    public void loadPointOfInterest(PointOfInterest poi) {
+        currentPOI = poi;
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
 
-        POIFragment fragment = POIFragment.newInstance(poi.getObjectID(), keyID);
+        POIFragment fragment = POIFragment.newInstance(poi.getObjectID(), keyID, previousPOI, currentPOI);
 
         transaction.replace(R.id.fragmentContainer, fragment);
         transaction.addToBackStack(null);
 
         transaction.commit();
-        poiNavigation.setVisibility(View.VISIBLE);
-        setPoiNavText(poi);
-        currentPOI = poi;
         sectionDescription.setVisibility(View.GONE);
         toolbar.setTitle(poi.getTitle());
-        navText.setText(toolbar.getTitle());
     }
 
     private class TourBuilderTask extends AsyncTask<Void, Void, Boolean> {
@@ -221,136 +196,9 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
                 bundle = null;
 
                 tour.printTour(tour.getRoot(), 0);
-                setupNavDrawer();
-                setupPoiNavigation();
                 loadCurrentSection();
             }
         }
     }
 
-    /**
-     * Sets up the navigation drawer with Top-Level sections of the tour
-     */
-    private void setupNavDrawer() {
-        navLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        navList = (ListView) findViewById(R.id.left_drawer);
-        navText = (TextView) findViewById(R.id.tourNameText);
-        navText.setText(toolbar.getTitle());
-
-        TextView topLevelText = (TextView) findViewById(R.id.TopLevelSectionText);
-        LinearLayout topLevel = (LinearLayout) findViewById(R.id.TopLevelSection);
-        topLevel.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                backStack.addLast(currentSection);
-                currentSection = tour.getRoot();
-                loadCurrentSection();
-                navLayout.closeDrawers();
-            }
-        });
-
-        topLevelText.setText(tour.getRoot().getTitle());
-        topLevelContents = tour.getRoot().getContents();
-
-        LinearLayout home = (LinearLayout) findViewById(R.id.homeLayout);
-        home.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), StartActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
-        navList.setAdapter(new ArrayAdapter<>(this, R.layout.nav_drawer_item, topLevelContents));
-
-        navList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                backStack.addLast(currentSection);
-                currentSection = (SubSection) topLevelContents.get(position);
-                loadCurrentSection();
-                navLayout.closeDrawers();
-            }
-        });
-
-        navToggle = new ActionBarDrawerToggle(
-                this,
-                navLayout,
-                toolbar,
-                R.string.drawer_open, R.string.drawer_close) {
-
-            /** Called when a drawer has settled in a completely open state. */
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                invalidateOptionsMenu();
-            }
-
-            /** Called when a drawer has settled in a completely closed state. */
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
-                invalidateOptionsMenu();
-            }
-        };
-
-        navToggle.setDrawerIndicatorEnabled(true);
-        navLayout.setDrawerListener(navToggle);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        if (navToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * Sets up the bottom navigation bar for traversing POIs within a section
-     */
-    public void setupPoiNavigation() {
-        poiNavigation = (RelativeLayout) findViewById(R.id.bottomToolbar);
-        leftLayout = (LinearLayout) findViewById(R.id.leftButtonLayout);
-        rightLayout = (LinearLayout) findViewById(R.id.rightButtonLayout);
-        rightPOI = (TextView) findViewById(R.id.rightPOI);
-        leftPOI = (TextView) findViewById(R.id.leftPOI);
-    }
-
-    /**
-     * Sets text for the corresponding POI (Left or Right) if such a POI exists. Otherwise makes the toolbar invisible if POI is solitary.
-     * Also configures onClickListeners to load the selected Point of Interest.
-     *
-     * @param poi the current Point of Interest displayed on the screen
-     */
-    public void setPoiNavText(PointOfInterest poi) {
-
-        //Checks next Point of Interest, if not null sets layout to visisble and configures onClickListener
-        if (poi.getNextPOI() != null) {
-            rightPOI.setText(poi.getNextPOI().getTitle());
-            rightLayout.setVisibility(View.VISIBLE);
-            rightLayout.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    previousPOI = currentPOI;
-                    loadPointOfInterest(currentPOI.getNextPOI());
-                }
-            });
-        } else {
-            rightLayout.setVisibility(View.INVISIBLE); //Hides layout if next POI is null
-        }
-        //Checks previous Point of Interest, if not null and the parents of the current POI and previous POI are equal, sets layout to visible and configures listener
-        if (previousPOI != null && previousPOI != poi && previousPOI.getParent() == poi.getParent()) {
-            leftPOI.setText(previousPOI.getTitle());
-            leftLayout.setVisibility(View.VISIBLE);
-            leftLayout.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    loadPointOfInterest(previousPOI);
-                }
-            });
-        } else {
-            leftLayout.setVisibility(View.INVISIBLE);
-        }
-        //If POI is solitary, hides the toolbar as it is not needed.
-        if (rightLayout.getVisibility() == View.INVISIBLE && leftLayout.getVisibility() == View.INVISIBLE) {
-            poiNavigation.setVisibility(View.INVISIBLE);
-        }
-    }
 }
