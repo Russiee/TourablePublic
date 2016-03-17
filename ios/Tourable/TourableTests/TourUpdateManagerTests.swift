@@ -36,13 +36,33 @@ class TourUpdateManagerTests: XCTestCase {
     }
     
     
-    func testCompareSameDates() {
+    func testCompareDatesSame() {
         let dateNow = NSDate()
         let resultComparison = TourUpdateManager.sharedInstance.compareDates(dateNow, newDate: dateNow)
         XCTAssertEqual("same", resultComparison)
-        
     }
-
+    
+    func testCompareDateOld() {
+        let dateOld = NSDate()
+        sleep(3)
+        let dateNew = NSDate()
+        print(dateOld)
+        print(dateNew)
+        let resultComparison = TourUpdateManager.sharedInstance.compareDates(dateOld, newDate: dateNew)
+        XCTAssertEqual("ascending", resultComparison)
+    }
+    
+    func testCompareDateNew() {
+        let dateOld = NSDate()
+        sleep(3)
+        let dateNew = NSDate()
+        print(dateOld)
+        print(dateNew)
+        let resultComparison = TourUpdateManager.sharedInstance.compareDates(dateNew, newDate: dateOld)
+        XCTAssertEqual("descending", resultComparison)
+    }
+    
+    
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measureBlock {
