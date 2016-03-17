@@ -1,5 +1,6 @@
 package com.hobbyte.touringandroid.internet;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -7,12 +8,16 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
+import com.hobbyte.touringandroid.App;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -194,12 +199,11 @@ public class ServerAPI {
 
     public static HttpURLConnection getConnection(String urlString) {
         HttpURLConnection connection = null;
-
         try {
             URL url = new URL(urlString);
             connection = (HttpURLConnection) url.openConnection();
             connection.connect();
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 

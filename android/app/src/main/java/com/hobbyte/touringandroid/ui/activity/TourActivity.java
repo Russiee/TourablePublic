@@ -2,6 +2,7 @@ package com.hobbyte.touringandroid.ui.activity;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -32,6 +33,7 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
 
     private static final String TAG = "TourActivity";
 
+    public Context context = this;
     public static final String INTENT_KEY_ID = "intentKeyID";
     public static final String INTENT_TITLE = "intentTitle";
 
@@ -99,6 +101,7 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
             backToSummary = true;
         } else if (backToSummary) {
             super.onBackPressed();
+
         }
     }
 

@@ -208,7 +208,6 @@ public class POIFragment extends ListFragment {
                         url = null;
                         option = new ArrayList<>();
                         JSONArray optAr = item.getJSONArray("options");
-                        System.out.println(optAr.length());
                         for(int j = 0; j < optAr.length(); j++) {
                             option.add(optAr.getString(j));
                         }

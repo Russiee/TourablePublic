@@ -69,6 +69,9 @@ public class SummaryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_summary);
 
+        App app = (App) this.getApplicationContext();
+        app.setCurrentActivity(this);
+
         Intent intent = getIntent();
         keyID = intent.getStringExtra(KEY_ID);
         tourID = intent.getStringExtra(TOUR_ID);
