@@ -18,10 +18,7 @@ public class InterruptThread implements Runnable {
         try {
             Thread.sleep(60000);
         } catch (InterruptedException e) {
-
         }
-                ((HttpURLConnection) connection).disconnect();
-                System.out.println("Closed connection");
-
+        ((HttpURLConnection) connection).disconnect();
     }
 }
