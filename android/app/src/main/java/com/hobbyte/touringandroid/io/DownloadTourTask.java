@@ -1,11 +1,13 @@
 package com.hobbyte.touringandroid.io;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
 import com.hobbyte.touringandroid.App;
+import com.hobbyte.touringandroid.internet.InterruptThread;
 import com.hobbyte.touringandroid.internet.ServerAPI;
 
 import java.io.BufferedInputStream;
@@ -40,6 +42,8 @@ public class DownloadTourTask extends Thread {
     private boolean getVideo;
 
     private Handler handler;
+
+    private Activity activity;
 
     /**
      *
@@ -79,6 +83,18 @@ public class DownloadTourTask extends Thread {
         float count = 0.0f;
 
         if (getVideo) {
+            for (Iterator<String> i = videoURLs.iterator(); i.hasNext(); ) {
+                String urlString = i.next();
+                Matcher m = namePattern.matcher(urlString);
+
+                if (m.matches()) {
+                    String img = m.group(1);
+                    saveFile(urlString, img, "video", 8192); // TODO figure out if there's ever a reason to use bigger than 8192
+                }
+
+                count += 2;
+                informActivity(count / total);
+            }
 
             for (Iterator<String> i = imageURLs.iterator(); i.hasNext(); ) {
                 String urlString = i.next();
@@ -96,26 +112,34 @@ public class DownloadTourTask extends Thread {
                 informActivity(++count / total);
             }
 
-            for (Iterator<String> i = videoURLs.iterator(); i.hasNext(); ) {
+            // inform the calling activity that the download is complete
+            Bundle bundle = new Bundle();
+            bundle.putInt(STATE, STATE_FINISHED);
+            Message msg = handler.obtainMessage();
+            msg.setData(bundle);
+            handler.handleMessage(msg);
+
+        } else {
+            Bundle bundle = new Bundle();
+            bundle.putInt(STATE, STATE_FINISHED);
+            Message msg = handler.obtainMessage();
+            msg.setData(bundle);
+            handler.handleMessage(msg);
+
+            for (Iterator<String> i = imageURLs.iterator(); i.hasNext(); ) {
                 String urlString = i.next();
+                Log.d(TAG, urlString);
                 Matcher m = namePattern.matcher(urlString);
 
                 if (m.matches()) {
                     String img = m.group(1);
-                    saveFile(urlString, img, "video", 8192); // TODO figure out if there's ever a reason to use bigger than 8192
+                    Log.d(TAG, img);
+                    saveFile(urlString, img, "image", 8192);
+                } else {
+                    Log.d(TAG, "Could not match " + urlString);
                 }
-
-                count += 2;
-                informActivity(count / total);
             }
         }
-
-        // inform the calling activity that the download is complete
-        Bundle bundle = new Bundle();
-        bundle.putInt(STATE, STATE_FINISHED);
-        Message msg = handler.obtainMessage();
-        msg.setData(bundle);
-        handler.handleMessage(msg);
     }
 
     /**
@@ -130,11 +154,11 @@ public class DownloadTourTask extends Thread {
      */
     private void saveFile(String url, String name, String folder, int bufferSize) {
         HttpURLConnection connection = ServerAPI.getConnection(url);
-
         try {
+            new Thread(new InterruptThread(Thread.currentThread(), connection)).start();
             BufferedInputStream bis = new BufferedInputStream(connection.getInputStream(), bufferSize);
             BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(
-                    new File(App.context.getFilesDir(), String.format("%s/%s/%s", keyID, folder, name))
+                    new File(App.context.getFilesDir(), String.format("%s/%s/temp", keyID, folder))
             ), bufferSize);
 
             byte[] buffer = new byte[bufferSize];
@@ -146,6 +170,9 @@ public class DownloadTourTask extends Thread {
                 bytesTotal += bytesRead;
             }
 
+            File temp = new File(App.context.getFilesDir(), String.format("%s/%s/temp", keyID, folder));
+            File real = new File(App.context.getFilesDir(), String.format("%s/%s/%s", keyID, folder, name));
+            temp.renameTo(real);
             connection.disconnect();
             bis.close();
             bos.close();
@@ -153,7 +180,15 @@ public class DownloadTourTask extends Thread {
             Log.d(TAG, String.format("Downloaded %s - %d bytes total", name, bytesTotal));
 
         } catch (IOException e) {
-            e.printStackTrace();
+            try {
+                activity = ((App) App.context).getCurrentActivity();
+                while (!ServerAPI.checkConnection(activity)) {
+                    Thread.sleep(1000);
+                }
+            } catch(InterruptedException ie) {
+                ie.printStackTrace();
+            }
+            saveFile(url, name, folder, bufferSize);
         }
     }
 
@@ -168,4 +203,6 @@ public class DownloadTourTask extends Thread {
         msg.setData(bundle);
         handler.handleMessage(msg);
     }
+
+
 }

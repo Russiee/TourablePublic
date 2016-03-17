@@ -27,7 +27,6 @@ public class Quiz {
      */
     public Quiz(ArrayList<String> option, int solution, View v) {
         this.options = option;
-        System.out.println("Quiz launched once");
         this.solution = solution;
         this.v = v;
         setupQuiz();
@@ -38,10 +37,8 @@ public class Quiz {
      * //TODO: Finish documentation
      */
     private void setupQuiz() {
-        System.out.println("Quiz set up once");
         LinearLayout layout = (LinearLayout) v.findViewById(R.id.optionsLayout);
         LayoutInflater inflater = LayoutInflater.from(v.getContext());
-        System.out.println(options.size());
         optionsList = new ArrayList<>();
         for(int i = 0; i < options.size(); i++) {
             TextView quizOption = (TextView) inflater.inflate(R.layout.quiz_option, layout, false);
