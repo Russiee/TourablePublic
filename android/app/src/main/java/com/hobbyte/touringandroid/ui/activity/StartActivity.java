@@ -41,6 +41,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.Date;
 
 /**
@@ -66,6 +67,7 @@ public class StartActivity extends AppCompatActivity {
 
     private String tourID;
     private String keyID;
+    private String keyExpiryDate;
 
     private Button fab;
 
@@ -86,7 +88,7 @@ public class StartActivity extends AppCompatActivity {
         textKey.setCallBackClass(this);
 
         toolbar = (Toolbar) findViewById(R.id.toolbarStart);
-        ((TextView)toolbar.findViewById(R.id.toolbar_title)).setText("Your Tours");
+        ((TextView) toolbar.findViewById(R.id.toolbar_title)).setText("Your Tours");
         setSupportActionBar(toolbar);
 
         // make the FAB do something
@@ -97,7 +99,6 @@ public class StartActivity extends AppCompatActivity {
                 showInput();
             }
         });
-
 
 
         loadPreviousTours();
@@ -173,7 +174,6 @@ public class StartActivity extends AppCompatActivity {
                 tour.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        System.out.println(v.getTag().toString());
                         registerForContextMenu(v);
                         openContextMenu(v);
                         return true;
@@ -284,6 +284,7 @@ public class StartActivity extends AppCompatActivity {
         Intent intent = new Intent(this, SummaryActivity.class);
         intent.putExtra(SummaryActivity.KEY_ID, keyID);
         intent.putExtra(SummaryActivity.TOUR_ID, tourID);
+        intent.putExtra(SummaryActivity.EXPIRY_TIME, expiryTime);
 
         SharedPreferences prefs = getApplicationContext().getSharedPreferences(
                 getString(R.string.preference_file_key),
@@ -343,8 +344,6 @@ public class StartActivity extends AppCompatActivity {
 
             // if the server returns JSON, extract needed details
             if (keyJSON != null) {
-
-                String keyExpiryDate;
 
                 try {
                     tourID = keyJSON.getJSONObject("tour").getString("objectId");
@@ -417,6 +416,7 @@ public class StartActivity extends AppCompatActivity {
                 Intent intent = new Intent(StartActivity.this, SummaryActivity.class);
                 intent.putExtra(SummaryActivity.KEY_ID, keyID);
                 intent.putExtra(SummaryActivity.TOUR_ID, tourID);
+                intent.putExtra(SummaryActivity.EXPIRY_TIME, keyExpiryDate);
                 intent.putExtra(SummaryActivity.DOWNLOAD, true);
                 intent.putExtra(SummaryActivity.MEDIA, false);
                 startActivity(intent);
@@ -430,6 +430,7 @@ public class StartActivity extends AppCompatActivity {
                 Intent intent = new Intent(StartActivity.this, SummaryActivity.class);
                 intent.putExtra(SummaryActivity.KEY_ID, keyID);
                 intent.putExtra(SummaryActivity.TOUR_ID, tourID);
+                intent.putExtra(SummaryActivity.EXPIRY_TIME, keyExpiryDate);
                 intent.putExtra(SummaryActivity.DOWNLOAD, true);
                 intent.putExtra(SummaryActivity.MEDIA, true);
                 startActivity(intent);

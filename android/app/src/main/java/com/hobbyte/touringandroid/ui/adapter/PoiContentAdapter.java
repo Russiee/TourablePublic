@@ -155,17 +155,22 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
             case VIDEO:
                 filePath = getContext().getFilesDir() + "/" + String.format("%s/video/%s", keyID, filename);
                 File file = new File(filePath);
+                final String videoURL = listViewItem.getUrl();
+                ImageView thumbnail = (ImageView) view.findViewById(R.id.poiContentVideoView);
+
                 if(file.exists()) {
                     Bitmap bMap = ThumbnailUtils.createVideoThumbnail(file.getAbsolutePath(), MediaStore.Video.Thumbnails.MINI_KIND);
-                    ImageView thumbnail = (ImageView) view.findViewById(R.id.poiContentVideoView);
                     thumbnail.setImageBitmap(bMap);
+                }  else {
+                    thumbnail.setImageDrawable(getContext().getResources().getDrawable(R.mipmap.ic_play_circle_filled_black_48dp));
+                }
                     thumbnail.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             Activity activity = ((App) getContext().getApplicationContext()).getCurrentActivity();
                             FragmentManager manager = activity.getFragmentManager();
                             FragmentTransaction transaction = manager.beginTransaction();
-                            VideoFragment video = VideoFragment.newInstance(filePath);
+                            VideoFragment video = VideoFragment.newInstance(filePath, videoURL);
                             transaction.replace(R.id.fragmentContainer, video);
                             transaction.addToBackStack(null);
                             ((AppCompatActivity) activity).getSupportActionBar().setTitle("VideoPlayer");
@@ -175,12 +180,6 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
                     TextView videoDesc = (TextView) view.findViewById(R.id.poiContentVideoDesc);
                     videoDesc.setText(listViewItem.getText());
                     return view;
-                } else {
-                    view = LayoutInflater.from(getContext()).inflate(R.layout.poi_content, parent, false);
-                    contentView = (TextView) view.findViewById(R.id.poiContentTextView);
-                    contentView.setText("This contains a video, please download the Tour with Media to view it!");
-                    return view;
-                }
             case HEADER:
                 // TODO
                 if (view.findViewById(R.id.poiHeaderTextView) == null) {
