@@ -1,9 +1,12 @@
-<div class="container">
-    <form id="key-form">
-        <div class="form-group">
-            <label for="keyInput"><h4>Enter a tour key to get started.</h4></label>
-            <input type="text" class="form-control" id="keyInput" placeholder="RBH-9252" ng-model="key">
-        </div>
-        <button type="submit" class="btn btn-default" ng-click="startTour(key)">Start Tour</button>
-    </form>
+<div id="home-background">
+    <div class="container">
+        <form id="key-form">
+            <h3 id="home-title">Tourable</h3>
+            <div class="form-group">
+                <label id="key-form-description" for="keyInput">Enter a tour key to get started.</label>
+                <input type="text" class="form-control" id="keyInput" placeholder="RBH-9252" ng-model="key">
+            </div>
+            <button type="submit" class="btn btn-default" ng-click="startTour(key)">Start Tour</button>
+        </form>
+    </div>
 </div>
