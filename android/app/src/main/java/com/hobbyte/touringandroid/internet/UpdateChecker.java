@@ -37,9 +37,9 @@ public class UpdateChecker extends Thread {
 
             try {
                 // TODO: change this when tour version numbers are implemented
-                String version = tour.getString("updatedAt");
+                int version = tour.getInt("version");
 
-                if (TourDBManager.convertStampToMillis(version)[0] > (long) row[2]) {
+                if (version > (int) row[2]) {
                     toUpdate.add(keyID);
                 }
 

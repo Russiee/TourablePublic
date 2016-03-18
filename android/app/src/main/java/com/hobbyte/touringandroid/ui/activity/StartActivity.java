@@ -32,6 +32,7 @@ import com.github.clans.fab.FloatingActionButton;
 import com.hobbyte.touringandroid.App;
 import com.hobbyte.touringandroid.R;
 import com.hobbyte.touringandroid.internet.ServerAPI;
+import com.hobbyte.touringandroid.internet.UpdateChecker;
 import com.hobbyte.touringandroid.io.FileManager;
 import com.hobbyte.touringandroid.io.TourDBContract;
 import com.hobbyte.touringandroid.io.TourDBManager;
@@ -69,17 +70,21 @@ public class StartActivity extends AppCompatActivity {
     private String keyID;
     private String keyExpiryDate;
 
+    private String expiryTimeString;
+    private long expiryTimeLong;
+
     private Button fab;
 
     private Toolbar toolbar;
+
+    private boolean exists;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
-//        FileManager.removeTour(getApplicationContext(), "APd4HhtBm9");
-//        new UpdateChecker(getApplicationContext()).start();
+        new UpdateChecker(getApplicationContext()).start();
 
         //get references for animations
         keyEntryLayout = (LinearLayout) findViewById(R.id.keyEntryLayout);
@@ -144,8 +149,6 @@ public class StartActivity extends AppCompatActivity {
 
             Log.d(TAG, DatabaseUtils.dumpCursorToString(c)); // TODO remove this at some point
 
-            DateFormat df = DateFormat.getDateInstance();
-
             while (c.moveToNext()) {
                 // for each tour, add an item with tour name and expiry date
                 View tourItem = getLayoutInflater().inflate(R.layout.text_tour_item, layout, false);
@@ -156,18 +159,17 @@ public class StartActivity extends AppCompatActivity {
                 final String keyID = c.getString(0);
                 final String tourID = c.getString(1);
                 String name = c.getString(2);
-                long expiryTime = c.getLong(3);
+                expiryTimeLong = c.getLong(3);
 
                 tour.setTag(keyID);
                 tourName.setText(name);
-                final String expiryText = df.format(new Date(expiryTime));
 
                 layout.addView(tourItem);
 
                 tour.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        goToTour(keyID, tourID, expiryText);
+                        goToTour(keyID, tourID);
                     }
                 });
 
@@ -259,12 +261,7 @@ public class StartActivity extends AppCompatActivity {
         if (tourKey.length() < 3)
             return; // TODO ask if there's a minimum Key length. Otherwise do 0
 
-        // check if key has already been used
-        boolean exists = TourDBManager.getInstance(getApplicationContext()).doesTourExist(tourKey);
-        if (exists) {
-            showToast(getString(R.string.msg_tour_exists));
-            textKey.setText("");
-        } else if (ServerAPI.checkConnection(this)) {
+        if (ServerAPI.checkConnection(this)) {
             // only check the key if we have an internet connection
             KeyCheckTask k = new KeyCheckTask();
             k.execute(tourKey);
@@ -279,12 +276,16 @@ public class StartActivity extends AppCompatActivity {
      *
      * @param keyID tour to start
      */
-    private void goToTour(String keyID, String tourID, String expiryTime) {
+    private void goToTour(String keyID, String tourID) {
         TourDBManager.getInstance(getApplicationContext()).updateAccessedTime(keyID);
         Intent intent = new Intent(this, SummaryActivity.class);
         intent.putExtra(SummaryActivity.KEY_ID, keyID);
         intent.putExtra(SummaryActivity.TOUR_ID, tourID);
-        intent.putExtra(SummaryActivity.EXPIRY_TIME, expiryTime);
+        if(expiryTimeString != null) {
+            intent.putExtra(SummaryActivity.EXPIRY_TIME_STRING, expiryTimeString);
+        } else {
+            intent.putExtra(SummaryActivity.EXPIRY_TIME_LONG, expiryTimeLong);
+        }
 
         SharedPreferences prefs = getApplicationContext().getSharedPreferences(
                 getString(R.string.preference_file_key),
@@ -293,7 +294,6 @@ public class StartActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(getString(R.string.prefs_current_tour), tourID);
         editor.putString(getString(R.string.prefs_current_key), keyID);
-        editor.putString(getString(R.string.prefs_current_expiry), expiryTime);
         editor.apply();
 
         startActivity(intent);
@@ -348,7 +348,11 @@ public class StartActivity extends AppCompatActivity {
                 try {
                     tourID = keyJSON.getJSONObject("tour").getString("objectId");
                     keyID = keyJSON.getString("objectId");
-                    keyExpiryDate = keyJSON.getString("expiry");
+                    exists = TourDBManager.getInstance(getApplicationContext()).doesTourExist(keyID);
+                    if (exists) {
+                        return false;
+                    }
+                    expiryTimeString = keyJSON.getString("expiry");
 
                     FileManager.makeTourDirectories(keyID);
                     FileManager.saveJSON(keyJSON, keyID, FileManager.KEY_JSON);
@@ -358,7 +362,7 @@ public class StartActivity extends AppCompatActivity {
                     e.printStackTrace();
                     tourID = null;
                     keyID = null;
-                    keyExpiryDate = null;
+                    expiryTimeString = null;
                 }
 
                 SharedPreferences prefs = getApplicationContext().getSharedPreferences(
@@ -376,7 +380,6 @@ public class StartActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putString(getString(R.string.prefs_current_tour), tourID);
                 editor.putString(getString(R.string.prefs_current_key), keyID);
-                editor.putString(getString(R.string.prefs_current_expiry), keyExpiryDate);
                 editor.apply();
                 return true;
             }
@@ -391,6 +394,8 @@ public class StartActivity extends AppCompatActivity {
 
             if (isValid) {
                 showDownloadDialog();
+            } else if(exists) {
+                showToast(getString(R.string.msg_tour_exists));
             } else {
                 showToast(getString(R.string.msg_invalid_key));
             }
@@ -416,7 +421,11 @@ public class StartActivity extends AppCompatActivity {
                 Intent intent = new Intent(StartActivity.this, SummaryActivity.class);
                 intent.putExtra(SummaryActivity.KEY_ID, keyID);
                 intent.putExtra(SummaryActivity.TOUR_ID, tourID);
-                intent.putExtra(SummaryActivity.EXPIRY_TIME, keyExpiryDate);
+                if(expiryTimeString != null) {
+                    intent.putExtra(SummaryActivity.EXPIRY_TIME_STRING, expiryTimeString);
+                } else {
+                    intent.putExtra(SummaryActivity.EXPIRY_TIME_LONG, expiryTimeLong);
+                }
                 intent.putExtra(SummaryActivity.DOWNLOAD, true);
                 intent.putExtra(SummaryActivity.MEDIA, false);
                 startActivity(intent);
@@ -430,7 +439,11 @@ public class StartActivity extends AppCompatActivity {
                 Intent intent = new Intent(StartActivity.this, SummaryActivity.class);
                 intent.putExtra(SummaryActivity.KEY_ID, keyID);
                 intent.putExtra(SummaryActivity.TOUR_ID, tourID);
-                intent.putExtra(SummaryActivity.EXPIRY_TIME, keyExpiryDate);
+                if(expiryTimeString != null) {
+                    intent.putExtra(SummaryActivity.EXPIRY_TIME_STRING, expiryTimeString);
+                } else {
+                    intent.putExtra(SummaryActivity.EXPIRY_TIME_LONG, expiryTimeLong);
+                }
                 intent.putExtra(SummaryActivity.DOWNLOAD, true);
                 intent.putExtra(SummaryActivity.MEDIA, true);
                 startActivity(intent);
