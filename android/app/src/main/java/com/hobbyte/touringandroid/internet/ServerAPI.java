@@ -136,6 +136,11 @@ public class ServerAPI {
         return null;
     }
 
+    /**
+     * Connects to API using a given tourID and retrieves corresponding bundle as a string
+     * @param tourID tourID whose bundle to retrieve
+     * @return Bundle string
+     */
     public static String getBundleString(String tourID) {
         try {
             URL url = new URL(BASE_URl + BUNDLE + tourID);
@@ -170,33 +175,11 @@ public class ServerAPI {
         return null;
     }
 
-    public static Bitmap downloadBitmap(String urlString) {
-        Log.d(TAG, "Preparing to download image at " + urlString);
-        HttpURLConnection connection = null;
-        Bitmap bitmap = null;
-
-        try {
-            URL url = new URL(urlString);
-            connection = (HttpURLConnection) url.openConnection();
-            connection.connect();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        if (connection != null) {
-            // download image into a bitmap
-            try (BufferedInputStream bis = new BufferedInputStream(connection.getInputStream())) {
-
-                bitmap = BitmapFactory.decodeStream(bis);
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                connection.disconnect();
-            }
-        }
-        return bitmap;
-    }
-
+    /**
+     * Opens a connection to a given URL
+     * @param urlString URL to open connection to
+     * @return Open connection
+     */
     public static HttpURLConnection getConnection(String urlString) {
         HttpURLConnection connection = null;
         try {
