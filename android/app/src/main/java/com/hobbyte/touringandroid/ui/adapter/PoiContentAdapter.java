@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.ThumbnailUtils;
@@ -15,9 +16,11 @@ import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,7 +28,7 @@ import android.widget.TextView;
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.hobbyte.touringandroid.App;
 import com.hobbyte.touringandroid.R;
-import com.hobbyte.touringandroid.io.VideoStreamSaver;
+import com.hobbyte.touringandroid.io.VideoCacheListener;
 import com.hobbyte.touringandroid.tourdata.ListViewItem;
 import com.hobbyte.touringandroid.tourdata.Quiz;
 import com.hobbyte.touringandroid.ui.fragment.POIFragment;
@@ -184,8 +187,19 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
 
                 if (file.exists()) {
                     //create a thumbnail from it
+
+                    //get screen width
+                    WindowManager wm = (WindowManager) App.context.getSystemService(Context.WINDOW_SERVICE);
+                    Display display = wm.getDefaultDisplay();
+                    Point size = new Point();
+                    display.getSize(size);
+                    int dimension = size.x;
+
+                    //make square thumbnail out of it
                     thumbnail = (ImageView) view.findViewById(R.id.poiContentVideoView);
-                    Bitmap bMap = ThumbnailUtils.createVideoThumbnail(file.getAbsolutePath(), MediaStore.Video.Thumbnails.MINI_KIND);
+                    Bitmap bMap = ThumbnailUtils.createVideoThumbnail(file.getAbsolutePath(), MediaStore.Video.Thumbnails.FULL_SCREEN_KIND);
+                    bMap = ThumbnailUtils.extractThumbnail(bMap, dimension, dimension);
+
                     thumbnail.setImageBitmap(bMap);
 
                 } else {
@@ -195,7 +209,7 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
 
                     //this isn't strictly necessary until we want to move the cached file to
                     // permanent video folder, but it provides debugging info until it's implemented
-                    proxy.registerCacheListener(new VideoStreamSaver(), savedVideoFilePath);
+                    proxy.registerCacheListener(new VideoCacheListener(), savedVideoFilePath);
                 }
 
                 //create final URL's so they can be accessed within the anon' inner class
