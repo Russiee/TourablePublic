@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
+var morgan = require('morgan');
 
 var Parse = require('parse/node').Parse;
 Parse.initialize("touring", "yF85llv84OI0NV41ieaHU7PM0oyRCMLT");
@@ -8,14 +9,16 @@ Parse.serverURL = 'http://touring-db.herokuapp.com/parse';
 
 //Allow cross origin requests
 app.use(function(req, res, next) {
-	//console.log("Running CORS middlesware");
-	res.header("Access-Control-Allow-Origin", "*");
-	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-	next();
+    //console.log("Running CORS middlesware");
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
 });
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+app.use(morgan('combined'));
 
 //Serve static files
 //app.use(express.static(__dirname + '/public'));
@@ -37,7 +40,7 @@ var bundle = require('./routes/bundle.js');
 
 //Route to test if API is working
 router.get('/', function(req, res) {
-	res.json({ message: 'This is the Hobbyte API', status: 200 });
+    res.json({ message: 'This is the Hobbyte API', status: 200 });
 });
 
 //Organization routes
