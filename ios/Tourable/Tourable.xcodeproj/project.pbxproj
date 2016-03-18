@@ -675,6 +675,7 @@
 				FA1C8C431C9C1E9C0055BB49 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
