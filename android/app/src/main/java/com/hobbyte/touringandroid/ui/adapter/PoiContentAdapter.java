@@ -12,6 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.media.ThumbnailUtils;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -61,7 +62,6 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
     private Bitmap loadingBitmap;
 
     private String keyID;
-    private String filePath;
 
     private Quiz quiz;
 
@@ -132,7 +132,7 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
      */
     @Override
     public View getView(int position, View view, ViewGroup parent) {
-        ListViewItem listViewItem = items[position];
+        final ListViewItem listViewItem = items[position];
         int listViewItemType = getItemViewType(position);
         String filename = null;
 
@@ -171,33 +171,55 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
                 return view;
 
             case VIDEO:
-                filePath = getContext().getFilesDir() + "/" + String.format("%s/video/%s", keyID, filename);
-                File file = new File(filePath);
-                final String videoURL = listViewItem.getUrl();
-                ImageView thumbnail = (ImageView) view.findViewById(R.id.poiContentVideoView);
+                ImageView thumbnail = (ImageView) view.findViewById(R.id.imagePlayIcon);
+                String savedVideoFilePath = getContext().getFilesDir() + "/" + String.format("%s/video/%s", keyID, filename);
 
-                if(file.exists()) {
+                File file = new File(savedVideoFilePath);
+
+                if (file.exists()) {
+                    //create a thumbnail from it
+                    thumbnail = (ImageView) view.findViewById(R.id.poiContentVideoView);
                     Bitmap bMap = ThumbnailUtils.createVideoThumbnail(file.getAbsolutePath(), MediaStore.Video.Thumbnails.MINI_KIND);
                     thumbnail.setImageBitmap(bMap);
-                }  else {
-                    thumbnail.setImageDrawable(getContext().getResources().getDrawable(R.mipmap.ic_play_circle_filled_black_48dp));
+
+                } else {
+                    //change to the caching service
+                    HttpProxyCacheServer proxy = App.getProxy();
+                    savedVideoFilePath = proxy.getProxyUrl(listViewItem.getUrl());
+                    proxy.registerCacheListener(new VideoStreamSaver(), savedVideoFilePath);
                 }
-                    thumbnail.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Activity activity = ((App) getContext().getApplicationContext()).getCurrentActivity();
-                            FragmentManager manager = activity.getFragmentManager();
-                            FragmentTransaction transaction = manager.beginTransaction();
-                            VideoFragment video = VideoFragment.newInstance(filePath, videoURL);
-                            transaction.replace(R.id.fragmentContainer, video);
-                            transaction.addToBackStack(null);
-                            ((AppCompatActivity) activity).getSupportActionBar().setTitle("VideoPlayer");
-                            transaction.commit();
+
+                final String filePath = savedVideoFilePath;
+                final String url = listViewItem.getUrl();
+
+                thumbnail.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        Activity activity = ((App) getContext().getApplicationContext()).getCurrentActivity();
+
+                        FragmentManager manager = activity.getFragmentManager();
+                        FragmentTransaction transaction = manager.beginTransaction();
+
+                        VideoFragment video = VideoFragment.newInstance(filePath, url);
+                        transaction.replace(R.id.fragmentContainer, video);
+                        transaction.addToBackStack(null);
+
+                        ActionBar actionBar = ((AppCompatActivity) activity).getSupportActionBar();
+                        if (actionBar != null) {
+                            actionBar.setTitle("Video Player");
                         }
-                    });
-                    TextView videoDesc = (TextView) view.findViewById(R.id.poiContentVideoDesc);
-                    videoDesc.setText(listViewItem.getText());
-                    return view;
+
+                        transaction.commit();
+                    }
+                });
+
+
+                TextView videoDesc = (TextView) view.findViewById(R.id.poiContentVideoDesc);
+                videoDesc.setText(listViewItem.getText());
+
+                return view;
+
             case HEADER:
                 // TODO
                 if (view.findViewById(R.id.poiHeaderTextView) == null) {
