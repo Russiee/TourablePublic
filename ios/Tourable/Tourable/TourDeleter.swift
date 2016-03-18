@@ -85,7 +85,7 @@ public class TourDeleter {
     func deleteMedia(imageURL: String, fileType: String)-> Bool {
         //get the storage name and path of the file to delete
         let fileName = String(imageURL.hash)
-        let path = mediaHelper.sharedInstance.fileInDocumentsDirectory(fileName, fileType: fileType)
+        let path = MediaHelper.sharedInstance.fileInDocumentsDirectory(fileName, fileType: fileType)
         
         do{
             //try executing the delete and report on its success.

@@ -28,7 +28,7 @@ class videoHandler {
     func downloadVideo(url: String){
         //creates an NSUrl from the string given.
         let actualURL = NSURL(string: url)
-        mediaHelper.sharedInstance.getDataFromUrl(actualURL!) { (data, response, error)  in
+        MediaHelper.sharedInstance.getDataFromUrl(actualURL!) { (data, response, error)  in
             dispatch_async(dispatch_get_main_queue()) { () -> Void in
                 guard let data = data where error == nil else {
                     return
@@ -44,7 +44,7 @@ class videoHandler {
         //The name is hashed to ensure it is uniqe and compatible with iOS filesystem
         let fileHash = String(name.hash)
         //get the full path to save the file to.
-        let path = mediaHelper.sharedInstance.fileInDocumentsDirectory(fileHash, fileType: ".mp4")
+        let path = MediaHelper.sharedInstance.fileInDocumentsDirectory(fileHash, fileType: ".mp4")
         //write the file to disk at the specified path.
         let result = videoData.writeToFile(path, atomically: true)
         //returns success status.
@@ -59,9 +59,9 @@ class videoHandler {
             return nil
         }else{
             let fileName = String(url!.hash)
-            let path = mediaHelper.sharedInstance.fileInDocumentsDirectory(fileName,fileType: ".mp4")
+            let path = MediaHelper.sharedInstance.fileInDocumentsDirectory(fileName,fileType: ".mp4")
             //check if the file has been downloaded and saved.
-            if mediaHelper.sharedInstance.checkFileExists(path){
+            if MediaHelper.sharedInstance.checkFileExists(path){
                 //yes, return the filepath
                 return NSURL(fileURLWithPath: path)
             }else{
