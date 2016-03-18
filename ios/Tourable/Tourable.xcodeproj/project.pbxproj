@@ -19,6 +19,7 @@
 		E536DCCC1C6510FD00A7B2FC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E536DCCA1C6510FD00A7B2FC /* LaunchScreen.storyboard */; };
 		E536DCE21C6510FD00A7B2FC /* TourableUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E536DCE11C6510FD00A7B2FC /* TourableUITests.swift */; };
 		E59E17DC1C9C0F24006C5BE4 /* APIConnectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59E17DB1C9C0F24006C5BE4 /* APIConnectorTests.swift */; };
+		FA0532C41C9C3B5000C5DF26 /* VideoHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0532C31C9C3B5000C5DF26 /* VideoHandlerTests.swift */; };
 		FA0A51701C772AAD00E4F733 /* bundleRouteConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0A516F1C772AAD00E4F733 /* bundleRouteConnector.swift */; };
 		FA0A51721C7747B400E4F733 /* tourSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0A51711C7747B400E4F733 /* tourSection.swift */; };
 		FA0A51741C77482D00E4F733 /* tourDataParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0A51731C77482D00E4F733 /* tourDataParser.swift */; };
@@ -81,6 +82,7 @@
 		E536DCE11C6510FD00A7B2FC /* TourableUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TourableUITests.swift; sourceTree = "<group>"; };
 		E536DCE31C6510FD00A7B2FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E59E17DB1C9C0F24006C5BE4 /* APIConnectorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = APIConnectorTests.swift; path = ../APIConnectorTests.swift; sourceTree = "<group>"; };
+		FA0532C31C9C3B5000C5DF26 /* VideoHandlerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoHandlerTests.swift; sourceTree = "<group>"; };
 		FA0A516F1C772AAD00E4F733 /* bundleRouteConnector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = bundleRouteConnector.swift; sourceTree = "<group>"; };
 		FA0A51711C7747B400E4F733 /* tourSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = tourSection.swift; sourceTree = "<group>"; };
 		FA0A51731C77482D00E4F733 /* tourDataParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = tourDataParser.swift; sourceTree = "<group>"; };
@@ -176,6 +178,7 @@
 				7A9118C71C945990008BF835 /* TourUpdateManagerTests.swift */,
 				E59E17DB1C9C0F24006C5BE4 /* APIConnectorTests.swift */,
 				FA1C8C441C9C1F140055BB49 /* TestTourDataParser.swift */,
+				FA0532C31C9C3B5000C5DF26 /* VideoHandlerTests.swift */,
 			);
 			path = TourableTests;
 			sourceTree = "<group>";
@@ -415,6 +418,7 @@
 			files = (
 				E59E17DC1C9C0F24006C5BE4 /* APIConnectorTests.swift in Sources */,
 				FA1C8C451C9C1F140055BB49 /* TestTourDataParser.swift in Sources */,
+				FA0532C41C9C3B5000C5DF26 /* VideoHandlerTests.swift in Sources */,
 				7A9118C81C945990008BF835 /* TourUpdateManagerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -671,6 +675,7 @@
 				FA1C8C431C9C1E9C0055BB49 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
