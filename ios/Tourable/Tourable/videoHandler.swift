@@ -33,6 +33,7 @@ class videoHandler {
                 guard let data = data where error == nil else {
                     return
                 }
+                print("now here")
                 //Save the data from the server as a video, with the url as its name.
                 self.saveVideo(data, name: url)
             }

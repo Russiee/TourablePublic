@@ -13,7 +13,7 @@ class tourDataParser{
     
     init(){ }
     
-    private func createNewTour(data: NSDictionary) ->tourSection{
+     func createNewTour(data: NSDictionary) ->tourSection{
 
         //pois might not exist, for example if it is the highest level
         var poisToAdd = [NSArray]()
@@ -53,7 +53,6 @@ class tourDataParser{
             
             return toplevelTour
         }
-        
     }
 
     func saveTourSection(data: NSDictionary){
@@ -94,13 +93,7 @@ class tourDataParser{
                     self.saveSubsections(NextLevelSubsections as! NSArray)
                 }
             }
-            
             self.saveTourSection(section as! NSDictionary)
         }
     }
-    
-    func deleteTourSection(){
-        //this will be complicated, so will do it later
-    }
-    
 }
