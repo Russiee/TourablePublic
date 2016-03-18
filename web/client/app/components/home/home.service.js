@@ -17,6 +17,6 @@ touring.factory('keyFactory', function($http, $q){
                     // or server returns response with an error status.
                 });
             });
-        }     
-    }
+        }
+    };
 });

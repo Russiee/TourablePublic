@@ -1,14 +1,14 @@
-angular.module('touring')    
+angular.module('touring')
 .factory( 'AuthService', function($rootScope, $q) {
-    
+
     Parse.initialize("touring", "2368AB2DAA73D3CB6B55555CEAF6C");
-    Parse.serverURL = 'http://touring-db.herokuapp.com/parse'
-    
+    Parse.serverURL = 'http://touring-db.herokuapp.com/parse';
+
 //    var currentUser;
 
 //        Parse.User.current().fetch().then(function (user) {
 //             currentUser = user;
-//        });        
+//        });
 
     return {
 //        signup: function(firstname, lastname, email, phone, pass) {
@@ -31,30 +31,30 @@ angular.module('touring')
 //                }
 //            });
 //        },
-        login: function(email, pass) { 
+        login: function(email, pass) {
             Parse.User.logIn(email, pass, {
                 success: function(user) {
                     // Do stuff after successful login.
                     $rootScope.$broadcast('loginStatusChanged', true);
                 },
                 error: function(user, error) {
-                    console.log(error)
+                    console.log(error);
                     // The login failed. Check error to see why.
                 }
             });
         },
-        logout: function() { 
-            Parse.User.logOut();  
+        logout: function() {
+            Parse.User.logOut();
             $rootScope.$broadcast('loginStatusChanged', false);
         },
-        isLoggedIn: function() { 
+        isLoggedIn: function() {
             if (Parse.User.current()) {
                 return true;
             } else {
                 return false;
             }
         },
-        currentUser: function() { 
+        currentUser: function() {
             if (Parse.User.current()){
                 return Parse.User.current();
             } else {
@@ -69,10 +69,10 @@ angular.module('touring')
     $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams) {
         if (toState.authenticate && !AuthService.isLoggedIn()){
             $state.transitionTo("admin.login");
-            event.preventDefault(); 
+            event.preventDefault();
         } else if (toState.name === "admin.login" && AuthService.isLoggedIn()) {
             $state.transitionTo("admin.dashboard");
-            event.preventDefault(); 
+            event.preventDefault();
         }
     });
 });
