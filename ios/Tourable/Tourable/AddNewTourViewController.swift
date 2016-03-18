@@ -104,7 +104,7 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: { action in
             self.performSegueWithIdentifier("cancelAdd", sender: self)
-            TourDeleter.sharedInstance.deleteTour(self.tourIndex!)
+            TourDeleter.sharedInstance.deleteTour(self.tourID)
         }))
         alert.addAction(UIAlertAction(title: "Download with media (Larger)", style: UIAlertActionStyle.Default, handler: { action in
             imageHandler.sharedInstance.downloadMediaSet(imageHandler.sharedInstance.imageQueue)
@@ -119,6 +119,8 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
     
     func setTourInfomation(){
         let dataId = TourIdParser().getTourMetadata(tourIdForSummary)["objectId"] as! String
+        //get the tourID so if cancel is called it get deleted
+        tourID = TourIdParser.sharedInstance.getAllTourIDs()[tourIndex!]
         let tour = tourDataParser().getTourSection(dataId)
         self.title = tour.title as String
         tourDescriptionLabel.text =  tour.description

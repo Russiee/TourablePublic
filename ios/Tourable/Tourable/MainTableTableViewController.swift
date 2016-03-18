@@ -194,8 +194,8 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             
-            TourDeleter.sharedInstance.deleteMediaInTour(indexPath.row)
-            TourDeleter.sharedInstance.deleteTour(indexPath.row)
+            TourDeleter.sharedInstance.deleteMediaInTour(tourIDs[indexPath.row])
+            TourDeleter.sharedInstance.deleteTour(tourIDs[indexPath.row])
             tourTitles = tourParser.getAllTours()
             checkStateOfScreen()
             //Reload Table
