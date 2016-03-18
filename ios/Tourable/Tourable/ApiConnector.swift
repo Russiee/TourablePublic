@@ -35,56 +35,40 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
     var urlPath: String = ""
     var JSONMetadataFromAPI: NSDictionary!
     var isUpdating = false
-
-    func initiateConnection(var tourCode: String, isCheckingForUpdate: Bool){
+    
+    func initiateConnection( var tourCode: String, isCheckingForUpdate: Bool){
         isUpdating = isCheckingForUpdate
         let resetData = NSMutableData()
         //Reseting data to blank with every new connection
         data = resetData
         tourCode = cleanTourId(tourCode)
-        //The path to where the Tour Data is stored
-        urlPath = "https://touring-api.herokuapp.com/api/v1/key/verify/" + tourCode
+        //The path to where the verifer is stored
+        let urlPath = "https://touring-api.herokuapp.com/api/v1/key/verify/" + tourCode
+        let request = NSURLRequest(URL: NSURL(string: urlPath)!)
+        let config = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let session = NSURLSession(configuration: config)
         
-        //Standard URLConnection method
-        do {
-            let request: NSURLRequest = NSURLRequest(URL: NSURL(string: urlPath)!)
-            let connection: NSURLConnection = NSURLConnection(request: request, delegate: self, startImmediately: false)!
-             connection.start()
-        }
-        //This is a lie, it does throw!
-        catch let err as NSError{
-            //Need to let user know if the tourID they entered was faulty here
-            print(err.description)
-            self.triggerInvalidKeyNotification()
-        }
-        catch _ as NSCocoaError{
-            
-            self.triggerInvalidKeyNotification()
-        }
-        //change to URLSession
-    }
-    
-    func connection(connection: NSURLConnection!, didReceiveData data: NSData!){
-        //Storing the data for use
-        self.data.appendData(data)
-    }
-    
-    // Completion handler for the key verification route.
-    func connectionDidFinishLoading(connection: NSURLConnection!) {
-        do {
-            let jsonResult: NSDictionary = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
-            JSONMetadataFromAPI = jsonResult
-            if !isUpdating {
-                _ = TourIdParser().addTourMetaData(jsonResult)
+        let task = session.dataTaskWithRequest(request) { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            self.data.appendData(data!)
+            do {
+                let jsonResult = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
+                self.JSONMetadataFromAPI = jsonResult
+                dispatch_async(dispatch_get_main_queue()){
+                if !self.isUpdating {
+                        _ = TourIdParser().addTourMetaData(jsonResult)
+                }
+                self.triggerValidKeyNotification()
+                //passing through the array of sections
+                }
             }
-            self.triggerValidKeyNotification()
+            catch let err as NSError{
+                //Need to let user know if the tourID they entered was faulty here
+                print(err.description)
+                self.triggerInvalidKeyNotification()
+            }
+            
         }
-        catch let err as NSError{
-            //Need to let user know if the tourID they entered was faulty here
-            print(err.description)
-            self.triggerInvalidKeyNotification()
-        }
-
+        task.resume()
     }
 
     //send a notification that the tour id
