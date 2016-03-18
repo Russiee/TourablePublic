@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:id="@+id/poiContentVideoLayout"
     android:paddingTop="16dp"
     android:paddingBottom="16dp"
+    android:orientation="vertical"
     android:background="@color/colorLightBackground">
 
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
     <ImageView
-        android:layout_width="fill_parent" android:layout_height="wrap_content"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
         android:id="@+id/poiContentVideoView"
         android:layout_centerInParent="true">
 
@@ -18,19 +23,19 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginLeft="30dp"
-        android:layout_marginTop="30dp"
         android:src="@mipmap/ic_play_circle_filled_black_48dp"
         android:layout_centerInParent="true" />
+
+    </RelativeLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/poiContentVideoDesc"
-        android:padding="16dp"
-        android:layout_marginTop="30dp"
         android:textColor="#000000"
         android:textStyle="italic"
-        android:layout_below="@+id/poiContentVideoView"
-        android:paddingTop="30dp" />
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="16dp" />
 
-</RelativeLayout>
+</LinearLayout>
