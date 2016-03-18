@@ -22,6 +22,7 @@ class POITableViewController: UITableViewController {
     let recognizer = UITapGestureRecognizer()
     var player = AVPlayer()
     let width = UIScreen.mainScreen().bounds.size.width
+    var quizes = [NSDictionary]()
     
     @IBOutlet var PreviousPoiButton: UIBarButtonItem!
     
@@ -315,7 +316,22 @@ class POITableViewController: UITableViewController {
                     } catch let error as NSError {
                         print("Error generating thumbnail: \(error)")
                     }
-                    
+                case "quiz":
+                    quizes.append(row as! NSDictionary)
+                    let button   = UIButton(type: UIButtonType.Custom) as UIButton
+                    button.frame = CGRectMake(0 , 0, width, 60)
+                    button.layer.cornerRadius = 0
+                    button.titleLabel?.font = UIFont.systemFontOfSize(17)
+                    button.layer.masksToBounds = true
+                    button.contentHorizontalAlignment = .Left
+                    button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
+                    button.backgroundColor = UIColor.whiteColor()
+                    //button.setTitleColor(UIColor(red: 21/255, green: 42/255, blue: 74/255, alpha: 1.0), forState: .Normal)
+                    button.setTitleColor(UIColor(red: 74/255, green: 95/255, blue: 126/255, alpha: 1.0), forState: .Normal)
+                    button.setTitle("Attempt Quiz", forState: UIControlState.Normal)
+                    button.addTarget(self, action: "quizButtonAction:", forControlEvents: UIControlEvents.TouchUpInside)
+                    button.tag = quizes.count-1
+                    poiViews.append(button)
                 default:
                     print("something is wrong")
             }
@@ -446,6 +462,26 @@ class POITableViewController: UITableViewController {
         }
         
         
+    }
+    
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "quizSegue"{
+
+            let destination =  segue.destinationViewController as! QuizTableViewController
+            destination.quiz = sender as! Quiz
+        }
+    }
+    func quizButtonAction(sender: UIButton) {
+        // do something else
+        print("fuck this I want to go home")
+        let quizData = quizes[sender.tag]
+        let quiz = Quiz()
+        quiz.question = quizData["question"] as! String
+        quiz.options = quizData["options"] as! NSArray
+        quiz.correct = quizData["solution"] as! Int
+        print(quizData["question"])
+        performSegueWithIdentifier("quizSegue", sender: quiz)
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
