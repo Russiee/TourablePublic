@@ -247,21 +247,6 @@
                         <rect key="frame" x="0.0" y="64" width="600" height="492"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6DD-cZ-3vf">
-                                <rect key="frame" x="179" y="325" width="243" height="54"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="54" id="Xh8-tG-YEj"/>
-                                    <constraint firstAttribute="width" constant="243" id="avt-ka-aQw"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="18"/>
-                                <state key="normal" title="Begin Tour" backgroundImage="generic_button">
-                                    <color key="titleColor" red="0.027450980390000001" green="0.24313725489999999" blue="0.45882352939999999" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="clickBeginTour:" destination="uSc-BO-M9N" eventType="touchUpInside" id="LwR-5d-CB2"/>
-                                    <segue destination="YdX-AY-UmE" kind="show" identifier="goToTourSections" id="d1o-YK-Yz6"/>
-                                </connections>
-                            </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="redraw" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" canCancelContentTouches="NO" bouncesZoom="NO" editable="NO" text="At run time, the text here will be replaced with the tour information." translatesAutoresizingMaskIntoConstraints="NO" id="mTv-Im-kld">
                                 <rect key="frame" x="0.0" y="8" width="600" height="57"/>
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
@@ -291,6 +276,21 @@
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="9TJ-NC-d4X">
                                 <rect key="frame" x="212" y="342" width="20" height="20"/>
                             </activityIndicatorView>
+                            <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6DD-cZ-3vf">
+                                <rect key="frame" x="179" y="325" width="243" height="54"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="54" id="Xh8-tG-YEj"/>
+                                    <constraint firstAttribute="width" constant="243" id="avt-ka-aQw"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="18"/>
+                                <state key="normal" title="Begin Tour" backgroundImage="generic_button">
+                                    <color key="titleColor" red="0.027450980390000001" green="0.24313725489999999" blue="0.45882352939999999" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="clickBeginTour:" destination="uSc-BO-M9N" eventType="touchUpInside" id="LwR-5d-CB2"/>
+                                    <segue destination="YdX-AY-UmE" kind="show" identifier="goToTourSections" id="d1o-YK-Yz6"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.94117647059999998" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -475,14 +475,40 @@
         <!--Table View Controller-->
         <scene sceneID="iBR-5g-kVt">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wVd-8W-bdG" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tableViewController id="w6Y-H8-yy9" customClass="POITableViewController" customModule="Tourable" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" autoresizesSubviews="NO" contentMode="scaleAspectFit" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="A0j-vj-qfP">
-                        <rect key="frame" x="0.0" y="64" width="600" height="492"/>
+                        <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.94117647059999998" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="separatorColor" red="0.94117647059999998" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="sectionIndexBackgroundColor" red="0.94117647059999998" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="sectionIndexTrackingBackgroundColor" red="0.94117647059999998" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
+                        <view key="tableFooterView" contentMode="scaleToFill" id="oBU-ga-rIa">
+                            <rect key="frame" x="0.0" y="160" width="600" height="113"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CdP-TR-qf7">
+                                    <rect key="frame" x="179" y="30" width="243" height="53"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="53" id="9zl-MZ-2C3"/>
+                                        <constraint firstAttribute="width" constant="243" id="kBD-5u-7xi"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="15"/>
+                                    <state key="normal" title="Back to overview" backgroundImage="generic_button">
+                                        <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="BackToOverView" destination="w6Y-H8-yy9" eventType="touchUpInside" id="OsO-Mk-DZy"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstItem="CdP-TR-qf7" firstAttribute="centerX" secondItem="oBU-ga-rIa" secondAttribute="centerX" id="P1e-k8-fpI"/>
+                                <constraint firstItem="CdP-TR-qf7" firstAttribute="top" secondItem="oBU-ga-rIa" secondAttribute="top" constant="30" id="zHV-9v-ic5"/>
+                            </constraints>
+                        </view>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="poiCells" id="4CT-F0-Vcd">
                                 <rect key="frame" x="0.0" y="28" width="600" height="44"/>
@@ -493,40 +519,32 @@
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
                             </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" tag="999" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="NextPOI" id="5u1-rt-TPD">
+                                <rect key="frame" x="0.0" y="72" width="600" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5u1-rt-TPD" id="t83-oJ-ba9">
+                                    <rect key="frame" x="0.0" y="0.0" width="567" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" tag="998" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="PreviousPOI" id="lTA-9x-jJJ">
+                                <rect key="frame" x="0.0" y="116" width="600" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lTA-9x-jJJ" id="WFm-55-d7C">
+                                    <rect key="frame" x="0.0" y="0.0" width="567" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
                         </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="w6Y-H8-yy9" id="eFJ-1v-mkg"/>
                             <outlet property="delegate" destination="w6Y-H8-yy9" id="Zxt-VY-H0G"/>
                         </connections>
                     </tableView>
-                    <toolbarItems>
-                        <barButtonItem title="Previous" id="PzX-rm-ioh">
-                            <connections>
-                                <action selector="PreviousPOI:" destination="w6Y-H8-yy9" id="yEr-Ga-YMv"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem systemItem="flexibleSpace" id="OP4-wr-VQU"/>
-                        <barButtonItem title="Previous Section" id="msd-xP-OaW">
-                            <connections>
-                                <action selector="PreviousSection:" destination="w6Y-H8-yy9" id="rQV-AV-L5t"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem systemItem="flexibleSpace" id="eB6-NP-McI"/>
-                        <barButtonItem title="Next" id="DGI-Or-u5s">
-                            <connections>
-                                <action selector="NextPOI:" destination="w6Y-H8-yy9" id="brn-EA-i0d"/>
-                            </connections>
-                        </barButtonItem>
-                    </toolbarItems>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" id="N3v-Wq-uSZ"/>
-                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
-                    <connections>
-                        <outlet property="NextPOIButton" destination="DGI-Or-u5s" id="TTW-zy-9gC"/>
-                        <outlet property="PreviousPoiButton" destination="PzX-rm-ioh" id="kAF-ed-vg9"/>
-                        <outlet property="PreviousSectionButton" destination="msd-xP-OaW" id="eNg-DL-LLD"/>
-                    </connections>
+                    <nil key="simulatedBottomBarMetrics"/>
                 </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="wVd-8W-bdG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1707" y="806"/>
         </scene>
