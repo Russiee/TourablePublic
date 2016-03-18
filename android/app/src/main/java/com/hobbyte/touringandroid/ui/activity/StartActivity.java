@@ -348,7 +348,7 @@ public class StartActivity extends AppCompatActivity {
                 try {
                     tourID = keyJSON.getJSONObject("tour").getString("objectId");
                     keyID = keyJSON.getString("objectId");
-                    keyExpiryDate = keyJSON.getString("expiresAt");
+                    keyExpiryDate = keyJSON.getString("expiry");
 
                     FileManager.makeTourDirectories(keyID);
                     FileManager.saveJSON(keyJSON, keyID, FileManager.KEY_JSON);
