@@ -77,6 +77,8 @@ public class StartActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
 
+    private boolean exists;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -259,12 +261,7 @@ public class StartActivity extends AppCompatActivity {
         if (tourKey.length() < 3)
             return; // TODO ask if there's a minimum Key length. Otherwise do 0
 
-        // check if key has already been used
-        boolean exists = TourDBManager.getInstance(getApplicationContext()).doesTourExist(tourKey);
-        if (exists) {
-            showToast(getString(R.string.msg_tour_exists));
-            textKey.setText("");
-        } else if (ServerAPI.checkConnection(this)) {
+        if (ServerAPI.checkConnection(this)) {
             // only check the key if we have an internet connection
             KeyCheckTask k = new KeyCheckTask();
             k.execute(tourKey);
@@ -351,6 +348,10 @@ public class StartActivity extends AppCompatActivity {
                 try {
                     tourID = keyJSON.getJSONObject("tour").getString("objectId");
                     keyID = keyJSON.getString("objectId");
+                    exists = TourDBManager.getInstance(getApplicationContext()).doesTourExist(keyID);
+                    if (exists) {
+                        return false;
+                    }
                     expiryTimeString = keyJSON.getString("expiry");
 
                     FileManager.makeTourDirectories(keyID);
@@ -393,6 +394,8 @@ public class StartActivity extends AppCompatActivity {
 
             if (isValid) {
                 showDownloadDialog();
+            } else if(exists) {
+                showToast(getString(R.string.msg_tour_exists));
             } else {
                 showToast(getString(R.string.msg_invalid_key));
             }
