@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7A3988D01C849C1E006572E6 /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3988CF1C849C1E006572E6 /* Queue.swift */; };
 		7A432AB11C8B69AB007482F8 /* TourUpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A432AB01C8B69AB007482F8 /* TourUpdateManager.swift */; };
 		7A9118C81C945990008BF835 /* TourUpdateManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9118C71C945990008BF835 /* TourUpdateManagerTests.swift */; };
 		E5007F851C8B6ACA0041B31C /* TourDeleter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5007F841C8B6ACA0041B31C /* TourDeleter.swift */; };
@@ -17,7 +16,6 @@
 		E536DCC71C6510FD00A7B2FC /* Tourable.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E536DCC51C6510FD00A7B2FC /* Tourable.xcdatamodeld */; };
 		E536DCC91C6510FD00A7B2FC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E536DCC81C6510FD00A7B2FC /* Assets.xcassets */; };
 		E536DCCC1C6510FD00A7B2FC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E536DCCA1C6510FD00A7B2FC /* LaunchScreen.storyboard */; };
-		E536DCE21C6510FD00A7B2FC /* TourableUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E536DCE11C6510FD00A7B2FC /* TourableUITests.swift */; };
 		E59E17DC1C9C0F24006C5BE4 /* APIConnectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59E17DB1C9C0F24006C5BE4 /* APIConnectorTests.swift */; };
 		FA0532C41C9C3B5000C5DF26 /* VideoHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0532C31C9C3B5000C5DF26 /* VideoHandlerTests.swift */; };
 		FA0A51701C772AAD00E4F733 /* bundleRouteConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0A516F1C772AAD00E4F733 /* bundleRouteConnector.swift */; };
@@ -64,7 +62,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		7A3988CF1C849C1E006572E6 /* Queue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Queue.swift; sourceTree = "<group>"; };
 		7A432AB01C8B69AB007482F8 /* TourUpdateManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TourUpdateManager.swift; sourceTree = "<group>"; };
 		7A9118C71C945990008BF835 /* TourUpdateManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TourUpdateManagerTests.swift; sourceTree = "<group>"; };
 		E5007F841C8B6ACA0041B31C /* TourDeleter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TourDeleter.swift; sourceTree = "<group>"; };
@@ -78,9 +75,6 @@
 		E536DCCD1C6510FD00A7B2FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E536DCD21C6510FD00A7B2FC /* TourableTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TourableTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E536DCD81C6510FD00A7B2FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E536DCDD1C6510FD00A7B2FC /* TourableUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TourableUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E536DCE11C6510FD00A7B2FC /* TourableUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TourableUITests.swift; sourceTree = "<group>"; };
-		E536DCE31C6510FD00A7B2FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E59E17DB1C9C0F24006C5BE4 /* APIConnectorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = APIConnectorTests.swift; path = ../APIConnectorTests.swift; sourceTree = "<group>"; };
 		FA0532C31C9C3B5000C5DF26 /* VideoHandlerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoHandlerTests.swift; sourceTree = "<group>"; };
 		FA0A516F1C772AAD00E4F733 /* bundleRouteConnector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = bundleRouteConnector.swift; sourceTree = "<group>"; };
@@ -186,7 +180,6 @@
 		FA0A51751C774CD900E4F733 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				7A3988CF1C849C1E006572E6 /* Queue.swift */,
 				FA0A51711C7747B400E4F733 /* tourSection.swift */,
 				FA0A51761C774CEC00E4F733 /* pointOfInterest.swift */,
 				7A432AB01C8B69AB007482F8 /* TourUpdateManager.swift */,
@@ -392,7 +385,6 @@
 				7A432AB11C8B69AB007482F8 /* TourUpdateManager.swift in Sources */,
 				E536DCC71C6510FD00A7B2FC /* Tourable.xcdatamodeld in Sources */,
 				FA0A517B1C775C3700E4F733 /* TourSectionsController.swift in Sources */,
-				7A3988D01C849C1E006572E6 /* Queue.swift in Sources */,
 				FAB049191C6E34BF00679C10 /* ApiConnector.swift in Sources */,
 				FAD9296A1C95BDCD0030BA7F /* ImageLoader.swift in Sources */,
 				FA9803291C666195001D23E2 /* MainTableTableViewController.swift in Sources */,
