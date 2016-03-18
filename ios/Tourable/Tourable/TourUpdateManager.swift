@@ -78,7 +78,7 @@ public class TourUpdateManager {
 
             let comparisonResulFromString = compareDates(todaysDate, newDate: expiresDate)
             if comparisonResulFromString == "descending" {
-                TourDeleter().deleteTour(tourTableRow)
+                TourDeleter().deleteTour(tourCode)
             } else if comparisonResulFromString == "same" {
                 // warn the user that the this is the last day they can open the project
             }
@@ -134,7 +134,7 @@ public class TourUpdateManager {
 
     // called from the tourSummary when the user confirms to download the updates
     func triggerUpdate() {
-        TourDeleter().deleteTour(tourTableRow)
+        TourDeleter().deleteTour(tourCode)
         ApiConnector.sharedInstance.initiateConnection(tourCode, isCheckingForUpdate: false)
     }
 }

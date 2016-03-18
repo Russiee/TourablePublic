@@ -27,17 +27,11 @@ public class TourDeleter {
     }
     
     //deletes whole tour
-    func deleteTour(pos: Int){
-        
-        //gets tour at the row we want to delete
-        let arrayOfTours = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! [AnyObject]
-        var tourIDs = [String]()
-        for tours in arrayOfTours{
-            let key = tours.allKeys[0] as! String
-            tourIDs.append(tours[key] as! String)
-        }
+    func deleteTour(tourID: String){
+        //get position of the tour we want to delete
+        let pos = TourIdParser.sharedInstance.getAllTourIDs().indexOf(tourID)
         //gets the pointer of the tour
-        let tourPointer = NSUserDefaults.standardUserDefaults().objectForKey(tourIDs[pos])
+        let tourPointer = NSUserDefaults.standardUserDefaults().objectForKey(tourID)
         //setting the Tour ID to tourPointer ObjectId
         let tourID = tourPointer!["objectId"] as! String
         //get the tour from UserDefaults
@@ -54,7 +48,9 @@ public class TourDeleter {
         //deletes the objectId of the tour itself
         NSUserDefaults.standardUserDefaults().removeObjectForKey(tourID)
         NSUserDefaults.standardUserDefaults().synchronize()
-        TourIdParser().deleteTourIdAtRow(pos)
+        if pos != nil {
+           TourIdParser().deleteTourIdAtRow(pos!)
+        }
         
         
     }
@@ -97,16 +93,9 @@ public class TourDeleter {
     }
     
     //deletes the media files in the tour. Currently only .jpg s
-    func deleteMediaInTour(pos: Int){
-        //gets tour at the row we want to delete
-        let arrayOfTours = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! NSMutableArray
-        var tourIDs = [String]()
-        for tours in arrayOfTours{
-            let key = tours.allKeys[0] as! String
-            tourIDs.append(tours[key] as! String)
-        }
+    func deleteMediaInTour(tourID: String){
         //gets the pointer of the tour
-        let tourPointer = NSUserDefaults.standardUserDefaults().objectForKey(tourIDs[pos])
+        let tourPointer = NSUserDefaults.standardUserDefaults().objectForKey(tourID)
         //setting the Tour ID to tourPointer ObjectId
         let tourID = tourPointer!["objectId"] as! String
         //get the tour from UserDefaults

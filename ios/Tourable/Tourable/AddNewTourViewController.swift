@@ -104,7 +104,7 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: { action in
             self.performSegueWithIdentifier("cancelAdd", sender: self)
-            TourDeleter.sharedInstance.deleteTour(self.tourIndex!)
+            TourDeleter.sharedInstance.deleteTour(self.tourID)
         }))
         alert.addAction(UIAlertAction(title: "Download with media (Larger)", style: UIAlertActionStyle.Default, handler: { action in
             imageHandler.sharedInstance.downloadMediaSet(imageHandler.sharedInstance.imageQueue)
