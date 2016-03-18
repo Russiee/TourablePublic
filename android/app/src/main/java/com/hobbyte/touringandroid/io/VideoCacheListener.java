@@ -2,13 +2,15 @@ package com.hobbyte.touringandroid.io;
 
 import android.util.Log;
 
-import com.danikula.videocache.CacheListener;
-
 import java.io.File;
 
-public class VideoStreamSaver implements CacheListener {
+/**
+ * Provides an interface to be able to tell how much a video has been cached,
+ * and where that cached version has been stored
+ */
+public class VideoCacheListener implements com.danikula.videocache.CacheListener {
 
-    private static final String TAG = "VideoStreamSaver";
+    private static final String TAG = "VideoCacheListener";
 
     @Override
     public void onCacheAvailable(File cacheFile, String url, int percentsAvailable) {
@@ -17,6 +19,7 @@ public class VideoStreamSaver implements CacheListener {
 
         Log.d(TAG, percentsAvailable + "% of this file is cached");
 
+        //if we have cached the entire file
         if (percentsAvailable == 100) {
             Log.d(TAG, "File cached at: " + cacheFile.toURI());
 
