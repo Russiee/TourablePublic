@@ -1,24 +1,19 @@
 package com.hobbyte.touringandroid.ui.fragment;
 
-import android.app.Activity;
+import android.app.Fragment;
 import android.content.pm.ActivityInfo;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
-import android.app.DialogFragment;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
-import com.hobbyte.touringandroid.App;
 import com.hobbyte.touringandroid.R;
 
 import java.io.File;
-import java.net.URI;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -77,7 +72,7 @@ public class VideoFragment extends Fragment {
         VideoView vid = (VideoView) v.findViewById(R.id.videoView);
         MediaController controller = new MediaController(getActivity());
         vid.setKeepScreenOn(true);
-        if(!file.exists()) {
+        if (!file.exists()) {
             Uri uri = Uri.parse(url);
             vid.setVideoURI(uri);
         } else {
