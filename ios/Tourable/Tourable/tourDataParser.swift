@@ -53,7 +53,6 @@ class tourDataParser{
             
             return toplevelTour
         }
-        
     }
 
     func saveTourSection(data: NSDictionary){
@@ -94,13 +93,7 @@ class tourDataParser{
                     self.saveSubsections(NextLevelSubsections as! NSArray)
                 }
             }
-            
             self.saveTourSection(section as! NSDictionary)
         }
     }
-    
-    func deleteTourSection(){
-        //this will be complicated, so will do it later
-    }
-    
 }

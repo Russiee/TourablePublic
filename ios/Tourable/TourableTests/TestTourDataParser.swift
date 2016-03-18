@@ -21,23 +21,22 @@ class TestTourDataParser: XCTestCase {
         super.tearDown()
     }
 
+    //Test the download of tour by triggering download and confirming result contains the correct tour markers
     func testTopLevelTourCreation() {
-        
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+       
         let bundleDownload = bundleRouteConnector()
         bundleDownload.startConnection("cjWRKDygIZ")
         let data = bundleDownload.getJSONResult()
         let result = tourDataParser().createNewTour(data)
 
-        //Check result has all asocited types that are required.
+        //Check result has all asociated types that are required.
         XCTAssertNotNil(result)
         XCTAssertNotNil(result.title.rangeOfString("title"))
         XCTAssertNotNil(result.title.rangeOfString("type"))
         XCTAssertNotNil(result.title.rangeOfString("Content"))
         
     }
-    
+    //Test the persisting a tour to NSUserDefaults, by saving a sample tour and then reading it again to confirm
     func testTourSave(){
         let bundleDownload = bundleRouteConnector()
         bundleDownload.startConnection("cjWRKDygIZ")
@@ -51,6 +50,7 @@ class TestTourDataParser: XCTestCase {
 
     }
     
+    //test performance of persisting a tour to NSUserDefaults
     func testSavePerformance(){
         
         self.measureBlock {
@@ -61,6 +61,7 @@ class TestTourDataParser: XCTestCase {
         }
     }
     
+    //Test performance of reading a tour from persistant storage
     func testReadPerformance(){
         
         let bundleDownload = bundleRouteConnector()
