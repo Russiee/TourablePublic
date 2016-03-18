@@ -158,8 +158,11 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
                 view = LayoutInflater.from(getContext()).inflate(R.layout.poi_content, parent, false);
             }
         }
+
         switch (listViewItemType) {
+
             case IMAGE:
+
                 ImageView imageView = (ImageView) view.findViewById(R.id.poiContentImageView);
                 TextView textView = (TextView) view.findViewById(R.id.poiContentImageDesc);
                 textView.setText(listViewItem.getText());
@@ -171,6 +174,7 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
                 return view;
 
             case VIDEO:
+                //generate default references for thumbnail and file path
                 ImageView thumbnail = (ImageView) view.findViewById(R.id.imagePlayIcon);
                 String savedVideoFilePath = getContext().getFilesDir() + "/" + String.format("%s/video/%s", keyID, filename);
 
@@ -183,70 +187,94 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
                     thumbnail.setImageBitmap(bMap);
 
                 } else {
-                    //change to the caching service
+                    //change file path to use the caching facility
                     HttpProxyCacheServer proxy = App.getProxy();
                     savedVideoFilePath = proxy.getProxyUrl(listViewItem.getUrl());
+
+                    //this isn't strictly necessary until we want to move the cached file to
+                    // permanent video folder, but it provides debugging info until it's implemented
                     proxy.registerCacheListener(new VideoStreamSaver(), savedVideoFilePath);
                 }
 
+                //create final URL's so they can be accessed within the anon' inner class
                 final String filePath = savedVideoFilePath;
                 final String url = listViewItem.getUrl();
 
+                //make the video show when the user clicks
                 thumbnail.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
-                        Activity activity = ((App) getContext().getApplicationContext()).getCurrentActivity();
-
-                        FragmentManager manager = activity.getFragmentManager();
-                        FragmentTransaction transaction = manager.beginTransaction();
-
+                        //create the video view
                         VideoFragment video = VideoFragment.newInstance(filePath, url);
+
+                        //get fragment manager
+                        Activity activity = ((App) getContext().getApplicationContext()).getCurrentActivity();
+                        FragmentManager manager = activity.getFragmentManager();
+
+                        //generate fragment transaction using fragment manager
+                        FragmentTransaction transaction = manager.beginTransaction();
                         transaction.replace(R.id.fragmentContainer, video);
                         transaction.addToBackStack(null);
 
+                        //display the video view
+                        transaction.commit();
+
+                        //set toolbar title to be something other than the poi title
                         ActionBar actionBar = ((AppCompatActivity) activity).getSupportActionBar();
                         if (actionBar != null) {
                             actionBar.setTitle("Video Player");
                         }
-
-                        transaction.commit();
                     }
                 });
 
-
+                //set description
                 TextView videoDesc = (TextView) view.findViewById(R.id.poiContentVideoDesc);
                 videoDesc.setText(listViewItem.getText());
 
                 return view;
 
             case HEADER:
+
                 // TODO
                 if (view.findViewById(R.id.poiHeaderTextView) == null) {
                     view = LayoutInflater.from(getContext()).inflate(R.layout.poi_header, parent, false);
                 }
+
                 contentView = (TextView) view.findViewById(R.id.poiHeaderTextView);
                 contentView.setText(listViewItem.getText() + "\n");
+
                 if (listViewItem.getText().length() == 0) {
                     return new View(getContext());
                 }
+
                 return view;
+
             case BODY:
+
                 // TODO
                 contentView = (TextView) view.findViewById(R.id.poiContentTextView);
                 contentView.setText(listViewItem.getText() + "\n");
+
                 return view;
+
             case QUIZ:
+
                 contentView = (TextView) view.findViewById(R.id.quizTitle);
                 contentView.setText("Quiz: " + listViewItem.getText() + "\n");
                 if (quiz == null) {
                     quiz = new Quiz(listViewItem.getOption(), listViewItem.getSolution(), view);
                 }
+
                 return view;
+
             default:
+
                 contentView = (TextView) view.findViewById(R.id.poiContentTextView);
                 contentView.setText("Something went wrong\n");
+
                 return view;
+
         }
     }
 
