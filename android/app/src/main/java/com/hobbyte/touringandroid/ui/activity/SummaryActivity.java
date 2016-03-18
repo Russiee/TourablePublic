@@ -127,6 +127,9 @@ public class SummaryActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Starts the Tour activity
+     */
     public void openTourActivity() {
         Intent intent = new Intent(this, TourActivity.class);
         intent.putExtra(TourActivity.INTENT_KEY_ID, keyID);
@@ -134,6 +137,9 @@ public class SummaryActivity extends AppCompatActivity {
         this.finish();
     }
 
+    /**
+     * Display the description and information regarding the corresponding tour
+     */
     private void displayTourInfo() {
         TextView timeTourTakes = (TextView) findViewById(R.id.txtEstimatedTime);
 
@@ -149,6 +155,10 @@ public class SummaryActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Checks for updates to the Tour, if no updates displays message that the version is the current version
+     * Otherwise displays button to allow for updating
+     */
     private void displayVersionAndUpdate() {
 
         updateButton = (ImageButton) findViewById(R.id.updateTourButton);
@@ -176,6 +186,9 @@ public class SummaryActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Displays the button options for updating the tour
+     */
     private void displayUpdateOption() {
 
         TextView version = (TextView) findViewById(R.id.txtVersion);
@@ -189,6 +202,9 @@ public class SummaryActivity extends AppCompatActivity {
         updateTour.setTag("ToUpdate");
     }
 
+    /**
+     * Displays the tours expiry in Days, Hours, Minutes, and Seconds
+     */
     private void displayExpiry() {
 
         TextView txtExpiry = (TextView) findViewById(R.id.txtExpiry);
@@ -200,6 +216,9 @@ public class SummaryActivity extends AppCompatActivity {
         //TODO implement this
     }
 
+    /**
+     * Start downloading the tour
+     */
     public void executeDownload() {
         new FetchTourJSON().execute();
     }
@@ -280,8 +299,6 @@ public class SummaryActivity extends AppCompatActivity {
                 getApplicationContext().getString(R.string.preference_file_key),
                 getApplicationContext().MODE_PRIVATE);
 
-        System.out.println(datetimes[0]);
-
         String name = "empty";
         String createdAt = "";
         String updatedAt = "";
@@ -322,11 +339,18 @@ public class SummaryActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Once download is finished adds tour to database and displays summary
+     */
     private void onDownloadFinished() {
         addTourToDB();
         displaySummary();
     }
 
+    /**
+     * Displays the summary of downloaded tour
+     * This includes its description, current version and if an update is available, and the expiry date
+     */
     private void displaySummary() {
         downloadLayout.setVisibility(View.GONE);
         tourCard.setVisibility(View.VISIBLE);
@@ -366,6 +390,10 @@ public class SummaryActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Displays the download dialog allowing for the tour to be updated if an update is available,
+     * restarts the Activity upon selecting an option and initiates download
+     */
     private void showDownloadDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
@@ -418,6 +446,9 @@ public class SummaryActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Parses the currently set date (in Long) to an appropriate X Days - X Hours - X Minutes - X Seconds format
+     */
     private void parseDate() {
 
         if(expiryTimeString != null) {

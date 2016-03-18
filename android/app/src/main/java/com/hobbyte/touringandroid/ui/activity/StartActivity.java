@@ -299,6 +299,9 @@ public class StartActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * Creates a context menu for deleting on LongPress
+     */
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -306,6 +309,9 @@ public class StartActivity extends AppCompatActivity {
         keyID = v.getTag().toString();
     }
 
+    /**
+     * Executes deletion and recreates activity on selecting delete
+     */
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         FileManager.removeTour(getApplicationContext(), keyID);
@@ -402,6 +408,9 @@ public class StartActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Displays a dialog displaying download options (With/Without Media) and opens a new intent accordingly
+     */
     private void showDownloadDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();

@@ -107,6 +107,11 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
         }
     }
 
+    /**
+     * Opens appropriate Section or PointOfInterest depending on the item clicked on
+     * @param position position of the item clicked on
+     */
+
     @Override
     public void onSubSectionClicked(int position) {
         ArrayList<TourItem> contents = currentSection.getContents();
@@ -172,6 +177,9 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
         toolbar.setTitle(poi.getTitle());
     }
 
+    /**
+     * Prepares and builds the tour from the given keyID
+     */
     private class TourBuilderTask extends AsyncTask<Void, Void, Boolean> {
         private JSONObject bundle;
 

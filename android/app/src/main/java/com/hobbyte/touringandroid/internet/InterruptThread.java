@@ -14,9 +14,14 @@ public class InterruptThread implements Runnable {
         this.connection = con;
     }
 
+    /**
+     * This method is required to bypass a bug with the HttpURLConnection, wherein an InputStream
+     * will hang if connection is lost while trying to read input.
+     * As an image will not take longer than 120seconds to load, connection will be forced to drop if the stream hangs
+     */
     public void run() {
         try {
-            Thread.sleep(60000);
+            Thread.sleep(120000);
         } catch (InterruptedException e) {
         }
         ((HttpURLConnection) connection).disconnect();
