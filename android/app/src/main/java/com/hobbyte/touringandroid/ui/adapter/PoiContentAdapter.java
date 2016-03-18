@@ -4,6 +4,15 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
+import android.graphics.SurfaceTexture;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.ThumbnailUtils;
+import android.provider.MediaStore;
+import android.support.v7.app.AppCompatActivity;
+import android.text.Layout;
+import android.util.DisplayMetrics;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,6 +23,7 @@ import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,15 +50,16 @@ import java.util.regex.Pattern;
  * An {@link ArrayAdapter} that parses a POI JSON file to create the elements contained therein. A
  * POI can have any combination of the following item types:
  * <ul>
- * <li>Header text</li><li>Body text</li>
- * <li>An image with description</li><li>A video with description</li>
+ *     <li>Header text</li><li>Body text</li>
+ *     <li>An image with description</li><li>A video with description</li>
  * </ul>
- * <p/>
+ * <p>
  * Much of the code relating to image loading and caching was inspired by the Android
  * <a href="https://developer.android.com/training/displaying-bitmaps/index.html">
  * training guides</a>.
  */
 public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
+    
     public static final int HEADER = 0;
     public static final int BODY = 1;
     public static final int IMAGE = 2;
@@ -173,7 +184,7 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
             case VIDEO:
                 filePath = getContext().getFilesDir() + "/" + String.format("%s/video/%s", keyID, filename);
                 File file = new File(filePath);
-                if (file.exists()) {
+                if(file.exists()) {
                     Bitmap bMap = ThumbnailUtils.createVideoThumbnail(file.getAbsolutePath(), MediaStore.Video.Thumbnails.MINI_KIND);
                     ImageView thumbnail = (ImageView) view.findViewById(R.id.poiContentVideoView);
                     thumbnail.setImageBitmap(bMap);

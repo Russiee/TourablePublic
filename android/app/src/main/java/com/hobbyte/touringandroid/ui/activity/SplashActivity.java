@@ -1,9 +1,11 @@
 package com.hobbyte.touringandroid.ui.activity;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.TextView;
 
 import com.hobbyte.touringandroid.App;
 import com.hobbyte.touringandroid.R;
@@ -16,6 +18,9 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        TextView logo = (TextView) findViewById(R.id.header_text);
+        Typeface font = Typeface.createFromAsset(getAssets(),  "fonts/Pacifico.ttf");
+        logo.setTypeface(font);
 
         new InitialisationTask().execute();
     }

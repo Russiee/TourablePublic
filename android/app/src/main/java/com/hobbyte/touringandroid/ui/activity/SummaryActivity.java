@@ -33,12 +33,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.Set;
 
 public class SummaryActivity extends AppCompatActivity {
 
     public static final String KEY_ID = "keyID";
     public static final String TOUR_ID = "tourID";
+    public static final String EXPIRY_TIME = "expiryTime";
     public static final String DOWNLOAD = "download";
     public static final String MEDIA = "media";
     private static final String TAG = "SummaryActivity";
@@ -51,6 +55,7 @@ public class SummaryActivity extends AppCompatActivity {
 
     private String keyID;
     private String tourID;
+    private String expiryTime;
     private Boolean withMedia;
     private Boolean doDownload;
 
@@ -69,9 +74,13 @@ public class SummaryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_summary);
 
+        App app = (App) this.getApplicationContext();
+        app.setCurrentActivity(this);
+
         Intent intent = getIntent();
         keyID = intent.getStringExtra(KEY_ID);
         tourID = intent.getStringExtra(TOUR_ID);
+        expiryTime = intent.getStringExtra(EXPIRY_TIME);
         doDownload = intent.getBooleanExtra(DOWNLOAD, false);
         withMedia = intent.getBooleanExtra(MEDIA, false);
 
@@ -139,7 +148,6 @@ public class SummaryActivity extends AppCompatActivity {
                 context.MODE_PRIVATE);
 
         Set<String> updateSet = prefs.getStringSet(context.getString(R.string.prefs_tours_to_update), null);
-
         if (updateSet != null) {
             for (String s : updateSet) {
                 if (s.equals(keyID)) {
@@ -170,12 +178,8 @@ public class SummaryActivity extends AppCompatActivity {
 
     private void displayExpiry() {
 
-        SharedPreferences prefs = getApplicationContext().getSharedPreferences(
-                getString(R.string.preference_file_key),
-                Context.MODE_PRIVATE);
-        String expiryText = prefs.getString(App.context.getString(R.string.prefs_current_expiry), null);
         TextView txtExpiry = (TextView) findViewById(R.id.txtExpiry);
-        txtExpiry.setText("Expires on: " + expiryText);
+        txtExpiry.setText("Expires on: " + expiryTime);
         //TODO implement this
     }
 
@@ -191,7 +195,6 @@ public class SummaryActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             tourJSON = ServerAPI.getJSON(tourID, ServerAPI.TOUR);
-            System.out.println("Is it saving JSON?");
             FileManager.saveJSON(getApplicationContext(), tourJSON, keyID, FileManager.TOUR_JSON);
             return null;
         }
@@ -260,7 +263,6 @@ public class SummaryActivity extends AppCompatActivity {
                 Context.MODE_PRIVATE
         );
         String expiresAt = prefs.getString(getString(R.string.prefs_current_expiry), null);
-
         String name = "empty";
         String createdAt = "";
         String updatedAt = "";
@@ -278,6 +280,16 @@ public class SummaryActivity extends AppCompatActivity {
                 name, createdAt, updatedAt,
                 expiresAt, withMedia
         );
+
+        long[] datetimes = {0};
+        try {
+            datetimes = TourDBManager.convertStampToMillis(expiresAt);
+        } catch(ParseException e) {
+            e.printStackTrace();
+        }
+
+        DateFormat df = DateFormat.getDateInstance();
+        expiryTime = df.format(new Date(datetimes[0]));
     }
 
     private void onDownloadFinished() {

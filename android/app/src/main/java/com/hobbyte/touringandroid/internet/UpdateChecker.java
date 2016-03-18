@@ -47,7 +47,6 @@ public class UpdateChecker extends Thread {
                 e.printStackTrace();
             }
         }
-
         if (toUpdate.size() > 0) {
             SharedPreferences prefs = context.getSharedPreferences(
                     context.getString(R.string.preference_file_key),

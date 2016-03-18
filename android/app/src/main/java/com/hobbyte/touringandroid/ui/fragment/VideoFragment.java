@@ -17,6 +17,9 @@ import android.widget.VideoView;
 import com.hobbyte.touringandroid.App;
 import com.hobbyte.touringandroid.R;
 
+import java.io.File;
+import java.net.URI;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -27,9 +30,11 @@ public class VideoFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String PARAM_VIDEO = "video";
+    private static final String PARAM_URL = "url";
 
     // TODO: Rename and change types of parameters
     private String filePath;
+    private String url;
 
 
     /**
@@ -40,10 +45,11 @@ public class VideoFragment extends Fragment {
      * @return A new instance of fragment VideoFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static VideoFragment newInstance(String filePath) {
+    public static VideoFragment newInstance(String filePath, String url) {
         VideoFragment fragment = new VideoFragment();
         Bundle args = new Bundle();
         args.putString(PARAM_VIDEO, filePath);
+        args.putString(PARAM_URL, url);
         fragment.setArguments(args);
         return fragment;
     }
@@ -58,6 +64,7 @@ public class VideoFragment extends Fragment {
 
         if (getArguments() != null) {
             filePath = getArguments().getString(PARAM_VIDEO);
+            url = getArguments().getString(PARAM_URL);
         }
     }
 
@@ -65,22 +72,26 @@ public class VideoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        System.out.println("creates view?");
         View v = inflater.inflate(R.layout.fragment_video, container, false);
-
+        File file = new File(filePath);
         VideoView vid = (VideoView) v.findViewById(R.id.videoView);
         MediaController controller = new MediaController(getActivity());
         vid.setKeepScreenOn(true);
-        vid.setVideoPath(filePath);
+        if(!file.exists()) {
+            Uri uri = Uri.parse(url);
+            vid.setVideoURI(uri);
+        } else {
+            vid.setVideoPath(filePath);
+        }
         vid.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
                 mp.setLooping(true);
+                mp.start();
             }
         });
         vid.setMediaController(controller);
         vid.requestFocus();
-        vid.start();
 
         return v;
     }
