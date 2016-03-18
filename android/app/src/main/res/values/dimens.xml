@@ -7,10 +7,6 @@
     <!-- StartActivity dimensions -->
     <dimen name="previous_tour_padding_top">50dp</dimen>
 
-    <!-- DownloadActivity dimensions -->
-    <dimen name="tour_title_padding_top">50dp</dimen>
-    <dimen name="tour_desc_padding_top">50dp</dimen>
-
     <!-- SummaryActivity dimensions-->
     <dimen name="start_button_LR_margins">60dp</dimen>
     <dimen name="start_button_TB_margins">5dp</dimen>

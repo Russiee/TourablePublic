@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.hobbyte.touringandroid.App;
 import com.hobbyte.touringandroid.R;
 import com.hobbyte.touringandroid.internet.UpdateChecker;
+import com.hobbyte.touringandroid.io.FileManager;
 import com.hobbyte.touringandroid.io.TourDBManager;
 
 public class SplashActivity extends AppCompatActivity {
@@ -64,7 +65,7 @@ public class SplashActivity extends AppCompatActivity {
 
             for (String keyID : expired) {
                 //TODO: remove once expiry date is proper
-                //FileManager.removeTour(App.context, keyID);
+                FileManager.removeTour(App.context, keyID);
             }
 
             return null;

@@ -39,7 +39,7 @@ public class TourDBManager extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "TourData.db";
 
-    public static final String dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+    public static final String dateFormat = "yyyy-MM-dd'T'HH:mm:ss.sss'Z'";
 
     private static TourDBManager tdbmInstance;
     private SQLiteDatabase db;
@@ -57,7 +57,8 @@ public class TourDBManager extends SQLiteOpenHelper {
                     TourList.COL_DATE_UPDATED + " NUMERIC NOT NULL," +
                     TourList.COL_DATE_EXPIRES_ON + " NUMERIC," +
                     TourList.COL_DATE_LAST_ACCESSED + " NUMERIC," +
-                    TourList.COL_HAS_VIDEO + " INTEGER DEFAULT 0" +
+                    TourList.COL_HAS_VIDEO + " INTEGER DEFAULT 0," +
+                    TourList.COL_VERSION + " NUMERIC NOT NULL" +
             ")";
 
     private static final String SQL_DELETE_TABLE =
@@ -174,7 +175,7 @@ public class TourDBManager extends SQLiteOpenHelper {
      * @param hasVideo whether or not the user opted to download the tour with video
      */
     public void putRow(String keyID, String tourID, String tourName, String creationDate,
-                       String updateDate, String expiryDate, boolean hasVideo) {
+                       String updateDate, String expiryDate, boolean hasVideo, int version) {
         open(true);
 
         int video = (hasVideo ? 1 : 0);
@@ -198,6 +199,7 @@ public class TourDBManager extends SQLiteOpenHelper {
         values.put(TourList.COL_DATE_EXPIRES_ON, datetimes[2]);
         values.put(TourList.COL_DATE_LAST_ACCESSED, Calendar.getInstance().getTimeInMillis());
         values.put(TourList.COL_HAS_VIDEO, video);
+        values.put(TourList.COL_VERSION, version);
 
         db.insert(TourList.TABLE_NAME, null, values);
     }
@@ -215,6 +217,39 @@ public class TourDBManager extends SQLiteOpenHelper {
         String[] whereArgs = {keyID};
 
         return db.query(TourList.TABLE_NAME, null, where, whereArgs, null, null, null);
+    }
+
+    public void updateRow(String keyID, String tourID, String tourName, String creationDate,
+                          String updateDate, String expiryDate, boolean hasVideo, int version) {
+
+        open(true);
+
+        int video = (hasVideo ? 1 : 0);
+        long[] datetimes;
+
+        try {
+            datetimes = convertStampToMillis(creationDate, updateDate, expiryDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            // is there a better way to handle this?
+            datetimes = new long[] {1, 1, 1};
+        }
+
+        String where = TourList.COL_TOUR_ID + " = ";
+        String whereArgs = "'" + tourID + "'";
+
+        ContentValues values = new ContentValues();
+
+        values.put(TourList.COL_TOUR_ID, tourID);
+        values.put(TourList.COL_TOUR_NAME, tourName);
+        values.put(TourList.COL_DATE_CREATED, datetimes[0]);
+        values.put(TourList.COL_DATE_UPDATED, datetimes[1]);
+        values.put(TourList.COL_DATE_EXPIRES_ON, datetimes[2]);
+        values.put(TourList.COL_DATE_LAST_ACCESSED, Calendar.getInstance().getTimeInMillis());
+        values.put(TourList.COL_HAS_VIDEO, video);
+        values.put(TourList.COL_VERSION, version);
+
+        db.update(TourList.TABLE_NAME, values, where + whereArgs, null);
     }
 
     /**
@@ -277,7 +312,7 @@ public class TourDBManager extends SQLiteOpenHelper {
         open(false);
 
         // TODO: change the return array and second column when tour version numbers are implemented
-        String[] cols = {TourList.COL_KEY_ID, TourList.COL_TOUR_ID, TourList.COL_DATE_UPDATED};
+        String[] cols = {TourList.COL_KEY_ID, TourList.COL_TOUR_ID, TourList.COL_VERSION};
         Cursor c = db.query(
                 TourList.TABLE_NAME, cols,
                 null, null, null, null, null
@@ -289,7 +324,7 @@ public class TourDBManager extends SQLiteOpenHelper {
         while (c.moveToNext()) {
             keys[i][0] = c.getString(0);
             keys[i][1] = c.getString(1);
-            keys[i][2] = c.getLong(2);
+            keys[i][2] = c.getInt(2);
             ++i;
         }
 
@@ -422,8 +457,12 @@ public class TourDBManager extends SQLiteOpenHelper {
         long[] toReturn = new long[timeArgs.length];
 
         for (int i = 0; i < timeArgs.length; i++) {
-            Date date = df.parse(timeArgs[i]);
-            toReturn[i] = date.getTime();
+            if(timeArgs[i].contains("T")) {
+                Date date = df.parse(timeArgs[i]);
+                toReturn[i] = date.getTime();
+            } else {
+                toReturn[i] = Long.valueOf(timeArgs[i]);
+            }
         }
 
         return toReturn;
