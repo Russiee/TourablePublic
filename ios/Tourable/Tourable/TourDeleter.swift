@@ -27,11 +27,17 @@ public class TourDeleter {
     }
     
     //deletes whole tour
-    func deleteTour(tourID: String){
+    func deleteTour(tourCode: String){
+        let arrayOfTours = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! [AnyObject]
+        var tourIDs = [String]()
+        for tours in arrayOfTours{
+            let key = tours.allKeys[0] as! String
+            tourIDs.append(tours[key] as! String)
+        }
         //get position of the tour we want to delete
-        let pos = TourIdParser.sharedInstance.getAllTourIDs().indexOf(tourID)
+        let pos = tourIDs.indexOf(tourCode)
         //gets the pointer of the tour
-        let tourPointer = NSUserDefaults.standardUserDefaults().objectForKey(tourID)
+        let tourPointer = NSUserDefaults.standardUserDefaults().objectForKey(tourCode)
         //setting the Tour ID to tourPointer ObjectId
         let tourID = tourPointer!["objectId"] as! String
         //get the tour from UserDefaults
@@ -93,9 +99,9 @@ public class TourDeleter {
     }
     
     //deletes the media files in the tour. Currently only .jpg s
-    func deleteMediaInTour(tourID: String){
+    func deleteMediaInTour(tourCode: String){
         //gets the pointer of the tour
-        let tourPointer = NSUserDefaults.standardUserDefaults().objectForKey(tourID)
+        let tourPointer = NSUserDefaults.standardUserDefaults().objectForKey(tourCode)
         //setting the Tour ID to tourPointer ObjectId
         let tourID = tourPointer!["objectId"] as! String
         //get the tour from UserDefaults
