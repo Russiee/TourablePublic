@@ -24,7 +24,7 @@ var auth = function (req, res, next) {
     };
 };
 
-app.use(express.static(__dirname + '/client'));
+app.use("/client", express.static(__dirname + '/client'));
 
 app.route('*')
     .get(auth, function(req, res) {
