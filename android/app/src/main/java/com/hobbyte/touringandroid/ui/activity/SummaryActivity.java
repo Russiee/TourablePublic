@@ -21,6 +21,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hobbyte.touringandroid.App;
 import com.hobbyte.touringandroid.R;
@@ -230,19 +231,32 @@ public class SummaryActivity extends AppCompatActivity {
      * Downloads the JSON for a tour object on the server. It is used to get the tour title and
      * description in this activity, plus in TourActivity.
      */
-    private class FetchTourJSON extends AsyncTask<Void, Void, Void> {
+    private class FetchTourJSON extends AsyncTask<Void, Void, Boolean> {
         @Override
-        protected Void doInBackground(Void... params) {
+        protected Boolean doInBackground(Void... params) {
             tourJSON = ServerAPI.getJSON(tourID, ServerAPI.TOUR);
-            FileManager.saveJSON(getApplicationContext(), tourJSON, keyID, FileManager.TOUR_JSON);
-            return null;
+            if (tourJSON != null) {
+                FileManager.saveJSON(getApplicationContext(), tourJSON, keyID, FileManager.TOUR_JSON);
+                return true;
+            }
+            else {
+                Log.e(TAG, "tourJSON was null");
+                return false;
+            }
+
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-            displayTourInfo();
-            DownloadTourTask dThread = new DownloadTourTask(handler, keyID, tourID, withMedia);
-            dThread.start();
+        protected void onPostExecute(Boolean tourJSONExists) {
+            if (tourJSONExists) {
+                displayTourInfo();
+                DownloadTourTask dThread = new DownloadTourTask(handler, keyID, tourID, withMedia);
+                dThread.start();
+            }
+            else {
+                Log.e(TAG, "TourJSON not fetched from server");
+                onTourDownloadFailedActions();
+            }
         }
     }
 
@@ -291,6 +305,20 @@ public class SummaryActivity extends AppCompatActivity {
             }
         }
     }
+
+    /**
+     * Actions that happen if tourjson download returns null
+     */
+    private void onTourDownloadFailedActions() {
+
+        CharSequence text = "Error downloading tour";
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(this, text, duration);
+        toast.show();
+
+        this.finish();
+    }
+
 
     /**
      * Creates a enw entry in the local db for a newly downloaded tour.
