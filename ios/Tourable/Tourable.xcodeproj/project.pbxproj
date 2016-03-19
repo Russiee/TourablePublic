@@ -10,6 +10,7 @@
 		7A3988D01C849C1E006572E6 /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3988CF1C849C1E006572E6 /* Queue.swift */; };
 		7A432AB11C8B69AB007482F8 /* TourUpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A432AB01C8B69AB007482F8 /* TourUpdateManager.swift */; };
 		7A9118C81C945990008BF835 /* TourUpdateManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9118C71C945990008BF835 /* TourUpdateManagerTests.swift */; };
+		7ACD54651C9DA89400920F58 /* TourMetadataConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ACD54641C9DA89400920F58 /* TourMetadataConnector.swift */; };
 		E5007F851C8B6ACA0041B31C /* TourDeleter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5007F841C8B6ACA0041B31C /* TourDeleter.swift */; };
 		E5012B8F1C8DDF3500A64038 /* POITableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5012B8E1C8DDF3500A64038 /* POITableViewController.swift */; };
 		E536DCBF1C6510FD00A7B2FC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E536DCBE1C6510FC00A7B2FC /* AppDelegate.swift */; };
@@ -74,6 +75,7 @@
 /* Begin PBXFileReference section */
 		7A432AB01C8B69AB007482F8 /* TourUpdateManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TourUpdateManager.swift; sourceTree = "<group>"; };
 		7A9118C71C945990008BF835 /* TourUpdateManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TourUpdateManagerTests.swift; sourceTree = "<group>"; };
+		7ACD54641C9DA89400920F58 /* TourMetadataConnector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TourMetadataConnector.swift; sourceTree = "<group>"; };
 		E5007F841C8B6ACA0041B31C /* TourDeleter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TourDeleter.swift; sourceTree = "<group>"; };
 		E5012B8E1C8DDF3500A64038 /* POITableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = POITableViewController.swift; sourceTree = "<group>"; };
 		E536DCBB1C6510FC00A7B2FC /* Tourable.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tourable.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -243,6 +245,7 @@
 				FA2BB2971C78F46500D784E8 /* imageHandler.swift */,
 				FA6FD5481C8A2D880033964F /* videoHandler.swift */,
 				FA6FD54A1C8A2DCE0033964F /* MediaHelper.swift */,
+				7ACD54641C9DA89400920F58 /* TourMetadataConnector.swift */,
 			);
 			name = Connectivity;
 			sourceTree = "<group>";
@@ -400,6 +403,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7ACD54651C9DA89400920F58 /* TourMetadataConnector.swift in Sources */,
 				FAD1B1541C6BAEB400CA5327 /* TourSummaryController.swift in Sources */,
 				FA0A51771C774CEC00E4F733 /* pointOfInterest.swift in Sources */,
 				FA6FD5491C8A2D880033964F /* videoHandler.swift in Sources */,
