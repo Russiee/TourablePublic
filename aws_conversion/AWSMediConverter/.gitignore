@@ -11,8 +11,8 @@ local.properties
 .recommenders
 
 .properties
-.classpath
-.project
+#.classpath
+#.project
 
 files/ffmpeg
 files/ffprobe
