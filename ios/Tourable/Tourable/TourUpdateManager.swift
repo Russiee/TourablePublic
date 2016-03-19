@@ -16,8 +16,13 @@ public class TourUpdateManager: NSObject {
     var newTourKEYmetadata: NSDictionary!
     var alreadyFetchedMetadata = false
     
-    // created just to initialise blank field object in other classes
-  
+    
+    //metadata to be displayed on the tourSummary
+    var timeHours: Int!
+    var timeMinutes: Int!
+    var expiresIn: Int!
+    var isTourUpTodate = true
+    
     class var sharedInstance: TourUpdateManager {
         struct Static {
             static var onceToken: dispatch_once_t = 0
@@ -29,7 +34,41 @@ public class TourUpdateManager: NSObject {
         }
         return Static.instance!
     }
+    
+    
+    func receiveDataReadyFromApi(jsonResult: NSDictionary) {
+        // update all the fucking information ready for the TourSummary
 
+        
+        let minutes = jsonResult["estimatedTime"]
+        let estimatedLenght = calculateTourLengthFromMinutes(minutes as! Int)
+        
+        timeHours = estimatedLenght.timeHours
+        timeMinutes = estimatedLenght.timeMins
+        isTourUpTodate = self.isTourUpToDate()
+        expiresIn = daysLeftForTheTour(currentTourKEYmetadata["expiresAt"] as! String)
+        
+        // call the tour summary to update tourSummary fields
+        self.triggerTourMetaDataAvailableNotification()
+    }
+
+    // receive minutes as a paramenter and return hours and minutes of that length
+    func calculateTourLengthFromMinutes(minutes: Int) -> (timeHours: Int, timeMins: Int) {
+        let hours = minutes / 60
+        let minutes = minutes % 60
+        return (hours,minutes)
+    }
+    
+    func daysLeftForTheTour(expiresAt: String) -> Int {
+        let expiryDate = getDateFromString(expiresAt)
+        // calculate how many days there are between today and the expiry date
+        return 10 // interval between today and expiry
+    }
+    
+    // returns fields variable set when data is returned by API
+    func getTourStatusInfo() -> (timeHours: Int,timeMins: Int, isCurrent: Bool, expiresIn: Int){
+        return (self.timeHours, self.timeMinutes, self.isTourUpTodate, self.expiresIn)
+    }
 
    func getCurrentData(tourCodetoCheck: String, tableRow: Int) {
         self.tourCode = tourCodetoCheck
@@ -49,10 +88,9 @@ public class TourUpdateManager: NSObject {
     // if there are updates the user is asked if he wants to download them
     func isTourUpToDate() -> Bool {
         downloadNewMetadata()
-
         if self.newTourKEYmetadata != nil {
-            let currentDate = obtainDateFromString(currentTourKEYmetadata["updatedAt"] as! String)
-            let newDate = obtainDateFromString(newTourKEYmetadata["updatedAt"] as! String)
+            let currentDate = getDateFromString(currentTourKEYmetadata["updatedAt"] as! String)
+            let newDate = getDateFromString(newTourKEYmetadata["updatedAt"] as! String)
 
             let comparisonResultString = compareDates(currentDate, newDate: newDate)
 
@@ -65,6 +103,14 @@ public class TourUpdateManager: NSObject {
         return true
     }
 
+    // trigger the tour metadata to be downloaded
+    // remember that multiples tourCodes can be associate with the same tourID (aka objectID in the tourMetada)
+    func getTourMetadata() {
+        let tourConnector = TourMetadataConnector()
+        tourConnector.createConnection(currentTourKEYmetadata["objectId"] as! String)
+    }
+
+
     // check if a project is out to date comparing metadata with current today's date.
     // if the project is out to date, it is deleted after informing the user
     func checkIfOutdatedAndDeleteProject() {
@@ -76,7 +122,7 @@ public class TourUpdateManager: NSObject {
         
         if self.newTourKEYmetadata != nil {
             let todaysDate = NSDate()
-            let expiresDate = obtainDateFromString(currentTourKEYmetadata["expiresAt"] as! String)
+            let expiresDate = getDateFromString(currentTourKEYmetadata["expiresAt"] as! String)
 
             let comparisonResulFromString = compareDates(todaysDate, newDate: expiresDate)
             if comparisonResulFromString == "descending" {
@@ -102,7 +148,7 @@ public class TourUpdateManager: NSObject {
     }
     
     // receive a string of format "yyyy-MM-dd'T'hh:mm:ss.SSSz" and returns an NSDate object
-    func obtainDateFromString(date: String) -> NSDate {
+    func getDateFromString(date: String) -> NSDate {
         let enUSPOSIXLocale: NSLocale = NSLocale(localeIdentifier: "en_US")
         let dateFormatter = NSDateFormatter()
         dateFormatter.locale = enUSPOSIXLocale
@@ -110,36 +156,22 @@ public class TourUpdateManager: NSObject {
         return dateFormatter.dateFromString(date)!
     }
     
-    // trigger notification when there is an update avaiable
-    func triggerUpdateAvailableNotification() {
+    // trigger fields to be updated in the TourSummary when TourMetadata Arrived
+    func triggerTourMetaDataAvailableNotification() {
         NSNotificationCenter.defaultCenter().addObserver(
             self,
             selector: "Tour Update Available:",
             name: "Tour Update Notification",
             object: nil)
         func notify() {
-            NSNotificationCenter.defaultCenter().postNotificationName(updateAvailableKey, object: self)
-
+            NSNotificationCenter.defaultCenter().postNotificationName(TourSummaryMetaDataAvailable, object: self)
         }
         notify()
     }
-    
-    // get the current status of the tour from the latest data on the api. Returns a tuple
-    func getTourStatusInfo() -> (timeHours: Int,timeMins: Int, isCurrent: Bool, expiresIn: Int){
-        
-        
-        var isTourUptodate = true
-        isTourUptodate = self.isTourUpToDate()
-        
-        //place holder information, this will need implementation=
-        let timeHours = 1
-        let timeMins = 30
-        let expiresIn = 7
-        return (timeHours, timeMins, false, expiresIn)
-    }
 
-    // called from the tourSummary when the user confirms to download the updates
+    // called from the tourSummary when the user clikes the updates in the TourSummary
     func triggerUpdate() {
+        // GET RID OF NOTIFIER!
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedValid", name: validIdNotificationKey, object: nil)
         print("triggering update")
         TourDeleter.sharedInstance.deleteTour(tourTableRow)

@@ -227,6 +227,7 @@
 			isa = PBXGroup;
 			children = (
 				E536DCBE1C6510FC00A7B2FC /* AppDelegate.swift */,
+				7A432AB01C8B69AB007482F8 /* TourUpdateManager.swift */,
 				FA0A51731C77482D00E4F733 /* tourDataParser.swift */,
 				FA4D0F5E1C6A4D08007D79E3 /* TourIdParser.swift */,
 				E5007F841C8B6ACA0041B31C /* TourDeleter.swift */,

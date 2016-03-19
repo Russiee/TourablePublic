@@ -38,7 +38,7 @@ class TourMetadataConnector {
                 self.data.appendData(data!)
                 do {
                     self.jsonResult = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
-
+                    TourUpdateManager.sharedInstance.receiveDataReadyFromApi(self.jsonResult)
                 }
                 catch _ as NSError{
                     //Need to let user know if the tourID they entered was faulty here
@@ -48,11 +48,4 @@ class TourMetadataConnector {
 
             task.resume()
         }
-
-    func getJSONResult() -> NSDictionary {
-        while( jsonResult == nil) {
-
-        }
-        return jsonResult
-    }
 }

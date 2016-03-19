@@ -7,7 +7,7 @@
 //
 
 import UIKit
-let updateAvailableKey = "updateAvailable"
+let TourSummaryMetaDataAvailable = "TourSummaryMetaDataAvailable"
 
 class TourSummaryController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
@@ -56,9 +56,12 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
         //notify this class about the status of update downloads
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedDownloading", name: beginDownloadKey, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedFinishedDownloading", name: endDownloadKey, object: nil)
-        // Notification for TourUpdateManager called when there is an update available
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedUpdateAvailable", name: updateAvailableKey, object: nil)
+        // Notification for TourUpdateManager called when metadata for the summary is ready to be displayed
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedTourSummaryMetaDataAvailable", name: TourSummaryMetaDataAvailable, object: nil)
        
+        
+        
+        TourUpdateManager.sharedInstance.getTourMetadata()
         //get the latest formatted data for the ui.
         summaryTableData = formatDataForTable(tourId, tableRow: tableRow)
         //set the data source and deligate of the table to this class.
@@ -111,9 +114,12 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
         beginTourButton.enabled = false
     }
     
-    // triggered if the TourUpdateManager sends the notification that an update is available
-    func NotifiedUpdateAvailable(){
+    // triggered if the TourUpdateManager has received latest Metadata for the current tour to be displayed
+    func NotifiedTourSummaryMetaDataAvailable(){
         summaryData.isCurrent = false
+        
+        // UPDATED FIELDS HERE AND THEN RELOAD DATA
+        TourUpdateManager.sharedInstance.getTourStatusInfo()
         tableView.reloadData()
     }
     
@@ -130,7 +136,7 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
         updateIndicator.hidden = false
         updateIndicator.startAnimating()
         beginTourButton.enabled = false
-        
+  
         //trigger update
         TourUpdateManager.sharedInstance.triggerUpdate()
         
