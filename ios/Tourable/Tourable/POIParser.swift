@@ -11,7 +11,7 @@ import Foundation
 class POIParser{
 
     //creates and returns a pointOfInterest object from the JSON passed to it
-    private func createNewPOI(data: NSDictionary)-> pointOfInterest {
+    func createNewPOI(data: NSDictionary)-> pointOfInterest {
         //Create and return the POI
         return  pointOfInterest(objectId: data["objectId"] as! String,
                 description: data["description"] as! String,
