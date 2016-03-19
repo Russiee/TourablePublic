@@ -96,11 +96,11 @@ class mediaHelper: XCTestCase {
             }
     }
     
-    func testVideoDownloadPerformance(){
+    func testImageDownloadPerformance(){
         
         self.measureBlock{
-        let expectation = self.expectationWithDescription("videoDownloadPerformance")
-        MediaHelper.sharedInstance.getDataFromUrl(NSURL(string: "https://s3-eu-west-1.amazonaws.com/testmediahobbyte/sample_video.mp4")!) { (data, response, error)  in
+        let expectation = self.expectationWithDescription("ImageDownloadPerformance")
+        MediaHelper.sharedInstance.getDataFromUrl(NSURL(string: "https://s3-eu-west-1.amazonaws.com/testmediahobbyte/alex%27s+bed.jpg")!) { (data, response, error)  in
             dispatch_async(dispatch_get_main_queue()) { () -> Void in
                 guard let _ = data where error == nil else {
                     XCTFail()
@@ -119,7 +119,7 @@ class mediaHelper: XCTestCase {
         }
     }
 
-    func testImageDownloadPerformance(){
+    func testVideoDownloadPerformance(){
         
         self.measureBlock{
             let expectation = self.expectationWithDescription("videoDownloadPerformance")
