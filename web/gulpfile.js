@@ -7,7 +7,7 @@ var bowerFiles = require('main-bower-files');
 var debug = require('gulp-debug');
 
 
-gulp.task('default', ['inject-bower', 'inject', 'lint'], function() {
+gulp.task('default', ['inject', 'lint'], function() {
     nodemon({
         script: 'server.js',
         ext: 'js html',
@@ -33,18 +33,4 @@ gulp.task('inject', function () {
 
     return target.pipe(inject(sources))
         .pipe(gulp.dest('./client'));
-});
-
-gulp.task('inject-bower', function () {
-//    var target = gulp.src('./client/index.html');
-//    var bower_sources = gulp.src(bowerFiles({
-//        paths: {
-//            bowerDirectory: './client/assets/bower_components',
-//            bowerrc: './client/assets/.bowerrc',
-//            bowerJson: './client/assets/bower.json'
-//        }
-//    }), {name: 'bower'}, {base: './client/assets/bower_components'}, {read: false});
-//
-//    return target.pipe(inject(bower_sources)).pipe(debug())
-//        .pipe(gulp.dest('./client'));
 });
