@@ -41,11 +41,5 @@ class POIParser{
         let data = NSUserDefaults.standardUserDefaults().objectForKey(objectId) as! NSDictionary
         //Create a poi object
         return createNewPOI(data)
-        
     }
-
-    func deletePOI(){
-        //this will be complicated, so will do it later
-    }
-
 }

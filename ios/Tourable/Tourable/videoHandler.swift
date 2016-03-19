@@ -12,17 +12,7 @@ import MediaPlayer
 //Deals with the download and saving of video mp4 files for playback in tours.
 class videoHandler {
     //This is a singleton class.
-    class var sharedInstance: videoHandler {
-        struct Static {
-            static var onceToken: dispatch_once_t = 0
-            static var instance: videoHandler? = nil
-        }
-        dispatch_once(&Static.onceToken) {
-            Static.instance = videoHandler()
-            
-        }
-        return Static.instance!
-    }
+     static let sharedInstance = videoHandler()
     
     //Downloads and triggers the save of the video with the specified url (https only)
     func downloadVideo(url: String){

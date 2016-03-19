@@ -14,17 +14,7 @@ public class TourDeleter {
     private var objectIDs = [String]()
     private var mediaURLS = [String]()
     
-    class var sharedInstance: TourDeleter {
-        struct Static {
-            static var onceToken: dispatch_once_t = 0
-            static var instance: TourDeleter? = nil
-        }
-        dispatch_once(&Static.onceToken) {
-            Static.instance = TourDeleter()
-            
-        }
-        return Static.instance!
-    }
+     static let sharedInstance = TourDeleter()
     
     //deletes whole tour
     func deleteTour(tourCode: String){

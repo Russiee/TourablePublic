@@ -18,17 +18,7 @@ class imageHandler: NSObject {
     
     //making the TourIdParser a singleton to parse all tours from the API
     //in order to access TourIdParser methods call TourIdParser.shardInstance.METHOD()
-    class var sharedInstance: imageHandler {
-        struct Static {
-            static var onceToken: dispatch_once_t = 0
-            static var instance: imageHandler? = nil
-        }
-        dispatch_once(&Static.onceToken) {
-            Static.instance = imageHandler()
-            
-        }
-        return Static.instance!
-    }
+    static let sharedInstance = imageHandler()
 
   
     

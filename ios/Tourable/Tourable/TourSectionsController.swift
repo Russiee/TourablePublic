@@ -25,11 +25,11 @@ class TourSectionsController: UITableViewController {
         self.clearsSelectionOnViewWillAppear = false
         let tour = tourDataParser().getTourSection(superTableId)
         self.title = tour.title as String 
-        let subsectionArray = tour.getSubSections()
+        let subsectionArray = tour.subsections
         tourSummaryTextView.text = tour.description
          //tourSummaryTextView.contentInset = UIEdgeInsetsMake(-10, 0, 10, 0)
         tourSummaryTextView.scrollEnabled = false
-        poiArray = tour.getPointsOfInterest()
+        poiArray = tour.pointsOfInterest
         var tourTitles = [String: String]()
         let tdp = tourDataParser.init()
         tableView.tableHeaderView = tourSummaryTextView
@@ -146,8 +146,8 @@ class TourSectionsController: UITableViewController {
 
         let objectForSegue = models[rowTitle]
 
-        let tourSections = tourDataParser.init().getTourSection(superTableId).getSubSections()
-        let tourPOIS = tourDataParser.init().getTourSection(superTableId).getPointsOfInterest()
+        let tourSections = tourDataParser.init().getTourSection(superTableId).subsections
+        let tourPOIS = tourDataParser.init().getTourSection(superTableId).pointsOfInterest
 
 
         for poi in tourPOIS{

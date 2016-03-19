@@ -17,17 +17,7 @@ public class TourIdParser {
     
     //static let sharedInstance = TourIdParser()
     
-    class var sharedInstance: TourIdParser {
-        struct Static {
-            static var onceToken: dispatch_once_t = 0
-            static var instance: TourIdParser? = nil
-        }
-        dispatch_once(&Static.onceToken) {
-            Static.instance = TourIdParser()
-  
-        }
-        return Static.instance!
-    }
+     static let sharedInstance = TourIdParser()
 
     func deleteTourIdAtRow(row: Int) {
         //remove from "Array"
