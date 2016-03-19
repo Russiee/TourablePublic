@@ -358,7 +358,8 @@ public class StartActivity extends AppCompatActivity {
                     if (exists) {
                         return false;
                     }
-                    expiryTimeString = keyJSON.getString("expiry");
+
+                    expiryTimeString = keyJSON.getJSONObject("expiry").getString("iso");
 
                     FileManager.makeTourDirectories(keyID);
                     FileManager.saveJSON(keyJSON, keyID, FileManager.KEY_JSON);
