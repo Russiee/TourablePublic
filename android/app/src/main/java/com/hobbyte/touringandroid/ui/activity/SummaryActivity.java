@@ -145,9 +145,12 @@ public class SummaryActivity extends AppCompatActivity {
 
         try {
             tourJSON = FileManager.getJSON(getApplicationContext(), keyID, FileManager.TOUR_JSON);
+            int timeForTour = tourJSON.getInt("estimatedTime");
+            int tourHours = timeForTour / 60;
+            int tourMinutes = timeForTour % 60;
             toolbar.setTitle(tourJSON.getString("title"));
             txtDescription.setText(tourJSON.getString("description"));
-            timeTourTakes.setText("Estimated time: 1 hour 30 minutes");
+            timeTourTakes.setText("Estimated time for tour: " + tourHours + " hours " + tourMinutes + " minutes");
         } catch (JSONException e) {
             e.printStackTrace();
             toolbar.setTitle("Error");
