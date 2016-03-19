@@ -14,17 +14,7 @@ public class TourDeleter {
     private var objectIDs = [String]()
     private var mediaURLS = [String]()
     
-    class var sharedInstance: TourDeleter {
-        struct Static {
-            static var onceToken: dispatch_once_t = 0
-            static var instance: TourDeleter? = nil
-        }
-        dispatch_once(&Static.onceToken) {
-            Static.instance = TourDeleter()
-            
-        }
-        return Static.instance!
-    }
+     static let sharedInstance = TourDeleter()
     
     //deletes whole tour
     func deleteTour(tourCode: String){
@@ -85,7 +75,7 @@ public class TourDeleter {
     func deleteMedia(imageURL: String, fileType: String)-> Bool {
         //get the storage name and path of the file to delete
         let fileName = String(imageURL.hash)
-        let path = mediaHelper.sharedInstance.fileInDocumentsDirectory(fileName, fileType: fileType)
+        let path = MediaHelper.sharedInstance.fileInDocumentsDirectory(fileName, fileType: fileType)
         
         do{
             //try executing the delete and report on its success.

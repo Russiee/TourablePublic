@@ -11,7 +11,7 @@ import Foundation
 class POIParser{
 
     //creates and returns a pointOfInterest object from the JSON passed to it
-    private func createNewPOI(data: NSDictionary)-> pointOfInterest {
+    func createNewPOI(data: NSDictionary)-> pointOfInterest {
         //Create and return the POI
         return  pointOfInterest(objectId: data["objectId"] as! String,
                 description: data["description"] as! String,
@@ -41,11 +41,5 @@ class POIParser{
         let data = NSUserDefaults.standardUserDefaults().objectForKey(objectId) as! NSDictionary
         //Create a poi object
         return createNewPOI(data)
-        
     }
-
-    func deletePOI(){
-        //this will be complicated, so will do it later
-    }
-
 }

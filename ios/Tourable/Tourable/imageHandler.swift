@@ -18,17 +18,7 @@ class imageHandler: NSObject {
     
     //making the TourIdParser a singleton to parse all tours from the API
     //in order to access TourIdParser methods call TourIdParser.shardInstance.METHOD()
-    class var sharedInstance: imageHandler {
-        struct Static {
-            static var onceToken: dispatch_once_t = 0
-            static var instance: imageHandler? = nil
-        }
-        dispatch_once(&Static.onceToken) {
-            Static.instance = imageHandler()
-            
-        }
-        return Static.instance!
-    }
+    static let sharedInstance = imageHandler()
 
   
     
@@ -61,7 +51,7 @@ class imageHandler: NSObject {
         //let fileName2 = fileName1.substringToIndex(fileName1.endIndex.advancedBy(-6))
     
         //self.addUrlToFileNameMap(name, fileName: fileName1)
-        let path = mediaHelper.sharedInstance.fileInDocumentsDirectory(fileName1, fileType: ".jpg")
+        let path = MediaHelper.sharedInstance.fileInDocumentsDirectory(fileName1, fileType: ".jpg")
         //TODO when profiling, this was found to be extremely heavy, so we should look at putting this in an async
         //let pngImageData = UIImagePNGRepresentation(image)
         let jpgImageData = UIImageJPEGRepresentation(image, 1.0)
@@ -78,7 +68,7 @@ class imageHandler: NSObject {
             return nil
         }else{
             let fileName = String(name!.hash)
-            let path = mediaHelper.sharedInstance.fileInDocumentsDirectory(fileName,fileType: ".jpg")
+            let path = MediaHelper.sharedInstance.fileInDocumentsDirectory(fileName,fileType: ".jpg")
             let image = UIImage(contentsOfFile: path)
             
             return image
@@ -98,9 +88,9 @@ class imageHandler: NSObject {
             if(url.characters.last == "g"){
             triggerDownloadBeginNotify()
             let imageUrl = url
-            let actualURL = NSURL(string: imageUrl )
+            let actualURL = NSURL(string: imageUrl)
         
-            mediaHelper.sharedInstance.getDataFromUrl(actualURL!) { (data, response, error)  in
+            MediaHelper.sharedInstance.getDataFromUrl(actualURL!) { (data, response, error)  in
                 dispatch_async(dispatch_get_main_queue()) { () -> Void in
                     guard let data = data where error == nil else {
                         return

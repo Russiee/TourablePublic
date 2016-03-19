@@ -9,19 +9,9 @@
 import Foundation
 
 //A helper class for the download and management of media binary files.
-class mediaHelper {
+class MediaHelper {
     
-    class var sharedInstance: mediaHelper {
-        struct Static {
-            static var onceToken: dispatch_once_t = 0
-            static var instance: mediaHelper? = nil
-        }
-        dispatch_once(&Static.onceToken) {
-            Static.instance = mediaHelper()
-            
-        }
-        return Static.instance!
-    }
+    static let sharedInstance = MediaHelper()
     
     //Downloads data from the internet, and takes a custom completion handler to deal with it.
     func getDataFromUrl(url:NSURL, completion: ((data: NSData?, response: NSURLResponse?, error: NSError? ) -> Void)) {

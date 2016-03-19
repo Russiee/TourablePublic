@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>classNames</key>
+	<dict>
+		<key>POIParserTests</key>
+		<dict>
+			<key>testReadMockDataFromPersistance()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>1.6644e-05</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>19 Mar 2016, 12:43:48</string>
+				</dict>
+			</dict>
+		</dict>
+		<key>mediaHelper</key>
+		<dict>
+			<key>testExistCheckPerformance()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>1.8087e-05</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>19 Mar 2016, 11:04:46</string>
+				</dict>
+			</dict>
+			<key>testImageDownloadPerformance()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Local Baseline</string>
+					<key>maxPercentRelativeStandardDeviation</key>
+					<real>70</real>
+				</dict>
+			</dict>
+			<key>testVideoDownloadPerformance()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>2.405</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Local Baseline</string>
+					<key>maxPercentRelativeStandardDeviation</key>
+					<real>50</real>
+				</dict>
+			</dict>
+		</dict>
+	</dict>
+</dict>
+</plist>

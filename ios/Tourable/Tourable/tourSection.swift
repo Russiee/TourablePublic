@@ -43,40 +43,6 @@ class tourSection{
             poic.initateConnection(objectId)
         }
     }
-    
-    //Prints tour section object for debugging
-    func debugDataPass(){
-        print("--------")
-        print(sectionId)
-        print(description)
-        print(createdAt)
-       
-        print(pointsOfInterest)
-        print(title)
-        print("--------")
-       
-    }
-    
-    //Endless getters for tour section properties
-    
-    func getSectionId() -> String{
-        return self.sectionId
-    }
-    func getDescription() -> String{
-        return self.description
-    }
-    func getCreatedAt() -> String{
-        return self.createdAt
-    }
-    func getSubSections() -> NSArray{
-        return self.subsections
-        
-    }
-    func getPointsOfInterest() -> NSArray{
-        return self.pointsOfInterest
-        
-    }
-    
 }
 
 

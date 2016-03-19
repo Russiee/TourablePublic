@@ -44,7 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             NSUserDefaults.standardUserDefaults().setObject(dictonary, forKey: "imageKeys")
             NSUserDefaults.standardUserDefaults().synchronize()
             do {
-                try fileManager.createDirectoryAtPath(mediaHelper.sharedInstance.getDocumentsURL().absoluteString,
+                try fileManager.createDirectoryAtPath(MediaHelper.sharedInstance.getDocumentsURL().absoluteString,
                     withIntermediateDirectories: false, attributes: nil)
             } catch {
                 print("An Error was generated creating directory")
