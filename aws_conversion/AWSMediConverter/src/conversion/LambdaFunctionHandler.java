@@ -10,7 +10,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,10 +25,8 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.event.S3EventNotification;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectResult;
 
 import org.dcm4che3.imageio.plugins.dcm.DicomImageReadParam;
-import org.dcm4che3.tool.dcm2jpg.Dcm2Jpg;
 
 import net.bramp.ffmpeg.FFmpeg;
 import net.bramp.ffmpeg.FFmpegExecutor;
@@ -57,10 +54,10 @@ public class LambdaFunctionHandler implements RequestHandler<S3Event, String> {
 	
     public String handleRequest(S3Event event, Context context) {
     	logger = context.getLogger();
+    	String msg = "";
     	
     	moveBinaries();
 //    	testFFmpeg();
-    	
     	
         S3EventNotification.S3EventNotificationRecord record = event.getRecords().get(0);
 
@@ -86,23 +83,30 @@ public class LambdaFunctionHandler implements RequestHandler<S3Event, String> {
         	logger.log(String.format("Could not match file %s", key));        	
         }
         
+        boolean success = false;
+        
         if (fileType != null) {
         	switch (fileType) {
 			case AVI:
-				convertAviToMp4(bucket, fileName, key);
-				deleteFileFromS3Bucket(bucket, key);
+				success = convertAviToMp4(bucket, fileName, key);
+				msg = "Converted avi to mp4";
 				break;
 			case DICOM:
-				convertDcmToJpg(bucket, fileName, key);
-				deleteFileFromS3Bucket(bucket, key);
+				success = convertDicom(bucket, fileName, key);
+				msg = "Converted dcm to jpg";
 				break;
 			default:
 				logger.log(String.format("No need to convert %s", key));
+				msg = "Skipped conversion";
 				break;
 			}
         }
+        
+        if (success) {
+        	deleteFileFromS3Bucket(bucket, key);
+        }
 
-        return "hello";
+        return msg;
     }
     
     /**
@@ -112,8 +116,9 @@ public class LambdaFunctionHandler implements RequestHandler<S3Event, String> {
      * @param fileName the file's name, without the .extension on the end
      * @param key the file's name, with the extension included
      */
-    private void convertAviToMp4(String bucket, String fileName, String key) {
+    private boolean convertAviToMp4(String bucket, String fileName, String key) {
     	logger.log(String.format("Converting %s to mp4", key));
+    	boolean success = false;
     	
     	File aviFile = new File(TMP + "/" + key);
     	String mp4FileName = fileName + MP4;
@@ -122,7 +127,6 @@ public class LambdaFunctionHandler implements RequestHandler<S3Event, String> {
     	
     	// this saves the S3Object to the specified file. Don't know what to do with the metadata
     	ObjectMetadata s3ObjectMeta = s3Client.getObject(new GetObjectRequest(bucket, key), aviFile);
-//    	logger.log("File is " + s3ObjectMeta.getContentType());
     	
     	// do conversion to mp4 with ffmeg
     	try {
@@ -148,51 +152,76 @@ public class LambdaFunctionHandler implements RequestHandler<S3Event, String> {
     	File mp4File = new File(convertedFilePath);
     	
     	if (mp4File.exists()) {
-    		s3Client.putObject(bucket, mp4FileName, mp4File);    		
-    	}    	
-    	
-    	// delete `key` in its bucket
+    		s3Client.putObject(bucket, mp4FileName, mp4File);
+    		success = true;
+    	}
     	
     	// delete the two video files in /tmp
     	aviFile.delete();
     	mp4File.delete();
+    	
+    	return success;
     }
     
-    private void convertDcmToJpg(String bucket, String fileName, String key) {
-    	logger.log(String.format("Converting %s to jpg", key));
-    	
+    private boolean convertDicom(String bucket, String fileName, String key) {
     	File dcmFile = new File(TMP + "/" + key);
-    	String jpgFileName = fileName + JPG;
-    	String convertedFilePath = TMP + "/" + jpgFileName;
+    	boolean success = false;
     	AmazonS3Client s3Client = new AmazonS3Client();
     	
-    	
-    	// this saves the S3Object to the specified file. Don't know what to do with the metadata
+    	// this saves the S3Object to the specified file
     	ObjectMetadata s3ObjectMeta = s3Client.getObject(new GetObjectRequest(bucket, key), dcmFile);
+    	
+    	try {
+    		ImageReader imageReader = ImageIO.getImageReadersByFormatName("DICOM").next();
+    		ImageInputStream iis = ImageIO.createImageInputStream(dcmFile);
+			imageReader.setInput(iis,false);
+			
+			int frameCount = 1;
+			
+			try {
+				frameCount = imageReader.getNumImages(false);				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			if (frameCount == 1) {
+				logger.log("File has one frame");
+				success = convertDcmToJpg(bucket, fileName, key, imageReader, iis);
+			} else {
+				logger.log(String.format("File has %d frames", frameCount));
+				success = convertDcmToMp4(bucket, fileName, key, imageReader, iis, frameCount);
+			}
+			
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	
+    	dcmFile.delete();
+    	return success;
+    }
+    
+    private boolean convertDcmToJpg(String bucket, String fileName, String key, ImageReader imageReader, ImageInputStream inputStream) {
+    	logger.log(String.format("Converting %s to jpg", key));
+    	boolean success = false;
+    	
+    	String jpgFileName = fileName + JPG;
+    	String jpgFilePath = TMP + "/" + jpgFileName;
+    	
+    	
     	
     	// do conversion to jpg with dcm4che2
     	try {
-    		ImageReader imageReader = ImageIO.getImageReadersByFormatName("DICOM").next();
     		DicomImageReadParam dicomImageReadParam = (DicomImageReadParam) imageReader.getDefaultReadParam();
-    		BufferedImage myJpegImage = null;
 
-    		try {
-    			ImageInputStream iis = ImageIO.createImageInputStream(dcmFile);
-    			imageReader.setInput(iis,false);
-    			myJpegImage = imageReader.read(0, dicomImageReadParam);
-    			iis.close();
+    		BufferedImage myJpegImage = imageReader.read(0, dicomImageReadParam);
+    		inputStream.close();
 
-    			if(myJpegImage == null){
-    				System.out.println("Could not read image!!");
-    			}
-    		} catch (IOException e) {
-    			e.printStackTrace();
+    		if (myJpegImage == null) {
+    			System.out.println("Could not read image!!");
     		}
 
-    		try {
-    			OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(convertedFilePath));
+    		try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(jpgFilePath))) {
     			ImageIO.write(myJpegImage, "jpg", outputStream);
-    			outputStream.close();
     		} catch (IOException e) {
     			e.printStackTrace();
     		}
@@ -204,15 +233,89 @@ public class LambdaFunctionHandler implements RequestHandler<S3Event, String> {
     	}
     	    	
     	// load converted file back into the bucket
-    	File jpgFile = new File(convertedFilePath);
+    	File jpgFile = new File(jpgFilePath);
     	
     	if (jpgFile.exists()) {
-    		s3Client.putObject(bucket, jpgFileName, jpgFile);    		
+    		AmazonS3Client s3Client = new AmazonS3Client();
+    		s3Client.putObject(bucket, jpgFileName, jpgFile);   
+    		success = true;
     	}    	
     	
-    	// delete the two video files in /tmp
-    	dcmFile.delete();
     	jpgFile.delete();
+    	return success;
+    }
+    
+    private boolean convertDcmToMp4(String bucket, String fileName, String key, ImageReader imageReader,
+    		ImageInputStream inputStream, int frameCount) {
+    	logger.log(String.format("Converting %s to mp4", key));
+    	boolean success = true;
+    	
+    	// directory for intermediate jpegs
+    	String dirPath = TMP + "/" + fileName + "Temp";
+    	File tempDir = new File(dirPath);
+    	tempDir.mkdir();
+    	String jpgTempBase = dirPath + "/" + fileName;
+    	
+    	String mp4FileName = fileName + MP4;
+    	String mp4FilePath = TMP + "/" + mp4FileName;
+    
+    	try {
+    		DicomImageReadParam dicomImageReadParam = (DicomImageReadParam) imageReader.getDefaultReadParam();
+    		
+    		for (int i = 0; i < frameCount; ++i) {
+    			BufferedImage myJpegImage = imageReader.read(i, dicomImageReadParam);
+    			String num = String.format("%03d", i);
+    			
+    			try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(jpgTempBase + num + JPG))) {
+        			ImageIO.write(myJpegImage, "jpg", outputStream);
+        		} catch (IOException e) {
+        			e.printStackTrace();
+        			inputStream.close();
+        			success = false;
+        		}
+    		}
+    		
+    		inputStream.close();
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	
+    	if (success) {
+    		try {
+            	FFmpeg ffmpeg = new FFmpeg(FFMPEG);
+            	FFprobe ffprobe = new FFprobe(FFPROBE);
+            	
+            	FFmpegBuilder builder = new FFmpegBuilder()
+            		.setInput(jpgTempBase + "%3d" + JPG)
+            			.overrideOutputFiles(true)
+            		.addOutput(mp4FilePath)
+            			.setFormat("mp4")
+            			.setVideoCodec("libx264")
+            			.setVideoFrameRate(24, 1)
+            			.done();
+            	
+            	FFmpegExecutor executor = new FFmpegExecutor(ffmpeg, ffprobe);
+            	executor.createJob(builder).run();
+            } catch (Exception e) {
+            	e.printStackTrace();
+            }
+    	}
+    	
+    	File mp4File = new File(mp4FilePath);
+    	
+    	if (mp4File.exists()) {
+    		AmazonS3Client s3Client = new AmazonS3Client();
+    		s3Client.putObject(bucket, mp4FileName, mp4File);   
+    		success = true;
+    	}
+    	
+    	for (File f : tempDir.listFiles()) {
+    		f.delete();
+    	}
+    	
+    	tempDir.delete();
+    	
+    	return success;
     }
     
     private void deleteFileFromS3Bucket(String bucket, String key) {
