@@ -216,7 +216,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         if segue.identifier == "toTableSummary" {
             if let destination = segue.destinationViewController as? TourSummaryController {
                 if let tourIndex = tableView.indexPathForSelectedRow?.row {
-                    destination.tourId = tourIDs[tourIndex] as! String
+                    destination.tourId = tourIDs[tourIndex]
                     destination.tableRow = tourIndex
                     tableView.deselectRowAtIndexPath(tableView.indexPathForSelectedRow!, animated: true)
                 }

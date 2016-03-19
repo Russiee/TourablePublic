@@ -21,45 +21,124 @@ class mediaHelper: XCTestCase {
         super.tearDown()
     }
 
-    func testVideoDownload() {
+    func testImageDownload() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
-        MediaHelper.sharedInstance.getDataFromUrl(NSURL(string: "https://s3-eu-west-1.amazonaws.com/testmediahobbyte/sample_video.mp4")!) { (data, response, error)  in
-            dispatch_sync(dispatch_get_main_queue()) { () -> Void in
-                guard let data = data where error == nil else {
-                    return
-                }
-                //Save the data from the server as a video, with the url as its name.
-                XCTAssertNotNil(data)
-            }
-            XCTAssertNotNil(data)
-        }
-    }
-    
-    func testImageDownload(){
         
+        let expectation = expectationWithDescription("imageDownload")
         MediaHelper.sharedInstance.getDataFromUrl(NSURL(string: "https://s3-eu-west-1.amazonaws.com/testmediahobbyte/alex%27s+desk.jpg")!) { (data, response, error)  in
-            dispatch_sync(dispatch_get_main_queue()) { () -> Void in
-                guard let data = data where error == nil else {
+            dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                guard let _ = data where error == nil else {
+                    XCTFail()
                     return
+
                 }
-                
-                XCTAssertNotNil(data)
+                expectation.fulfill()
             }
-            XCTAssertNotNil(data)
+        }
+
+            self.waitForExpectationsWithTimeout(20) { error in
+                if let error = error {
+                    print("Error: \(error.localizedDescription)")
+                }
+            }
+        }
+    
+    func testVideoDownload() {
+
+        let expectation = expectationWithDescription("videoDownload")
+        MediaHelper.sharedInstance.getDataFromUrl(NSURL(string: "https://s3-eu-west-1.amazonaws.com/testmediahobbyte/sample_video.mp4")!) { (data, response, error)  in
+            dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                guard let _ = data where error == nil else {
+                    XCTFail()
+                    return
+                    
+                }
+                expectation.fulfill()
+            }
+        }
+        
+        self.waitForExpectationsWithTimeout(60) { error in
+            if let error = error {
+                print("Error: \(error.localizedDescription)")
+            }
         }
     }
     
+   
     
-    func testCheckFileExists(){
-            
+    func testFileExists(){
+        
+        let image = UIImage(named: "PlayButton")
+        let pngImageData = UIImagePNGRepresentation(image!)
+        let path = MediaHelper.sharedInstance.fileInDocumentsDirectory("playButton", fileType: ".png")
+        let result = pngImageData!.writeToFile(path, atomically: true)
+        
+        XCTAssertTrue(result)
+        
+       XCTAssertTrue(MediaHelper.sharedInstance.checkFileExists(path))
     }
+    
+    
+  
 
-    func testPerformanceExample() {
+    func testExistCheckPerformance() {
         // This is an example of a performance test case.
-        self.measureBlock {
-            // Put the code you want to measure the time of here.
+    
+            let image = UIImage(named: "PlayButton")
+            let pngImageData = UIImagePNGRepresentation(image!)
+            let path = MediaHelper.sharedInstance.fileInDocumentsDirectory("playButton", fileType: ".png")
+            let result = pngImageData!.writeToFile(path, atomically: true)
+            
+            XCTAssertTrue(result)
+             self.measureBlock {
+            XCTAssertTrue(MediaHelper.sharedInstance.checkFileExists(path))
+            }
+    }
+    
+    func testVideoDownloadPerformance(){
+        
+        self.measureBlock{
+        let expectation = self.expectationWithDescription("videoDownloadPerformance")
+        MediaHelper.sharedInstance.getDataFromUrl(NSURL(string: "https://s3-eu-west-1.amazonaws.com/testmediahobbyte/sample_video.mp4")!) { (data, response, error)  in
+            dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                guard let _ = data where error == nil else {
+                    XCTFail()
+                    return
+                    
+                }
+                expectation.fulfill()
+            }
+        }
+        
+        self.waitForExpectationsWithTimeout(60) { error in
+            if let error = error {
+                print("Error: \(error.localizedDescription)")
+                }
+            }
         }
     }
 
+    func testImageDownloadPerformance(){
+        
+        self.measureBlock{
+            let expectation = self.expectationWithDescription("videoDownloadPerformance")
+            MediaHelper.sharedInstance.getDataFromUrl(NSURL(string: "https://s3-eu-west-1.amazonaws.com/testmediahobbyte/sample_video.mp4")!) { (data, response, error)  in
+                dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                    guard let _ = data where error == nil else {
+                        XCTFail()
+                        return
+                        
+                    }
+                    expectation.fulfill()
+                }
+            }
+            
+            self.waitForExpectationsWithTimeout(60) { error in
+                if let error = error {
+                    print("Error: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
 }

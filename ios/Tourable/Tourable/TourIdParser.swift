@@ -114,7 +114,7 @@ public class TourIdParser {
     }
     
     public func getAllTourIDs() -> [String] {
-        var tours = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! NSMutableArray
+        let tours = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! NSMutableArray
         var tourIDs = [String]()
         if(tours.count != 0){
         for tour in tours{

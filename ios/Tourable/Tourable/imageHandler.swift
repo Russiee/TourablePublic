@@ -98,7 +98,7 @@ class imageHandler: NSObject {
             if(url.characters.last == "g"){
             triggerDownloadBeginNotify()
             let imageUrl = url
-            let actualURL = NSURL(string: imageUrl )
+            let actualURL = NSURL(string: imageUrl)
         
             MediaHelper.sharedInstance.getDataFromUrl(actualURL!) { (data, response, error)  in
                 dispatch_async(dispatch_get_main_queue()) { () -> Void in
