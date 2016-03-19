@@ -12,8 +12,8 @@ public class TourUpdateManager: NSObject {
 
     var tourTableRow: Int!
     var tourCode: String!
-    var currentMetadata: Dictionary<String,AnyObject>!
-    var newMetadata: NSDictionary!
+    var currentTourKEYmetadata: Dictionary<String,AnyObject>!
+    var newTourKEYmetadata: NSDictionary!
     var alreadyFetchedMetadata = false
     
     // created just to initialise blank field object in other classes
@@ -34,14 +34,14 @@ public class TourUpdateManager: NSObject {
    func getCurrentData(tourCodetoCheck: String, tableRow: Int) {
         self.tourCode = tourCodetoCheck
         self.tourTableRow = tableRow
-        self.currentMetadata = TourIdParser().getTourMetadata(tourCode)
+        self.currentTourKEYmetadata = TourIdParser().getTourMetadata(tourCode)
     }
 
     // download fresh metadata for the tour if there is internet connection
     func downloadNewMetadata() {
         if ApiConnector.sharedInstance.isConnectedToNetwork() {
             ApiConnector.sharedInstance.initiateConnection(tourCode, isCheckingForUpdate: true)
-            newMetadata = ApiConnector.sharedInstance.getTourMetadata(tourCode)
+            newTourKEYmetadata = ApiConnector.sharedInstance.getTourMetadata(tourCode)
         }
     }
 
@@ -50,9 +50,9 @@ public class TourUpdateManager: NSObject {
     func isTourUpToDate() -> Bool {
         downloadNewMetadata()
 
-        if self.newMetadata != nil {
-            let currentDate = obtainDateFromString(currentMetadata["updatedAt"] as! String)
-            let newDate = obtainDateFromString(newMetadata["updatedAt"] as! String)
+        if self.newTourKEYmetadata != nil {
+            let currentDate = obtainDateFromString(currentTourKEYmetadata["updatedAt"] as! String)
+            let newDate = obtainDateFromString(newTourKEYmetadata["updatedAt"] as! String)
 
             let comparisonResultString = compareDates(currentDate, newDate: newDate)
 
@@ -74,9 +74,9 @@ public class TourUpdateManager: NSObject {
             alreadyFetchedMetadata = true
         }
         
-        if self.newMetadata != nil {
+        if self.newTourKEYmetadata != nil {
             let todaysDate = NSDate()
-            let expiresDate = obtainDateFromString(currentMetadata["expiresAt"] as! String)
+            let expiresDate = obtainDateFromString(currentTourKEYmetadata["expiresAt"] as! String)
 
             let comparisonResulFromString = compareDates(todaysDate, newDate: expiresDate)
             if comparisonResulFromString == "descending" {
@@ -135,7 +135,7 @@ public class TourUpdateManager: NSObject {
         let timeHours = 1
         let timeMins = 30
         let expiresIn = 7
-        return (timeHours, timeMins, isTourUptodate, expiresIn)
+        return (timeHours, timeMins, false, expiresIn)
     }
 
     // called from the tourSummary when the user confirms to download the updates
@@ -151,6 +151,6 @@ public class TourUpdateManager: NSObject {
         // re-download images
         imageHandler.sharedInstance.downloadMediaSet(imageHandler.sharedInstance.imageQueue)
         // save newly downloaded metadata.
-        TourIdParser.sharedInstance.addTourMetaData(newMetadata)
+        TourIdParser.sharedInstance.addTourMetaData(newTourKEYmetadata)
     }
 }
