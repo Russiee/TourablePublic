@@ -316,21 +316,6 @@ public class SummaryActivity extends AppCompatActivity {
         this.finish();
     }
 
-
-    /**
-     * Actions that happen if tourjson download returns null
-     */
-    private void onTourDownloadFailedActions() {
-
-        CharSequence text = "Error downloading tour";
-        int duration = Toast.LENGTH_SHORT;
-        Toast toast = Toast.makeText(this, text, duration);
-        toast.show();
-
-        this.finish();
-    }
-
-
     /**
      * Creates a enw entry in the local db for a newly downloaded tour.
      */
