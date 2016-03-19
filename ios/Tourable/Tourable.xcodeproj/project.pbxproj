@@ -33,6 +33,8 @@
 		FA4D0F5F1C6A4D08007D79E3 /* TourIdParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4D0F5E1C6A4D08007D79E3 /* TourIdParser.swift */; };
 		FA4EBAC01C68CC1100E6E601 /* AddNewTourViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4EBABF1C68CC1100E6E601 /* AddNewTourViewController.swift */; };
 		FA56AD7B1C8C614B00F200B9 /* AlertViewBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56AD7A1C8C614B00F200B9 /* AlertViewBuilder.swift */; };
+		FA5C8ED71C9D9CB4002F554C /* ImageHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5C8ED61C9D9CB4002F554C /* ImageHandlerTests.swift */; };
+		FA5C8EDE1C9DA3F5002F554C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E536DCC81C6510FD00A7B2FC /* Assets.xcassets */; };
 		FA6FD5491C8A2D880033964F /* videoHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6FD5481C8A2D880033964F /* videoHandler.swift */; };
 		FA6FD54B1C8A2DCE0033964F /* MediaHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6FD54A1C8A2DCE0033964F /* MediaHelper.swift */; };
 		FA7936AC1C8A4C2B006AD406 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA7936AB1C8A4C2B006AD406 /* AVKit.framework */; };
@@ -96,6 +98,7 @@
 		FA4D0F5E1C6A4D08007D79E3 /* TourIdParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TourIdParser.swift; sourceTree = "<group>"; };
 		FA4EBABF1C68CC1100E6E601 /* AddNewTourViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNewTourViewController.swift; sourceTree = "<group>"; };
 		FA56AD7A1C8C614B00F200B9 /* AlertViewBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertViewBuilder.swift; sourceTree = "<group>"; };
+		FA5C8ED61C9D9CB4002F554C /* ImageHandlerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageHandlerTests.swift; sourceTree = "<group>"; };
 		FA6FD5481C8A2D880033964F /* videoHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = videoHandler.swift; sourceTree = "<group>"; };
 		FA6FD54A1C8A2DCE0033964F /* MediaHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaHelper.swift; sourceTree = "<group>"; };
 		FA7936AB1C8A4C2B006AD406 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
@@ -180,6 +183,7 @@
 				FA0532C31C9C3B5000C5DF26 /* VideoHandlerTests.swift */,
 				FA1F63641C9C5B1600952E03 /* mediaHelperTests.swift */,
 				FAD0BB5C1C9D767000FEC01A /* POIParserTests.swift */,
+				FA5C8ED61C9D9CB4002F554C /* ImageHandlerTests.swift */,
 			);
 			path = TourableTests;
 			sourceTree = "<group>";
@@ -365,6 +369,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA5C8EDE1C9DA3F5002F554C /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -421,6 +426,7 @@
 				FA1C8C451C9C1F140055BB49 /* TourDataParserTests.swift in Sources */,
 				FA0532C41C9C3B5000C5DF26 /* VideoHandlerTests.swift in Sources */,
 				FAD0BB5D1C9D767000FEC01A /* POIParserTests.swift in Sources */,
+				FA5C8ED71C9D9CB4002F554C /* ImageHandlerTests.swift in Sources */,
 				7A9118C81C945990008BF835 /* TourUpdateManagerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
