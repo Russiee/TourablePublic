@@ -306,6 +306,17 @@ public class SummaryActivity extends AppCompatActivity {
         }
     }
 
+    private void onTourDownloadFailedActions() {
+
+        CharSequence text = "Error downloading tour";
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(this, text, duration);
+        toast.show();
+
+        this.finish();
+    }
+
+
     /**
      * Actions that happen if tourjson download returns null
      */
