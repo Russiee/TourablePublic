@@ -33,8 +33,11 @@ public class Quiz {
     }
 
     /**
-     * Sets up the quiz
-     * //TODO: Finish documentation
+     * Sets up the quiz by inflating the quiz layout.
+     * For each option available creates a textview, sets the relevant text from the option and queries
+     * whether textview with the option is the solution textview.
+     * Sets a solution textview to use as comparison
+     *
      */
     private void setupQuiz() {
         LinearLayout layout = (LinearLayout) v.findViewById(R.id.optionsLayout);
@@ -66,6 +69,9 @@ public class Quiz {
 
     }
 
+    /**
+     * Remove listeners from all options to prevent users from retrying quiz multiple times till the correct answer is selected
+     */
     private void clearListeners() {
         for(int i = 0; i < optionsList.size(); i++) {
             optionsList.get(i).setOnClickListener(null);

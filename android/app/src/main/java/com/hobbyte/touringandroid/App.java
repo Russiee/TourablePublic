@@ -21,6 +21,10 @@ public class App extends Application {
         context = getApplicationContext();
     }
 
+    /**
+     * Returns the current activity to allow it to be used outside an Activity or Fragment
+     * @return currentActivity
+     */
     public Activity getCurrentActivity(){
         return currentActivity;
     }

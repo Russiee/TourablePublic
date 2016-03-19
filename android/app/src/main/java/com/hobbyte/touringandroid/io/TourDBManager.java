@@ -219,6 +219,22 @@ public class TourDBManager extends SQLiteOpenHelper {
         return db.query(TourList.TABLE_NAME, null, where, whereArgs, null, null, null);
     }
 
+    /**
+     * Update a tour entry in the db. All fields, with the exception of `db` and `hasVideo`, will
+     * be extracted from JSON that was fetched from the server.
+     * <p>
+     * All the timestamp parameters should be passed in the string form in which the server stores
+     * them. They will be converted into, and stored as, milliseconds since Epoch.
+     *
+     * @param keyID the objectId of the key used to fetch the tour
+     * @param tourID the objectId of the tour itself
+     * @param tourName the tour's title
+     * @param creationDate when the tour was created
+     * @param updateDate when the tour was last updated
+     * @param expiryDate when the tour expires
+     * @param hasVideo whether or not the user opted to download the tour with video
+     * @param version the current version of the tour
+     */
     public void updateRow(String keyID, String tourID, String tourName, String creationDate,
                           String updateDate, String expiryDate, boolean hasVideo, int version) {
 
@@ -361,7 +377,7 @@ public class TourDBManager extends SQLiteOpenHelper {
                 toDelete[--count] = c.getString(0);
             }
 
-            c.close();
+        c.close();
 
         c.close();
         return toDelete;
