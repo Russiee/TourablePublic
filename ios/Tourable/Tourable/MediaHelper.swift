@@ -18,7 +18,6 @@ class MediaHelper {
         }
         dispatch_once(&Static.onceToken) {
             Static.instance = MediaHelper()
-            
         }
         return Static.instance!
     }
