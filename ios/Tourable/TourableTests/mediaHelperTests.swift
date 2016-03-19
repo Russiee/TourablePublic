@@ -96,24 +96,23 @@ class mediaHelper: XCTestCase {
             }
     }
     
-    func testImageDownloadPerformance(){
-        
+    func testImageDLPerformance(){
         self.measureBlock{
-        let expectation = self.expectationWithDescription("ImageDownloadPerformance")
-        MediaHelper.sharedInstance.getDataFromUrl(NSURL(string: "https://s3-eu-west-1.amazonaws.com/testmediahobbyte/alex%27s+bed.jpg")!) { (data, response, error)  in
-            dispatch_async(dispatch_get_main_queue()) { () -> Void in
-                guard let _ = data where error == nil else {
-                    XCTFail()
-                    return
-                    
+            let expectation = self.expectationWithDescription("ImageDownloadPerformance")
+            MediaHelper.sharedInstance.getDataFromUrl(NSURL(string: "https://s3-eu-west-1.amazonaws.com/testmediahobbyte/alex%27s+bed.jpg")!) { (data, response, error)  in
+                dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                    guard let _ = data where error == nil else {
+                        XCTFail()
+                        return
+                        
+                    }
+                    expectation.fulfill()
                 }
-                expectation.fulfill()
             }
-        }
-        
-        self.waitForExpectationsWithTimeout(60) { error in
-            if let error = error {
-                print("Error: \(error.localizedDescription)")
+            
+            self.waitForExpectationsWithTimeout(60) { error in
+                if let error = error {
+                    print("Error: \(error.localizedDescription)")
                 }
             }
         }
