@@ -6,7 +6,7 @@ angular.module('tourable')
         verifyKey.then(function(response) {
             $scope.location = $location.search().key;
             console.log('Success: ', response.data);
-
+            getTourMetaData(response.data.tour.objectId);
             getTourBundle(response.data.tour.objectId);
 
         }, function(error) {
@@ -20,6 +20,10 @@ angular.module('tourable')
             var getMetaData = tourFactory.getTour(id);
             getMetaData.then(function(response) {
                 console.log(response.data);
+                //check if bundle has already populated $scope.tour, if not fill it with the metadata
+                if (!$scope.tour) {
+                    $scope.tour = response.data;
+                }
             }, function (error) {
                 console.log("Error fetching tour metadata: ", error);
             });
@@ -29,6 +33,7 @@ angular.module('tourable')
             var getBundle = tourFactory.getBundle(id);
             getBundle.then(function(response) {
                 console.log(response.data);
+                $scope.tour = response.data;
             }, function (error) {
                 console.log("Error fetching tour bundle: ", error);
             });
