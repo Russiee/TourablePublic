@@ -32,3 +32,17 @@
 .tour-overview-data .tour-overview-data-last {
     border: 0;
 }
+
+.tour-button {
+    border: 0;
+    min-width: 150px;
+    font-weight: 600;
+}
+
+.tour-start-button {
+    padding: 15px 20px;
+    display: block;
+    margin: 30px auto;
+    background-color: #D8DCE0;
+    color: #162B49;
+}
