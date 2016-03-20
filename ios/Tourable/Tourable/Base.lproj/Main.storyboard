@@ -155,7 +155,7 @@
                             <rect key="frame" x="0.0" y="136" width="600" height="107"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qFn-jb-js7">
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qFn-jb-js7">
                                     <rect key="frame" x="179" y="-13" width="243" height="112"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="243" id="pj3-2u-tIl"/>
@@ -288,6 +288,9 @@
                                     <segue destination="YdX-AY-UmE" kind="show" identifier="goToTourSections" id="d1o-YK-Yz6"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="ENF-lH-oHt">
+                                <rect key="frame" x="280" y="435" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="0.94117647059999998" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -308,6 +311,7 @@
                     <connections>
                         <outlet property="UIDescriptionBox" destination="mTv-Im-kld" id="EA5-28-fsl"/>
                         <outlet property="beginTourButton" destination="6DD-cZ-3vf" id="c4L-fG-lmj"/>
+                        <outlet property="fetchingMetadataIndicator" destination="ENF-lH-oHt" id="rxu-dU-doP"/>
                         <outlet property="tableView" destination="m9X-WR-BhL" id="5ns-kW-Yur"/>
                         <outlet property="updateIndicator" destination="9TJ-NC-d4X" id="XLk-fa-2Of"/>
                     </connections>
