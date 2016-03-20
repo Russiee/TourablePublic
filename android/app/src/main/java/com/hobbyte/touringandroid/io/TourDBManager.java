@@ -54,8 +54,6 @@ public class TourDBManager extends SQLiteOpenHelper {
                     TourList.COL_KEY_ID + " TEXT PRIMARY KEY," +
                     TourList.COL_TOUR_ID + " TEXT NOT NULL," +
                     TourList.COL_TOUR_NAME + " TEXT NOT NULL," +
-                    TourList.COL_DATE_CREATED + " NUMERIC NOT NULL," +
-                    TourList.COL_DATE_UPDATED + " NUMERIC NOT NULL," +
                     TourList.COL_DATE_EXPIRES_ON + " NUMERIC," +
                     TourList.COL_DATE_LAST_ACCESSED + " NUMERIC," +
                     TourList.COL_HAS_VIDEO + " INTEGER DEFAULT 0," +
@@ -195,10 +193,11 @@ public class TourDBManager extends SQLiteOpenHelper {
         values.put(TourList.COL_KEY_ID, keyID);
         values.put(TourList.COL_TOUR_ID, tourID);
         values.put(TourList.COL_TOUR_NAME, tourName);
-        values.put(TourList.COL_DATE_CREATED, datetimes[0]);
-        values.put(TourList.COL_DATE_UPDATED, datetimes[1]);
         values.put(TourList.COL_DATE_EXPIRES_ON, datetimes[2]);
-        values.put(TourList.COL_DATE_LAST_ACCESSED, Calendar.getInstance().getTimeInMillis());
+        values.put(
+                TourList.COL_DATE_LAST_ACCESSED,
+                Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis()
+        );
         values.put(TourList.COL_HAS_VIDEO, video);
         values.put(TourList.COL_VERSION, version);
 
@@ -259,8 +258,6 @@ public class TourDBManager extends SQLiteOpenHelper {
 
         values.put(TourList.COL_TOUR_ID, tourID);
         values.put(TourList.COL_TOUR_NAME, tourName);
-        values.put(TourList.COL_DATE_CREATED, datetimes[0]);
-        values.put(TourList.COL_DATE_UPDATED, datetimes[1]);
         values.put(TourList.COL_DATE_EXPIRES_ON, datetimes[2]);
         values.put(
                 TourList.COL_DATE_LAST_ACCESSED,
