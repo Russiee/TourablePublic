@@ -14,6 +14,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * Performs all required database operations. To use, simply call {@link #getInstance(Context)}.
@@ -39,7 +40,7 @@ public class TourDBManager extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "TourData.db";
 
-    public static final String dateFormat = "yyyy-MM-dd'T'HH:mm:ss.sss'Z'";
+    public static final String dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
     private static TourDBManager tdbmInstance;
     private SQLiteDatabase db;
@@ -261,7 +262,10 @@ public class TourDBManager extends SQLiteOpenHelper {
         values.put(TourList.COL_DATE_CREATED, datetimes[0]);
         values.put(TourList.COL_DATE_UPDATED, datetimes[1]);
         values.put(TourList.COL_DATE_EXPIRES_ON, datetimes[2]);
-        values.put(TourList.COL_DATE_LAST_ACCESSED, Calendar.getInstance().getTimeInMillis());
+        values.put(
+                TourList.COL_DATE_LAST_ACCESSED,
+                Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis()
+        );
         values.put(TourList.COL_HAS_VIDEO, video);
         values.put(TourList.COL_VERSION, version);
 
@@ -310,7 +314,11 @@ public class TourDBManager extends SQLiteOpenHelper {
         open(true);
 
         ContentValues values = new ContentValues();
-        values.put(TourList.COL_DATE_LAST_ACCESSED, Calendar.getInstance().getTimeInMillis());
+
+        values.put(
+                TourList.COL_DATE_LAST_ACCESSED,
+                Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis()
+        );
 
         String where = TourList.COL_KEY_ID + " = ?";
         String[] whereArgs = {keyID};
@@ -469,6 +477,7 @@ public class TourDBManager extends SQLiteOpenHelper {
      */
     public static long[] convertStampToMillis(String... timeArgs) throws ParseException {
         SimpleDateFormat df = new SimpleDateFormat(dateFormat);
+        df.setTimeZone(TimeZone.getTimeZone("UTC"));
 
         long[] toReturn = new long[timeArgs.length];
 
