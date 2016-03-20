@@ -17,9 +17,12 @@
     <string name="prefs_current_expiry">CURRENT_KEY_EXPIRATION</string>
     <string name="prefs_tours_to_update">TO_UPDATE</string>
 
+    <string name="start_activity_your_tours">Your Tours</string>
     <string name="start_activity_enter_key">Enter the provided tour key:</string>
-    <string name="submit_key_button_text">Submit</string>
-    <string name="no_tours_exist">You haven\'t added any tours yet.</string>
+    <string name="start_activity_add_new_tour">Add New Tour</string>
+    <string name="start_activity_add_tour">Add Tour</string>
+    <string name="start_activity_submit_key_button_text">Submit</string>
+    <string name="start_activity_no_tours_exist">You haven\'t added any tours yet.</string>
     <string name="poi_first_text">Current placeholder text</string>
     <string name="download_text">Your tour key is valid! You can now download your tour!</string>
 

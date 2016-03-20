@@ -57,7 +57,6 @@ public class SummaryActivity extends AppCompatActivity {
     private String keyID;
     private String tourID;
     private Boolean withMedia;
-    private Boolean doDownload;
 
     private String expiryTimeString;
     private long expiryTimeLong;
@@ -93,7 +92,7 @@ public class SummaryActivity extends AppCompatActivity {
         tourID = intent.getStringExtra(TOUR_ID);
         expiryTimeString = intent.getStringExtra(EXPIRY_TIME_STRING);
         expiryTimeLong = intent.getLongExtra(EXPIRY_TIME_LONG, 0);
-        doDownload = intent.getBooleanExtra(DOWNLOAD, false);
+        Boolean doDownload = intent.getBooleanExtra(DOWNLOAD, false);
         withMedia = intent.getBooleanExtra(MEDIA, false);
         updating = intent.getBooleanExtra(UPDATING, false);
 
@@ -116,7 +115,6 @@ public class SummaryActivity extends AppCompatActivity {
         }
 
         handler = new ProgressHandler(this);
-
     }
 
     @Override
@@ -132,6 +130,7 @@ public class SummaryActivity extends AppCompatActivity {
      * Starts the Tour activity
      */
     public void openTourActivity() {
+
         Intent intent = new Intent(this, TourActivity.class);
         intent.putExtra(TourActivity.INTENT_KEY_ID, keyID);
         startActivity(intent);
@@ -142,6 +141,7 @@ public class SummaryActivity extends AppCompatActivity {
      * Display the description and information regarding the corresponding tour
      */
     private void displayTourInfo() {
+
         TextView timeTourTakes = (TextView) findViewById(R.id.txtEstimatedTime);
 
         try {
@@ -172,7 +172,7 @@ public class SummaryActivity extends AppCompatActivity {
         Context context = getApplicationContext();
         SharedPreferences prefs = context.getSharedPreferences(
                 context.getString(R.string.preference_file_key),
-                context.MODE_PRIVATE);
+                Context.MODE_PRIVATE);
 
         Set<String> updateSet = prefs.getStringSet(context.getString(R.string.prefs_tours_to_update), null);
         if (updateSet != null) {
@@ -274,7 +274,7 @@ public class SummaryActivity extends AppCompatActivity {
 
         public ProgressHandler(SummaryActivity a) {
             super(Looper.getMainLooper());
-            activity = new WeakReference<SummaryActivity>(a);
+            activity = new WeakReference<>(a);
         }
 
         @Override
@@ -324,7 +324,7 @@ public class SummaryActivity extends AppCompatActivity {
 
         SharedPreferences prefs = getApplicationContext().getSharedPreferences(
                 getApplicationContext().getString(R.string.preference_file_key),
-                getApplicationContext().MODE_PRIVATE);
+                Context.MODE_PRIVATE);
 
         String name = "empty";
         String createdAt = "";
@@ -400,8 +400,6 @@ public class SummaryActivity extends AppCompatActivity {
                 if (v.getTag().equals("ToUpdate")) {
                     updating = true;
                     showDownloadDialog();
-                } else if (v.getTag().equals("Updated")) {
-                    //Do nothing
                 }
             }
         });

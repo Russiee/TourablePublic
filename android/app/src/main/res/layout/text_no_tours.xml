@@ -7,10 +7,14 @@
         android:padding="8dp"
         android:showDividers="beginning">
 
-        <TextView
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="100dp" />
+
+    <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/no_tours_exist"
+            android:text="@string/start_activity_no_tours_exist"
             android:gravity="center_horizontal"
             android:fontFamily="sans-serif-thin"
             android:textSize="18sp"
