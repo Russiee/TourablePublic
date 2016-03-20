@@ -50,13 +50,10 @@ public class StartActivity extends AppCompatActivity {
     private String expiryTimeString;
     private long expiryTimeLong;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-
-        new UpdateChecker(getApplicationContext()).start();
 
         //add toolbar to the screen
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarStart);
@@ -228,16 +225,18 @@ public class StartActivity extends AppCompatActivity {
      */
     public void checkTourKey(String tourKey) {
         // current valid key: KCL-1010
-        if (tourKey.length() < 1)
-            return;
+        if (tourKey.length() < 1) return;
 
-        if (ServerAPI.checkConnection(this)) {
+        if (TourDBManager.getInstance(getApplicationContext()).doesTourKeyNameExist(tourKey)) {
+            showToast(getString(R.string.msg_tour_exists));
+        } else if (ServerAPI.checkConnection(this)) {
             // only check the key if we have an internet connection
             KeyCheckTask k = new KeyCheckTask();
             k.execute(tourKey);
         } else {
             showToast(getString(R.string.msg_no_internet));
         }
+//        textKey.setText("");
     }
 
     /**
@@ -333,14 +332,6 @@ public class StartActivity extends AppCompatActivity {
                 try {
                     tourID = keyJSON.getJSONObject("tour").getString("objectId");
                     keyID = keyJSON.getString("objectId");
-                    exists = TourDBManager.getInstance(getApplicationContext()).doesTourExist(keyID);
-
-                    if (exists) {
-                        tourID = null;
-                        keyID = null;
-                        return false;
-                    }
-
                     expiryTimeString = keyJSON.getString("expiry");
 
                     FileManager.makeTourDirectories(keyID);
@@ -377,7 +368,6 @@ public class StartActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Boolean isValid) {
-
             if (isValid) {
                 showDownloadDialog();
             } else if (exists) {

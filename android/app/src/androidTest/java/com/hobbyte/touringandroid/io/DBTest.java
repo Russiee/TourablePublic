@@ -4,7 +4,6 @@ import android.database.Cursor;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.RenamingDelegatingContext;
-import android.test.suitebuilder.annotation.LargeTest;
 
 import org.junit.After;
 import org.junit.Before;
@@ -12,7 +11,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.text.ParseException;
-import java.util.Calendar;
 
 import static org.junit.Assert.*;
 
@@ -28,6 +26,9 @@ public class DBTest {
 
     private static String KEYID_1 = "qwerty";
     private static String KEYID_2 = "azerty";
+
+    private static String KEY_NAME_1 = "key-1";
+    private static String KEY_NAME_2 = "key-2";
 
     private static String TOURID_1 = "1kdlNd7";
     private static String TOURID_2 = "pLd3B8d";
@@ -57,25 +58,27 @@ public class DBTest {
     public void testEmpty() {
         assertTrue(db.dbIsEmpty());
 
-        db.putRow(KEYID_1, TOURID_1, NAME_1, EXPIRES_IN_FUTURE, false, VERSION_1);
+        db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRES_IN_FUTURE, false, VERSION_1);
         assertFalse(db.dbIsEmpty());
     }
 
     @Test
     public void areRowsInsertedProperly_nonDates() {
-        db.putRow(KEYID_1, TOURID_1, NAME_1, EXPIRES_IN_FUTURE, true, VERSION_1);
+        db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRES_IN_FUTURE, true, VERSION_1);
 
         Cursor c = db.getRow(KEYID_1);
         c.moveToFirst();
 
         String kid = c.getString(0);
-        String tid = c.getString(1);
-        String name = c.getString(2);
-        int hasMedia = c.getInt(4);
-        int version = c.getInt(5);
+        String kname = c.getString(1);
+        String tid = c.getString(2);
+        String name = c.getString(3);
+        int hasMedia = c.getInt(5);
+        int version = c.getInt(6);
         c.close();
 
         assertEquals(KEYID_1, kid);
+        assertEquals(KEY_NAME_1, kname);
         assertEquals(TOURID_1, tid);
         assertEquals(NAME_1, name);
         assertEquals(1, hasMedia);
@@ -84,12 +87,12 @@ public class DBTest {
 
     @Test
     public void areRowsInsertedProperly_dates() {
-        db.putRow(KEYID_1, TOURID_1, NAME_1, EXPIRES_IN_FUTURE, true, VERSION_1);
+        db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRES_IN_FUTURE, true, VERSION_1);
 
         Cursor c = db.getRow(KEYID_1);
         c.moveToFirst();
 
-        long expires = c.getLong(3);
+        long expires = c.getLong(4);
         c.close();
 
         assertEquals(EXPIRES_IN_FUTURE_L, expires);
@@ -97,8 +100,8 @@ public class DBTest {
 
     @Test
     public void testRowDeletion_single() {
-        db.putRow(KEYID_1, TOURID_1, NAME_1, EXPIRES_IN_FUTURE, false, VERSION_1);
-        db.putRow(KEYID_2, TOURID_2, NAME_2, EXPIRES_IN_FUTURE, false, VERSION_2);
+        db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRES_IN_FUTURE, false, VERSION_1);
+        db.putRow(KEYID_2, TOURID_2, KEY_NAME_2, NAME_2, EXPIRES_IN_FUTURE, false, VERSION_2);
 
         db.deleteTour(KEYID_2);
 
@@ -113,8 +116,8 @@ public class DBTest {
 
     @Test
     public void testRowDeletion_multi() {
-        db.putRow(KEYID_1, TOURID_1, NAME_1, EXPIRES_IN_FUTURE, false, VERSION_1);
-        db.putRow(KEYID_2, TOURID_2, NAME_2, EXPIRES_IN_FUTURE, false, VERSION_2);
+        db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRES_IN_FUTURE, false, VERSION_1);
+        db.putRow(KEYID_2, TOURID_2, KEY_NAME_2, NAME_2, EXPIRES_IN_FUTURE, false, VERSION_2);
 
         String[] toDelete = {KEYID_1, KEYID_2};
 
@@ -124,8 +127,8 @@ public class DBTest {
 
     @Test
     public void correctUpdateInfo() {
-        db.putRow(KEYID_1, TOURID_1, NAME_1, EXPIRES_IN_FUTURE, false, VERSION_1);
-        db.putRow(KEYID_2, TOURID_2, NAME_2, EXPIRES_IN_FUTURE, false, VERSION_2);
+        db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRES_IN_FUTURE, false, VERSION_1);
+        db.putRow(KEYID_2, TOURID_2, KEY_NAME_2, NAME_2, EXPIRES_IN_FUTURE, false, VERSION_2);
 
         Object[][] info = db.getTourUpdateInfo();
         assertEquals(2, info.length);
@@ -143,8 +146,8 @@ public class DBTest {
 
     @Test
     public void testGetExpiredTours() {
-        db.putRow(KEYID_1, TOURID_1, NAME_1, EXPIRES_IN_FUTURE, false, VERSION_1);
-        db.putRow(KEYID_2, TOURID_2, NAME_2, EXPIRED_IN_PAST, false, VERSION_2);
+        db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRES_IN_FUTURE, false, VERSION_1);
+        db.putRow(KEYID_2, TOURID_2, KEY_NAME_2, NAME_2, EXPIRED_IN_PAST, false, VERSION_2);
 
         String[] expiredTours = db.getExpiredTours();
 
@@ -154,23 +157,23 @@ public class DBTest {
 
     @Test
     public void testTourExists() {
-        db.putRow(KEYID_1, TOURID_1, NAME_1, EXPIRES_IN_FUTURE, false, VERSION_1);
+        db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRES_IN_FUTURE, false, VERSION_1);
 
-        boolean tour1Exists = db.doesTourExist(KEYID_1);
+        boolean tour1Exists = db.doesTourKeyNameExist(KEY_NAME_1);
         assertTrue(tour1Exists);
     }
 
     @Test
     public void testTourDoesNotExist() {
-        db.putRow(KEYID_1, TOURID_1, NAME_1, EXPIRES_IN_FUTURE, false, 1);
+        db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRES_IN_FUTURE, false, 1);
 
-        boolean tour2Exists = db.doesTourExist(KEYID_2);
+        boolean tour2Exists = db.doesTourKeyNameExist(KEY_NAME_2);
         assertFalse(tour2Exists);
     }
 
     @Test
     public void testTourHasVideo() {
-        db.putRow(KEYID_1, TOURID_1, NAME_1, EXPIRES_IN_FUTURE, true, 1);
+        db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRES_IN_FUTURE, true, 1);
 
         boolean hasMedia = db.doesTourHaveMedia(KEYID_1);
         assertTrue(hasMedia);
@@ -178,7 +181,7 @@ public class DBTest {
 
     @Test
     public void testTourDoesNotHaveVideo() {
-        db.putRow(KEYID_1, TOURID_1, NAME_1, EXPIRES_IN_FUTURE, false, 1);
+        db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRES_IN_FUTURE, false, 1);
 
         boolean hasMedia = db.doesTourHaveMedia(KEYID_1);
         assertFalse(hasMedia);
@@ -186,8 +189,8 @@ public class DBTest {
 
     @Test
     public void cannotPutDuplicateKeyIDs() {
-        db.putRow(KEYID_1, TOURID_1, NAME_1, EXPIRES_IN_FUTURE, false, 1);
-        db.putRow(KEYID_1, TOURID_2, NAME_2, EXPIRES_IN_FUTURE, true, 1);
+        db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRES_IN_FUTURE, false, 1);
+        db.putRow(KEYID_1, TOURID_2, KEY_NAME_2, NAME_2, EXPIRES_IN_FUTURE, true, 1);
 
         Cursor c = db.getRow(KEYID_1);
         int count = c.getCount();
