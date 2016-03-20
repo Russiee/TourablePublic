@@ -77,7 +77,6 @@ public class SummaryActivity extends AppCompatActivity {
 
     private Boolean updating;
 
-    private long datetime = 0;
     private int durationSeconds;
     private int durationMinutes;
     private int durationHours;
@@ -209,14 +208,61 @@ public class SummaryActivity extends AppCompatActivity {
     }
 
     /**
-     * Displays the tours expiry in Days, Hours, Minutes, and Seconds
+     * Displays the tours expiry in Days or Hours and Minutes
      */
     private void displayExpiry() {
 
         TextView txtExpiry = (TextView) findViewById(R.id.txtExpiry);
-        txtExpiry.setText(String.format("Expires in %d days %d hours %d minutes %d seconds",
-                durationDays, durationHours, durationMinutes, durationSeconds)
-        );
+
+        StringBuilder sb = new StringBuilder(getString(R.string.expires_in));
+        sb.append(" "); //because android string resources strip tailing and leading spaces
+
+        //number of days, days or day
+        if (durationDays > 1) {
+            sb.append(durationDays);
+            sb.append(" ");
+            sb.append(getString(R.string.expires_in_days));
+        } else if (durationDays == 1) {
+            sb.append(durationDays);
+            sb.append(" ");
+            sb.append(getString(R.string.expires_in_day));
+        } else {
+            //if there are no days left, then set text to red and display hours & minutes
+
+            txtExpiry.setTextColor(getResources().getColor(R.color.red));
+
+            //number of hours, hours or hour
+            if (durationHours > 1) {
+                sb.append(durationHours);
+                sb.append(" ");
+                sb.append(getString(R.string.expires_in_hours));
+            } else if (durationHours == 1) {
+                sb.append(durationHours);
+                sb.append(getString(R.string.space));
+                sb.append(getString(R.string.expires_in_hour));
+            }
+
+            //if there are minutes to add
+            if (durationMinutes != 0) {
+                //check number of hours if we hav minutes, because we don't want to add
+                // 'and' ifn there are no hours to add to
+                if (durationHours >= 1) {
+                    sb.append(" and ");
+                }
+
+                //number of minutes, minutes or minute
+                if (durationMinutes >= 1) {
+                    sb.append(durationMinutes);
+                    sb.append(" ");
+                    sb.append(getString(R.string.expires_in_minutes));
+                } else {
+                    sb.append(durationMinutes);
+                    sb.append(" ");
+                    sb.append(getString(R.string.expires_in_minute));
+                }
+            }
+        }
+        txtExpiry.setText(sb.toString());
     }
 
     /**
@@ -466,6 +512,7 @@ public class SummaryActivity extends AppCompatActivity {
      * Parses the currently set date (in Long) to an appropriate X Days - X Hours - X Minutes - X Seconds format
      */
     private void parseDate() {
+        long datetime = 0;
         if (expiryTimeString != null) {
             try {
                 datetime = TourDBManager.convertStampToMillis(expiryTimeString);
