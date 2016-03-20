@@ -1,14 +1,14 @@
-angular.module('touring')
-	.controller('HomeCtrl', function ($scope, $location, keyFactory) {
-    
+angular.module('tourable')
+    .controller('HomeCtrl', function ($scope, $location, keyFactory) {
+
         $scope.startTour = function (key) {
             var promise = keyFactory.verify(key);
             promise.then(function(response) {
-                $location.url('/tour?key=' + key)
+                $location.url('/tour?key=' + key);
                 console.log('Success: ' + response);
             }, function(error) {
-                alert("KEY REJECTED ASSHOLE")
+                alert("KEY REJECTED");
                 console.log('Failed: ' + error);
             });
-        }
-	});
+        };
+    });

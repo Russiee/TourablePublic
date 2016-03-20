@@ -1,3 +1,15 @@
+#home-background {
+    background-color: #162B49;
+    width: 100vw;
+    height: 100vh;
+}
+
+#home-title {
+    font-family: Pacifico;
+    color: #fff;
+    text-align: center;
+}
+
 #key-form {
     max-width: 400px;
     margin: 0 auto;
@@ -6,7 +18,7 @@
 }
 
 #key-form input {
-    
+
 }
 
 #key-form button {
@@ -26,10 +38,10 @@
     width: 100%;
 }
 
-#key-form h4 {
+#key-form-description {
     text-align: center;
-    font-weight: 600;
     margin-top: 10px;
     margin-bottom: 30px;
-    color: #666;
+    color: #D8DCE0;
+    font-size: 10px;
 }

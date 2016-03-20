@@ -1,0 +1,135 @@
+#tour-view {
+    padding-top: 60px;
+}
+
+.tour-container {
+    max-width: 600px;
+    padding: 0;
+}
+
+.tour-overview-description {
+    color: #162B49;
+    padding: 20px;
+    margin: 0;
+}
+
+.tour-overview-data .fa-check {
+    color: #44DB5E;
+    padding: 3px;
+}
+
+.tour-cell-list {
+    background-color: #FFF;
+    border-radius: 5px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tour-cell-list li {
+    padding: 15px 20px;
+    border-bottom-style: solid;
+    border-bottom-color: #ECF0F1;
+    border-bottom-width: 1px;
+    color: #162B49;
+}
+
+.tour-cell-list:last-child {
+    border: 0;
+}
+
+.tour-cell-list .fa-chevron-right {
+    color: #DDD;
+    padding: 4px 0;
+}
+
+.tour-button {
+    border: 0;
+    min-width: 150px;
+    font-weight: 600;
+    outline: 0 !important;
+}
+
+.tour-start-button {
+    padding: 15px 20px;
+    display: block;
+    margin: 30px auto;
+    background-color: #D8DCE0;
+    color: #162B49;
+}
+
+/*Tour Section Styles*/
+
+.tour-container h6 {
+    color: #162B49;
+    margin: 0;
+    padding: 20px 20px 15px 20px;
+}
+
+.tour-section-description {
+    background-color: #162B49;
+    color: #FFF;
+}
+
+.tour-section-description p {
+    margin: 0;
+    padding: 20px;
+}
+
+/*Tour POI Styles*/
+
+.tour-poi {
+    color: #162b49;
+    padding-top: 20px;
+    padding-bottom: 80px;
+}
+
+.tour-poi img,
+.tour-poi video {
+    background-color: #DDD;
+    width: 100%;
+    max-width: 600px;
+    margin: 10px 0px;
+}
+
+.tour-poi-header,
+.tour-poi-body {
+    margin: 0;
+    padding: 10px 20px;
+}
+
+.tour-poi-quiz h4,
+.tour-poi-header h4 {
+    font-weight: 600;
+    font-size: 18px;
+    margin: 0;
+    padding: 0;
+}
+
+.tour-poi-body,
+.tour-poi-media-description {
+    color: #4A5F7E;
+}
+
+.tour-poi-media-description {
+    margin: 0;
+    padding: 0px 20px 15px 20px;
+}
+
+.tour-poi-quiz h4 {
+    padding: 20px;
+}
+
+.tour-poi-quiz {
+    padding-bottom: 20px;
+}
+
+.tour-poi-quiz-success {
+    background-color: #B2FFB1;
+    border-color: #B2FFB1;
+}
+
+.tour-poi-quiz-error {
+    background-color: #FFB2B1;
+    border-color: #FFB2B1;
+}

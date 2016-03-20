@@ -1,0 +1,27 @@
+<div class="container tour-container tour-poi">
+    <div class="tour-poi-component" ng-repeat="component in poi.post track by $index">
+        <div class="tour-poi-header" ng-if="component.type === 'header'">
+            <h4>{{component.content}}</h4>
+        </div>
+        <div class="tour-poi-body" ng-if="component.type === 'body'">
+            <p>{{component.content}}</p>
+        </div>
+        <div class="tour-poi-image" ng-if="component.type === 'image'">
+            <img ng-src="{{component.url}}">
+            <p class="tour-poi-media-description"><i>{{component.description}}</i></p>
+        </div>
+        <div class="tour-poi-video" ng-if="component.type === 'video'">
+            <video ng-src="{{component.url | trustVideo}}" loop controls></video>
+            <p class="tour-poi-media-description"><i>{{component.description}}</i></p>
+        </div>
+        <div class="tour-poi-quiz" ng-if="component.type === 'quiz'">
+            <h4>{{component.question}}</h4>
+            <ul class="tour-cell-list">
+                <div ng-repeat="option in component.options track by $index">
+                    <li class="cursor-pointer" ng-class="{'tour-poi-quiz-success': solve !== undefined, 'tour-poi-quiz-error': solve !== undefined && solve === $index && solve !== component.solution}" ng-click="solve = $index">{{option}}</li>
+                </div>
+            </ul>
+        </div>
+    </div>
+
+</div>
