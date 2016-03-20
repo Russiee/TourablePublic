@@ -33,13 +33,13 @@ class TourMetadataConnector {
             let request = NSURLRequest(URL: NSURL(string: urlPath)!)
             let config = NSURLSessionConfiguration.defaultSessionConfiguration()
             let session = NSURLSession(configuration: config)
-
+            print("about to dispatch async")
             let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
                 self.data.appendData(data!)
                 // callback from api
                 do {
                     self.jsonResult = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
-
+                    print("in the callback")
                     TourUpdateManager.sharedInstance.receiveDataReadyFromApi(self.jsonResult)
                 }
                 catch _ as NSError{

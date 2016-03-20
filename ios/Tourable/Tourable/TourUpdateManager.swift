@@ -42,20 +42,17 @@ public class TourUpdateManager: NSObject {
         self.currentTourKEYmetadata = TourIdParser().getTourMetadata(tourCode)
     }
     
-    
+    // this method received data from the tourMetadata and saves it into fields
     func receiveDataReadyFromApi(jsonResult: NSDictionary) {
-        // update all the fucking information ready for the TourSummary
-
         
         let minutes = jsonResult["estimatedTime"]
         let estimatedLenght = calculateTourLengthFromMinutes(minutes as! Int)
-        
         timeHours = estimatedLenght.timeHours
         timeMinutes = estimatedLenght.timeMins
         // you will need to pass jsonResult["version"] to the isTourUpToDate()
         isTourUpTodate = self.isTourUpToDate()
         expiresIn = daysLeftForTheTour(currentTourKEYmetadata["expiry"] as! String)
-        
+        print("saving fields in the tourUpdateManager")
         // call the tour summary to update tourSummary fields
         self.triggerTourMetaDataAvailableNotification()
     }

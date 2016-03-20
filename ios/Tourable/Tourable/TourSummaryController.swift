@@ -69,7 +69,6 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
         self.fetchingMetadataIndicator.frame = CGRectMake(0, screenSize.size.width, screenSize.size.width, screenSize.size.height)
         self.fetchingMetadataIndicator.startAnimating()
         
-        
         // download tourSummary data and then updated the view automatically with notifiers
         TourUpdateManager.sharedInstance.getCurrentData(tourId, tableRow: tableRow)
         TourUpdateManager.sharedInstance.getTourMetadata()
@@ -127,12 +126,14 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     // triggered if the TourUpdateManager has received latest Metadata for the current tour to be displayed
+    // this method saved the new sentences to be displayed and reload table
     func NotifiedTourSummaryMetaDataAvailable(){
         summaryData.isCurrent = false
-        
         // UPDATED FIELDS HERE AND THEN RELOAD DATA
         self.summaryTableData = formatDataForTable()
+        print("reloading table data")
         tableView.reloadData()
+        tableView.reloadInputViews()
     }
 
     //user has tapped update tour, modify UI and begin update.
@@ -187,8 +188,7 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
-        // Most of the time my data source is an array of something...  will replace with the actual name of the data source
+        return 3 //number of rows on the tourSummary is always the same
     }
     
     //
@@ -196,18 +196,24 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
         //get the cell at that point in the table
         let cell = tableView.dequeueReusableCellWithIdentifier("fakeCell")! as UITableViewCell
         
+        print("CALLING TABLE VIEW")
+        print("count:", summaryTableData.count)
+        
         if summaryTableData.count > 0 {
             
-            
-            
+            // show table and hide spinning wheel
+            self.tableView.hidden = false
+            self.fetchingMetadataIndicator.stopAnimating()
+            self.fetchingMetadataIndicator.hidden = true
+
             //set the text of the row
             cell.textLabel?.text = summaryTableData[indexPath.row]
-            
+
             //highlight expiry in red if there is little time left
             if indexPath.row == 2 && summaryData.expiresIn < 3 {
                 cell.textLabel?.textColor = UIColor.redColor()
             }
-            
+
             //Set the dynamic content of the update status row.
             if indexPath.row == 1 {
                 //tour is not upto date and not currently being updated, show update button.
@@ -220,22 +226,22 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
                     updateButton.addTarget(self, action: "updateButtonClicked:", forControlEvents: UIControlEvents.TouchUpInside)
                     updateButton.setTitle("UPDATE", forState: UIControlState.Normal)
                     cell.addSubview(updateButton)
-                    
+
                     //tour is up to date and not being updated, show the green tick
                 }else if summaryData.isCurrent && !isUpdating{
-                    
+
                     let tick_image = UIImage(named: "green_tick")
                     let tickFrame = UIImageView(image: tick_image)
                     tickFrame.center = CGPoint(x: view.bounds.width * 0.95, y: 60.0 / 2.0)
                     cell.addSubview(tickFrame)
-                    
+
                     //Tour is being updated, show the busy wheel
                 }else{
                     
                     updateIndicator.frame = CGRectMake(40, 60, 75, 24)
                     updateIndicator.center = CGPoint(x: view.bounds.width * 0.90, y: 60.0 / 2.0)
                     cell.addSubview(updateIndicator)
-                    
+
                 }
             }
 
