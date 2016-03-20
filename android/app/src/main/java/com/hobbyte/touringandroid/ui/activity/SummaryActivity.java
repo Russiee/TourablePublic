@@ -35,7 +35,9 @@ import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Set;
+import java.util.TimeZone;
 
 public class SummaryActivity extends AppCompatActivity {
 
@@ -74,11 +76,11 @@ public class SummaryActivity extends AppCompatActivity {
 
     private Boolean updating;
 
-    private long[] datetimes = {0};
-    private long durationSeconds;
-    private long durationMinutes;
-    private long durationHours;
-    private long durationDays;
+    private long datetime = 0;
+    private int durationSeconds;
+    private int durationMinutes;
+    private int durationHours;
+    private int durationDays;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +110,7 @@ public class SummaryActivity extends AppCompatActivity {
 
         parseDate();
 
-        if(doDownload) {
+        if (doDownload) {
             findViewById(R.id.downloadLayout).setVisibility(View.VISIBLE);
             executeDownload();
         } else {
@@ -212,6 +214,7 @@ public class SummaryActivity extends AppCompatActivity {
     private void displayExpiry() {
 
         TextView txtExpiry = (TextView) findViewById(R.id.txtExpiry);
+        txtExpiry.setText(String.format("Expires in "));
         txtExpiry.setText("Expires in: " +
                 String.valueOf(durationDays) + " days " +
                 String.valueOf(durationHours) + " hours " +
@@ -238,8 +241,7 @@ public class SummaryActivity extends AppCompatActivity {
             if (tourJSON != null) {
                 FileManager.saveJSON(getApplicationContext(), tourJSON, keyID, FileManager.TOUR_JSON);
                 return true;
-            }
-            else {
+            } else {
                 Log.e(TAG, "tourJSON was null");
                 return false;
             }
@@ -252,8 +254,7 @@ public class SummaryActivity extends AppCompatActivity {
                 displayTourInfo();
                 DownloadTourTask dThread = new DownloadTourTask(handler, keyID, tourID, withMedia);
                 dThread.start();
-            }
-            else {
+            } else {
                 Log.e(TAG, "TourJSON not fetched from server");
                 onTourDownloadFailedActions();
             }
@@ -327,25 +328,17 @@ public class SummaryActivity extends AppCompatActivity {
                 getApplicationContext().MODE_PRIVATE);
 
         String name = "empty";
-        String createdAt = "";
-        String updatedAt = "";
         int version = 0;
 
         try {
             name = tourJSON.getString("title");
-            createdAt = tourJSON.getString("createdAt");
-            updatedAt = tourJSON.getString("updatedAt");
             version = tourJSON.getInt("version");
         } catch (JSONException je) {
             je.printStackTrace();
         }
 
-        if(updating) {
-            dbHelper.updateRow(
-                    keyID, tourID,
-                    name, createdAt, updatedAt,
-                    String.valueOf(datetimes[0]), withMedia, version
-            );
+        if (updating) {
+            dbHelper.updateRow(keyID, tourID, name, String.valueOf(datetime), withMedia, version);
 
             Set<String> updateSet = prefs.getStringSet(getApplicationContext().getString(R.string.prefs_tours_to_update), null);
             if (updateSet != null) {
@@ -357,11 +350,7 @@ public class SummaryActivity extends AppCompatActivity {
                 }
             }
         } else {
-            dbHelper.putRow(
-                    keyID, tourID,
-                    name, createdAt, updatedAt,
-                    String.valueOf(datetimes[0]), withMedia, version
-            );
+            dbHelper.putRow(keyID, tourID, name, String.valueOf(datetime), withMedia, version);
         }
 
     }
@@ -432,11 +421,13 @@ public class SummaryActivity extends AppCompatActivity {
                 Intent intent = new Intent(SummaryActivity.this, SummaryActivity.class);
                 intent.putExtra(SummaryActivity.KEY_ID, keyID);
                 intent.putExtra(SummaryActivity.TOUR_ID, tourID);
-                if(expiryTimeString != null) {
+
+                if (expiryTimeString != null) {
                     intent.putExtra(SummaryActivity.EXPIRY_TIME_STRING, expiryTimeString);
                 } else {
                     intent.putExtra(SummaryActivity.EXPIRY_TIME_LONG, expiryTimeLong);
                 }
+
                 intent.putExtra(SummaryActivity.DOWNLOAD, true);
                 intent.putExtra(SummaryActivity.MEDIA, false);
                 intent.putExtra(SummaryActivity.UPDATING, updating);
@@ -450,11 +441,13 @@ public class SummaryActivity extends AppCompatActivity {
                 Intent intent = new Intent(SummaryActivity.this, SummaryActivity.class);
                 intent.putExtra(SummaryActivity.KEY_ID, keyID);
                 intent.putExtra(SummaryActivity.TOUR_ID, tourID);
-                if(expiryTimeString != null) {
+
+                if (expiryTimeString != null) {
                     intent.putExtra(SummaryActivity.EXPIRY_TIME_STRING, expiryTimeString);
                 } else {
                     intent.putExtra(SummaryActivity.EXPIRY_TIME_LONG, expiryTimeLong);
                 }
+
                 intent.putExtra(SummaryActivity.DOWNLOAD, true);
                 intent.putExtra(SummaryActivity.MEDIA, true);
                 intent.putExtra(SummaryActivity.UPDATING, updating);
@@ -478,24 +471,23 @@ public class SummaryActivity extends AppCompatActivity {
      */
     private void parseDate() {
 
-        if(expiryTimeString != null) {
+        if (expiryTimeString != null) {
             try {
-                datetimes = TourDBManager.convertStampToMillis(expiryTimeString);
-            } catch(ParseException e) {
+                datetime = TourDBManager.convertStampToMillis(expiryTimeString);
+            } catch (ParseException e) {
                 e.printStackTrace();
             }
         } else {
             try {
-                datetimes = TourDBManager.convertStampToMillis(String.valueOf(expiryTimeLong));
-            } catch(ParseException e) {
+                datetime = TourDBManager.convertStampToMillis(String.valueOf(expiryTimeLong));
+            } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
 
-        long currentDate = System.currentTimeMillis();
-        long duration = datetimes[0] - currentDate;
+        int duration = (int) (datetime - Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis());
         durationSeconds = duration / 1000 % 60;
-        durationMinutes = duration / (60*1000) % 60;
+        durationMinutes = duration / (60 * 1000) % 60;
         durationHours = duration / (60 * 60 * 1000) % 24;
         durationDays = duration / (24 * 60 * 60 * 1000);
     }

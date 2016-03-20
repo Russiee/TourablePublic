@@ -24,7 +24,7 @@ public final class TourDBContract {
         public static final String COL_TOUR_NAME          = "tourName";
         public static final String COL_DATE_EXPIRES_ON    = "expiresOn";
         public static final String COL_DATE_LAST_ACCESSED = "lastAccessedOn";
-        public static final String COL_HAS_VIDEO          = "hasVideo";
+        public static final String COL_HAS_MEDIA          = "hasMedia";
         public static final String COL_VERSION            = "version";
     }
 }
