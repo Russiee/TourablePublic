@@ -47,6 +47,7 @@ public class StartActivity extends AppCompatActivity {
 
     private String tourID;
     private String keyID;
+    private String keyName;
 
     private String expiryTimeString;
     private long expiryTimeLong;
@@ -331,6 +332,7 @@ public class StartActivity extends AppCompatActivity {
 
             // if the server returns JSON, extract needed details
             if (keyJSON != null) {
+                    keyName = key;
 
                 try {
                     tourID = keyJSON.getJSONObject("tour").getString("objectId");
