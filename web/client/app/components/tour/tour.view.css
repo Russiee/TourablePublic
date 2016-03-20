@@ -4,6 +4,7 @@
 
 .tour-container {
     max-width: 600px;
+    padding: 0;
 }
 
 .tour-overview-description {
@@ -66,7 +67,20 @@
 }
 
 .tour-section-description {
-    color: #162B49;
-    padding: 20px 20px 0px 20px;
+    background-color: #162B49;
+    color: #FFF;
+}
+
+.tour-section-description p {
     margin: 0;
+    padding: 20px;
+}
+
+/*Tour POI Styles*/
+
+.tour-poi img,
+.tour-poi video {
+    background-color: #DDD;
+    width: 100%;
+    max-width: 600px;
 }
