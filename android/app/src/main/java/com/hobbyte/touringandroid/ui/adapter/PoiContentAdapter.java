@@ -288,6 +288,7 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
 
                 contentView = (TextView) view.findViewById(R.id.poiContentTextView);
                 contentView.setText("Something went wrong\n");
+                Log.e(TAG, "poiContentAdapter could not find use type: " + listViewItem.getType());
 
                 return view;
 

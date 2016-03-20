@@ -20,7 +20,10 @@
         android:id="@+id/poiContentImageDesc"
         android:textColor="#000000"
         android:textStyle="italic"
-        android:padding="16dp"
-        android:textSize="@dimen/dimension_text_size_small" />
+        android:textSize="@dimen/dimension_text_size_small"
+        android:paddingLeft="16dp"
+        android:paddingTop="8dp"
+        android:paddingRight="8dp"
+        android:paddingBottom="8dp" />
 
 </LinearLayout>
