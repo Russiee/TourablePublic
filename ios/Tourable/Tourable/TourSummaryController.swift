@@ -64,7 +64,6 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
         
         // hide table view and show spinning wheel while downloading metadata
         self.tableView.hidden = true
-        let screenSize: CGRect = UIScreen.mainScreen().bounds
         self.fetchingMetadataIndicator.hidden = false
         self.fetchingMetadataIndicator.startAnimating()
         
