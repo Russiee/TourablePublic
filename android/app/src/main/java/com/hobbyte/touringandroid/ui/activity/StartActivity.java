@@ -45,6 +45,7 @@ public class StartActivity extends AppCompatActivity {
 
     private String tourID;
     private String keyID;
+    private String keyName;
 
     private String expiryTimeString;
     private long expiryTimeLong;
@@ -188,7 +189,6 @@ public class StartActivity extends AppCompatActivity {
      * Shows input box, keyboard and hides the existing tours table
      */
     private void showInput() {
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
 
@@ -225,10 +225,11 @@ public class StartActivity extends AppCompatActivity {
      */
     public void checkTourKey(String tourKey) {
         // current valid key: KCL-1010
-        if (tourKey.length() < 1)
-            return;
+        if (tourKey.length() < 1) return;
 
-        if (ServerAPI.checkConnection(this)) {
+        if (TourDBManager.getInstance(getApplicationContext()).doesTourKeyNameExist(tourKey)) {
+            showToast(getString(R.string.msg_tour_exists));
+        } else if (ServerAPI.checkConnection(this)) {
             // only check the key if we have an internet connection
             KeyCheckTask k = new KeyCheckTask();
             k.execute(tourKey);
@@ -315,8 +316,6 @@ public class StartActivity extends AppCompatActivity {
      */
     private class KeyCheckTask extends AsyncTask<String, Void, Boolean> {
 
-        private boolean exists;
-
         @Override
         protected Boolean doInBackground(String... params) {
             String key = params[0];
@@ -325,18 +324,11 @@ public class StartActivity extends AppCompatActivity {
 
             // if the server returns JSON, extract needed details
             if (keyJSON != null) {
+                    keyName = key;
 
                 try {
                     tourID = keyJSON.getJSONObject("tour").getString("objectId");
                     keyID = keyJSON.getString("objectId");
-                    exists = TourDBManager.getInstance(getApplicationContext()).doesTourExist(keyID);
-
-                    if (exists) {
-                        tourID = null;
-                        keyID = null;
-                        return false;
-                    }
-
                     expiryTimeString = keyJSON.getString("expiry");
 
                     FileManager.makeTourDirectories(keyID);
@@ -373,11 +365,8 @@ public class StartActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Boolean isValid) {
-
             if (isValid) {
                 showDownloadDialog();
-            } else if (exists) {
-                showToast(getString(R.string.msg_tour_exists));
             } else {
                 showToast(getString(R.string.msg_invalid_key));
             }

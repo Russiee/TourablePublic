@@ -43,6 +43,7 @@ public class SummaryActivity extends AppCompatActivity {
 
     public static final String KEY_ID = "keyID";
     public static final String TOUR_ID = "tourID";
+    public static final String KEY_NAME = "keyName";
     public static final String EXPIRY_TIME_LONG = "expiryTimeLong";
     public static final String EXPIRY_TIME_STRING = "expiryTimeString";
     public static final String DOWNLOAD = "download";
@@ -58,6 +59,7 @@ public class SummaryActivity extends AppCompatActivity {
 
     private String keyID;
     private String tourID;
+    private String keyName;
     private Boolean withMedia;
 
     private String expiryTimeString;
@@ -92,6 +94,7 @@ public class SummaryActivity extends AppCompatActivity {
         Intent intent = getIntent();
         keyID = intent.getStringExtra(KEY_ID);
         tourID = intent.getStringExtra(TOUR_ID);
+        keyName = intent.getStringExtra(KEY_NAME);
         expiryTimeString = intent.getStringExtra(EXPIRY_TIME_STRING);
         expiryTimeLong = intent.getLongExtra(EXPIRY_TIME_LONG, 0);
         Boolean doDownload = intent.getBooleanExtra(DOWNLOAD, false);
@@ -345,7 +348,7 @@ public class SummaryActivity extends AppCompatActivity {
                 }
             }
         } else {
-            dbHelper.putRow(keyID, tourID, name, expiryTimeString, withMedia, version);
+            dbHelper.putRow(keyID, tourID, keyName, name, expiryTimeString, withMedia, version);
         }
 
     }

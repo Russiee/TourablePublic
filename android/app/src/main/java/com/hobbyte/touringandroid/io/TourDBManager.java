@@ -172,7 +172,7 @@ public class TourDBManager extends SQLiteOpenHelper {
      * @param expiryDate when the tour expires
      * @param hasMedia whether or not the user opted to download the tour with video
      */
-    public void putRow(String keyID, String tourID, String tourName,
+    public void putRow(String keyID, String tourID, String keyName, String tourName,
                        String expiryDate, boolean hasMedia, int version) {
         open(true);
 
@@ -190,7 +190,7 @@ public class TourDBManager extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
 
         values.put(TourList.COL_KEY_ID, keyID);
-        values.put(TourList.COL_KEY_NAME, "helloDave");
+        values.put(TourList.COL_KEY_NAME, keyName);
         values.put(TourList.COL_TOUR_ID, tourID);
         values.put(TourList.COL_TOUR_NAME, tourName);
         values.put(TourList.COL_DATE_EXPIRES_ON, expiryLong);
@@ -395,15 +395,15 @@ public class TourDBManager extends SQLiteOpenHelper {
      * Checks if a key has already been used (i.e. there is a row for it in the db). Used when the
      * user enters a key, to prevent downloading duplicate tours.
      *
-     * @param keyID the ID of a tour key (not the tour ID itself)
+     * @param keyName the key that was first entered by the user to download the tour
      * @return true if the tour exists
      */
-    public boolean doesTourExist(String keyID) {
+    public boolean doesTourKeyNameExist(String keyName) {
         open(false);
 
         String[] cols = {TourList.COL_KEY_ID};
-        String where = TourList.COL_KEY_ID + " = ?";
-        String[] whereArgs = {keyID};
+        String where = TourList.COL_KEY_NAME + " = ?";
+        String[] whereArgs = {keyName};
 
         Cursor c = db.query(
                 TourList.TABLE_NAME, cols,
