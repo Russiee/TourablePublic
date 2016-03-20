@@ -1,5 +1,5 @@
 angular.module('tourable')
-    .controller('TourCtrl', function ($scope, $location, keyFactory, tourFactory) {
+    .controller('TourCtrl', function ($scope, $location, $state, keyFactory, tourFactory) {
 
         //verify that the key is valid again, in case the user tries to manipulate the url
         var verifyKey = keyFactory.verify($location.search().key);
@@ -34,10 +34,35 @@ angular.module('tourable')
             getBundle.then(function(response) {
                 console.log(response.data);
                 $scope.tour = response.data;
+                sessionStorage.setItem('tour', response.data);
+                if ($state.current.name === "tour.section" && $state.params.id) {
+                    if (sessionStorage.getItem('section')) {
+                        $scope.section = JSON.parse(sessionStorage.getItem('section'));
+                    } else {
+                        $location.url('/tour?key=' + $scope.key);
+                    }
+                }
+
             }, function (error) {
                 console.log("Error fetching tour bundle: ", error);
             });
         }
+
+
+//        function initSection() {
+//            if ($state.params.id === $scope.tour.objectId) {
+//                $scope.section = {
+//                    title: $scope.tour.title,
+//                    description: $scope.tour.description,
+//                    subsections: $scope.tour.sections,
+//                    pois: [],
+//                    previousSection: null
+//                };
+//            } else {
+//                sessionStorage.setItem('tour', response.data);
+//            }
+//        }
+
 
         $scope.startTour = function() {
             console.log($scope.tour.objectId);
@@ -49,6 +74,7 @@ angular.module('tourable')
                 pois: [],
                 previousSection: null
             };
+            sessionStorage.setItem('section', JSON.stringify($scope.section));
         };
 
         $scope.navBack = function() {
