@@ -11,8 +11,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.internal.view.ContextThemeWrapper;
-import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -22,28 +20,19 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.clans.fab.FloatingActionButton;
-import com.hobbyte.touringandroid.App;
 import com.hobbyte.touringandroid.R;
 import com.hobbyte.touringandroid.internet.ServerAPI;
 import com.hobbyte.touringandroid.internet.UpdateChecker;
 import com.hobbyte.touringandroid.io.FileManager;
-import com.hobbyte.touringandroid.io.TourDBContract;
 import com.hobbyte.touringandroid.io.TourDBManager;
 import com.hobbyte.touringandroid.ui.BackAwareEditText;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.util.Date;
 
 /**
  * @author Jonathan
@@ -359,7 +348,7 @@ public class StartActivity extends AppCompatActivity {
                         return false;
                     }
 
-                    expiryTimeString = keyJSON.getJSONObject("expiry").getString("iso");
+                    expiryTimeString = keyJSON.getString("expiry");
 
                     FileManager.makeTourDirectories(keyID);
                     FileManager.saveJSON(keyJSON, keyID, FileManager.KEY_JSON);
