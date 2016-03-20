@@ -31,7 +31,7 @@ tourable.config(function($stateProvider, $urlRouterProvider, $locationProvider) 
         controller: "TourCtrl"
     })
     .state('tour.poi', {
-        url: "/tour/section/{id}?key",
+        url: "/tour/poi/{id}?key",
         templateUrl: "/client/app/components/tour/components/poi.view.html",
         controller: "TourCtrl"
     })
