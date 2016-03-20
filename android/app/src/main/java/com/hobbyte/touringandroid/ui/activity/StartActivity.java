@@ -197,8 +197,10 @@ public class StartActivity extends AppCompatActivity {
      * Shows input box, keyboard and hides the existing tours table
      */
     private void showInput() {
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
+
         final View view = inflater.inflate(R.layout.add_tour_dialog, null);
         builder.setView(view);
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -209,12 +211,14 @@ public class StartActivity extends AppCompatActivity {
                 checkTourKey(key);
             }
         });
+
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
                 dialog.cancel();
             }
         });
+
         AlertDialog dialog = builder.create();
         dialog.show();
     }
