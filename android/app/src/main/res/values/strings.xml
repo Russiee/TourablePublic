@@ -44,9 +44,13 @@
     <string name="summary_activity_estimated_time">Estimated time:</string>
     <string name="summary_activity_version_is_current">Your version is current</string>
     <string name="summary_activity_new_version_is_available">A new version is available</string>
-    <string name="summary_activity_expires_in">Tour key expires in </string>
-    <string name="summary_activity_expires_in_day">days</string>
-    <string name="summary_activity_expires_in_days">day </string>
+    <string name="expires_in">Expires in</string>
+    <string name="expires_in_day">days</string>
+    <string name="expires_in_days">day</string>
+    <string name="expires_in_hours">hours</string>
+    <string name="expires_in_hour">hour</string>
+    <string name="expires_in_minutes">minutes</string>
+    <string name="expires_in_minute">minute</string>
     <string name="enter_tour_text">Enter the provided tour key: </string>
 
     <string name="msg_no_internet">No internet connection</string>
@@ -58,4 +62,6 @@
 
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+
+    <string name="space"> </string>
 </resources>
