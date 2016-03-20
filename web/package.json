@@ -4,7 +4,8 @@
   "description": "touring web component",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "./node_modules/bower/bin/bower install"
   },
   "repository": {
     "type": "git",
@@ -15,6 +16,7 @@
   "dependencies": {
     "basic-auth": "^1.0.3",
     "body-parser": "^1.15.0",
+    "bower": "^1.7.7",
     "express": "^4.13.4"
   },
   "devDependencies": {
