@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.hobbyte.touringandroid.App;
 import com.hobbyte.touringandroid.R;
 import com.hobbyte.touringandroid.tourdata.TourItem;
 
@@ -36,13 +37,13 @@ public class TourItemAdapter extends ArrayAdapter<TourItem> {
         if (selected.getType() == TourItem.TYPE_SUBSECTION) {
             if(position == 0) {
                 separator.setVisibility(View.VISIBLE);
-                separator.setText("SUBSECTIONS");
+                separator.setText(App.context.getString(R.string.tour_activity_subsection));
             }
             subsectionView.setText(selected.getTitle());
         } else {
             if(position == 0 || (position != 0) && getItem(position-1).getType() == TourItem.TYPE_SUBSECTION) {
                 separator.setVisibility(View.VISIBLE);
-                separator.setText("POINTS OF INTEREST");
+                separator.setText(App.context.getString(R.string.tour_activity_poi));
             }
             subsectionView.setText(selected.getTitle());
         }
