@@ -5,9 +5,20 @@ var organizationTest = require('../tests/organization-test.js');
 var tourTest = require('../tests/tour-test.js');
 var adminTest = require('../tests/admin-test.js');
 var poiTest = require('../tests/poi-test.js');
-var keyTest = require('../tests/key-test.js')
-var sectionTest = require('../tests/section-test.js')
+var keyTest = require('../tests/key-test.js');
+var sectionTest = require('../tests/section-test.js');
+var bundleTest = require('../tests/bundle-test.js');
 
+//Test suite for testing the organization, admin, key, tour, POI and section routes
+//Tests consist of checking all functions of the routes
+//Each route is tested by adding it to the API (POST function)
+//The object is then queried (GET function)
+//The object is then updated (PUT function)
+//The object is then queried again to confirm update changes (GET function)
+//The object is then deleted (DELETE function)
+//The object is then queried a final time to confirm it no longer exists or is connected to other objects (GET function)
+
+//The test suite is started by typing 'gulp tests' in the terminal when in the project directory
 
 describe('Route tests', function() {
 var organizationObjID;
@@ -17,8 +28,9 @@ var adminObjID;
 var tourObjID;
 var keyObjID;
 
-
+//The source for all requests, the database url 
 var url = 'http://touring-api.herokuapp.com/';
+//Tests time out after 10s (not the default of 2s), allowing for the database to 'wake up'
 this.timeout(10000);
 
 
@@ -181,6 +193,16 @@ this.timeout(10000);
             done();
         });
     })
+    
+    //Bundle test
+    
+    it('should correctly get the bundle of the tour', function(done){
+        bundleTest.GET(tourObjID, url, function(){
+            done();
+        });
+    })
+    
+    
     
     //Begin deleting from bottom up, and checking they are deleted
         
