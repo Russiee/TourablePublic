@@ -66,7 +66,6 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
         self.tableView.hidden = true
         let screenSize: CGRect = UIScreen.mainScreen().bounds
         self.fetchingMetadataIndicator.hidden = false
-        self.fetchingMetadataIndicator.frame = CGRectMake(0, screenSize.size.width, screenSize.size.width, screenSize.size.height)
         self.fetchingMetadataIndicator.startAnimating()
         
         // download tourSummary data and then updated the view automatically with notifiers
