@@ -37,7 +37,7 @@ import java.util.TimeZone;
 public class TourDBManager extends SQLiteOpenHelper {
     private static final String TAG = "TourDBManager";
 
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "TourData.db";
 
     public static final String dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
@@ -56,7 +56,7 @@ public class TourDBManager extends SQLiteOpenHelper {
                     TourList.COL_TOUR_NAME + " TEXT NOT NULL," +
                     TourList.COL_DATE_EXPIRES_ON + " NUMERIC," +
                     TourList.COL_DATE_LAST_ACCESSED + " NUMERIC," +
-                    TourList.COL_HAS_VIDEO + " INTEGER DEFAULT 0," +
+                    TourList.COL_HAS_MEDIA + " INTEGER DEFAULT 0," +
                     TourList.COL_VERSION + " NUMERIC NOT NULL" +
             ")";
 
@@ -159,7 +159,7 @@ public class TourDBManager extends SQLiteOpenHelper {
     }
 
     /**
-     * Insert a tour entry into the db. All fields, with the exception of `db` and `hasVideo`, will
+     * Insert a tour entry into the db. All fields, with the exception of `hasMedia`, will
      * be extracted from JSON that was fetched from the server.
      * <p>
      * All the timestamp parameters should be passed in the string form in which the server stores
@@ -168,24 +168,22 @@ public class TourDBManager extends SQLiteOpenHelper {
      * @param keyID the objectId of the key used to fetch the tour
      * @param tourID the objectId of the tour itself
      * @param tourName the tour's title
-     * @param creationDate when the tour was created
-     * @param updateDate when the tour was last updated
      * @param expiryDate when the tour expires
-     * @param hasVideo whether or not the user opted to download the tour with video
+     * @param hasMedia whether or not the user opted to download the tour with video
      */
-    public void putRow(String keyID, String tourID, String tourName, String creationDate,
-                       String updateDate, String expiryDate, boolean hasVideo, int version) {
+    public void putRow(String keyID, String tourID, String tourName,
+                       String expiryDate, boolean hasMedia, int version) {
         open(true);
 
-        int video = (hasVideo ? 1 : 0);
-        long[] datetimes;
+        int video = (hasMedia ? 1 : 0);
+        long expiryLong;
 
         try {
-            datetimes = convertStampToMillis(creationDate, updateDate, expiryDate);
+            expiryLong = convertStampToMillis(expiryDate);
         } catch (ParseException e) {
             e.printStackTrace();
             // is there a better way to handle this?
-            datetimes = new long[] {1, 1, 1};
+            expiryLong = 100;
         }
 
         ContentValues values = new ContentValues();
@@ -193,12 +191,12 @@ public class TourDBManager extends SQLiteOpenHelper {
         values.put(TourList.COL_KEY_ID, keyID);
         values.put(TourList.COL_TOUR_ID, tourID);
         values.put(TourList.COL_TOUR_NAME, tourName);
-        values.put(TourList.COL_DATE_EXPIRES_ON, datetimes[2]);
+        values.put(TourList.COL_DATE_EXPIRES_ON, expiryLong);
         values.put(
                 TourList.COL_DATE_LAST_ACCESSED,
                 Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis()
         );
-        values.put(TourList.COL_HAS_VIDEO, video);
+        values.put(TourList.COL_HAS_MEDIA, video);
         values.put(TourList.COL_VERSION, version);
 
         db.insert(TourList.TABLE_NAME, null, values);
@@ -220,7 +218,7 @@ public class TourDBManager extends SQLiteOpenHelper {
     }
 
     /**
-     * Update a tour entry in the db. All fields, with the exception of `db` and `hasVideo`, will
+     * Update a tour entry in the db. All fields, with the exception of `db` and `hasMedia`, will
      * be extracted from JSON that was fetched from the server.
      * <p>
      * All the timestamp parameters should be passed in the string form in which the server stores
@@ -229,44 +227,41 @@ public class TourDBManager extends SQLiteOpenHelper {
      * @param keyID the objectId of the key used to fetch the tour
      * @param tourID the objectId of the tour itself
      * @param tourName the tour's title
-     * @param creationDate when the tour was created
-     * @param updateDate when the tour was last updated
      * @param expiryDate when the tour expires
-     * @param hasVideo whether or not the user opted to download the tour with video
+     * @param hasMedia whether or not the user opted to download the tour with video
      * @param version the current version of the tour
      */
-    public void updateRow(String keyID, String tourID, String tourName, String creationDate,
-                          String updateDate, String expiryDate, boolean hasVideo, int version) {
-
+    public void updateRow(String keyID, String tourID, String tourName,
+                          String expiryDate, boolean hasMedia, int version) {
         open(true);
 
-        int video = (hasVideo ? 1 : 0);
-        long[] datetimes;
+        int video = (hasMedia ? 1 : 0);
+        long expiryLong;
 
         try {
-            datetimes = convertStampToMillis(creationDate, updateDate, expiryDate);
+            expiryLong = convertStampToMillis(expiryDate);
         } catch (ParseException e) {
             e.printStackTrace();
             // is there a better way to handle this?
-            datetimes = new long[] {1, 1, 1};
+            expiryLong = 100;
         }
 
-        String where = TourList.COL_TOUR_ID + " = ";
-        String whereArgs = "'" + tourID + "'";
+        String where = TourList.COL_TOUR_ID + " = ?";
+        String[] whereArgs = {keyID};
 
         ContentValues values = new ContentValues();
 
         values.put(TourList.COL_TOUR_ID, tourID);
         values.put(TourList.COL_TOUR_NAME, tourName);
-        values.put(TourList.COL_DATE_EXPIRES_ON, datetimes[2]);
+        values.put(TourList.COL_DATE_EXPIRES_ON, expiryLong);
         values.put(
                 TourList.COL_DATE_LAST_ACCESSED,
                 Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis()
         );
-        values.put(TourList.COL_HAS_VIDEO, video);
+        values.put(TourList.COL_HAS_MEDIA, video);
         values.put(TourList.COL_VERSION, version);
 
-        db.update(TourList.TABLE_NAME, values, where + whereArgs, null);
+        db.update(TourList.TABLE_NAME, values, where, whereArgs);
     }
 
     /**
@@ -448,7 +443,7 @@ public class TourDBManager extends SQLiteOpenHelper {
     public boolean doesTourHaveVideo(String keyID) {
         open(false);
 
-        String[] cols = {TourList.COL_HAS_VIDEO};
+        String[] cols = {TourList.COL_HAS_MEDIA};
         String where = TourList.COL_KEY_ID + " = ?";
         String[] whereArgs = {keyID};
 
@@ -459,32 +454,30 @@ public class TourDBManager extends SQLiteOpenHelper {
         );
 
         c.moveToFirst();
-        boolean hasVideo = c.getInt(0) == 1;
+        boolean hasMedia = c.getInt(0) == 1;
 
         c.close();
-        return hasVideo;
+        return hasMedia;
     }
 
     /**
      * Takes one or more timestamps and converts them into milliseconds since Epoch.
      *
-     * @param timeArgs one or more timestamps
+     * @param timestamp one or more timestamps
      * @return millisecond representations of the provided timestamps
      * @throws ParseException if the timestamps don't match the dateFormat
      */
-    public static long[] convertStampToMillis(String... timeArgs) throws ParseException {
+    public static long convertStampToMillis(String timestamp) throws ParseException {
         SimpleDateFormat df = new SimpleDateFormat(dateFormat);
         df.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-        long[] toReturn = new long[timeArgs.length];
+        long toReturn;
 
-        for (int i = 0; i < timeArgs.length; i++) {
-            if(timeArgs[i].contains("T")) {
-                Date date = df.parse(timeArgs[i]);
-                toReturn[i] = date.getTime();
-            } else {
-                toReturn[i] = Long.valueOf(timeArgs[i]);
-            }
+        if(timestamp.contains("T")) {
+            Date date = df.parse(timestamp);
+            toReturn = date.getTime();
+        } else {
+            toReturn = Long.valueOf(timestamp);
         }
 
         return toReturn;
