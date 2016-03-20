@@ -10,7 +10,13 @@ gulp.task('default', function() {
       })
 });
 
-gulp.task('tests', function () {
+gulp.task('route tests', function () {
+    return gulp.src(['tests/route-tests.js'], { read: false })
+        .pipe(mocha({ reporter: 'spec' }))
+        .on('error', util.log);
+});
+
+gulp.task('validate tests', function () {
     return gulp.src(['tests/route-tests.js'], { read: false })
         .pipe(mocha({ reporter: 'spec' }))
         .on('error', util.log);
