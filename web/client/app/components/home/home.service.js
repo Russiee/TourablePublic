@@ -6,15 +6,10 @@ tourable.factory('keyFactory', function($http, $q){
                     method: 'GET',
                     url: 'http://touring-api.herokuapp.com/api/v1/key/verify/' + key
                 }).then(function success(response) {
-                    console.log(response);
                     resolve (response);
-                    // this callback will be called asynchronously
-                    // when the response is available
                 }, function error(response) {
-                    console.log("error", response);
+                    console.log("Error verifying key: ", response);
                     reject (response);
-                    // called asynchronously if an error occurs
-                    // or server returns response with an error status.
                 });
             });
         }

@@ -1,5 +1,8 @@
 tourable.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 
+    Parse.initialize("touring", "2368AB2DAA73D3CB6B55555CEAF6C");
+    Parse.serverURL = 'http://touring-db.herokuapp.com/parse';
+
     $locationProvider.html5Mode(true);
 
     //TODO change this to 404

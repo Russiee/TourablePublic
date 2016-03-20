@@ -7,7 +7,7 @@ angular.module('tourable')
                 $location.url('/tour?key=' + key);
                 console.log('Success: ' + response);
             }, function(error) {
-                alert("KEY REJECTED ASSHOLE");
+                alert("KEY REJECTED");
                 console.log('Failed: ' + error);
             });
         };
