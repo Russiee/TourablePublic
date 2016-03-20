@@ -12,6 +12,14 @@
     color: #D8DCE0;
     padding-top: 20px;
     padding-bottom: 20px;
+    z-index: 100;
+}
+
+.navbar-default .navbar-nav > li > a:focus,
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:active,
+.navbar-default .navbar-nav > li > a:visited {
+    color: #D8DCE0;
 }
 
 .navbar-center {
@@ -20,6 +28,7 @@
     left: 0;
     text-align: center;
     margin: 0 auto;
+    z-index: 0;
 }
 
 .tour-navbar-title {

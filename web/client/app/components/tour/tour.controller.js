@@ -1,6 +1,10 @@
 angular.module('tourable')
     .controller('TourCtrl', function ($scope, $location, $state, keyFactory, tourFactory) {
 
+        if ($state.current.name === "tour.section" && $state.params.path.length === 0) {
+            $location.url('/tour?key=' + $scope.key);
+        }
+
         //verify that the key is valid again, in case the user tries to manipulate the url
         var verifyKey = keyFactory.verify($location.search().key);
         verifyKey.then(function(response) {
@@ -35,11 +39,12 @@ angular.module('tourable')
                 console.log(response.data);
                 $scope.tour = response.data;
                 sessionStorage.setItem('tour', response.data);
-                if ($state.current.name === "tour.section" && $state.params.id) {
+
+                console.log($state.params);
+
+                if ($state.current.name === "tour.section" && $state.params.path.length > 0) {
                     if (sessionStorage.getItem('section')) {
                         $scope.section = JSON.parse(sessionStorage.getItem('section'));
-                    } else {
-                        $location.url('/tour?key=' + $scope.key);
                     }
                 }
 
@@ -47,22 +52,6 @@ angular.module('tourable')
                 console.log("Error fetching tour bundle: ", error);
             });
         }
-
-
-//        function initSection() {
-//            if ($state.params.id === $scope.tour.objectId) {
-//                $scope.section = {
-//                    title: $scope.tour.title,
-//                    description: $scope.tour.description,
-//                    subsections: $scope.tour.sections,
-//                    pois: [],
-//                    previousSection: null
-//                };
-//            } else {
-//                sessionStorage.setItem('tour', response.data);
-//            }
-//        }
-
 
         $scope.startTour = function() {
             console.log($scope.tour.objectId);
@@ -78,7 +67,7 @@ angular.module('tourable')
         };
 
         $scope.navBack = function() {
-            if ($scope.previousSection === null) {
+            if ($scope.section.previousSection === null) {
                 $location.url('/tour?key=' + $scope.key);
             } else {
                 $location.url('/tour/section/' + $scope.section.previousSection.objectId + '?key=' + $scope.key);
