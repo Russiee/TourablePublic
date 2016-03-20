@@ -9,7 +9,6 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -27,7 +26,6 @@ import android.widget.Toast;
 
 import com.hobbyte.touringandroid.R;
 import com.hobbyte.touringandroid.internet.ServerAPI;
-import com.hobbyte.touringandroid.internet.UpdateChecker;
 import com.hobbyte.touringandroid.io.FileManager;
 import com.hobbyte.touringandroid.io.TourDBManager;
 
@@ -131,8 +129,7 @@ public class StartActivity extends AppCompatActivity {
             addTourButton.setTextColor(res.getColor(R.color.colorWhiteText));
             addTourButton.setText(getString(R.string.start_activity_add_tour));
 
-            ActionBar actionBar = getSupportActionBar();
-            if (actionBar != null) actionBar.hide();
+            findViewById(R.id.toolbarStart).setVisibility(View.GONE);
 
         } else {
 
@@ -140,8 +137,7 @@ public class StartActivity extends AppCompatActivity {
             addTourButton.setTextColor(res.getColor(R.color.colorDarkText));
             addTourButton.setText(getString(R.string.start_activity_add_new_tour));
 
-            ActionBar actionBar = getSupportActionBar();
-            if (actionBar != null) actionBar.show();
+            findViewById(R.id.toolbarStart).setVisibility(View.VISIBLE);
 
             layout.getRootView().setBackgroundColor(res.getColor(R.color.colorLightBackground));
 
@@ -244,7 +240,7 @@ public class StartActivity extends AppCompatActivity {
     /**
      * Moves the app to the {@link SummaryActivity}, ready to start the tour
      */
-    private void goToTour(String keyID, String tourID) {
+    private void goToTour(boolean downloadNeeded, boolean withMedia) {
         Intent intent = new Intent(this, SummaryActivity.class);
         intent.putExtra(SummaryActivity.KEY_ID, keyID);
         intent.putExtra(SummaryActivity.TOUR_ID, tourID);
