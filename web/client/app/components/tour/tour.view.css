@@ -123,3 +123,13 @@
 .tour-poi-quiz {
     padding-bottom: 20px;
 }
+
+.tour-poi-quiz-success {
+    background-color: #B2FFB1;
+    border-color: #B2FFB1;
+}
+
+.tour-poi-quiz-error {
+    background-color: #FFB2B1;
+    border-color: #FFB2B1;
+}

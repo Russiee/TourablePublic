@@ -17,10 +17,10 @@
         <div class="tour-poi-quiz" ng-if="component.type === 'quiz'">
             <h4>{{component.question}}</h4>
             <ul class="tour-cell-list">
-            <div ng-repeat="option in component.options track by $index">
-                <li class="cursor-pointer" ng-click="checkQuizSolution()">{{option}}</li>
-            </div>
-        </ul>
+                <div ng-repeat="option in component.options track by $index">
+                    <li class="cursor-pointer" ng-class="{'tour-poi-quiz-success': solve !== undefined, 'tour-poi-quiz-error': solve !== undefined && solve === $index && solve !== component.solution}" ng-click="solve = $index">{{option}}</li>
+                </div>
+            </ul>
         </div>
     </div>
 

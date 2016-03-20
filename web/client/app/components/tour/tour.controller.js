@@ -120,4 +120,6 @@ angular.module('tourable')
             var newPath = $state.params.path + '#' + index;
             $state.go('tour.poi', {path: newPath, key: $scope.key})
         }
+
+        $scope.solve;
     });
