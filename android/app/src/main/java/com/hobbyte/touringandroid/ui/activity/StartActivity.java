@@ -26,7 +26,6 @@ import android.widget.Toast;
 
 import com.hobbyte.touringandroid.R;
 import com.hobbyte.touringandroid.internet.ServerAPI;
-import com.hobbyte.touringandroid.internet.UpdateChecker;
 import com.hobbyte.touringandroid.io.FileManager;
 import com.hobbyte.touringandroid.io.TourDBManager;
 import com.hobbyte.touringandroid.ui.BackAwareEditText;
@@ -65,8 +64,6 @@ public class StartActivity extends AppCompatActivity {
     private Button fab;
 
     private Toolbar toolbar;
-
-    private boolean exists;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -245,17 +242,18 @@ public class StartActivity extends AppCompatActivity {
      */
     public void checkTourKey(String tourKey) {
         // current valid key: KCL-1010
-        if (tourKey.length() < 1)
-            return;
+        if (tourKey.length() < 1) return;
 
-        if (ServerAPI.checkConnection(this)) {
+        if (TourDBManager.getInstance(getApplicationContext()).doesTourKeyNameExist(tourKey)) {
+            showToast(getString(R.string.msg_tour_exists));
+        } else if (ServerAPI.checkConnection(this)) {
             // only check the key if we have an internet connection
             KeyCheckTask k = new KeyCheckTask();
             k.execute(tourKey);
         } else {
             showToast(getString(R.string.msg_no_internet));
-            textKey.setText("");
         }
+        textKey.setText("");
     }
 
     /**
@@ -267,6 +265,7 @@ public class StartActivity extends AppCompatActivity {
         Intent intent = new Intent(this, SummaryActivity.class);
         intent.putExtra(SummaryActivity.KEY_ID, keyID);
         intent.putExtra(SummaryActivity.TOUR_ID, tourID);
+
         if(expiryTimeString != null) {
             intent.putExtra(SummaryActivity.EXPIRY_TIME_STRING, expiryTimeString);
         } else {
@@ -341,14 +340,6 @@ public class StartActivity extends AppCompatActivity {
                 try {
                     tourID = keyJSON.getJSONObject("tour").getString("objectId");
                     keyID = keyJSON.getString("objectId");
-                    exists = TourDBManager.getInstance(getApplicationContext()).doesTourExist(keyID);
-
-                    if (exists) {
-                        tourID = null;
-                        keyID = null;
-                        return false;
-                    }
-
                     expiryTimeString = keyJSON.getString("expiry");
 
                     FileManager.makeTourDirectories(keyID);
@@ -385,14 +376,11 @@ public class StartActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Boolean isValid) {
-            textKey.setText("");
             submitButton.setEnabled(true);
             textKey.setEnabled(true);
 
             if (isValid) {
                 showDownloadDialog();
-            } else if(exists) {
-                showToast(getString(R.string.msg_tour_exists));
             } else {
                 showToast(getString(R.string.msg_invalid_key));
             }
