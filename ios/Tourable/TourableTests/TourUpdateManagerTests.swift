@@ -28,7 +28,7 @@ class TourUpdateManagerTests: XCTestCase {
         let formatter = NSDateFormatter()
         formatter.dateFormat = "yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"
        
-        let date = TourUpdateManager.sharedInstance.obtainDateFromString(dateInString)
+        let date = TourUpdateManager.sharedInstance.getDateFromString(dateInString)
 
         let newDateInString = formatter.stringFromDate(date)
 
@@ -65,7 +65,7 @@ class TourUpdateManagerTests: XCTestCase {
     
     func testObtainDateFromStringSuccess() {
         let dateInString = "2016-02-24T12:32:06.952Z"
-        let actualDate = TourUpdateManager.sharedInstance.obtainDateFromString(dateInString)
+        let actualDate = TourUpdateManager.sharedInstance.getDateFromString(dateInString)
         let actualDateMirror = Mirror(reflecting: actualDate) // mirror copy of the object to access type
         XCTAssertEqual("__NSDate", String(actualDateMirror.subjectType))
     }

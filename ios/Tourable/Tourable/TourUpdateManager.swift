@@ -176,7 +176,7 @@ public class TourUpdateManager: NSObject {
         // GET RID OF NOTIFIER!
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedValid", name: validIdNotificationKey, object: nil)
         print("triggering update")
-        TourDeleter.sharedInstance.deleteTour(tourTableRow)
+        TourDeleter.sharedInstance.deleteTour(tourCode)
         ApiConnector.sharedInstance.initiateConnection(tourCode, isCheckingForUpdate: false)
     }
     
