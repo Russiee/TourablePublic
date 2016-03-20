@@ -18,6 +18,7 @@ import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -139,8 +140,6 @@ public class StartActivity extends AppCompatActivity {
 
         } else {
 
-
-
             addTourButton.setBackgroundColor(res.getColor(R.color.buttonGrey));
             addTourButton.setTextColor(res.getColor(R.color.colorDarkText));
             addTourButton.setText(getString(R.string.start_activity_add_new_tour));
@@ -203,7 +202,7 @@ public class StartActivity extends AppCompatActivity {
 
         final View view = inflater.inflate(R.layout.add_tour_dialog, null);
         builder.setView(view);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
                 EditText tourText = (EditText) view.findViewById(R.id.textKey);
@@ -220,7 +219,12 @@ public class StartActivity extends AppCompatActivity {
         });
 
         AlertDialog dialog = builder.create();
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         dialog.show();
+
+        Resources res = getResources();
+        dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(res.getColor(R.color.colorAccent));
+        dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(res.getColor(R.color.colorAccent));
     }
 
     /**
