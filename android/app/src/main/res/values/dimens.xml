@@ -15,4 +15,8 @@
 
     <!-- Shared dimensions-->
     <dimen name="progress_bar_height">16dp</dimen>
+
+    <dimen name="dimension_text_size">18sp</dimen>
+    <dimen name="dimension_text_size_small">14sp</dimen>
+
 </resources>

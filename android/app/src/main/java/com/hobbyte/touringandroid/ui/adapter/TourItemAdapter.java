@@ -1,7 +1,6 @@
 package com.hobbyte.touringandroid.ui.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +40,7 @@ public class TourItemAdapter extends ArrayAdapter<TourItem> {
             }
             subsectionView.setText(selected.getTitle());
         } else {
-            if((position != 0) && getItem(position-1).getType() == TourItem.TYPE_SUBSECTION) {
+            if(position == 0 || (position != 0) && getItem(position-1).getType() == TourItem.TYPE_SUBSECTION) {
                 separator.setVisibility(View.VISIBLE);
                 separator.setText("POINTS OF INTEREST");
             }

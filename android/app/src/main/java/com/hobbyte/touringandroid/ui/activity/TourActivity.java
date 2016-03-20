@@ -39,9 +39,8 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
 
     private static String keyID;
 
-    private Toolbar toolbar;
-
     private TextView sectionDescription;
+    private Toolbar toolbar;
 
     private Tour tour;
     private SubSection currentSection;
@@ -55,34 +54,35 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_tour);
-            App app = (App) this.getApplicationContext();
-            app.setCurrentActivity(this);
+        setContentView(R.layout.activity_tour);
+        App app = (App) this.getApplicationContext();
+        app.setCurrentActivity(this);
 
-            Intent intent = getIntent();
-            keyID = intent.getStringExtra(INTENT_KEY_ID);
-            String title = intent.getStringExtra(INTENT_TITLE);
+        Intent intent = getIntent();
+        keyID = intent.getStringExtra(INTENT_KEY_ID);
+        String title = intent.getStringExtra(INTENT_TITLE);
 
-            //Created my own backstack to save the subsections previously clicked on and added to Toolbar
-            backStack = new LinkedList<>();
+        //Created my own backstack to save the subsections previously clicked on and added to Toolbar
+        backStack = new LinkedList<>();
 
-            backToSummary = false; //Checks whether back has been pressed at Root, and whether warning given to press back again
+        backToSummary = false; //Checks whether back has been pressed at Root, and whether warning given to press back again
 
-            toolbar = (Toolbar) findViewById(R.id.toolbar);
-            toolbar.setTitle(title);
-            toolbar.setNavigationIcon(R.mipmap.ic_keyboard_backspace_white_36dp);
-
-            sectionDescription = (TextView) findViewById(R.id.sectionDescription);
-            setSupportActionBar(toolbar);
-            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onBackPressed();
-                }
-            });
-            TourBuilderTask tbt = new TourBuilderTask();
-            tbt.execute();
-        }
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(title);
+        sectionDescription = (TextView) findViewById(R.id.sectionDescription);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha));
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                backToSummary = true;
+                onBackPressed();
+                backToSummary = false;
+            }
+        });
+        TourBuilderTask tbt = new TourBuilderTask();
+        tbt.execute();
+    }
 
     /**
      * Listens for a back button press and displays previously opened fragment
@@ -91,13 +91,13 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
      */
     @Override
     public void onBackPressed() {
-        if (backStack.size() > 1 && !backToSummary) {
+        if (backStack.size() > 1) {
             currentSection = backStack.getLast();
             backStack.removeLast();
             backToSummary = false;
             loadCurrentSection();
         } else if (!backToSummary) {
-            Toast.makeText(getApplicationContext(), "Please press back again to exit", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Press back again to exit", Toast.LENGTH_SHORT).show();
             backToSummary = true;
         } else if (backToSummary) {
             super.onBackPressed();
@@ -109,6 +109,7 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
 
     /**
      * Opens appropriate Section or PointOfInterest depending on the item clicked on
+     *
      * @param position position of the item clicked on
      */
 

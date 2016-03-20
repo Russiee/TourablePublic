@@ -3,121 +3,55 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:animateLayoutChanges="true"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".ui.activity.StartActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbarStart"
+        app:titleTextAppearance="@style/Toolbar.TitleText"
+        app:titleTextColor="@android:color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="false"
         android:background="@color/colorPrimary"
-        android:minHeight="?android:attr/actionBarSize"
-        android:paddingRight="@dimen/activity_horizontal_margin"
         android:elevation="4dp"
-        android:layout_alignParentStart="true" >
+        android:minHeight="?android:attr/actionBarSize"
+        android:paddingRight="@dimen/activity_horizontal_margin">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textColor="#ffffff"
-            android:id="@+id/toolbar_title"
-            android:textSize="25sp"/>
-        </android.support.v7.widget.Toolbar>
+    </android.support.v7.widget.Toolbar>
 
     <LinearLayout
         android:id="@+id/previousToursLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/addTourButton"
         android:layout_alignParentStart="false"
+        android:layout_below="@+id/toolbarStart"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:paddingTop="30dp"
-        android:layout_below="@+id/toolbarStart">
-
-        <View
-            android:paddingLeft="18dp"
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:background="#D9DDE1"
-            android:id="@+id/divider"/>
+        android:paddingTop="30dp">
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/keyEntryLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:layout_centerVertical="true"
-        android:orientation="vertical"
-        android:visibility="invisible">
-
-        <TextView
-            android:id="@+id/entryTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/start_activity_enter_key"
-            android:textColor="#ffffff"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <com.hobbyte.touringandroid.ui.BackAwareEditText
-                android:id="@+id/textEnterTour"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_weight="1"
-                android:inputType="text"
-                android:textColor="#ffffff"/>
-
-            <Button
-                android:id="@+id/buttonSubmitKey"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:color="@color/colorPrimary"
-                android:onClick="checkTourKey"
-                android:text="@string/submit_key_button_text"
-                android:textColor="@color/colorPrimary" />
-        </LinearLayout>
-
-    </LinearLayout>
-
-
-    <RelativeLayout
+    <Button
+        android:id="@+id/addTourButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:layout_alignParentStart="false"
-        android:layout_alignParentEnd="false"
-        android:layout_centerInParent="true"
-        android:layout_below="@+id/keyEntryLayout">
-
-        <Button
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="false"
-            android:layout_alignParentEnd="false"
-            android:layout_gravity="end"
-            android:text="Add Another Tour"
-            android:fontFamily="sans-serif"
-            android:textStyle="bold"
-            android:textAllCaps="false"
-            android:textColor="@color/colorPrimary"
-            android:elevation="20dp"
-            android:paddingTop="18dp"
-            android:paddingBottom="18dp"
-            android:paddingLeft="30dp"
-            android:paddingRight="30dp"
-            android:layout_centerHorizontal="true" />
-
-    </RelativeLayout>
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="end"
+        android:layout_marginBottom="84dp"
+        android:elevation="20dp"
+        android:fontFamily="sans-serif"
+        android:paddingBottom="20dp"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:paddingTop="20dp"
+        android:text="@string/start_activity_add_new_tour"
+        android:textAllCaps="false"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold" />
 
 </RelativeLayout>
