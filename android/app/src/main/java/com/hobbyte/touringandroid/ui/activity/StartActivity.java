@@ -245,6 +245,7 @@ public class StartActivity extends AppCompatActivity {
         Intent intent = new Intent(this, SummaryActivity.class);
         intent.putExtra(SummaryActivity.KEY_ID, keyID);
         intent.putExtra(SummaryActivity.TOUR_ID, tourID);
+        intent.putExtra(SummaryActivity.KEY_NAME, keyName);
         intent.putExtra(SummaryActivity.DOWNLOAD, downloadNeeded);
         intent.putExtra(SummaryActivity.MEDIA, withMedia);
 
