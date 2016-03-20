@@ -37,7 +37,7 @@ import java.util.TimeZone;
 public class TourDBManager extends SQLiteOpenHelper {
     private static final String TAG = "TourDBManager";
 
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 3;
     public static final String DATABASE_NAME = "TourData.db";
 
     public static final String SERVER_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
@@ -52,6 +52,7 @@ public class TourDBManager extends SQLiteOpenHelper {
     private static final String SQL_CREATE_TABLE =
             "CREATE TABLE " + TourList.TABLE_NAME + " (" +
                     TourList.COL_KEY_ID + " TEXT PRIMARY KEY," +
+                    TourList.COL_KEY_NAME + " TEXT NOT NULL," +
                     TourList.COL_TOUR_ID + " TEXT NOT NULL," +
                     TourList.COL_TOUR_NAME + " TEXT NOT NULL," +
                     TourList.COL_DATE_EXPIRES_ON + " NUMERIC," +
@@ -189,6 +190,7 @@ public class TourDBManager extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
 
         values.put(TourList.COL_KEY_ID, keyID);
+        values.put(TourList.COL_KEY_NAME, "helloDave");
         values.put(TourList.COL_TOUR_ID, tourID);
         values.put(TourList.COL_TOUR_NAME, tourName);
         values.put(TourList.COL_DATE_EXPIRES_ON, expiryLong);
