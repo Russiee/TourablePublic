@@ -1,44 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/tourCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:visibility="visible"
     android:orientation="vertical"
-    android:theme="@style/AppTheme">
+    android:theme="@style/AppTheme"
+    android:visibility="visible">
 
-        <LinearLayout
+    <LinearLayout
+        android:id="@+id/tourItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/textTourName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
-            android:background="#ffffff"
-            android:id="@+id/tourItem"
-            android:orientation="horizontal">
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/dimension_text_size" />
 
-            <TextView
-                android:id="@+id/textTourName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimary"
-                android:layout_weight="1"
-                android:layout_gravity="center_vertical"
-                android:textSize="@dimen/dimension_text_size" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/ic_chevron_right_black_24dp"
-                android:tint="#D9DDE1"
-                android:contentDescription="chevronRight" />
-        </LinearLayout>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="chevronRight"
+            android:src="@mipmap/ic_chevron_right_black_24dp"
+            android:tint="#D9DDE1" />
+    </LinearLayout>
 
     <View
-        android:paddingLeft="18dp"
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:background="#D9DDE1" />
+        android:background="#D9DDE1"
+        android:paddingLeft="18dp" />
 </LinearLayout>
