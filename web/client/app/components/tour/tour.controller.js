@@ -7,7 +7,7 @@ angular.module('tourable')
             $scope.location = $location.search().key;
             console.log('Success: ', response.data);
 
-            getTourMetaData(response.data.tour.objectId);
+            getTourBundle(response.data.tour.objectId);
 
         }, function(error) {
             //If it fails, redirect back to homepage
@@ -17,11 +17,20 @@ angular.module('tourable')
         });
 
         function getTourMetaData(id) {
-            var tourMetaData = tourFactory.getTour(id);
-            tourMetaData.then(function(response) {
+            var getMetaData = tourFactory.getTour(id);
+            getMetaData.then(function(response) {
                 console.log(response.data);
             }, function (error) {
                 console.log("Error fetching tour metadata: ", error);
+            });
+        }
+
+        function getTourBundle(id) {
+            var getBundle = tourFactory.getBundle(id);
+            getBundle.then(function(response) {
+                console.log(response.data);
+            }, function (error) {
+                console.log("Error fetching tour bundle: ", error);
             });
         }
     });

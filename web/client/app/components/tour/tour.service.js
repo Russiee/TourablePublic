@@ -1,4 +1,4 @@
-tourable.factory('tourFactory', function($http, $q){
+tourable.factory('tourFactory', function($http, $q) {
     return {
         getTour: function(id) {
             return $q(function(resolve, reject) {

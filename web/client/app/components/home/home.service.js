@@ -1,6 +1,6 @@
-tourable.factory('keyFactory', function($http, $q){
+tourable.factory('keyFactory', function($http, $q) {
     return {
-        verify: function(key){
+        verify: function(key) {
             return $q(function(resolve, reject) {
                 $http({
                     method: 'GET',

@@ -22,18 +22,15 @@ tourable.config(function($stateProvider, $urlRouterProvider, $locationProvider) 
     })
     .state('tour.overview', {
         url: "/tour?key",
-        templateUrl: "/client/app/components/tour/components/overview.view.html",
-        controller: "TourCtrl"
+        templateUrl: "/client/app/components/tour/components/overview.view.html"
     })
     .state('tour.section', {
         url: "/tour/section/{id}?key",
-        templateUrl: "/client/app/components/tour/components/section.view.html",
-        controller: "TourCtrl"
+        templateUrl: "/client/app/components/tour/components/section.view.html"
     })
     .state('tour.poi', {
         url: "/tour/poi/{id}?key",
-        templateUrl: "/client/app/components/tour/components/poi.view.html",
-        controller: "TourCtrl"
+        templateUrl: "/client/app/components/tour/components/poi.view.html"
     })
 
 
