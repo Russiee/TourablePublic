@@ -314,6 +314,7 @@ public class StartActivity extends AppCompatActivity {
         });
 
         dialog.show();
+        dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorAccent));
     }
 
     /**

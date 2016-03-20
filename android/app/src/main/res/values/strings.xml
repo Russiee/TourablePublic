@@ -24,7 +24,13 @@
     <string name="start_activity_submit_key_button_text">Submit</string>
     <string name="start_activity_no_tours_exist">You haven\'t added any tours yet.</string>
     <string name="poi_first_text">Current placeholder text</string>
-    <string name="download_text">Your tour key is valid! You can now download your tour!</string>
+
+    <string name="download_dialog_download_text"> "Your tour key is valid! You can now download this tour.
+        If you download it without media, you will need internet to view media during the tour.</string>
+
+    <string name="download_dialog_download_tour">Download Tour</string>
+    <string name="download_dialog_just_text">Download text only (Smaller)</string>
+    <string name="download_dialog_with_media">Download with media (Larger)</string>
 
     <string name="download_option_image">Download just Images</string>
     <string name="download_option_video">Download with Video</string>
