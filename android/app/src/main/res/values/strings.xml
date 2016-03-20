@@ -53,6 +53,9 @@
     <string name="expires_in_minute">minute</string>
     <string name="enter_tour_text">Enter the provided tour key: </string>
 
+    <string name="tour_activity_subsection">SUBSECTION</string>
+    <string name="tour_activity_poi">POINT OF INTEREST</string>
+
     <string name="msg_no_internet">No internet connection</string>
     <string name="msg_invalid_key">Invalid tour key</string>
     <string name="msg_tour_exists">Tour already exists</string>
