@@ -73,8 +73,6 @@ public class StartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
-        new UpdateChecker(getApplicationContext()).start();
-
         //get references for animations
         keyEntryLayout = (LinearLayout) findViewById(R.id.keyEntryLayout);
         previousToursLayout = (LinearLayout) findViewById(R.id.previousToursLayout);
@@ -247,8 +245,8 @@ public class StartActivity extends AppCompatActivity {
      */
     public void checkTourKey(String tourKey) {
         // current valid key: KCL-1010
-        if (tourKey.length() < 3)
-            return; // TODO ask if there's a minimum Key length. Otherwise do 0
+        if (tourKey.length() < 1)
+            return;
 
         if (ServerAPI.checkConnection(this)) {
             // only check the key if we have an internet connection
@@ -266,7 +264,6 @@ public class StartActivity extends AppCompatActivity {
      * @param keyID tour to start
      */
     private void goToTour(String keyID, String tourID) {
-        TourDBManager.getInstance(getApplicationContext()).updateAccessedTime(keyID);
         Intent intent = new Intent(this, SummaryActivity.class);
         intent.putExtra(SummaryActivity.KEY_ID, keyID);
         intent.putExtra(SummaryActivity.TOUR_ID, tourID);
@@ -344,7 +341,10 @@ public class StartActivity extends AppCompatActivity {
                     tourID = keyJSON.getJSONObject("tour").getString("objectId");
                     keyID = keyJSON.getString("objectId");
                     exists = TourDBManager.getInstance(getApplicationContext()).doesTourExist(keyID);
+
                     if (exists) {
+                        tourID = null;
+                        keyID = null;
                         return false;
                     }
 
@@ -399,12 +399,14 @@ public class StartActivity extends AppCompatActivity {
     }
 
     /**
-     * Displays a dialog displaying download options (With/Without Media) and opens a new intent accordingly
+     * Displays a dialog displaying download options (With/Without Media) and opens a new intent
+     * accordingly
      */
     private void showDownloadDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
         final View view = inflater.inflate(R.layout.dialog_download, null);
+
         builder.setView(view);
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
@@ -413,6 +415,7 @@ public class StartActivity extends AppCompatActivity {
             }
         });
         final AlertDialog dialog = builder.create();
+
         Button noMedia = (Button) view.findViewById(R.id.download_without_media);
         noMedia.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -420,17 +423,20 @@ public class StartActivity extends AppCompatActivity {
                 Intent intent = new Intent(StartActivity.this, SummaryActivity.class);
                 intent.putExtra(SummaryActivity.KEY_ID, keyID);
                 intent.putExtra(SummaryActivity.TOUR_ID, tourID);
+
                 if(expiryTimeString != null) {
                     intent.putExtra(SummaryActivity.EXPIRY_TIME_STRING, expiryTimeString);
                 } else {
                     intent.putExtra(SummaryActivity.EXPIRY_TIME_LONG, expiryTimeLong);
                 }
+
                 intent.putExtra(SummaryActivity.DOWNLOAD, true);
                 intent.putExtra(SummaryActivity.MEDIA, false);
                 startActivity(intent);
                 dialog.cancel();
             }
         });
+
         Button media = (Button) view.findViewById(R.id.download_with_media);
         media.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -438,17 +444,20 @@ public class StartActivity extends AppCompatActivity {
                 Intent intent = new Intent(StartActivity.this, SummaryActivity.class);
                 intent.putExtra(SummaryActivity.KEY_ID, keyID);
                 intent.putExtra(SummaryActivity.TOUR_ID, tourID);
+
                 if(expiryTimeString != null) {
                     intent.putExtra(SummaryActivity.EXPIRY_TIME_STRING, expiryTimeString);
                 } else {
                     intent.putExtra(SummaryActivity.EXPIRY_TIME_LONG, expiryTimeLong);
                 }
+
                 intent.putExtra(SummaryActivity.DOWNLOAD, true);
                 intent.putExtra(SummaryActivity.MEDIA, true);
                 startActivity(intent);
                 dialog.cancel();
             }
         });
+
         dialog.show();
     }
 }
