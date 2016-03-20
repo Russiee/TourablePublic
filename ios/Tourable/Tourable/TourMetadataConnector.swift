@@ -34,18 +34,19 @@ class TourMetadataConnector {
             let config = NSURLSessionConfiguration.defaultSessionConfiguration()
             let session = NSURLSession(configuration: config)
 
-            let task = session.dataTaskWithRequest(request) { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
                 self.data.appendData(data!)
                 // callback from api
                 do {
                     self.jsonResult = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
+
                     TourUpdateManager.sharedInstance.receiveDataReadyFromApi(self.jsonResult)
                 }
                 catch _ as NSError{
                     //Need to let user know if the tourID they entered was faulty here
                     print("TourMetadataConnector: there was an error downloading data")
                 }
-            }
+            });
 
             task.resume()
         }
