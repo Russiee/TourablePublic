@@ -17,8 +17,22 @@ tourable.config(function($stateProvider, $urlRouterProvider, $locationProvider) 
         controller: "HomeCtrl"
     })
     .state('tour', {
-        url: "/tour?key",
         templateUrl: "/client/app/components/tour/tour.view.html",
+        controller: "TourCtrl"
+    })
+    .state('tour.overview', {
+        url: "/tour?key",
+        templateUrl: "/client/app/components/tour/components/overview.view.html",
+        controller: "TourCtrl"
+    })
+    .state('tour.section', {
+        url: "/tour/section/{id}?key",
+        templateUrl: "/client/app/components/tour/components/section.view.html",
+        controller: "TourCtrl"
+    })
+    .state('tour.poi', {
+        url: "/tour/section/{id}?key",
+        templateUrl: "/client/app/components/tour/components/poi.view.html",
         controller: "TourCtrl"
     })
 
