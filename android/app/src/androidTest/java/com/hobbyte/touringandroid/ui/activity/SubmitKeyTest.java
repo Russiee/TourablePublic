@@ -40,7 +40,7 @@ public class SubmitKeyTest {
     @Test
     public void submitInvalidKey() {
         // click FAB to bring up key entry form
-        onView(withId(R.id.fab)).perform(click());
+        onView(withId(R.id.addTourButton)).perform(click());
 
         // enter a bad key into the entry form and click submit
         onView(withId(R.id.textEnterTour)).perform(typeText("fakeKey"), closeSoftKeyboard());
