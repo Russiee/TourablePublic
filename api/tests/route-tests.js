@@ -5,9 +5,9 @@ var organizationTest = require('../tests/organization-test.js');
 var tourTest = require('../tests/tour-test.js');
 var adminTest = require('../tests/admin-test.js');
 var poiTest = require('../tests/poi-test.js');
-var keyTest = require('../tests/key-test.js')
-var sectionTest = require('../tests/section-test.js')
-
+var keyTest = require('../tests/key-test.js');
+var sectionTest = require('../tests/section-test.js');
+var bundleTest = require('../tests/bundle-test.js');
 
 //Test suite for testing the organization, admin, key, tour, POI and section routes
 //Tests consist of checking all functions of the routes
@@ -193,6 +193,16 @@ this.timeout(10000);
             done();
         });
     })
+    
+    //Bundle test
+    
+    it('should correctly get the bundle of the tour', function(done){
+        bundleTest.GET(tourObjID, url, function(){
+            done();
+        });
+    })
+    
+    
     
     //Begin deleting from bottom up, and checking they are deleted
         

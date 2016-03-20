@@ -19,7 +19,9 @@ var adminTest = {
         "organization": ""+pointerID,
         "username": "Tester Name",
         "email": "test mail",
+        "password": "hi",
         "isSuper": true
+            
         };
         //sends object to API
         request(url)
@@ -33,6 +35,7 @@ var adminTest = {
               res.body.should.have.property("organization");
               res.body.should.have.property("username");
               res.body.should.have.property("email");
+              res.body.should.have.property("password");
               res.body.should.have.property("isSuper");
               res.status.should.be.equal(201);
               objID = res.body.objectId;
@@ -76,6 +79,7 @@ var adminTest = {
         },
         "username": "New Tester Name",
         "email": "tester mail",
+        "password": "hi",
         "isSuper": true,
       };
         request(url)
@@ -90,6 +94,7 @@ var adminTest = {
               res.body.should.have.property("organization");
               res.body.should.have.property("username");
               res.body.should.have.property("email");
+              res.body.should.have.property("password");
               res.body.should.have.property("isSuper");
               res.status.should.be.equal(200);
               callback();

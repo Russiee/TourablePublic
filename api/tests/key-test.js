@@ -19,14 +19,12 @@ var keyTest = {
         var key  = {
             "code": "KCL-1000",
 			"tour": ""+pointerID,
-			"expiresAt": "20-03-2018"
+			"expiry": "20-03-2018"
         };
         request(url)
         //sends object to API
        .post('api/v1/key/')
        .send(key)
-        
-        //checks that 
         .end(function(err, res) {
               if (err) {
                 throw err;
@@ -34,7 +32,7 @@ var keyTest = {
             //checks that the object to be added to the API follows the required format
               res.body.should.have.property("code");
               res.body.should.have.property("tour");
-              res.body.should.have.property("expiresAt");
+              res.body.should.have.property("expiry");
               res.status.should.be.equal(201);
               objID = res.body.objectId;
             //uses callback to ensure tests run synchronously (for the purpose of linking objects through pointers)
@@ -59,7 +57,7 @@ var keyTest = {
                 throw err;
             }
             res.body.code.should.equal('KCL-1000');
-            res.body.expiresAt.should.not.equal(null);
+            res.body.expiry.should.not.equal(null);
             callback();
         });
     },
@@ -76,7 +74,7 @@ var keyTest = {
           "objectId": ""+pointID
         },
         "code": "KCL-1001",
-        "expiresAt": "21-03-2016",
+        "expiry": "21-03-2016",
       };
         //updates the object with given objectID
         request(url)
@@ -88,7 +86,7 @@ var keyTest = {
                 throw err;
               }
 
-              res.body.should.have.property("expiresAt");
+              res.body.should.have.property("expiry");
               res.body.should.have.property("code");
               res.status.should.be.equal(200);
               callback();
@@ -107,7 +105,7 @@ var keyTest = {
             if (err) {
                 throw err;
             }
-            res.body.expiresAt.should.not.equal(null);
+            res.body.expiry.should.not.equal(null);
             res.body.code.should.equal("KCL-1001");
             res.body.tour.should.not.equal(null);
             callback();

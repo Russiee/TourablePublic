@@ -15,7 +15,9 @@ var tourTest = {
                 "admin": ""+pointerID,
                 "description": "This is a test tour",
                 "title": "Ultimate Test Tour",
-                "isPublic": true
+                "isPublic": true,
+                "estimatedTime": 10,
+                "version": 10
         };
         request(url)
         //sends object to API
@@ -30,6 +32,8 @@ var tourTest = {
               res.body.should.have.property("description");
               res.body.should.have.property("admin");
               res.body.should.have.property("isPublic");
+              res.body.should.have.property("version");
+              res.body.should.have.property("estimatedTime");
               res.status.should.be.equal(201);
               objID = res.body.objectId;
             //uses callback to ensure tests run synchronously (for the purpose of linking objects through pointers)
@@ -54,6 +58,8 @@ var tourTest = {
 	        res.body.description.should.equal("This is a test tour");                    
 	        res.body.isPublic.should.equal(true);
             res.body.admin.should.not.equal(null);
+            res.body.estimatedTime.should.equal(10);
+            res.body.version.should.equal(10);
 			callback();
 		});
 	},
@@ -71,7 +77,9 @@ var tourTest = {
             },
             "description": "described",
             "title": "TestTour2",
-            "isPublic": true
+            "isPublic": true,
+            "estimatedTime": 0,
+            "version": 0
         };
 	     request(url)
 		.put('api/v1/tour/'+pointID)
@@ -85,6 +93,8 @@ var tourTest = {
            res.body.should.have.property("description");
            res.body.should.have.property("admin");
            res.body.should.have.property("isPublic");
+           res.body.should.have.property("version");
+           res.body.should.have.property("estimatedTime");
            res.status.should.be.equal(200);
            callback();
 		});
@@ -106,6 +116,8 @@ var tourTest = {
             res.body.description.should.equal("described");                     
             res.body.isPublic.should.equal(true);
             res.body.admin.should.not.equal(null);
+            res.body.estimatedTime.should.equal(0);
+            res.body.version.should.equal(0);
             callback();
         });
     },

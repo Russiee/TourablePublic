@@ -1,5 +1,5 @@
 var validate = {
-
+    //checks stuff is there and of correct type
 	validateInput: function (input, expectedInput) {
         var validInput = true;
         for (var prop in expectedInput) {
@@ -17,6 +17,7 @@ var validate = {
         else
             return false;
 	},   
+    //removes properties we dont expect
     parseData: function (input, expectedInput) {
         var data = input;
         for (var prop in data) {

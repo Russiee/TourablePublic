@@ -21,7 +21,7 @@ var poiTest = {
             "post": [{"type": "Header",
                       "content": "Header text"
                      }],		
-            "section": ""+pointerI
+            "section": ""+pointerID
             };            
             request(url)
             //sends object to API

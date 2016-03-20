@@ -53,6 +53,7 @@ var tour = {
             "title": "",
             "admin": "",
             "isPublic": false,
+            "estimatedTime": 0,
             "version": 0
         };
 
@@ -83,6 +84,7 @@ var tour = {
             "title": "",
             "admin": "",
             "isPublic": false,
+            "estimatedTime": 0,
             "version": 0
         };
 
