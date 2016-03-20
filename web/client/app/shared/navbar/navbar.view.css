@@ -1,0 +1,29 @@
+.navbar-fixed-top {
+    min-height: 60px;
+}
+
+.navbar-default {
+    background-color: #162B49;
+    border-color: #E7E7E7;
+    height: 50px;
+}
+
+.navbar-default .navbar-nav > li > a {
+    color: #D8DCE0;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.navbar-center {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.tour-navbar-title {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: #FFF;
+}

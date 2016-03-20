@@ -11,11 +11,14 @@ tourable.config(function($stateProvider, $urlRouterProvider, $locationProvider) 
 
     //state init
     $stateProvider
+
     .state('home', {
         url: "/",
         templateUrl: "/client/app/components/home/home.view.html",
         controller: "HomeCtrl"
     })
+
+
     .state('tour', {
         templateUrl: "/client/app/components/tour/tour.view.html",
         controller: "TourCtrl"

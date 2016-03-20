@@ -10,7 +10,7 @@ var debug = require('gulp-debug');
 gulp.task('default', ['inject', 'lint'], function() {
     nodemon({
         script: 'server.js',
-        ext: 'js html',
+        ext: 'js html css',
         env: { 'NODE_ENV': 'development' }
     });
 });
