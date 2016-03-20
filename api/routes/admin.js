@@ -9,7 +9,7 @@ var Admin = Parse.Object.extend("_User");
 var Organization = Parse.Object.extend("Organization");
 
 //admin module object
-//containsfunctions for all REST api routes for the admin object
+//contains functions for all REST api routes for the admin object
 var admin = {
 
     //GET route function
@@ -286,7 +286,7 @@ function createAdmin (data, callback) {
 
     //temporarily save the organization (ID) string
     var orgID = data.organization;
-    //delete the organization string form the data
+    //delete the organization string from the data
     delete data.organization;
 
     //add the organization property to data, but in the form of a pointer object to the Organization prototype

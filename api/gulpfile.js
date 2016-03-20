@@ -19,7 +19,7 @@ gulp.task('route-tests', function () {
 });
 
 gulp.task('validate-tests', function () {
-    return gulp.src(['tests/route-tests.js'], { read: false })
+    return gulp.src(['tests/validate-tests.js'], { read: false })
         .pipe(mocha({ reporter: 'spec' }))
         .on('error', util.log);
 });
