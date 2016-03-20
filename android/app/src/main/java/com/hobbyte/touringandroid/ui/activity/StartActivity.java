@@ -61,9 +61,7 @@ public class StartActivity extends AppCompatActivity {
 
         //add toolbar to the screen
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarStart);
-        ((TextView) toolbar.findViewById(R.id.toolbar_title))
-                .setText(getString(R.string.start_activity_your_tours));
-        setSupportActionBar(toolbar);
+        toolbar.setTitle(getString(R.string.start_activity_your_tours));
 
         //assign action the the addTourButton
         Button addTourButton = (Button) findViewById(R.id.addTourButton);
