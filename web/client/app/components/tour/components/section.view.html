@@ -8,7 +8,7 @@
         <h6>SUBSECTIONS</h6>
         <ul class="tour-cell-list">
             <div ng-repeat="subsection in section.subsections track by $index">
-                <li ng-click="goToSection($index)">{{subsection.title}}<i class="fa fa-chevron-right pull-right"></i></li>
+                <li class="cursor-pointer" ng-click="goToSection($index)">{{subsection.title}}<i class="fa fa-chevron-right pull-right"></i></li>
             </div>
         </ul>
     </div>
@@ -16,7 +16,7 @@
         <h6>POINTS OF INTEREST</h6>
         <ul class="tour-cell-list">
             <div ng-repeat="poi in section.pois track by $index">
-                <li ng-click="goToPOI($index)">{{poi.title}}<i class="fa fa-chevron-right pull-right"></i></li>
+                <li class="cursor-pointer" ng-click="goToPOI($index)">{{poi.title}}<i class="fa fa-chevron-right pull-right"></i></li>
             </div>
         </ul>
     </div>
