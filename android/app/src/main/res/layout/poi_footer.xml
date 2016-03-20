@@ -23,7 +23,8 @@
             android:id="@+id/previousPOIFooter"
             android:textColor="@color/colorPrimary"
             android:text="Go to previous POI"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:textSize="@dimen/dimension_text_size" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -52,7 +53,8 @@
             android:id="@+id/nextPOIFooter"
             android:textColor="@color/colorPrimary"
             android:text="Go to next POI "
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:textSize="@dimen/dimension_text_size" />
 
         <ImageView
             android:layout_width="wrap_content"

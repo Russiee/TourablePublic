@@ -22,8 +22,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:textColor="#ffffff"
-            android:textSize="20sp" />
+            android:textColor="#ffffff" />
     </android.support.v7.widget.Toolbar>
 
     <LinearLayout

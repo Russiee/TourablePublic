@@ -6,4 +6,5 @@
     android:id="@+id/poiContentTextView"
     android:textColor="@color/colorDarkText"
     android:padding="16dp"
-    android:background="@color/colorLightBackground"/>
+    android:background="@color/colorLightBackground"
+    android:textSize="@dimen/dimension_text_size_small" />

@@ -9,9 +9,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/quizTitle"
-        android:textStyle="bold"
         android:textColor="@color/colorDarkText"
-        android:padding="16dp" />
+        android:padding="16dp"
+        android:textSize="@dimen/dimension_text_size" />
 
     <LinearLayout
         android:layout_width="fill_parent"
