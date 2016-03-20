@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7A3988D01C849C1E006572E6 /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3988CF1C849C1E006572E6 /* Queue.swift */; };
 		7A432AB11C8B69AB007482F8 /* TourUpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A432AB01C8B69AB007482F8 /* TourUpdateManager.swift */; };
 		7A9118C81C945990008BF835 /* TourUpdateManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9118C71C945990008BF835 /* TourUpdateManagerTests.swift */; };
 		7ACD54651C9DA89400920F58 /* TourMetadataConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ACD54641C9DA89400920F58 /* TourMetadataConnector.swift */; };
@@ -30,14 +29,10 @@
 		FA1C8C301C9C14850055BB49 /* Quiz.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1C8C2F1C9C14850055BB49 /* Quiz.swift */; };
 		FA1C8C321C9C14AE0055BB49 /* QuizTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1C8C311C9C14AE0055BB49 /* QuizTableViewController.swift */; };
 		FA1C8C3D1C9C1E9C0055BB49 /* TourableUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1C8C3C1C9C1E9C0055BB49 /* TourableUITests.swift */; };
-		FA1C8C451C9C1F140055BB49 /* TourDataParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1C8C441C9C1F140055BB49 /* TourDataParserTests.swift */; };
-		FA1F63651C9C5B1600952E03 /* mediaHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1F63641C9C5B1600952E03 /* mediaHelperTests.swift */; };
-		FA1F63661C9C5E2800952E03 /* MediaHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6FD54A1C8A2DCE0033964F /* MediaHelper.swift */; };
 		FA2BB2981C78F46500D784E8 /* imageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2BB2971C78F46500D784E8 /* imageHandler.swift */; };
 		FA4D0F5F1C6A4D08007D79E3 /* TourIdParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4D0F5E1C6A4D08007D79E3 /* TourIdParser.swift */; };
 		FA4EBAC01C68CC1100E6E601 /* AddNewTourViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4EBABF1C68CC1100E6E601 /* AddNewTourViewController.swift */; };
 		FA56AD7B1C8C614B00F200B9 /* AlertViewBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56AD7A1C8C614B00F200B9 /* AlertViewBuilder.swift */; };
-		FA5C8ED71C9D9CB4002F554C /* ImageHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5C8ED61C9D9CB4002F554C /* ImageHandlerTests.swift */; };
 		FA5C8EDE1C9DA3F5002F554C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E536DCC81C6510FD00A7B2FC /* Assets.xcassets */; };
 		FA6FD5491C8A2D880033964F /* videoHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6FD5481C8A2D880033964F /* videoHandler.swift */; };
 		FA6FD54B1C8A2DCE0033964F /* MediaHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6FD54A1C8A2DCE0033964F /* MediaHelper.swift */; };
@@ -47,7 +42,6 @@
 		FAB946A01CA039E8003A09F9 /* APIConnectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB9469F1CA039E8003A09F9 /* APIConnectorTests.swift */; };
 		FAB946A21CA039F4003A09F9 /* TourDeleterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB946A11CA039F4003A09F9 /* TourDeleterTests.swift */; };
 		FACF41081C8F1D74000C2D5A /* NavViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACF41071C8F1D74000C2D5A /* NavViewController.swift */; };
-		FAD0BB5D1C9D767000FEC01A /* POIParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD0BB5C1C9D767000FEC01A /* POIParserTests.swift */; };
 		FAD1B1541C6BAEB400CA5327 /* TourSummaryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD1B1531C6BAEB400CA5327 /* TourSummaryController.swift */; };
 		FAD9296A1C95BDCD0030BA7F /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD929691C95BDCD0030BA7F /* ImageLoader.swift */; };
 		FAD9296C1C95E9B60030BA7F /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD9296B1C95E9B60030BA7F /* AboutViewController.swift */; };
@@ -208,7 +202,6 @@
 			children = (
 				FA0A51711C7747B400E4F733 /* tourSection.swift */,
 				FA0A51761C774CEC00E4F733 /* pointOfInterest.swift */,
-				7A432AB01C8B69AB007482F8 /* TourUpdateManager.swift */,
 				FA1C8C2F1C9C14850055BB49 /* Quiz.swift */,
 			);
 			name = Model;
@@ -226,8 +219,8 @@
 		FA2164921C7B482B0056FF02 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				E536DCBE1C6510FC00A7B2FC /* AppDelegate.swift */,
 				7A432AB01C8B69AB007482F8 /* TourUpdateManager.swift */,
+				E536DCBE1C6510FC00A7B2FC /* AppDelegate.swift */,
 				FA0A51731C77482D00E4F733 /* tourDataParser.swift */,
 				FA4D0F5E1C6A4D08007D79E3 /* TourIdParser.swift */,
 				E5007F841C8B6ACA0041B31C /* TourDeleter.swift */,

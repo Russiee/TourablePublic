@@ -14,8 +14,6 @@ public class TourUpdateManager: NSObject {
     var tourCode: String!
     var currentTourKEYmetadata: Dictionary<String,AnyObject>!
     var newTourKEYmetadata: NSDictionary!
-    var alreadyFetchedMetadata = false
-    
     
     //metadata to be displayed on the tourSummary
     var timeHours: Int!
@@ -35,11 +33,19 @@ public class TourUpdateManager: NSObject {
         return Static.instance!
     }
     
-    
-    func getCurrentData(tourCodetoCheck: String, tableRow: Int) {
+    // to be called as an initialiser to prepare the object for other methods
+    func prepareTourMangaer(tourCodetoCheck: String, tableRow: Int) {
         self.tourCode = tourCodetoCheck
         self.tourTableRow = tableRow
+        
+        // get current tourKey metadata from cache
         self.currentTourKEYmetadata = TourIdParser().getTourMetadata(tourCode)
+        
+        // get new tourKey metadata
+        if ApiConnector.sharedInstance.isConnectedToNetwork() {
+            ApiConnector.sharedInstance.initiateConnection(tourCode, isCheckingForUpdate: true)
+            newTourKEYmetadata = ApiConnector.sharedInstance.getTourMetadata(tourCode)
+        }
     }
     
     // this method received data from the tourMetadata and saves it into fields
@@ -52,7 +58,7 @@ public class TourUpdateManager: NSObject {
 
         // TOUR UPDATE STATUS
         // you will need to pass jsonResult["version"] to the isTourUpToDate()
-        isTourUpTodate = self.isTourUpToDate()
+        isTourUpTodate = self.isTourUpToDate(jsonResult["version"] as! Int)
 
         // EXPIRY DATE
         let expiryDate = getDateFromString(currentTourKEYmetadata["expiry"] as! String)
@@ -63,7 +69,7 @@ public class TourUpdateManager: NSObject {
     }
 
     // receive minutes as a paramenter and return hours and minutes of that length
-    func calculateTourLengthFromMinutes(minutes: Int) -> (timeHours: Int, timeMins: Int) {
+    private func calculateTourLengthFromMinutes(minutes: Int) -> (timeHours: Int, timeMins: Int) {
         let hours = minutes / 60
         let minutes = minutes % 60
         return (hours,minutes)
@@ -74,28 +80,15 @@ public class TourUpdateManager: NSObject {
         return (self.timeHours, self.timeMinutes, self.isTourUpTodate, self.expiresIn)
     }
 
-    
-    // download fresh metadata for the tour if there is internet connection
-    func downloadNewMetadata() {
-        if ApiConnector.sharedInstance.isConnectedToNetwork() {
-            ApiConnector.sharedInstance.initiateConnection(tourCode, isCheckingForUpdate: true)
-            newTourKEYmetadata = ApiConnector.sharedInstance.getTourMetadata(tourCode)
-        }
-    }
-
     // check for updates comparing freshly downloaded metadata with current stored one
     // if there are updates the user is asked if he wants to download them
-    func isTourUpToDate() -> Bool {
-        downloadNewMetadata()
+    func isTourUpToDate(versionFreshFromAPI: Int) -> Bool {
         if self.newTourKEYmetadata != nil {
-            let currentDate = getDateFromString(currentTourKEYmetadata["updatedAt"] as! String)
-            let newDate = getDateFromString(newTourKEYmetadata["updatedAt"] as! String)
+            // when you change it as it not programmatic 
+            // is gonna be something like that currentTourmetadata["version"] as! Int
+            let currentVersion = 17
 
-            let comparisonResultString = compareDates(currentDate, newDate: newDate)
-
-            // check if the current date is less recent than the one in the metadata ("ascending"). If yes, ask the user to update tour.
-            if comparisonResultString == "ascending" {
-                print("current date \(currentDate) is less recent than the last updated \(newDate), therefore update triggered here")
+            if currentVersion < versionFreshFromAPI {
                 return false
             }
         }
@@ -113,11 +106,6 @@ public class TourUpdateManager: NSObject {
     // check if a project is out to date comparing metadata with current today's date.
     // if the project is out to date, it is deleted after informing the user
     func checkIfOutdatedAndDeleteProject() {
-        // in this way the metadata is downloaded only once when opening the app.
-        if !alreadyFetchedMetadata {
-            downloadNewMetadata()
-            alreadyFetchedMetadata = true
-        }
         
         if self.newTourKEYmetadata != nil {
             let todaysDate = NSDate()
@@ -172,7 +160,6 @@ public class TourUpdateManager: NSObject {
     func triggerUpdate() {
         // GET RID OF NOTIFIER!
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedValid", name: validIdNotificationKey, object: nil)
-        print("triggering update")
         TourDeleter.sharedInstance.deleteTour(tourCode)
         ApiConnector.sharedInstance.initiateConnection(tourCode, isCheckingForUpdate: false)
     }
@@ -181,8 +168,6 @@ public class TourUpdateManager: NSObject {
         sleep(1)
         // re-download images
         imageHandler.sharedInstance.downloadMediaSet(imageHandler.sharedInstance.imageQueue)
-        // save newly downloaded metadata.
-        TourIdParser.sharedInstance.addTourMetaData(newTourKEYmetadata)
     }
 }
 

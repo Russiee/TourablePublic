@@ -68,7 +68,7 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
         self.fetchingMetadataIndicator.startAnimating()
         
         // download tourSummary data and then updated the view automatically with notifiers
-        TourUpdateManager.sharedInstance.getCurrentData(tourId, tableRow: tableRow)
+        TourUpdateManager.sharedInstance.prepareTourMangaer(tourId, tableRow: tableRow)
         TourUpdateManager.sharedInstance.getTourMetadata()
 
 
@@ -82,9 +82,8 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
     
     //Takes the data from the tuple and formats it for presentation in the tableView
     func formatDataForTable() -> [String]{
-        
         //get the current update and expiry status for the current tour
-        TourUpdateManager.sharedInstance.getCurrentData(tourId, tableRow: tableRow)
+        TourUpdateManager.sharedInstance.prepareTourMangaer(tourId, tableRow: tableRow)
         //set the summary data tuple to the result of this call
         summaryData = TourUpdateManager.sharedInstance.getTourStatusInfo()
         //format the strings with the data from TourUpdateManager for display on the tour summary
@@ -146,9 +145,7 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
         updateIndicator.startAnimating()
         beginTourButton.enabled = false
 
-        //trigger update
         TourUpdateManager.sharedInstance.triggerUpdate()
-
     }
 
     // increase counter to activate user wheel
