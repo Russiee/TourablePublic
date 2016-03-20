@@ -36,6 +36,13 @@ public class TourUpdateManager: NSObject {
     }
     
     
+    func getCurrentData(tourCodetoCheck: String, tableRow: Int) {
+        self.tourCode = tourCodetoCheck
+        self.tourTableRow = tableRow
+        self.currentTourKEYmetadata = TourIdParser().getTourMetadata(tourCode)
+    }
+    
+    
     func receiveDataReadyFromApi(jsonResult: NSDictionary) {
         // update all the fucking information ready for the TourSummary
 
@@ -45,8 +52,9 @@ public class TourUpdateManager: NSObject {
         
         timeHours = estimatedLenght.timeHours
         timeMinutes = estimatedLenght.timeMins
+        // you will need to pass jsonResult["version"] to the isTourUpToDate()
         isTourUpTodate = self.isTourUpToDate()
-        expiresIn = daysLeftForTheTour(currentTourKEYmetadata["expiresAt"] as! String)
+        expiresIn = daysLeftForTheTour(currentTourKEYmetadata["expiry"] as! String)
         
         // call the tour summary to update tourSummary fields
         self.triggerTourMetaDataAvailableNotification()
@@ -59,8 +67,9 @@ public class TourUpdateManager: NSObject {
         return (hours,minutes)
     }
     
-    func daysLeftForTheTour(expiresAt: String) -> Int {
-        let expiryDate = getDateFromString(expiresAt)
+    func daysLeftForTheTour(expiry: String) -> Int {
+        let expiryDate = getDateFromString(expiry)
+        let today = NSDate()
         // calculate how many days there are between today and the expiry date
         return 10 // interval between today and expiry
     }
@@ -70,11 +79,7 @@ public class TourUpdateManager: NSObject {
         return (self.timeHours, self.timeMinutes, self.isTourUpTodate, self.expiresIn)
     }
 
-   func getCurrentData(tourCodetoCheck: String, tableRow: Int) {
-        self.tourCode = tourCodetoCheck
-        self.tourTableRow = tableRow
-        self.currentTourKEYmetadata = TourIdParser().getTourMetadata(tourCode)
-    }
+
 
     // download fresh metadata for the tour if there is internet connection
     func downloadNewMetadata() {
@@ -103,7 +108,7 @@ public class TourUpdateManager: NSObject {
         return true
     }
 
-    // trigger the tour metadata to be downloaded
+    // trigger download of the tour metadata needed on the tourSummary
     // remember that multiples tourCodes can be associate with the same tourID (aka objectID in the tourMetada)
     func getTourMetadata() {
         let tourConnector = TourMetadataConnector()
@@ -122,7 +127,7 @@ public class TourUpdateManager: NSObject {
         
         if self.newTourKEYmetadata != nil {
             let todaysDate = NSDate()
-            let expiresDate = getDateFromString(currentTourKEYmetadata["expiresAt"] as! String)
+            let expiresDate = getDateFromString(currentTourKEYmetadata["expiry"] as! String)
 
             let comparisonResulFromString = compareDates(todaysDate, newDate: expiresDate)
             if comparisonResulFromString == "descending" {

@@ -54,7 +54,7 @@ public class TourIdParser {
 
         let tourDict = metadata["tour"] as! NSMutableDictionary
         tourDict["code"] = metadata["code"]
-        tourDict["expiresAt"] = metadata["expiresAt"]
+        tourDict["expiry"] = metadata["expiry"]
         tourDict["updatedAt"] = metadata["updatedAt"]
         tourDict["createdAt"] = metadata["createdAt"]
 

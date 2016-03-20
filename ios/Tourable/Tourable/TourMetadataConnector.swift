@@ -36,6 +36,7 @@ class TourMetadataConnector {
 
             let task = session.dataTaskWithRequest(request) { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
                 self.data.appendData(data!)
+                // callback from api
                 do {
                     self.jsonResult = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
                     TourUpdateManager.sharedInstance.receiveDataReadyFromApi(self.jsonResult)
