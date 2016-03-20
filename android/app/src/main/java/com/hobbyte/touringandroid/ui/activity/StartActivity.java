@@ -57,7 +57,7 @@ public class StartActivity extends AppCompatActivity {
 
     private String tourID;
     private String keyID;
-    private String keyExpiryDate;
+    private String keyName;
 
     private String expiryTimeString;
     private long expiryTimeLong;
@@ -336,6 +336,7 @@ public class StartActivity extends AppCompatActivity {
 
             // if the server returns JSON, extract needed details
             if (keyJSON != null) {
+                    keyName = key;
 
                 try {
                     tourID = keyJSON.getJSONObject("tour").getString("objectId");
@@ -423,6 +424,7 @@ public class StartActivity extends AppCompatActivity {
                 Intent intent = new Intent(StartActivity.this, SummaryActivity.class);
                 intent.putExtra(SummaryActivity.KEY_ID, keyID);
                 intent.putExtra(SummaryActivity.TOUR_ID, tourID);
+                intent.putExtra(SummaryActivity.KEY_NAME, keyName);
 
                 if(expiryTimeString != null) {
                     intent.putExtra(SummaryActivity.EXPIRY_TIME_STRING, expiryTimeString);
@@ -444,6 +446,7 @@ public class StartActivity extends AppCompatActivity {
                 Intent intent = new Intent(StartActivity.this, SummaryActivity.class);
                 intent.putExtra(SummaryActivity.KEY_ID, keyID);
                 intent.putExtra(SummaryActivity.TOUR_ID, tourID);
+                intent.putExtra(SummaryActivity.KEY_NAME, keyName);
 
                 if(expiryTimeString != null) {
                     intent.putExtra(SummaryActivity.EXPIRY_TIME_STRING, expiryTimeString);

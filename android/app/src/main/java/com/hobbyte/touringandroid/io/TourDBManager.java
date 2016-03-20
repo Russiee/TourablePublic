@@ -172,7 +172,7 @@ public class TourDBManager extends SQLiteOpenHelper {
      * @param expiryDate when the tour expires
      * @param hasMedia whether or not the user opted to download the tour with video
      */
-    public void putRow(String keyID, String tourID, String tourName,
+    public void putRow(String keyID, String tourID, String keyName, String tourName,
                        String expiryDate, boolean hasMedia, int version) {
         open(true);
 
@@ -190,7 +190,7 @@ public class TourDBManager extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
 
         values.put(TourList.COL_KEY_ID, keyID);
-        values.put(TourList.COL_KEY_NAME, "helloDave");
+        values.put(TourList.COL_KEY_NAME, keyName);
         values.put(TourList.COL_TOUR_ID, tourID);
         values.put(TourList.COL_TOUR_NAME, tourName);
         values.put(TourList.COL_DATE_EXPIRES_ON, expiryLong);
