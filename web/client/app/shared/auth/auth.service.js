@@ -1,4 +1,4 @@
-angular.module('touring')
+angular.module('tourable')
 .factory( 'AuthService', function($rootScope, $q) {
 
     Parse.initialize("touring", "2368AB2DAA73D3CB6B55555CEAF6C");

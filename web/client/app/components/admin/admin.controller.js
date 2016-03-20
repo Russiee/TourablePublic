@@ -1,4 +1,4 @@
-angular.module('touring')
+angular.module('tourable')
     .controller('AdminCtrl', function ($scope, AuthService, $state, $location) {
 
         $scope.$on('loginStatusChanged', function (event, isLoggedIn) {

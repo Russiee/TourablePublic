@@ -1,4 +1,4 @@
-angular.module('touring')
+angular.module('tourable')
     .controller('HomeCtrl', function ($scope, $location, keyFactory) {
 
         $scope.startTour = function (key) {

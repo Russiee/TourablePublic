@@ -1,4 +1,4 @@
-touring.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
+tourable.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 
     $locationProvider.html5Mode(true);
 

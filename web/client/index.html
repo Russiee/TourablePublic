@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="touring">
+<html lang="en" ng-app="tourable">
     <head>
         <base href="/" />
         <meta charset="utf-8">
@@ -8,17 +8,18 @@
         <link rel="stylesheet" href="/client/assets/bower_components/bootstrap/dist/css/bootstrap.css">
         <link rel="stylesheet" href='https://fonts.googleapis.com/css?family=Open+Sans:400,800,700,600,300' type='text/css'>
         <link rel="stylesheet" href='https://fonts.googleapis.com/css?family=Pacifico:400,800,700,600,300' type='text/css'>
-
+        <!-- files injected by gulp-inject -->
         <!-- inject:css -->
         <link rel="stylesheet" href="/client/app/app.css">
         <link rel="stylesheet" href="/client/app/components/admin/admin.view.css">
-        <link rel="stylesheet" href="/client/app/components/home/home.view.css">
         <link rel="stylesheet" href="/client/app/components/tour/tour.view.css">
+        <link rel="stylesheet" href="/client/app/components/home/home.view.css">
         <!-- endinject -->
 
     </head>
     <body>
         <ui-view></ui-view>
+        <!-- files injected by gulp-inject -->
         <!-- inject:js -->
         <script src="/client/assets/bower_components/angular/angular.js"></script>
         <script src="/client/assets/bower_components/angular-ui-router/release/angular-ui-router.js"></script>
@@ -30,12 +31,12 @@
         <script src="/client/app/app.routes.js"></script>
         <script src="/client/app/components/admin/admin.controller.js"></script>
         <script src="/client/app/components/admin/admin.service.js"></script>
-        <script src="/client/app/components/home/home.controller.js"></script>
-        <script src="/client/app/components/home/home.service.js"></script>
-        <script src="/client/app/shared/navbar/navbar.directive.js"></script>
         <script src="/client/app/components/tour/tour.controller.js"></script>
         <script src="/client/app/components/tour/tour.service.js"></script>
+        <script src="/client/app/components/home/home.controller.js"></script>
+        <script src="/client/app/components/home/home.service.js"></script>
         <script src="/client/app/shared/auth/auth.service.js"></script>
+        <script src="/client/app/shared/navbar/navbar.directive.js"></script>
         <!-- endinject -->
     </body>
 </html>
