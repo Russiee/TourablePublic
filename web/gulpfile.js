@@ -26,8 +26,8 @@ gulp.task('inject', function () {
     var sources = gulp.src(bowerFiles({
         paths: {
             bowerDirectory: './client/assets/bower_components',
-            bowerrc: './client/assets/.bowerrc',
-            bowerJson: './client/assets/bower.json'
+            bowerrc: './bowerrc',
+            bowerJson: './bower.json'
         }
     }).concat(['./client/app/**/*.js', './client/app/**/*.css']), {read: false});
 
