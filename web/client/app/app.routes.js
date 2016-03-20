@@ -28,7 +28,7 @@ tourable.config(function($stateProvider, $urlRouterProvider, $locationProvider) 
         templateUrl: "/client/app/components/tour/components/overview.view.html"
     })
     .state('tour.section', {
-        url: "/tour/section/{id}?key",
+        url: "/tour/section/:id?key",
         templateUrl: "/client/app/components/tour/components/section.view.html"
     })
     .state('tour.poi', {
