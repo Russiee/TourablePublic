@@ -1,6 +1,6 @@
 tourable.factory('tourFactory', function($http, $q){
     return {
-        getTour: function(id){
+        getTour: function(id) {
             return $q(function(resolve, reject) {
                 $http({
                     method: 'GET',
@@ -18,7 +18,7 @@ tourable.factory('tourFactory', function($http, $q){
                 });
             });
         },
-        getTour: function(id){
+        getBundle: function(id) {
             return $q(function(resolve, reject) {
                 $http({
                     method: 'GET',
