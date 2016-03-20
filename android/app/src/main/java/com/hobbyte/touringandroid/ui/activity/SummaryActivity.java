@@ -98,14 +98,12 @@ public class SummaryActivity extends AppCompatActivity {
         withMedia = intent.getBooleanExtra(MEDIA, false);
         updating = intent.getBooleanExtra(UPDATING, false);
 
-        Log.d(TAG, String.format("k: %s t: %s", keyID, tourID));
         downloadLayout = (RelativeLayout) findViewById(R.id.downloadLayout);
         tourCard = (RelativeLayout) findViewById(R.id.tourCard);
         buttonLayout = (RelativeLayout) findViewById(R.id.buttonLayout);
         downloadButton = (Button) findViewById(R.id.downloadButton);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         txtDescription = (TextView) findViewById(R.id.txtTourDescription);
-
 
         parseDate();
 
@@ -143,11 +141,10 @@ public class SummaryActivity extends AppCompatActivity {
      * Display the description and information regarding the corresponding tour
      */
     private void displayTourInfo() {
-
+        tourJSON = FileManager.getJSON(getApplicationContext(), keyID, FileManager.TOUR_JSON);
         TextView timeTourTakes = (TextView) findViewById(R.id.txtEstimatedTime);
 
         try {
-            tourJSON = FileManager.getJSON(getApplicationContext(), keyID, FileManager.TOUR_JSON);
             int timeForTour = tourJSON.getInt("estimatedTime");
             int tourHours = timeForTour / 60;
             int tourMinutes = timeForTour % 60;
@@ -214,13 +211,9 @@ public class SummaryActivity extends AppCompatActivity {
     private void displayExpiry() {
 
         TextView txtExpiry = (TextView) findViewById(R.id.txtExpiry);
-        txtExpiry.setText(String.format("Expires in "));
-        txtExpiry.setText("Expires in: " +
-                String.valueOf(durationDays) + " days " +
-                String.valueOf(durationHours) + " hours " +
-                String.valueOf(durationMinutes) + " minutes " +
-                String.valueOf(durationSeconds) + " seconds ");
-        //TODO implement this
+        txtExpiry.setText(String.format("Expires in %d days %d hours %d minutes %d seconds",
+                durationDays, durationHours, durationMinutes, durationSeconds)
+        );
     }
 
     /**
@@ -338,8 +331,10 @@ public class SummaryActivity extends AppCompatActivity {
         }
 
         if (updating) {
-            dbHelper.updateRow(keyID, tourID, name, String.valueOf(datetime), withMedia, version);
+            dbHelper.updateTourVersion(keyID, version);
+//            dbHelper.updateRow(keyID, tourID, name, String.valueOf(datetime), withMedia, version);
 
+            // unflag this tour as having an update available
             Set<String> updateSet = prefs.getStringSet(getApplicationContext().getString(R.string.prefs_tours_to_update), null);
             if (updateSet != null) {
                 for (String s : updateSet) {
@@ -350,7 +345,7 @@ public class SummaryActivity extends AppCompatActivity {
                 }
             }
         } else {
-            dbHelper.putRow(keyID, tourID, name, String.valueOf(datetime), withMedia, version);
+            dbHelper.putRow(keyID, tourID, name, expiryTimeString, withMedia, version);
         }
 
     }
@@ -468,26 +463,23 @@ public class SummaryActivity extends AppCompatActivity {
      * Parses the currently set date (in Long) to an appropriate X Days - X Hours - X Minutes - X Seconds format
      */
     private void parseDate() {
-
         if (expiryTimeString != null) {
             try {
                 datetime = TourDBManager.convertStampToMillis(expiryTimeString);
             } catch (ParseException e) {
+                // use temp expiry for display purposes
+                datetime = Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis() + 2592000000L;
                 e.printStackTrace();
             }
         } else {
-            try {
-                datetime = TourDBManager.convertStampToMillis(String.valueOf(expiryTimeLong));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            datetime = expiryTimeLong;
         }
 
-        int duration = (int) (datetime - Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis());
-        durationSeconds = duration / 1000 % 60;
-        durationMinutes = duration / (60 * 1000) % 60;
-        durationHours = duration / (60 * 60 * 1000) % 24;
-        durationDays = duration / (24 * 60 * 60 * 1000);
+        long duration = datetime - Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis();
+        durationSeconds = (int) (duration / 1000 % 60);
+        durationMinutes = (int) (duration / (60 * 1000) % 60);
+        durationHours = (int) (duration / (60 * 60 * 1000) % 24);
+        durationDays = (int) (duration / (24 * 60 * 60 * 1000));
     }
 
 }

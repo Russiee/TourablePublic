@@ -232,6 +232,9 @@ public class StartActivity extends AppCompatActivity {
      * inform the user that the key was invalid.
      */
     public void checkTourKey(String tourKey) {
+        // current valid key: KCL-1010
+        if (tourKey.length() < 1)
+            return;
 
         if (ServerAPI.checkConnection(this)) {
             // only check the key if we have an internet connection
@@ -246,10 +249,7 @@ public class StartActivity extends AppCompatActivity {
      * Moves the app to the {@link SummaryActivity}, ready to start the tour
      */
     private void goToTour(boolean downloadNeeded, boolean withMedia) {
-
-        TourDBManager.getInstance(getApplicationContext()).updateAccessedTime(keyID);
-        Intent intent = new Intent(StartActivity.this, SummaryActivity.class);
-
+        Intent intent = new Intent(this, SummaryActivity.class);
         intent.putExtra(SummaryActivity.KEY_ID, keyID);
         intent.putExtra(SummaryActivity.TOUR_ID, tourID);
         intent.putExtra(SummaryActivity.DOWNLOAD, downloadNeeded);
@@ -338,7 +338,10 @@ public class StartActivity extends AppCompatActivity {
                     tourID = keyJSON.getJSONObject("tour").getString("objectId");
                     keyID = keyJSON.getString("objectId");
                     exists = TourDBManager.getInstance(getApplicationContext()).doesTourExist(keyID);
+
                     if (exists) {
+                        tourID = null;
+                        keyID = null;
                         return false;
                     }
 

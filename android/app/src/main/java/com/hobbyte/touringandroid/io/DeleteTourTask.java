@@ -45,6 +45,9 @@ public class DeleteTourTask extends Thread {
             new File(tourDir, "bundle").delete();
             fileCount++;
 
+            new File(tourDir, "key").delete();
+            fileCount++;
+
             String[] dirs = {"poi", "image", "video"};
 
             for (String d : dirs) {
