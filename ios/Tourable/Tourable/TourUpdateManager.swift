@@ -44,14 +44,20 @@ public class TourUpdateManager: NSObject {
     
     // this method received data from the tourMetadata and saves it into fields
     func receiveDataReadyFromApi(jsonResult: NSDictionary) {
-        
+        // TOUR LENGTH HOURS AND MINUTES
         let minutes = jsonResult["estimatedTime"]
         let estimatedLenght = calculateTourLengthFromMinutes(minutes as! Int)
         timeHours = estimatedLenght.timeHours
         timeMinutes = estimatedLenght.timeMins
+
+        // TOUR UPDATE STATUS
         // you will need to pass jsonResult["version"] to the isTourUpToDate()
         isTourUpTodate = self.isTourUpToDate()
-        expiresIn = daysLeftForTheTour(currentTourKEYmetadata["expiry"] as! String)
+
+        // EXPIRY DATE
+        let expiryDate = getDateFromString(currentTourKEYmetadata["expiry"] as! String)
+        expiresIn = expiryDate.daysFrom(NSDate())
+
         print("saving fields in the tourUpdateManager")
         // call the tour summary to update tourSummary fields
         self.triggerTourMetaDataAvailableNotification()
@@ -64,20 +70,12 @@ public class TourUpdateManager: NSObject {
         return (hours,minutes)
     }
     
-    func daysLeftForTheTour(expiry: String) -> Int {
-        let expiryDate = getDateFromString(expiry)
-        let today = NSDate()
-        // calculate how many days there are between today and the expiry date
-        return 10 // interval between today and expiry
-    }
-    
     // returns fields variable set when data is returned by API
     func getTourStatusInfo() -> (timeHours: Int,timeMins: Int, isCurrent: Bool, expiresIn: Int){
         return (self.timeHours, self.timeMinutes, self.isTourUpTodate, self.expiresIn)
     }
 
-
-
+    
     // download fresh metadata for the tour if there is internet connection
     func downloadNewMetadata() {
         if ApiConnector.sharedInstance.isConnectedToNetwork() {
@@ -186,5 +184,42 @@ public class TourUpdateManager: NSObject {
         imageHandler.sharedInstance.downloadMediaSet(imageHandler.sharedInstance.imageQueue)
         // save newly downloaded metadata.
         TourIdParser.sharedInstance.addTourMetaData(newTourKEYmetadata)
+    }
+}
+
+// credit to: Leo Dabus
+// http://stackoverflow.com/questions/27182023/getting-the-difference-between-two-nsdates-in-months-days-hours-minutes-seconds
+extension NSDate {
+    func yearsFrom(date:NSDate) -> Int{
+        return NSCalendar.currentCalendar().components(.Year, fromDate: date, toDate: self, options: []).year
+    }
+    func monthsFrom(date:NSDate) -> Int{
+        return NSCalendar.currentCalendar().components(.Month, fromDate: date, toDate: self, options: []).month
+    }
+    func weeksFrom(date:NSDate) -> Int{
+        return NSCalendar.currentCalendar().components(.WeekOfYear, fromDate: date, toDate: self, options: []).weekOfYear
+    }
+    func daysFrom(date:NSDate) -> Int{
+        return NSCalendar.currentCalendar().components(.Day, fromDate: date, toDate: self, options: []).day
+    }
+    func hoursFrom(date:NSDate) -> Int{
+        return NSCalendar.currentCalendar().components(.Hour, fromDate: date, toDate: self, options: []).hour
+    }
+    func minutesFrom(date:NSDate) -> Int{
+        return NSCalendar.currentCalendar().components(.Minute, fromDate: date, toDate: self, options: []).minute
+    }
+    func secondsFrom(date:NSDate) -> Int{
+        return NSCalendar.currentCalendar().components(.Second, fromDate: date, toDate: self, options: []).second
+    }
+    
+    func offsetFrom(date:NSDate) -> String {
+        if yearsFrom(date)   > 0 { return "\(yearsFrom(date))y"   }
+        if monthsFrom(date)  > 0 { return "\(monthsFrom(date))M"  }
+        if weeksFrom(date)   > 0 { return "\(weeksFrom(date))w"   }
+        if daysFrom(date)    > 0 { return "\(daysFrom(date))d"    }
+        if hoursFrom(date)   > 0 { return "\(hoursFrom(date))h"   }
+        if minutesFrom(date) > 0 { return "\(minutesFrom(date))m" }
+        if secondsFrom(date) > 0 { return "\(secondsFrom(date))s" }
+        return ""
     }
 }
