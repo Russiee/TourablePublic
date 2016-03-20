@@ -1,9 +1,29 @@
 angular.module('tourable')
-    .controller('TourCtrl', function ($scope, $location, $state, keyFactory, tourFactory) {
+    .controller('TourCtrl', function ($rootScope, $scope, $location, $state, keyFactory, tourFactory) {
 
         if ($state.current.name === "tour.section" && $state.params.path.length === 0) {
             $location.url('/tour?key=' + $scope.key);
         }
+
+        $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
+            if ($state.current.name === "tour.section" && $state.params.path.length === 0) {
+                $location.url('/tour?key=' + $scope.key);
+            } else if ($state.current.name === "tour.section") {
+                if ($state.params.path === 't') {
+                    $scope.startTour();
+                } else {
+                    var hierachy = $state.params.path.split('');
+                    console.log(hierachy);
+                    var script = "$scope.section = $scope.tour.sections[" + hierachy[1] + "]";
+                    for (var s = 2; s < hierachy.length; s++) {
+                        console.log(hierachy[s]);
+                        script += ".subsections[" + hierachy[s] + "]";
+                    }
+                    console.log(script);
+                    eval(script);
+                }
+            }
+        });
 
         //verify that the key is valid again, in case the user tries to manipulate the url
         var verifyKey = keyFactory.verify($location.search().key);
@@ -55,7 +75,7 @@ angular.module('tourable')
 
         $scope.startTour = function() {
             console.log($scope.tour.objectId);
-            $location.url('/tour/section/' + $scope.tour.objectId + '?key=' + $scope.key);
+            $location.url('/tour/section/t?key=' + $scope.key);
             $scope.section = {
                 title: $scope.tour.title,
                 description: $scope.tour.description,
@@ -67,10 +87,23 @@ angular.module('tourable')
         };
 
         $scope.navBack = function() {
-            if ($scope.section.previousSection === null) {
-                $location.url('/tour?key=' + $scope.key);
-            } else {
-                $location.url('/tour/section/' + $scope.section.previousSection.objectId + '?key=' + $scope.key);
+            if ($state.current.name === 'tour.overview') {
+                $state.go('home');
+            } else if ($state.current.name === 'tour.section') {
+                var newPath = $state.params.path.substring(0, $state.params.path.length - 1);
+                $state.go('tour.section', {path: newPath});
             }
         };
+
+        $scope.goToSection = function (index) {
+            var newPath = $state.params.path + index;
+            $state.go('tour.section', {path: newPath});
+            $scope.section = $scope.section.subsections[index];
+            sessionStorage.setItem('section', JSON.stringify($scope.section));
+        }
+
+        $scope.goToPOI = function (index) {
+            var newPath = $state.params.path + index;
+            $state.go('tour.poi', {path: newPath})
+        }
     });

@@ -1,0 +1,15 @@
+<div class="container tour-container">
+    <p class="tour-section-description">{{section.description}}</p>
+    <div ng-show="section.subsections.length > 0">
+        <h6>SUBSECTIONS</h6>
+        <ul class="tour-cell-list" ng-repeat="subsection in section.subsections">
+            <li ng-click="goToSection(subsection.objectId)">{{subsection.title}}<i class="fa fa-chevron-right pull-right"></i></li>
+        </ul>
+    </div>
+    <div ng-show="section.pois.length > 0">
+        <h6>POINTS OF INTEREST</h6>
+        <ul class="tour-cell-list" ng-repeat="poi in section.pois">
+            <li ng-click="goToPOI(poi.objectId)">{{poi.title}}<i class="fa fa-chevron-right pull-right"></i></li>
+        </ul>
+    </div>
+</div>

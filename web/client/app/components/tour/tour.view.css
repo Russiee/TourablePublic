@@ -8,7 +8,7 @@
 
 .tour-overview-description {
     color: #162B49;
-    padding: 20px 15px;
+    padding: 20px;
     margin: 0;
 }
 
@@ -17,20 +17,29 @@
     padding: 3px;
 }
 
-.tour-overview-data {
+.tour-cell-list {
     background-color: #FFF;
     border-radius: 5px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
-.tour-overview-data > div {
+.tour-cell-list li {
     padding: 15px 20px;
     border-bottom-style: solid;
     border-bottom-color: #ECF0F1;
     border-bottom-width: 1px;
+    color: #162B49;
 }
 
-.tour-overview-data .tour-overview-data-last {
+.tour-cell-list:last-child {
     border: 0;
+}
+
+.tour-cell-list .fa-chevron-right {
+    color: #DDD;
+    padding: 4px 0;
 }
 
 .tour-button {
@@ -46,4 +55,18 @@
     margin: 30px auto;
     background-color: #D8DCE0;
     color: #162B49;
+}
+
+/*Tour Section Styles*/
+
+.tour-container h6 {
+    color: #162B49;
+    margin: 0;
+    padding: 20px 20px 15px 20px;
+}
+
+.tour-section-description {
+    color: #162B49;
+    padding: 20px 20px 0px 20px;
+    margin: 0;
 }

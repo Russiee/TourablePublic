@@ -1,11 +1,11 @@
 <div class="container tour-container">
     <p class="tour-overview-description">{{tour.description}}</p>
 
-    <section class="tour-overview-data">
-        <div>Estimated Time: {{tour.estimatedTime}}</div>
-        <div>Your version is current. <i class="fa fa-check pull-right"></i></div>
-        <div class="tour-overview-data-last">Tour key expires in</div>
-    </section>
+    <ul class="tour-overview-data tour-cell-list">
+        <li>Estimated Time: {{tour.estimatedTime}}</li>
+        <li>Your version is current. <i class="fa fa-check pull-right"></i></li>
+        <li class="tour-overview-data-last">Tour key expires in</li>
+    </ul>
 
     <button class="btn btn-default tour-button tour-start-button" ng-click="startTour()">Start Tour</button>
 </div>
