@@ -1,18 +1,20 @@
 <div class="container tour-container tour-poi">
-    <div ng-repeat="component in poi.post track by $index">
-        <div ng-if="component.type === 'header'">
+    <div class="tour-poi-component" ng-repeat="component in poi.post track by $index">
+        <div class="tour-poi-header" ng-if="component.type === 'header'">
             <h4>{{component.content}}</h4>
         </div>
-        <div ng-if="component.type === 'body'">
+        <div class="tour-poi-body" ng-if="component.type === 'body'">
             <p>{{component.content}}</p>
         </div>
-        <div ng-if="component.type === 'image'">
+        <div class="tour-poi-image" ng-if="component.type === 'image'">
             <img ng-src="{{component.url}}">
+            <p class="tour-poi-media-description"><i>{{component.description}}</i></p>
         </div>
-        <div ng-if="component.type === 'video'">
-            <video ng-src="{{component.url | trustVideo}}" loop controls>
+        <div class="tour-poi-video" ng-if="component.type === 'video'">
+            <video ng-src="{{component.url | trustVideo}}" loop controls></video>
+            <p class="tour-poi-media-description"><i>{{component.description}}</i></p>
         </div>
-        <div ng-if="component.type === 'quiz'">
+        <div class="tour-poi-quiz" ng-if="component.type === 'quiz'">
             <h1>QUIZ</h1>
         </div>
     </div>

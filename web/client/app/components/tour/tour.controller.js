@@ -103,11 +103,11 @@ angular.module('tourable')
                 $state.go('home');
             } else if ($state.current.name === 'tour.section') {
                 var newPath = $state.params.path.substring(0, $state.params.path.length - 1);
-                $state.go('tour.section', {path: newPath});
+                $state.go('tour.section', {path: newPath, key: $scope.key});
             } else if ($state.current.name === 'tour.poi') {
                 var hash = $state.params.path.indexOf('#');
                 var newPath = $state.params.path.substring(0, hash);
-                $state.go('tour.section', {path: newPath});
+                $state.go('tour.section', {path: newPath, key: $scope.key});
             }
         };
 
