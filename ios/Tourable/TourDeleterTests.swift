@@ -2,7 +2,7 @@
 //  TourDeleterTests.swift
 //  Tourable
 //
-//  Created by Daniel Baryshnikov on 17/03/2016.
+//  Created by Daniel Baryshnikov on 20/03/2016.
 //  Copyright © 2016 Hobbyte. All rights reserved.
 //
 
