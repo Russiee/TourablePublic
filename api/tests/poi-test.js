@@ -12,9 +12,9 @@ var poi = require('../routes/poi.js');
 var poiTest = {
 
     //POST function tests
-    //creates and adds admin object to API database with given values
+    //creates and adds poi object to API database with given values
     POST: function(pointerID, url, callback){
-        //takes pointerID to link admin object to given organization
+        //takes pointerID to link poi object to given section
             var poi  = {
             "title": "TestPOI",
             "description": "described",

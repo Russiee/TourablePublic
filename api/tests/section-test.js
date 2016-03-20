@@ -12,9 +12,9 @@ var section = require('../routes/section.js');
 var sectionTest = {
     
     //POST function tests
-    //creates and adds admin object to API database with given values
+    //creates and adds secction object to API database with given values
     POST: function(pointerID, url, callback){
-        //takes pointerID to link admin object to given organization
+        //takes pointerID to link section object to given tour / supersection
         var section  = {
             "tour":  ""+pointerID,
             "superSection": "",

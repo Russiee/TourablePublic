@@ -11,9 +11,8 @@ var organization = require('../routes/organization.js');
 var organizationTest = {
     
     //POST function tests
-    //creates and adds admin object to API database with given values
+    //creates and adds organization object to API database with given values
     POST: function(url, callback) {
-        //takes pointerID to link admin object to given organization
         var organizaton  = {
             "key": "KCL",
             "name": "King's College London Tester",
