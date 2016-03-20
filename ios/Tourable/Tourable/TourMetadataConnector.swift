@@ -40,7 +40,9 @@ class TourMetadataConnector {
                 do {
                     self.jsonResult = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
                     print("in the callback")
-                    TourUpdateManager.sharedInstance.receiveDataReadyFromApi(self.jsonResult)
+                    dispatch_async(dispatch_get_main_queue()){
+                        TourUpdateManager.sharedInstance.receiveDataReadyFromApi(self.jsonResult)
+                    }
                 }
                 catch _ as NSError{
                     //Need to let user know if the tourID they entered was faulty here
