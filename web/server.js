@@ -3,6 +3,8 @@ var app = express();
 var bodyParser = require('body-parser');
 var path = require('path');
 
+process.env.PWD = process.cwd();
+
 var basicAuth = require('basic-auth');
 
 var auth = function (req, res, next) {
@@ -24,7 +26,7 @@ var auth = function (req, res, next) {
     };
 };
 
-app.use("/client", express.static(__dirname + '/client'));
+app.use("/client", express.static(process.env.PWD + '/client'));
 
 app.route('*')
     .get(auth, function(req, res) {
