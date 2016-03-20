@@ -20,13 +20,11 @@ public final class TourDBContract {
     public static abstract class TourList implements BaseColumns {
         public static final String TABLE_NAME             = "tourList";
         public static final String COL_KEY_ID             = "keyId";
+        public static final String COL_KEY_NAME           = "keyName";
         public static final String COL_TOUR_ID            = "tourId";
         public static final String COL_TOUR_NAME          = "tourName";
-        public static final String COL_DATE_CREATED       = "keyCreationDate";
-        public static final String COL_DATE_UPDATED       = "keyUpdateDate";
         public static final String COL_DATE_EXPIRES_ON    = "expiresOn";
-        public static final String COL_DATE_LAST_ACCESSED = "lastAccessedOn";
-        public static final String COL_HAS_VIDEO          = "hasVideo";
+        public static final String COL_HAS_MEDIA          = "hasMedia";
         public static final String COL_VERSION            = "version";
     }
 }

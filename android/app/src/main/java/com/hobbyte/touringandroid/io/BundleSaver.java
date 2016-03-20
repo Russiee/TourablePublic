@@ -87,22 +87,16 @@ public class BundleSaver extends Thread {
             int depthZeroCount = bundleTemp.getJSONArray("sections").length();
 
             JSONObject tourRoot = new JSONObject();
+            JSONArray topSections = new JSONArray();
 
-            // if the tour has only one section at depth = 0, use that as the root of the tour
-            if (depthZeroCount == 1) {
-                tourRoot.put("objectId", sections.getJSONObject(0).getString("objectId"));
-            } else {
-                tourRoot.put("objectId", "tour");
-                JSONArray topSections = new JSONArray();
-
-                for (int i = 0; i < depthZeroCount; ++i) {
-                    String objectId = sections.getJSONObject(i).getString("objectId");
-                    topSections.put(i, objectId);
-                }
-
-                tourRoot.put("subsections", topSections);
-                tourRoot.put("title", bundleTemp.getString("title"));
+            for (int i = 0; i < depthZeroCount; ++i) {
+                String objectId = sections.getJSONObject(i).getString("objectId");
+                topSections.put(i, objectId);
             }
+
+            tourRoot.put("subsections", topSections);
+            tourRoot.put("title", bundleTemp.getString("title"));
+            tourRoot.put("description", bundleTemp.getString("description"));
 
             json.put("root", tourRoot);
 

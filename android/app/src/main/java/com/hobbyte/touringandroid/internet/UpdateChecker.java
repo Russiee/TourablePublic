@@ -36,7 +36,6 @@ public class UpdateChecker extends Thread {
             JSONObject tour = ServerAPI.getJSON(tourID, ServerAPI.TOUR);
 
             try {
-                // TODO: change this when tour version numbers are implemented
                 int version = tour.getInt("version");
 
                 if (version > (int) row[2]) {

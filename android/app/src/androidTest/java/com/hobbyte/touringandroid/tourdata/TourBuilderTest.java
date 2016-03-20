@@ -91,7 +91,7 @@ public class TourBuilderTest {
     }
 
 
-    private static final String rootID = "rootID123";
+    private static final String rootID = "root";
     private static final String rootTitle = "Ultimate Fake Tour";
     private static final String rootDesc = "Fake tours are the best";
 
@@ -154,8 +154,7 @@ public class TourBuilderTest {
 
     public static final String TEST_JSON =
             "{" +
-                    "\"root\":{\"objectId\":\"" + rootID + "\"}," +
-                    "\"" + rootID + "\":{" +
+                    "\"root\":{" +
                         "\"title\":\"" + rootTitle + "\"," +
                         "\"description\":\"" + rootDesc + "\"," +
                         "\"subsections\":[\"" + s1_ID + "\",\"" + s2_ID + "\",\"" + s3_ID + "\"]" +
