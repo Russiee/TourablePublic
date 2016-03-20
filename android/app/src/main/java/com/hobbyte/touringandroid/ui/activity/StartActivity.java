@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -123,15 +122,16 @@ public class StartActivity extends AppCompatActivity {
 
         LinearLayout layout = (LinearLayout) findViewById(R.id.previousToursLayout);
         Button addTourButton = (Button) findViewById(R.id.addTourButton);
+        Resources res = getResources();
 
         if (dbHelper.dbIsEmpty()) {
             // no tours saved, so show the empty text
             View noToursText = getLayoutInflater().inflate(R.layout.text_no_tours, layout, false);
             layout.addView(noToursText);
-            layout.getRootView().setBackgroundColor(Color.parseColor("#162b49"));
+            layout.getRootView().setBackgroundColor(res.getColor(R.color.colorPrimary));
 
-            addTourButton.setBackgroundColor(Color.parseColor("#37435B"));
-            addTourButton.setTextColor(Color.parseColor("#D2DBEC"));
+            addTourButton.setBackgroundColor(res.getColor(R.color.colorEmptyStateButton));
+            addTourButton.setTextColor(res.getColor(R.color.colorWhiteText));
             addTourButton.setText(getString(R.string.start_activity_add_tour));
 
             ActionBar actionBar = getSupportActionBar();
@@ -139,7 +139,7 @@ public class StartActivity extends AppCompatActivity {
 
         } else {
 
-            Resources res = getResources();
+
 
             addTourButton.setBackgroundColor(res.getColor(R.color.buttonGrey));
             addTourButton.setTextColor(res.getColor(R.color.colorDarkText));

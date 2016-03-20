@@ -8,6 +8,7 @@
     <color name="colorAccentLight">#fa89d6fa</color>
     <color name="colorAccentDark">#fa077bb0</color>
 
+    <color name="colorEmptyStateButton">#36445a</color>
     <color name="colorLightBackground">#F3F1F2</color>
     <color name="colorDarkText">#162B4A</color>
     <color name="colorWhiteText">#deffffff</color>
