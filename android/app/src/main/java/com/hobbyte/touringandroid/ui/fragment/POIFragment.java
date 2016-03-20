@@ -170,7 +170,7 @@ public class POIFragment extends ListFragment {
                 int type;
 
                 switch (item.getString("type")) {
-                    case "Header":
+                    case "header":
                         text = item.getString("content");
                         if(((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
                             if (text.equals(((AppCompatActivity) getActivity()).getSupportActionBar().getTitle().toString())) {
@@ -220,6 +220,8 @@ public class POIFragment extends ListFragment {
                         option = null;
                         solution = 0;
                         type = PoiContentAdapter.IGNORE_ITEM_VIEW_TYPE;
+                        Log.e(TAG, "Error creating listViewItemList");
+                        Log.e(TAG, String.format("Type: %s, Text: %s", type, text));
                 }
 
                 listItems[i] = new ListViewItem(text, type, url, option, solution);
