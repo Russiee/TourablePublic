@@ -12,16 +12,10 @@ angular.module('tourable')
                 if ($state.params.path === 't') {
                     $scope.startTour();
                 } else {
-                    var hierachy = $state.params.path.split('');
-                    console.log(hierachy);
-                    var script = "$scope.section = $scope.tour.sections[" + hierachy[1] + "]";
-                    for (var s = 2; s < hierachy.length; s++) {
-                        console.log(hierachy[s]);
-                        script += ".subsections[" + hierachy[s] + "]";
-                    }
-                    console.log(script);
-                    eval(script);
+                    getSectionFromPath($state.params.path);
                 }
+            } else if ($state.current.name === "tour.poi") {
+                getPOIFromPath($state.params.path);
             }
         });
 
@@ -39,6 +33,25 @@ angular.module('tourable')
             //Redirect back to homepage
             $location.url('/');
         });
+
+        function getSectionFromPath(path) {
+            var hierachy = path.split('');
+            console.log(hierachy);
+            var script = "$scope.section = $scope.tour.sections[" + hierachy[1] + "]";
+            for (var s = 2; s < hierachy.length; s++) {
+                console.log(hierachy[s]);
+                script += ".subsections[" + hierachy[s] + "]";
+            }
+            console.log(script);
+            eval(script);
+        }
+
+        function getPOIFromPath(path) {
+            var hash = path.indexOf('#');
+            console.log(path.substring(0,hash));
+            getSectionFromPath(path.substring(0,hash));
+            $scope.poi = $scope.section.pois[parseInt(path.substring(hash + 1))]
+        }
 
         function getTourMetaData(id) {
             var getMetaData = tourFactory.getTour(id);
@@ -60,12 +73,12 @@ angular.module('tourable')
                 $scope.tour = response.data;
                 sessionStorage.setItem('tour', response.data);
 
-                console.log($state.params);
+
 
                 if ($state.current.name === "tour.section" && $state.params.path.length > 0) {
-                    if (sessionStorage.getItem('section')) {
-                        $scope.section = JSON.parse(sessionStorage.getItem('section'));
-                    }
+                    getSectionFromPath($state.params.path);
+                } else if ($state.current.name === "tour.poi" && $state.params.path.length > 0) {
+                    getPOIFromPath($state.params.path);
                 }
 
             }, function (error) {
@@ -83,7 +96,6 @@ angular.module('tourable')
                 pois: [],
                 previousSection: null
             };
-            sessionStorage.setItem('section', JSON.stringify($scope.section));
         };
 
         $scope.navBack = function() {
@@ -97,13 +109,11 @@ angular.module('tourable')
 
         $scope.goToSection = function (index) {
             var newPath = $state.params.path + index;
-            $state.go('tour.section', {path: newPath});
-            $scope.section = $scope.section.subsections[index];
-            sessionStorage.setItem('section', JSON.stringify($scope.section));
+            $state.go('tour.section', {path: newPath, key: $scope.key});
         }
 
         $scope.goToPOI = function (index) {
-            var newPath = $state.params.path + index;
-            $state.go('tour.poi', {path: newPath})
+            var newPath = $state.params.path + '#' + index;
+            $state.go('tour.poi', {path: newPath, key: $scope.key})
         }
     });

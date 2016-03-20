@@ -1,15 +1,20 @@
-<div class="container tour-container">
-    <p class="tour-section-description">{{section.description}}</p>
-    <div ng-show="section.subsections.length > 0">
-        <h6>SUBSECTIONS</h6>
-        <ul class="tour-cell-list" ng-repeat="subsection in section.subsections">
-            <li ng-click="goToSection(subsection.objectId)">{{subsection.title}}<i class="fa fa-chevron-right pull-right"></i></li>
-        </ul>
+<div class="container tour-container tour-poi">
+    <div ng-repeat="component in poi.post track by $index">
+        <div ng-if="component.type === 'header'">
+            <h4>{{component.content}}</h4>
+        </div>
+        <div ng-if="component.type === 'body'">
+            <p>{{component.content}}</p>
+        </div>
+        <div ng-if="component.type === 'image'">
+            <img ng-src="{{component.url}}">
+        </div>
+        <div ng-if="component.type === 'video'">
+            <video ng-src="{{component.url | trustVideo}}" loop controls>
+        </div>
+        <div ng-if="component.type === 'quiz'">
+            <h1>QUIZ</h1>
+        </div>
     </div>
-    <div ng-show="section.pois.length > 0">
-        <h6>POINTS OF INTEREST</h6>
-        <ul class="tour-cell-list" ng-repeat="poi in section.pois">
-            <li ng-click="goToPOI(poi.objectId)">{{poi.title}}<i class="fa fa-chevron-right pull-right"></i></li>
-        </ul>
-    </div>
+
 </div>
