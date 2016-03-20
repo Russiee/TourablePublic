@@ -129,9 +129,7 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
         summaryData.isCurrent = false
         // UPDATED FIELDS HERE AND THEN RELOAD DATA
         self.summaryTableData = formatDataForTable()
-        print("reloading table data")
         tableView.reloadData()
-        tableView.reloadInputViews()
     }
 
     //user has tapped update tour, modify UI and begin update.
@@ -193,9 +191,6 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         //get the cell at that point in the table
         let cell = tableView.dequeueReusableCellWithIdentifier("fakeCell")! as UITableViewCell
-        
-        print("CALLING TABLE VIEW")
-        print("count:", summaryTableData.count)
         
         if summaryTableData.count > 0 {
             

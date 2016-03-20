@@ -58,7 +58,6 @@ public class TourUpdateManager: NSObject {
         let expiryDate = getDateFromString(currentTourKEYmetadata["expiry"] as! String)
         expiresIn = expiryDate.daysFrom(NSDate())
 
-        print("saving fields in the tourUpdateManager")
         // call the tour summary to update tourSummary fields
         self.triggerTourMetaDataAvailableNotification()
     }
