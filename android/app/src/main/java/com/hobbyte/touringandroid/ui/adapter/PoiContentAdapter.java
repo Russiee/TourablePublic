@@ -66,7 +66,6 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
     private static Pattern namePattern;
     private ListViewItem[] items;
     private Bitmap loadingBitmap;
-
     private String keyID;
 
     // needed to prevent ListView recycling form making many duplicate quizzes
