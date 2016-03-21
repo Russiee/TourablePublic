@@ -11,36 +11,6 @@
         android:background="#D9DDE1" />
 
     <LinearLayout
-        android:id="@+id/leftLayout"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="#ffffff"
-        android:orientation="horizontal"
-        android:padding="18dp">
-
-        <TextView
-            android:id="@+id/previousPOIFooter"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/dimension_text_size"
-            android:text="@string/poi_previous" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_chevron_right_black_24dp"
-            android:tint="#D9DDE1" />
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:background="#D9DDE1" />
-
-    <LinearLayout
         android:id="@+id/rightLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -56,6 +26,36 @@
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/dimension_text_size"
             android:text="@string/poi_next" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_chevron_right_black_24dp"
+            android:tint="#D9DDE1" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#D9DDE1" />
+
+    <LinearLayout
+        android:id="@+id/leftLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:orientation="horizontal"
+        android:padding="18dp">
+
+        <TextView
+            android:id="@+id/previousPOIFooter"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/dimension_text_size"
+            android:text="@string/poi_previous" />
 
         <ImageView
             android:layout_width="wrap_content"
