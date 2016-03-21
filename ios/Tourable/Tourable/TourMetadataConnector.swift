@@ -86,12 +86,11 @@ class TourMetadataConnector {
     func saveUpdateMetadata(metadata: NSDictionary, objectId: String, tourCode: String){
 
         var tourDict = NSUserDefaults.standardUserDefaults().objectForKey(tourCode) as! [String : AnyObject]
-        print(tourDict)
 
         tourDict["version"] = metadata["version"]
         tourDict["estimatedTime"] =  metadata["estimatedTime"]
 
-        NSUserDefaults.standardUserDefaults().setObject(tourDict, forKey: tourCode as! String)
+        NSUserDefaults.standardUserDefaults().setObject(tourDict, forKey: tourCode)
         NSUserDefaults.standardUserDefaults().synchronize()
     }
 

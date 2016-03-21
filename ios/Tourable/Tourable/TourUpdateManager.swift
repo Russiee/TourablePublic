@@ -40,8 +40,7 @@ public class TourUpdateManager: NSObject {
         
         // get current tourKey metadata from cache
         self.currentTourKEYmetadata = TourIdParser().getTourMetadata(tourCode)
-        print("//////")
-        print(self.currentTourKEYmetadata)
+
         // get new tourKey metadata
         if ApiConnector.sharedInstance.isConnectedToNetwork() {
             ApiConnector.sharedInstance.initiateConnection(tourCode, isCheckingForUpdate: true)
@@ -87,7 +86,7 @@ public class TourUpdateManager: NSObject {
         if self.newTourKEYmetadata != nil {
             // when you change it as it not programmatic 
             // is gonna be something like that currentTourmetadata["version"] as! Int
-            let currentVersion = 17
+            let currentVersion = currentTourKEYmetadata["version"] as! Int
 
             if currentVersion < versionFreshFromAPI {
                 return false
@@ -107,7 +106,6 @@ public class TourUpdateManager: NSObject {
     // check if a project is out to date comparing metadata with current today's date.
     // if the project is out to date, it is deleted after informing the user
     func checkIfOutdatedAndDeleteProject() {
-        
         if self.newTourKEYmetadata != nil {
             let todaysDate = NSDate()
             let expiresDate = getDateFromString(currentTourKEYmetadata["expiry"] as! String)
@@ -165,9 +163,9 @@ public class TourUpdateManager: NSObject {
         ApiConnector.sharedInstance.initiateConnection(tourCode, isCheckingForUpdate: false)
     }
     
+    // images re-downloaded only when it's notified to do so
     func NotifiedValid(){
         sleep(1)
-        // re-download images
         imageHandler.sharedInstance.downloadMediaSet(imageHandler.sharedInstance.imageQueue)
     }
 }

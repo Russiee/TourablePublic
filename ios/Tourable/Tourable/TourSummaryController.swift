@@ -91,7 +91,7 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
         let estimatedTime = "Estimated time: \(summaryData.timeHours) hour \(summaryData.timeMins) minutes"
         //checks the update status of the tour
         if summaryData.isCurrent {
-            updateStatus = "The tour is up-to-date"
+            updateStatus = "The tour is up to date"
         }else{
             updateStatus = "An update is available"
         }
@@ -219,7 +219,12 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
 
                     //tour is up to date and not being updated, show the green tick
                 }else if summaryData.isCurrent && !isUpdating{
-
+                    print(indexPath.row)
+                    
+                    if indexPath.row == 1 {
+                        cell.textLabel?.text = "The tour is up to date"
+                    }
+                    
                     let tick_image = UIImage(named: "green_tick")
                     let tickFrame = UIImageView(image: tick_image)
                     tickFrame.center = CGPoint(x: view.bounds.width * 0.95, y: 60.0 / 2.0)
