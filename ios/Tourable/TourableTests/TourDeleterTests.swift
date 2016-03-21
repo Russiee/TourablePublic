@@ -119,5 +119,37 @@ class TourDeleterTests: XCTestCase {
     }
     
     
+    func testDeletingMedia(){
+        let url = "https://s3-eu-west-1.amazonaws.com/testmediahobbyte/sample_video.mp4"
+        videoHandler.sharedInstance.downloadVideo(url)
+        let metaData = [
+            "tour": [
+                "__type": "Pointer",
+                "className": "Tour",
+                "objectId": "cjWRKDygIZ"
+            ],
+            "code": "KCL-1010",
+            "updatedAt": "2016-03-20T12:10:42.175Z",
+            "createdAt": "2016-03-18T10:50:47.172Z",
+            "expiry": "2016-06-19T00:00:00.000Z",
+            "objectId": "ZX8DHpGKxk"
+        ]
+        
+        NSUserDefaults.standardUserDefaults().setObject(metaData["tour"], forKey: "KCL-1010")
+        NSUserDefaults.standardUserDefaults().synchronize()
+        let bundleDownload = bundleRouteConnector()
+        bundleDownload.startConnection("cjWRKDygIZ")
+        let data = bundleDownload.getJSONResult()
+        print(data)
+        _ = tourDataParser().saveNewTour(data)
+        TourIdParser.sharedInstance.updateArray("KCL-1010", tourTitle: "Ultimate Flat Tour")
+        TourDeleter.sharedInstance.deleteMediaInTour("KCL-1010")
+        let fileName = String(url.hash)
+        let path = MediaHelper.sharedInstance.fileInDocumentsDirectory(fileName,fileType: ".mp4")
+        XCTAssertFalse(MediaHelper.sharedInstance.checkFileExists(path), "This video should be deleted")
+        TourDeleter.sharedInstance.deleteTour("KCL-1010")
+        
+    }
+    
     
 }
