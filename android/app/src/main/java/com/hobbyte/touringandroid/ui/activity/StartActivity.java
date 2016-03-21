@@ -153,8 +153,8 @@ public class StartActivity extends AppCompatActivity {
                 TextView tourName = (TextView) tourItem.findViewById(R.id.textTourName);
                 LinearLayout tour = (LinearLayout) tourItem.findViewById(R.id.tourItem);
 
-                keyID = c.getString(0);
-                tourID = c.getString(1);
+                final String keyID = c.getString(0);
+                final String tourID = c.getString(1);
                 String name = c.getString(2);
                 expiryTimeLong = c.getLong(3);
 
@@ -166,7 +166,7 @@ public class StartActivity extends AppCompatActivity {
                 tour.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        goToTour(false, false);
+                        goToTour(keyID, tourID, false, false);
                     }
                 });
 
@@ -242,7 +242,7 @@ public class StartActivity extends AppCompatActivity {
     /**
      * Moves the app to the {@link SummaryActivity}, ready to start the tour
      */
-    private void goToTour(boolean downloadNeeded, boolean withMedia) {
+    private void goToTour(String keyID, String tourID, boolean downloadNeeded, boolean withMedia) {
         Intent intent = new Intent(this, SummaryActivity.class);
         intent.putExtra(SummaryActivity.KEY_ID, keyID);
         intent.putExtra(SummaryActivity.TOUR_ID, tourID);
@@ -293,7 +293,7 @@ public class StartActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                goToTour(true, false);
+                goToTour(keyID, tourID, true, false);
                 dialog.cancel();
             }
         });
@@ -303,7 +303,7 @@ public class StartActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                goToTour(true, true);
+                goToTour(keyID, tourID, true, true);
                 dialog.cancel();
             }
         });
