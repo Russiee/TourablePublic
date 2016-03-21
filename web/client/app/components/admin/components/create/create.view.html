@@ -3,7 +3,7 @@
 </div>
 <div class="row">
     <div class="admin-main col-sm-8">
-        <h3 class="admin-header">Create {{create.class}}</h3>
+        <h3 class="admin-header">Create a {{class.capitalize()}}</h3>
     </div>
     <div class="admin-help col-sm-4 hidden-xs"></div>
 </div>
@@ -21,7 +21,7 @@
 </div>
 <div class="row">
     <div class="admin-main col-sm-8">
-        <button class="btn admin-btn">Create new {{create.class.toUpperCase()}}</button><br>
+        <button class="btn admin-btn">Create new {{class.capitalize()}}</button><br>
         <div class="admin-message admin-message-success" ng-show="accountmessage === success">Your changes have been saved successfully</div>
         <div class="admin-message admin-message-error" ng-show="accountmessage === error">There was an error saving your changes</div>
         <div class="admin-message admin-message-neutral" ng-show="accountmessage === neutral">You haven't modified any details</div>
