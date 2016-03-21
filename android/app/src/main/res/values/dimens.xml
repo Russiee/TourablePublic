@@ -13,6 +13,12 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
 
+    <!--POI dimensions-->
+    <dimen name="poi_padding_top">24dp</dimen>
+    <dimen name="poi_padding_top_small">16dp</dimen>
+    <dimen name="poi_padding_top_tiny">8dp</dimen>
+    <dimen name="poi_padding_side">16dp</dimen>
+
     <!-- Shared dimensions-->
     <dimen name="progress_bar_height">16dp</dimen>
 

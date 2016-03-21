@@ -258,7 +258,7 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
                 }
 
                 contentView = (TextView) view.findViewById(R.id.poiHeaderTextView);
-                contentView.setText(listViewItem.getText() + "\n");
+                contentView.setText(listViewItem.getText());
 
                 if (listViewItem.getText().length() == 0) {
                     return new View(getContext());
@@ -270,14 +270,14 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
 
                 // TODO
                 contentView = (TextView) view.findViewById(R.id.poiContentTextView);
-                contentView.setText(listViewItem.getText() + "\n");
+                contentView.setText(listViewItem.getText());
 
                 return view;
 
             case QUIZ:
 
                 contentView = (TextView) view.findViewById(R.id.quizTitle);
-                contentView.setText("Quiz: " + listViewItem.getText() + "\n");
+                contentView.setText("Quiz: " + listViewItem.getText());
                 if (quiz == null) {
                     quiz = new Quiz(listViewItem.getOption(), listViewItem.getSolution(), view);
                 }
