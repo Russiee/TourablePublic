@@ -1,5 +1,5 @@
 angular.module('tourable')
-    .controller('AdminCtrl', function ($scope, AuthService, $state, $location, adminFactory) {
+    .controller('AdminCtrl', function ($rootScope, $scope, AuthService, $state, $location, adminFactory) {
 
         $scope.$state = $state;
         $scope.accountmessage = "";
@@ -11,6 +11,15 @@ angular.module('tourable')
                 $state.go("admin.dashboard");
             } else {
                 $state.go("home");
+            }
+        });
+
+
+        $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
+            if (fromState.name === 'admin.create' && fromParams.class === 'tour') {
+                getAllTours();
+            } else if (fromState.name === 'admin.create' && fromParams.class === 'admin') {
+                getAllAdmins();
             }
         });
 

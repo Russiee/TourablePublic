@@ -11,7 +11,8 @@
     <div class="row" ng-repeat="input in classData[class].expectedInput track by $index">
         <div class="admin-main col-sm-8 admin-account-inputs admin-create-input">
             <h5 class="admin-subheader">{{input.description}}</h5>
-            <input type="text" class="form-control" ng-model="input.value">
+            <input type="text" class="form-control" ng-model="input.value" ng-disabled="creating">
+            <div class="admin-message admin-message-error" ng-show="validate && !input.value && input.required">This is a required input</div>
         </div>
         <div class="admin-help col-sm-4 hidden-xs">{{input.help}}</div>
     </div>
@@ -19,7 +20,8 @@
 </div>
 <div class="row">
     <div class="admin-main col-sm-8">
-        <button class="btn admin-btn" ng-click="create()">Create</button><br>
+        <button class="btn admin-btn" ng-click="create()" ng-disabled="creating">Create this {{class.capitalize()}}</button><br>
+        <h5 ng-show="creating" class="admin-subheader"><i class="fa fa-spin fa-cog"></i> Creating your {{class.capitalize()}}...</h5>
         <div class="admin-message admin-message-success" ng-show="accountmessage === success">Your {{class.capitalize()}} has been created successfully</div>
         <div class="admin-message admin-message-error" ng-show="accountmessage === error">There was an error creating your {{class.capitalize()}}</div>
     </div>
