@@ -43,8 +43,6 @@ public class DownloadTourTask extends Thread {
 
     private Handler handler;
 
-    private Activity activity;
-
     /**
      *
      * @param handler a {@link Handler} implementation from an Activity that updates a progress bar
@@ -181,8 +179,7 @@ public class DownloadTourTask extends Thread {
 
         } catch (IOException e) {
             try {
-                activity = ((App) App.context).getCurrentActivity();
-                while (!ServerAPI.checkConnection(activity)) {
+                while (!ServerAPI.checkConnection()) {
                     Thread.sleep(1000);
                 }
             } catch(InterruptedException ie) {
