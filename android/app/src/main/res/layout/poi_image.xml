@@ -3,7 +3,6 @@
     android:id="@+id/poiImageLayout"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorLightBackground"
     android:orientation="vertical"
     android:paddingTop="@dimen/poi_padding_top">
 

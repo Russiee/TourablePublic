@@ -3,7 +3,6 @@
     android:id="@+id/poiContentTextView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorLightBackground"
     android:includeFontPadding="false"
     android:paddingLeft="@dimen/poi_padding_side"
     android:paddingRight="@dimen/poi_padding_side"
