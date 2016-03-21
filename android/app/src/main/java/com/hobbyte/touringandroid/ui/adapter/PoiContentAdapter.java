@@ -30,7 +30,7 @@ import com.hobbyte.touringandroid.App;
 import com.hobbyte.touringandroid.R;
 import com.hobbyte.touringandroid.io.VideoCacheListener;
 import com.hobbyte.touringandroid.tourdata.ListViewItem;
-import com.hobbyte.touringandroid.tourdata.Quiz;
+import com.hobbyte.touringandroid.ui.util.Quiz;
 import com.hobbyte.touringandroid.ui.fragment.POIFragment;
 import com.hobbyte.touringandroid.ui.fragment.VideoFragment;
 import com.hobbyte.touringandroid.ui.util.ImageCache;
@@ -59,14 +59,17 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
     public static final int IMAGE = 2;
     public static final int VIDEO = 3;
     public static final int QUIZ = 4;
+
     private static final String TAG = "PoiContentAdapter";
     private static final String FILE_NAME_PATTERN = "https?:\\/\\/[-\\w\\.\\/]*\\/(.+\\.(jpe?g|png|mp4))";
+
     private static Pattern namePattern;
     private ListViewItem[] items;
     private Bitmap loadingBitmap;
 
     private String keyID;
 
+    // needed to prevent ListView recycling form making many duplicate quizzes
     private Quiz quiz;
 
     public PoiContentAdapter(Context context, ListViewItem[] content, String keyID) {
