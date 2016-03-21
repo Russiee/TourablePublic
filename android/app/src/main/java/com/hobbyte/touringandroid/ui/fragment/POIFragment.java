@@ -210,7 +210,7 @@ public class POIFragment extends ListFragment {
                     url = item.getString("url");
                     type = PoiContentAdapter.VIDEO;
                     break;
-                case "quiz":
+                case QUIZ:
                     text = item.getString("question");
                     options = new ArrayList<>();
                     JSONArray optAr = item.getJSONArray("options");

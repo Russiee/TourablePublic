@@ -1,23 +1,16 @@
 package com.hobbyte.touringandroid.internet;
 
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
-import com.hobbyte.touringandroid.App;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -33,9 +26,6 @@ public class ServerAPI {
     public static final String BUNDLE = "/bundle/";
     public static final String TOUR = "/tour/";
     public static final String KEY = "/key/";
-
-
-
 
     /**
      * Asks the server if a provided Tour Key is a real, valid key. If it is, return the
@@ -138,6 +128,7 @@ public class ServerAPI {
 
     /**
      * Connects to API using a given tourID and retrieves corresponding bundle as a string
+     *
      * @param tourID tourID whose bundle to retrieve
      * @return Bundle string
      */
@@ -177,6 +168,7 @@ public class ServerAPI {
 
     /**
      * Opens a connection to a given URL
+     *
      * @param urlString URL to open connection to
      * @return Open connection
      */

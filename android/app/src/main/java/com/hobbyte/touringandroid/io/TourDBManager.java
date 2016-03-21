@@ -66,6 +66,8 @@ public class TourDBManager extends SQLiteOpenHelper {
     private static final String SQL_ROW_COUNT =
             "SELECT COUNT(" + TourList.COL_TOUR_ID + ") FROM " + TourList.TABLE_NAME;
 
+    private static final String WHERE_KEY_ID = TourList.COL_KEY_ID + " = ?";
+
     /*=============================================
         DATABASE METHODS
      =============================================*/
@@ -209,10 +211,9 @@ public class TourDBManager extends SQLiteOpenHelper {
     public Cursor getRow(String keyID) {
         open(false);
 
-        String where = TourList.COL_KEY_ID + " = ?";
         String[] whereArgs = {keyID};
 
-        return db.query(TourList.TABLE_NAME, null, where, whereArgs, null, null, null);
+        return db.query(TourList.TABLE_NAME, null, WHERE_KEY_ID, whereArgs, null, null, null);
     }
 
     /**
@@ -244,7 +245,6 @@ public class TourDBManager extends SQLiteOpenHelper {
             expiryLong = 100;
         }
 
-        String where = TourList.COL_TOUR_ID + " = ?";
         String[] whereArgs = {keyID};
 
         ContentValues values = new ContentValues();
@@ -255,19 +255,42 @@ public class TourDBManager extends SQLiteOpenHelper {
         values.put(TourList.COL_HAS_MEDIA, video);
         values.put(TourList.COL_VERSION, version);
 
-        db.update(TourList.TABLE_NAME, values, where, whereArgs);
+        db.update(TourList.TABLE_NAME, values, WHERE_KEY_ID, whereArgs);
     }
 
+    /**
+     * Changes a tour's version number. Used to trigger updates.
+     *
+     * @param keyID the ID of a tour key (not the tour ID itself)
+     * @param version the new version number
+     */
     public void updateTourVersion(String keyID, int version) {
         open(true);
 
         ContentValues values = new ContentValues();
         values.put(TourList.COL_VERSION, version);
 
-        String where = TourList.COL_KEY_ID + " = ?";
         String[] whereArgs = {keyID};
 
-        db.update(TourList.TABLE_NAME, values, where, whereArgs);
+        db.update(TourList.TABLE_NAME, values, WHERE_KEY_ID, whereArgs);
+    }
+
+    /**
+     * Changes a tour's expiry date.
+     *
+     * @param keyID the ID of a tour key (not the tour ID itself)
+     * @param expiry the new expiry date
+     */
+    public void updateTourExpiry(String keyID, long expiry) {
+        open(true);
+
+        ContentValues values = new ContentValues();
+        values.put(TourList.COL_DATE_EXPIRES_ON, expiry);
+
+        String[] whereArgs = {keyID};
+
+        db.update(TourList.TABLE_NAME, values, WHERE_KEY_ID, whereArgs);
+
     }
 
     /**
@@ -278,9 +301,8 @@ public class TourDBManager extends SQLiteOpenHelper {
     public void deleteTour(String keyID) {
         open(true);
 
-        String where = TourList.COL_KEY_ID + " = ?";
         String[] whereArgs = {keyID};
-        int count = db.delete(TourList.TABLE_NAME, where, whereArgs);
+        int count = db.delete(TourList.TABLE_NAME, WHERE_KEY_ID, whereArgs);
         Log.d(TAG, "Deleted " + count + " row");
     }
 
@@ -306,24 +328,28 @@ public class TourDBManager extends SQLiteOpenHelper {
      * Fetches the information required to find out if a tour needs updating.
      *
      * @return an array where each row is of the form [(String) keyID, (String) tourID,
-     * (int) version]
+     * (int) version, (long) expiry date]
      */
     public Object[][] getTourUpdateInfo() {
         open(false);
 
-        String[] cols = {TourList.COL_KEY_ID, TourList.COL_TOUR_ID, TourList.COL_VERSION};
+        String[] cols = {
+                TourList.COL_KEY_ID, TourList.COL_TOUR_ID,
+                TourList.COL_VERSION, TourList.COL_DATE_EXPIRES_ON
+        };
         Cursor c = db.query(
                 TourList.TABLE_NAME, cols,
                 null, null, null, null, null
         );
 
-        Object[][] keys = new Object[c.getCount()][3];
+        Object[][] keys = new Object[c.getCount()][4];
         int i = 0;
 
         while (c.moveToNext()) {
             keys[i][0] = c.getString(0);
             keys[i][1] = c.getString(1);
             keys[i][2] = c.getInt(2);
+            keys[i][3] = c.getLong(3);
             ++i;
         }
 
@@ -427,12 +453,11 @@ public class TourDBManager extends SQLiteOpenHelper {
         open(false);
 
         String[] cols = {TourList.COL_HAS_MEDIA};
-        String where = TourList.COL_KEY_ID + " = ?";
         String[] whereArgs = {keyID};
 
         Cursor c = db.query(
                 TourList.TABLE_NAME, cols,
-                where, whereArgs,
+                WHERE_KEY_ID, whereArgs,
                 null, null, null
         );
 

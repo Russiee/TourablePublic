@@ -165,7 +165,7 @@ public class DBTest {
 
     @Test
     public void testTourDoesNotExist() {
-        db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRES_IN_FUTURE, false, 1);
+        db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRES_IN_FUTURE, false, VERSION_1);
 
         boolean tour2Exists = db.doesTourKeyNameExist(KEY_NAME_2);
         assertFalse(tour2Exists);
@@ -173,7 +173,7 @@ public class DBTest {
 
     @Test
     public void testTourHasVideo() {
-        db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRES_IN_FUTURE, true, 1);
+        db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRES_IN_FUTURE, true, VERSION_1);
 
         boolean hasMedia = db.doesTourHaveMedia(KEYID_1);
         assertTrue(hasMedia);
@@ -181,7 +181,7 @@ public class DBTest {
 
     @Test
     public void testTourDoesNotHaveVideo() {
-        db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRES_IN_FUTURE, false, 1);
+        db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRES_IN_FUTURE, false, VERSION_1);
 
         boolean hasMedia = db.doesTourHaveMedia(KEYID_1);
         assertFalse(hasMedia);
@@ -189,14 +189,34 @@ public class DBTest {
 
     @Test
     public void cannotPutDuplicateKeyIDs() {
-        db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRES_IN_FUTURE, false, 1);
-        db.putRow(KEYID_1, TOURID_2, KEY_NAME_2, NAME_2, EXPIRES_IN_FUTURE, true, 1);
+        db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRES_IN_FUTURE, false, VERSION_1);
+        db.putRow(KEYID_1, TOURID_2, KEY_NAME_2, NAME_2, EXPIRES_IN_FUTURE, true, VERSION_2);
 
         Cursor c = db.getRow(KEYID_1);
         int count = c.getCount();
         c.close();
 
         assertEquals(1, count);
+    }
+
+    @Test
+    public void testVersionUpdateWorks() {
+        db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRES_IN_FUTURE, false, VERSION_1);
+
+        db.updateTourVersion(KEYID_1, VERSION_1 + 1);
+        Object[][] info = db.getTourUpdateInfo();
+
+        assertEquals(VERSION_1 + 1, (int) info[0][2]);
+    }
+
+    @Test
+    public void testExpiryUpdateWorks() {
+        db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRED_IN_PAST, false, VERSION_1);
+
+        db.updateTourExpiry(KEYID_1, EXPIRES_IN_FUTURE_L);
+        Object[][] info = db.getTourUpdateInfo();
+
+        assertEquals(EXPIRES_IN_FUTURE_L, (long) info[0][3]);
     }
 
     @Test

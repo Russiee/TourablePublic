@@ -47,7 +47,6 @@ public class SplashActivity extends AppCompatActivity {
 
             long appStartTime = System.currentTimeMillis();
 
-            // TODO this doesn't check if key expiry dates have been updated
             UpdateChecker checker = new UpdateChecker(App.context);
 
             try {
@@ -56,17 +55,22 @@ public class SplashActivity extends AppCompatActivity {
 
                 // makes it last at least one second, even if update takes less.
                 long timeToSleepFor = 1000 - (System.currentTimeMillis() - appStartTime);
-                Thread.sleep(timeToSleepFor < 0 ? 0 : timeToSleepFor);
+
+                if (timeToSleepFor > 0) {
+                    Thread.sleep(timeToSleepFor);
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
-            String[] expired = TourDBManager.getInstance(App.context).getExpiredTours();
+            TourDBManager dbHelper = TourDBManager.getInstance(App.context);
+            String[] expired = dbHelper.getExpiredTours();
 
             for (String keyID : expired) {
-                //TODO: remove once expiry date is proper
                 FileManager.removeTour(App.context, keyID);
             }
+
+            dbHelper.close();
 
             return null;
         }
