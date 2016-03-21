@@ -232,7 +232,7 @@ class APIConnectorTests: XCTestCase {
         }
     }
     
-    func testCeanTourIds(){
+    func testCleanTourIds(){
         let test1 = "    KCL- 1  0 1     0"
         let test2 = "///KC/L-10/1/0/"
         let test3 = "\\KCL-\\1010"
