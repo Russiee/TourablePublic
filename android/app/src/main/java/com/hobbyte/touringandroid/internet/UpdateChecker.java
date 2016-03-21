@@ -27,6 +27,10 @@ public class UpdateChecker extends Thread {
 
     @Override
     public void run() {
+
+        //if no internet, don't run
+        if (!ServerAPI.checkConnection()) return;
+
         TourDBManager dbHelper = TourDBManager.getInstance(context);
 
         // has keyID, tourID, version, and expiry date
