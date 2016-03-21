@@ -20,6 +20,7 @@ angular.module('tourable')
                 console.log('Success: ', response.data);
                 $scope.admin = response.data;
                 getOrganization(response.data.organization.objectId);
+                getAllAdmins(response.data.organization.objectId);
             }, function(error) {
                 //Console log in case we need to debug with a user
                 console.log('An error occured while retrieving the admin data: ', error);
@@ -40,6 +41,16 @@ angular.module('tourable')
             });
         }
 
+        function getAllAdmins (orgID) {
+            var getAllAdminData = adminFactory.getAllAdmins(orgID);
+            getAllAdminData.then(function(response) {
+                console.log('Success: ', response.data);
+                $scope.admins = response.data;
+            }, function(error) {
+                //Console log in case we need to debug with a user
+                console.log('An error occured while retrieving the all-admin data: ', error);
+            });
+        }
 
 
         $scope.login = function () {

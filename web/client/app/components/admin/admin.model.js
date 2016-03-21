@@ -40,7 +40,7 @@ tourable.factory('adminFactory', function($http, $q) {
             return $q(function(resolve, reject) {
                 $http({
                     method: 'GET',
-                    url: 'https://api.tourable.org/api/v1/admin/' + id
+                    url: 'https://api.tourable.org/api/v1/admins?organization=' + orgID
                 }).then(function success(response) {
                     console.log(response);
                     resolve (response);
