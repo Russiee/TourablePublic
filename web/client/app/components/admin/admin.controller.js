@@ -2,6 +2,7 @@ angular.module('tourable')
     .controller('AdminCtrl', function ($scope, AuthService, $state, $location, adminFactory) {
 
         $scope.$state = $state;
+        $scope.accountmessage = "";
 
         $scope.$on('loginStatusChanged', function (event, isLoggedIn) {
             console.log("hello");
