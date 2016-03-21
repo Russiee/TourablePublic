@@ -3,9 +3,11 @@ var app = express();
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
 
+var config = require('./config.js');
+
 Parse = require('parse/node').Parse;
-Parse.initialize("touring", "yF85llv84OI0NV41ieaHU7PM0oyRCMLT");
-Parse.serverURL = 'http://touring-db.herokuapp.com/parse';
+Parse.initialize(config.database().appID, config.database().masterKey);
+Parse.serverURL = config.database().serverURL;
 
 //Allow cross origin requests
 app.use(function(req, res, next) {
