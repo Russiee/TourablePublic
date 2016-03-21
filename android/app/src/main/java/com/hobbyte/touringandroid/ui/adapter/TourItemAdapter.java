@@ -38,6 +38,7 @@ public class TourItemAdapter extends ArrayAdapter<TourItem> {
 
         TextView subsectionView = (TextView) view.findViewById(R.id.SubSectionTextView);
         TextView separator = (TextView) view.findViewById(R.id.separator);
+        separator.setVisibility(View.GONE);
 
         if (selected.getType() == TourItem.TYPE_SUBSECTION) {
             if(!hasSubSectionText && position == 0) {
