@@ -33,15 +33,19 @@ public class TourItemAdapter extends ArrayAdapter<TourItem> {
 
         TextView subsectionView = (TextView) view.findViewById(R.id.SubSectionTextView);
         TextView separator = (TextView) view.findViewById(R.id.separator);
+        separator.setVisibility(View.GONE);
 
         if (selected.getType() == TourItem.TYPE_SUBSECTION) {
-            if(position == 0) {
+            if (position == 0) {
                 separator.setVisibility(View.VISIBLE);
                 separator.setText(App.context.getString(R.string.tour_activity_subsection));
             }
             subsectionView.setText(selected.getTitle());
         } else {
-            if(position == 0 || (position != 0) && getItem(position-1).getType() == TourItem.TYPE_SUBSECTION) {
+            //must be a poi
+            if (position == 0
+                    || ((position != 0) && getItem(position - 1).getType() == TourItem.TYPE_SUBSECTION))
+            {
                 separator.setVisibility(View.VISIBLE);
                 separator.setText(App.context.getString(R.string.tour_activity_poi));
             }
