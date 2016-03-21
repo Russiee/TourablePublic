@@ -52,6 +52,8 @@ var tour = {
     //required param(s) in req: none
     //optional param(s) in req: "limit" - number of tours to be fetched, otherwise set to 20,
     //                          "orderBy" - 'descending' or 'ascending' order
+    //                          "organization" - the id of the organization that the query results should be filtered for
+
     GET_ALL: function(req, res) {
         //server log for debugging
         console.log("GET ALL TOURS");
@@ -62,6 +64,8 @@ var tour = {
         var limit = req.query.limit || 20;
         //default orderBy to null if no value is passed
         var orderBy = req.query.orderBy || null;
+        //default organization to null if no value is passed
+        var organization = req.query.organization || null;
 
         //instantiates a new query to Parse (database mount) for the Tour prototype
 
@@ -73,6 +77,11 @@ var tour = {
         //if orderBy was passed as a param, sort the query by that value
         if (orderBy) {
             query.ascending(orderBy);
+        }
+
+        //if organization was passed as a param, sort the query by that value
+        if (organization) {
+            query.equalTo("organization",{"__type":"Pointer","className":"Organization","objectId":organization})
         }
 
         //execute 'find' query and pass success and error callbacks as parameters
