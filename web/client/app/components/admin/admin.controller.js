@@ -1,6 +1,8 @@
 angular.module('tourable')
     .controller('AdminCtrl', function ($scope, AuthService, $state, $location, adminFactory) {
 
+        $scope.$state = $state;
+
         $scope.$on('loginStatusChanged', function (event, isLoggedIn) {
             console.log("hello");
             if (isLoggedIn){

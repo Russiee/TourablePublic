@@ -112,3 +112,17 @@
     padding: 15px 0px;
     color: #4A5F7E;
 }
+
+/* admin account page styles */
+
+.admin-account-inputs input {
+    margin-bottom: 15px;
+}
+
+/* admin login page styles */
+
+.admin-login-view {
+    position: fixed;
+    left: 0;
+    width: 100vw;
+}
