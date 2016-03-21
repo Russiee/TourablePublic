@@ -55,12 +55,13 @@ class APIConnectorTests: XCTestCase {
     
     
     func testPerformanceOfAPIConnectionWithKCL1010() {
+        let urlPath = "https://touring-api.herokuapp.com/api/v1/key/verify/KCL-1010"
+        let request = NSURLRequest(URL: NSURL(string: urlPath)!)
+        let config = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let session = NSURLSession(configuration: config)
+        
         self.measureBlock {
             let expectation = self.expectationWithDescription("connecting to api")
-            let urlPath = "https://touring-api.herokuapp.com/api/v1/key/verify/KCL-1010"
-            let request = NSURLRequest(URL: NSURL(string: urlPath)!)
-            let config = NSURLSessionConfiguration.defaultSessionConfiguration()
-            let session = NSURLSession(configuration: config)
             
             let task = session.dataTaskWithRequest(request) { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
                 //XCTAssertNotNil(ourData, "the data should be nil as we havent received anything yet")
