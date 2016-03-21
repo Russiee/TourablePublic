@@ -13,7 +13,7 @@ var Tour = Parse.Object.extend("Tour");
 //key module object
 //contains functions for all REST api routes for the key object
 var key = {
-    
+
     //GET route function
     //returns a single key object
     //required param(s) in req(uest): id of the key object to be fetched
@@ -21,13 +21,13 @@ var key = {
     GET: function(req, res) {
         //server log for debugging
         console.log("GET KEY");
-        
+
         //isolates id from request params
         var id = req.params.id;
-        
+
         //instantiates a new query to Parse (database mount) for the Key prototype
         var query = new Parse.Query(Key);
-        
+
         //execute query and pass the id as a parameter, as well as success and error callbacks
         query.get(id, {
             //success callback, executed if the query is successful
@@ -47,7 +47,7 @@ var key = {
             }
         });
     },
-    
+
     //GET_ALL route function
     //returns as many key objects as requested
     //required param(s) in req: none
@@ -56,21 +56,25 @@ var key = {
     GET_ALL: function(req, res) {
         //server log for debugging
         console.log("GET ALL KEYS");
-        
-        //isolates limit and orderBy from request params
+
+        //isolates limit and orderBy from query parameters
 
         //default limit to 20 if no limit is passed
         var limit = req.query.limit || 20;
-        //TO DO: FIX IT
         //default orderBy to null if no value is passed
-        var orderBy = req.query.limit || null;
+        var orderBy = req.query.orderBy || null;
 
         //instantiates a new query to Parse (database mount) for the Key prototype
         var query = new Parse.Query(Key);
-        
+
+        //if orderBy was passed as a param, sort the query by that value
+        if (orderBy) {
+            query.ascending(orderBy);
+        }
+
         //set the limit to the appropriate value in the query
         query.limit(parseInt(limit));
-        
+
         //execute 'find' query and pass success and error callbacks as parameters
         query.find({
             //success callback, executed if the query is successful
@@ -99,10 +103,10 @@ var key = {
     POST: function(req, res) {
         //server logs for debugging
         console.log("POST KEY:\n", req.body);
-        
+
         //isolates relevant data from request
         var data = req.body;
-        
+
         //expected input is the expected format and data of the request, in type application/json
         //it does not represent actual data values, however it checks the value types (eg. is the data value a String, Boolean?)
         var expectedInput = {
@@ -110,7 +114,7 @@ var key = {
             "tour": "",
             "expiry": ""
         };
-        
+
         //this runs the validate module function to check the request input format against the expected input format
         //checking that each data value is of the correct type for the database
         //returns false if the request input format is not correct
@@ -118,7 +122,7 @@ var key = {
         //runs through the request data and removes any unexpected properties
         //this cleans the data and ensures it adheres to the correct format
         var parseData = validate.parseData(data, expectedInput);
-        
+
         //server logs for debugging
         console.log("Parsed Data: ", parseData);
 
@@ -126,10 +130,10 @@ var key = {
         var query = new Parse.Query(Key);
         //query checks if any keys in database exist with same code as new entry
         query.equalTo("code", req.body.code);
-        
+
         //responses if key with same code is found
         query.find({
-            //if a key is found with the same code (Key's code must be unique) and result is not empty, send back an https response with code 400 (bad request) 
+            //if a key is found with the same code (Key's code must be unique) and result is not empty, send back an https response with code 400 (bad request)
             success: function(results) {
                 if (results.length !== 0)
                     res.status(400).send({error: "Keys must be unique"});
@@ -156,7 +160,7 @@ var key = {
             }
         });
     },
-    
+
     //PUT route function
     //updates an key object
     //required param(s) in req: id of the key object to be updated
@@ -165,12 +169,12 @@ var key = {
     PUT: function(req, res) {
         //server log for debugging
         console.log("PUT KEY:\n", req.body);
-        
+
         //isolates relevant data from request
         var data = req.body;
         //isolates id from request params
         var id = req.params.id;
-        
+
         //check expected input with validate functions, see POST route for more detailed documentation
         var expectedInput = {
             "code": "",
@@ -180,13 +184,13 @@ var key = {
 
         var validInput = validate.validateInput(data, expectedInput);
         var parseData = validate.parseData(data, expectedInput);
-        
+
         //server log for debugging
         console.log("Parsed Data: ", parseData);
-        
+
         //instantiates a new query to Parse (database mount) for the Key prototype
         var query = new Parse.Query(Key);
-        
+
         //first GET the key object to be updated
         //execute query and pass the id as a parameter, as well as success and error callbacks
         query.get(id, {
@@ -194,13 +198,13 @@ var key = {
             success: function(key) {
                 //server log for debugging
                 console.log("Key " + id + " retrieved succesfully");
-                
+
                 //iterate over the properties in the parsed data
                 for (var prop in parseData) {
                     //override the current data in the key object with our parsed data
                     key.set(prop.toString(), parseData[prop]);
                 }
-                
+
                 //execute the save function on the object on the database with Parse, passing success and error callbacks
                 key.save(null, {
                     //success callback, executed if the save is successful
@@ -239,13 +243,13 @@ var key = {
     DELETE: function(req, res) {
         //server log for debugging
         console.log("DELETE KEY");
-        
+
         //isolates id from request params
         var id = req.params.id;
-        
+
         //instantiates a new query to Parse (database mount) for the Key prototype
         var query = new Parse.Query(Key);
-        
+
         //first GET the key object to be deleted
         //execute query and pass the id as a parameter, as well as success and error callbacks
         query.get(id, {
@@ -253,7 +257,7 @@ var key = {
             success: function(key) {
                 //server log for debugging
                 console.log("Key " + id + " retrieved succesfully");
-                
+
                 //execute the destroy function on the object on the database with Parse, passing success and error callbacks
                 key.destroy({
                     //success callback, executed if the destroy is successful
@@ -292,16 +296,16 @@ var key = {
     verify: function(req, res) {
         //server log for debugging
         console.log("VERIFYING KEY");
-        
+
         //isolates  key code from request params
         var code = req.params.code;
 
         //instantiates a new query to Parse (database mount) for the Key prototype
-        var query = new Parse.Query(Key
-                                    
+        var query = new Parse.Query(Key);
+
         //sets database query param to find a key with a code equal to the code passed by user
         query.equalTo("code", code);
-        
+
         //execute 'find' query and pass success and error callbacks as parameters
         query.find({
             //success callback, executed if the query is successful
@@ -339,7 +343,7 @@ function createKey (data, callback) {
 
     //create a new instance of the Key object prototype
     var key = new Key();
-    
+
     //temporarily save the tour (ID) string
     var tourID = data.tour;
     //delete the tour string from the data
@@ -355,7 +359,7 @@ function createKey (data, callback) {
             //server logs for debugging
             console.log("Created key with ID " + key.id + " at time " + key.createdAt);
             console.log(key);
-            
+
             //return the key object to the callback function passed by the POST route function
             callback(key);
         },
@@ -364,7 +368,7 @@ function createKey (data, callback) {
             //server logs for debugging
             console.log("Failed to create key.");
             console.log("Error: ", error);
-            
+
             //return the error status and data to the callback function passed by the POST route function
             callback({status: 500, data: error});
         }

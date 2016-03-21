@@ -19,13 +19,13 @@ var tour = {
     GET: function(req, res) {
         //server log for debugging
         console.log("GET TOUR");
-        
+
         //isolates id from request params
         var id = req.params.id;
-        
+
         //instantiates a new query to Parse (database mount) for the Tour prototype
         var query = new Parse.Query(Tour);
-        
+
         //execute query and pass the id as a parameter, as well as success and error callbacks
         query.get(id, {
             //success callback, executed if the query is successful
@@ -55,22 +55,26 @@ var tour = {
     GET_ALL: function(req, res) {
         //server log for debugging
         console.log("GET ALL TOURS");
-        
-        //isolates limit and orderBy from request params
+
+        //isolates limit and orderBy from query parameters
 
         //default limit to 20 if no limit is passed
         var limit = req.query.limit || 20;
-        //TO DO: FIX IT
         //default orderBy to null if no value is passed
-        var orderBy = req.query.limit || null;
+        var orderBy = req.query.orderBy || null;
 
         //instantiates a new query to Parse (database mount) for the Tour prototype
 
         var query = new Parse.Query(Tour);
-        
+
         //set the limit to the appropriate value in the query
         query.limit(parseInt(limit));
-        
+
+        //if orderBy was passed as a param, sort the query by that value
+        if (orderBy) {
+            query.ascending(orderBy);
+        }
+
         //execute 'find' query and pass success and error callbacks as parameters
         query.find({
             //success callback, executed if the query is successful
@@ -99,10 +103,10 @@ var tour = {
     POST: function(req, res) {
         //server log for debugging
         console.log("POST TOUR:\n", req.body);
-        
+
         //isolates relevant data from request
         var data = req.body;
-        
+
         //expected input is the expected format and data of the request, in type application/json
         //it does not represent actual data values, however it checks the value types (eg. is the data value a String, Boolean?)
         var expectedInput = {
@@ -121,14 +125,14 @@ var tour = {
         //runs through the request data and removes any unexpected properties
         //this cleans the data and ensures it adheres to the correct format
         var parseData = validate.parseData(data, expectedInput);
-        
+
         //server log for debugging
         console.log("Parsed Data: ", parseData);
         //if request format is incorrect, return https response 400 (bad request)
         if (!validInput) {
             res.sendStatus(400);
         }
-        //the request is formatted correctly, call the createTour function (separate logic function) and pass it a callback function 
+        //the request is formatted correctly, call the createTour function (separate logic function) and pass it a callback function
         else {
             createTour(parseData, function(result) {
                 //checks the status code sent back, if there is no server error (status 500)
@@ -151,12 +155,12 @@ var tour = {
     PUT: function(req, res) {
         //server log for debugging
         console.log("PUT TOUR:\n", req.body);
-        
+
         //isolates relevant data from request
-		var data = req.body;
+        var data = req.body;
         //isolates id from request params
-		var id = req.params.id;
-        
+        var id = req.params.id;
+
         //check expected input with validate functions, see POST route for more detailed documentation
         var expectedInput = {
             "description": "",
@@ -169,13 +173,13 @@ var tour = {
 
         var validInput = validate.validateInput(data, expectedInput);
         var parseData = validate.parseData(data, expectedInput);
-        
+
         //server log for debugging
         console.log("Parsed Data: ", parseData);
 
         //instantiates a new query to Parse (database mount) for the Tour prototype
         var query = new Parse.Query(Tour);
-        
+
         //first GET the tour object to be updated
         //execute query and pass the id as a parameter, as well as success and error callbacks
         query.get(id, {
@@ -183,13 +187,13 @@ var tour = {
             success: function(tour) {
                 //server log for debugging
                 console.log("Tour " + id + " retrieved succesfully");
-                
+
                 //iterate over the properties in the parsed data
                 for (var prop in parseData) {
                     //override the current data in the tour object with our parsed data
                     tour.set(prop.toString(), parseData[prop]);
                 }
-                
+
                 //execute the save function on the object on the database with Parse, passing success and error callbacks
                 tour.save(null, {
                     //success callback, executed if the save is successful
@@ -228,13 +232,13 @@ var tour = {
     DELETE: function(req, res) {
         //server log for debugging
         console.log("DELETE TOUR");
-        
+
         //isolates id from request params
         var id = req.params.id;
-        
+
         //instantiates a new query to Parse (database mount) for the Tour prototype
         var query = new Parse.Query(Tour);
-        
+
         //first GET the tour object to be deleted
         //execute query and pass the id as a parameter, as well as success and error callbacks
         query.get(id, {
@@ -279,7 +283,7 @@ function createTour (data, callback) {
 
     //create a new instance of the Tour object prototype
     var tour = new Tour();
-    
+
     //temporarily save the admin (ID) string
     var adminID = data.admin;
     //delete the admin string from the data
@@ -294,7 +298,7 @@ function createTour (data, callback) {
             //server log for debugging
             console.log("Created tour with ID " + tour.id + " at time " + tour.createdAt);
             console.log(tour);
-            
+
             //return the tour object to the callback function passed by the POST route function
             callback(tour);
         },
@@ -303,7 +307,7 @@ function createTour (data, callback) {
             //server log for debugging
             console.log("Failed to create tour.");
             console.log("Error: ", error);
-            
+
             //return the error status and data to the callback function passed by the POST route function
             callback({status: 500, data: error});
         }
