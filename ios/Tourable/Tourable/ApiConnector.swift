@@ -51,13 +51,17 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
                     }
                 } else {
                     print("invalid")
-                   self.triggerInvalidKeyNotification()
+                    dispatch_async(dispatch_get_main_queue()){
+                        self.triggerInvalidKeyNotification()
+                    }
                 }
             }
             catch let err as NSError{
                 //Need to let user know if the tourID they entered was faulty here
                 print(err.description)
-                self.triggerInvalidKeyNotification()
+                dispatch_async(dispatch_get_main_queue()){
+                    self.triggerInvalidKeyNotification()
+                }
             }
             
         }
