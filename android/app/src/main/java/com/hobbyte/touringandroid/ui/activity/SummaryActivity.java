@@ -34,7 +34,6 @@ import org.json.JSONObject;
 import java.lang.ref.WeakReference;
 import java.text.ParseException;
 import java.util.Calendar;
-import java.util.Set;
 import java.util.TimeZone;
 
 public class SummaryActivity extends AppCompatActivity {
@@ -75,7 +74,6 @@ public class SummaryActivity extends AppCompatActivity {
 
     private Boolean updating;
 
-    private int durationSeconds;
     private int durationMinutes;
     private int durationHours;
     private int durationDays;
@@ -501,7 +499,6 @@ public class SummaryActivity extends AppCompatActivity {
         }
 
         long duration = datetime - Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis();
-        durationSeconds = (int) (duration / 1000 % 60);
         durationMinutes = (int) (duration / (60 * 1000) % 60);
         durationHours = (int) (duration / (60 * 60 * 1000) % 24);
         durationDays = (int) (duration / (24 * 60 * 60 * 1000));
