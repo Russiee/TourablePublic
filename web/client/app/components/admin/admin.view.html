@@ -1,1 +1,13 @@
-<ui-view></ui-view>
+<div id="admin-view">
+    <div class="row">
+        <div id="admin-nav" class="col-md-3 hidden-xs hidden-sm" ng-hide="$state.current.name === 'admin.login'">
+            <ng-include src="'client/app/components/admin/components/sidenav.view.html'"></ng-include>
+        </div>
+        <div class="col-md-3">
+        </div>
+        <div id="admin-content" class="col-md-9">
+            <ui-view></ui-view>
+        </div>
+    </div>
+</div>
+

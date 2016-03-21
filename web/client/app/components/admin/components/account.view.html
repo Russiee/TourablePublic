@@ -1,2 +1,30 @@
-<div id="admin-dash-main" class="col-md-6"></div>
-    <div id="admin-dash-help" class="col-md-3"></div>
+<div class="row">
+    <div class="admin-help-bkg col-sm-3 hidden-xs hidden-sm"></div>
+</div>
+<div class="row">
+    <div class="admin-main col-sm-8">
+        <h3 class="admin-header">Account Settings</h3>
+    </div>
+    <div class="admin-help col-sm-4 hidden-xs"></div>
+</div>
+<div class="row">
+    <div class="admin-main col-sm-8 admin-account-inputs">
+        <h5 class="admin-subheader">First Name</h5>
+        <input type="text" class="form-control" ng-model="admin.firstname">
+        <h5 class="admin-subheader">Last Name</h5>
+        <input type="text" class="form-control" ng-model="admin.lastname">
+        <h5 class="admin-subheader">Email</h5>
+        <input type="text" class="form-control" ng-model="admin.email">
+
+    </div>
+<!--    <div class="admin-help col-sm-4 hidden-xs">help 2</div>-->
+</div>
+<div class="row">
+    <div class="admin-main col-sm-8">
+        <button class="btn admin-btn">Save Account Settings</button><br>
+        <div class="admin-message admin-message-success" ng-show="accountmessage === success">Your changes have been saved successfully</div>
+        <div class="admin-message admin-message-error" ng-show="accountmessage === error">There was an error saving your changes</div>
+        <div class="admin-message admin-message-neutral" ng-show="accountmessage === neutral">You haven't modified any details</div>
+    </div>
+    <div class="admin-help col-sm-4 hidden-xs"></div>
+</div>

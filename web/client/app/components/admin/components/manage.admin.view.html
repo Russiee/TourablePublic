@@ -1,2 +1,36 @@
-<div id="admin-dash-main" class="col-md-6"></div>
-    <div id="admin-dash-help" class="col-md-3"></div>
+<div class="row">
+    <div class="admin-help-bkg col-md-3 hidden-xs hidden-sm"></div>
+</div>
+<div class="row">
+    <div class="admin-main col-sm-8">
+        <h3 class="admin-header">Manage Admins</h3>
+        <h5 class="admin-subheader">Create and delete admins, manage their permissions.</h5>
+    </div>
+    <div class="admin-help col-md-4 hidden-xs"></div>
+</div>
+<div class="row">
+    <div class="admin-main col-sm-8">
+        <h5 class="admin-subheader no-padding-top">Admins of {{organization.name}}</h5>
+        <ul class="admin-cell-list">
+            <div ng-repeat="_admin in admins track by $index">
+                <li class="cursor-pointer">{{_admin.username}}<i class="fa fa-chevron-right pull-right"></i></li>
+            </div>
+        </ul>
+    </div>
+    <div class="admin-help col-md-4 hidden-xs">
+        This is a list of all the admins in your organization.
+        Click on an admin to edit or delete their information.
+    </div>
+</div>
+<div class="row">
+    <div class="admin-main col-sm-8">
+        <button class="btn admin-btn" ui-sref="admin.create({class: 'admin'})">Create an Admin</button><br>
+    </div>
+    <div class="admin-help col-md-4 hidden-xs">
+        Click on the "Create an Admin" button to create a new admin in your organization, so that they can add and edit tours.
+    </div>
+</div>
+
+
+
+

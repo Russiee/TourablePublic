@@ -1,10 +1,106 @@
-#admin-dash-nav {
-    min-height: 100vh;
-    background-color: #14233C;
-    padding-right: 0;
+/* general admin view styles */
+
+#admin-view .row {
+    margin: 0;
+    height: 100%;
 }
 
-#admin-dash-nav-list {
+#admin-view .form-control {
+    color: #4A5F7E;
+    padding: 20px;
+    border-width: 2px;
+    border-color: #D8DCE0;
+    background-color: #ecf0f1;
+    box-shadow: none;
+    border-radius: 5px;
+    -webkit-transition: background-color 150ms ease-in-out;
+       -moz-transition: background-color 150ms ease-in-out;
+         -o-transition: background-color 150ms ease-in-out;
+        -ms-transition: background-color 150ms ease-in-out;
+            transition: background-color 150ms ease-in-out;
+}
+
+#admin-view .form-control:focus {
+    background-color: #FFF;
+    border-color: #D8DCE0;
+    box-shadow: none;
+
+    -webkit-transition: background-color 150ms ease-in-out;
+       -moz-transition: background-color 150ms ease-in-out;
+         -o-transition: background-color 150ms ease-in-out;
+        -ms-transition: background-color 150ms ease-in-out;
+            transition: background-color 150ms ease-in-out;
+}
+
+.admin-btn {
+    border-radius: 5px;
+    padding: 15px 20px;
+    border: 2px;
+    background-color: #D8DCE0;
+    color: #162B49;
+}
+
+.admin-message {
+    background-color: #D8DCE0;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin: 10px 0px;
+    color: #162B49;
+    display: inline-block;
+}
+
+.admin-message-success {
+    background-color: #B2FFB1;
+}
+
+.admin-message-error {
+    background-color: #FFB2B1;
+}
+
+.admin-message-neutral {
+    background-color: #FFF5AB;
+}
+
+.admin-cell-list {
+    background-color: #FFF;
+    border-radius: 5px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.admin-cell-list li {
+    padding: 15px 20px;
+    border-bottom-style: solid;
+    border-bottom-color: #ECF0F1;
+    border-bottom-width: 1px;
+    color: #162B49;
+}
+
+.admin-cell-list:last-child {
+    border: 0;
+}
+
+.admin-cell-list .fa-chevron-right {
+    color: #DDD;
+    padding: 4px 0;
+}
+
+
+/* admin sidenav styles */
+
+#admin-nav {
+    min-height: 100vh;
+    background: #162B49; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#061730, #0f3874); /* For Safari 5.1 to 6.0 */
+    background:      -o-linear-gradient(#061730, #0f3874); /* For Opera 11.1 to 12.0 */
+    background:    -moz-linear-gradient(#061730, #0f3874); /* For Firefox 3.6 to 15 */
+    background:         linear-gradient(#061730, #0f3874); /* Standard syntax */
+    padding: 0;
+    position: fixed;
+}
+
+#admin-nav-list {
     list-style-type: none;
     color: #fff;
     margin: 0;
@@ -13,25 +109,86 @@
     padding-top: 15px;
 }
 
-#admin-dash-nav-list li {
+
+#admin-nav-list li {
     padding: 15px 30px;
     width: 100%;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
 }
-
-#admin-dash-nav-list li {
-    padding: 15px 30px;
-    width: 100%;
-    font-weight: 500;
-    cursor: pointer;
+#admin-nav-list li:hover {
+    background: #0c2d5d;
 }
 
-#admin-dash-main {
-    min-height: 100vh;
-} 
+#admin-nav-list .fa {
+    margin-right: 10px;
+}
 
-#admin-dash-help {
-    min-height: 100vh;
-    background-color: #fff;
+.admin-nav-brand {
+    font-family: Pacifico;
+    margin: 0;
+    padding: 20px 25px;
+}
+
+/* admin content section styles */
+
+#admin-content {
+    padding: 0;
+}
+
+.admin-main,
+.admin-help {
+    padding: 20px 30px;
+}
+
+.admin-help {
+    color: #4A5F7E;
+    font-size: 12px;
+}
+
+.admin-help-bkg {
+    position: fixed;
+    height: 100vh;
+    background-color: #FFF;
+    right: 0;
+}
+
+.admin-header {
+    margin: 0;
+    padding: 0;
+    padding-top: 16px;
+    color: #162B49;
+    font-weight: 600;
+}
+
+.admin-subheader {
+    margin: 0;
+    padding: 15px 0px;
+    color: #4A5F7E;
+}
+
+/* admin account page styles */
+
+.admin-account-inputs input {
+    margin-bottom: 15px;
+}
+
+/* admin login page styles */
+
+.admin-login-view {
+    position: fixed;
+    left: 0;
+    width: 100vw;
+}
+
+
+/* admin create page styles */
+
+.admin-create-input {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.admin-create-container {
+
 }
