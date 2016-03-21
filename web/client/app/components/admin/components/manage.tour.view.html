@@ -2,14 +2,31 @@
     <div class="admin-help-bkg col-md-3 hidden-xs hidden-sm"></div>
 </div>
 <div class="row">
-    <div class="admin-main col-sm-8"><h3 class="admin-header">Manage Tours</h3></div>
-    <div class="admin-help col-sm-4 hidden-xs"></div>
+    <div class="admin-main col-sm-8">
+        <h3 class="admin-header">Manage Tours</h3>
+        <h5 class="admin-subheader">Create and delete admins, manage their permissions.</h5>
+    </div>
+    <div class="admin-help col-md-4 hidden-xs"></div>
 </div>
 <div class="row">
-    <div class="admin-main col-sm-8">2</div>
-    <div class="admin-help col-sm-4 hidden-xs">help 2</div>
+    <div class="admin-main col-sm-8">
+        <h5 class="admin-subheader no-padding-top">Your Tours</h5>
+        <ul class="tour-cell-list">
+            <div ng-repeat="_admin in admins track by $index">
+                <li class="cursor-pointer">{{_admin.username}}<i class="fa fa-chevron-right pull-right"></i></li>
+            </div>
+        </ul>
+    </div>
+    <div class="admin-help col-md-4 hidden-xs">This is a list of your tours.</div>
 </div>
 <div class="row">
-    <div class="admin-main col-sm-8">3</div>
-    <div class="admin-help col-sm-4 hidden-xs">help 3</div>
+    <div class="admin-main col-sm-8">
+        <h5 class="admin-subheader no-padding-top">Other Tours</h5>
+        <ul class="tour-cell-list">
+            <div ng-repeat="_admin in admins track by $index">
+                <li class="cursor-pointer">{{_admin.username}}<i class="fa fa-chevron-right pull-right"></i></li>
+            </div>
+        </ul>
+    </div>
+    <div class="admin-help col-md-4 hidden-xs">This is a list of all the tours in your organization that aren't yours.</div>
 </div>
