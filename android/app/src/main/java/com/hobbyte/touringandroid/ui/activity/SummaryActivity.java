@@ -404,7 +404,7 @@ public class SummaryActivity extends AppCompatActivity {
      */
     private void onDownloadFinished() {
         addTourToDB();
-        displaySummary();
+        this.finish();
     }
 
     /**
