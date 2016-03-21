@@ -61,6 +61,24 @@
     background-color: #FFF5AB;
 }
 
+.admin-cell-list {
+    background-color: #FFF;
+    border-radius: 5px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.admin-cell-list li {
+    padding: 15px 20px;
+    border-bottom-style: solid;
+    border-bottom-color: #ECF0F1;
+    border-bottom-width: 1px;
+    color: #162B49;
+}
+
+
+
 /* admin sidenav styles */
 
 #admin-nav {
@@ -116,7 +134,6 @@
 }
 
 .admin-help {
-    background-color: #FFF;
     color: #4A5F7E;
     font-size: 12px;
 }
