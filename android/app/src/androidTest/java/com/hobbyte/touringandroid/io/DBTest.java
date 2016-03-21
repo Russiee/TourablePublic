@@ -241,6 +241,13 @@ public class DBTest {
     }
 
     @Test
+    public void testGetExpiryDate() {
+        db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRED_IN_PAST, false, VERSION_1);
+
+        assertEquals(EXPIRED_IN_PAST_L, db.getExpiryDate(KEYID_1));
+    }
+
+    @Test
     public void timeConverterWorks() {
         long converted;
         try {
