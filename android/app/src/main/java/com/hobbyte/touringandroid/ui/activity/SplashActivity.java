@@ -47,6 +47,7 @@ public class SplashActivity extends AppCompatActivity {
 
             long appStartTime = System.currentTimeMillis();
 
+            // this checks for changes to expiry date and version number
             UpdateChecker checker = new UpdateChecker(App.context);
 
             try {
@@ -63,14 +64,11 @@ public class SplashActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            TourDBManager dbHelper = TourDBManager.getInstance(App.context);
-            String[] expired = dbHelper.getExpiredTours();
+            String[] expired = TourDBManager.getInstance(App.context).getExpiredTours();
 
             for (String keyID : expired) {
                 FileManager.removeTour(App.context, keyID);
             }
-
-            dbHelper.close();
 
             return null;
         }
