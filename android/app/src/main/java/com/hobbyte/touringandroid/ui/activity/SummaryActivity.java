@@ -21,7 +21,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hobbyte.touringandroid.App;
 import com.hobbyte.touringandroid.R;
 import com.hobbyte.touringandroid.internet.ServerAPI;
 import com.hobbyte.touringandroid.io.DownloadTourTask;
@@ -32,21 +31,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
-import java.text.ParseException;
 import java.util.Calendar;
 import java.util.TimeZone;
 
 public class SummaryActivity extends AppCompatActivity {
+    private static final String TAG = "SummaryActivity";
 
     public static final String KEY_ID = "keyID";
     public static final String TOUR_ID = "tourID";
     public static final String KEY_NAME = "keyName";
-    public static final String EXPIRY_TIME_LONG = "expiryTimeLong";
     public static final String EXPIRY_TIME_STRING = "expiryTimeString";
     public static final String DOWNLOAD = "download";
     public static final String MEDIA = "media";
     public static final String UPDATING = "updating";
-    private static final String TAG = "SummaryActivity";
 
     private static ProgressHandler handler;
 
@@ -60,7 +57,6 @@ public class SummaryActivity extends AppCompatActivity {
     private Boolean withMedia;
 
     private String expiryTimeString;
-    private long expiryTimeLong;
 
     private JSONObject tourJSON;
 
@@ -83,12 +79,13 @@ public class SummaryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_summary);
 
+        Log.i(TAG, "Creating SummaryActivity");
+
         Intent intent = getIntent();
         keyID = intent.getStringExtra(KEY_ID);
         tourID = intent.getStringExtra(TOUR_ID);
         keyName = intent.getStringExtra(KEY_NAME);
         expiryTimeString = intent.getStringExtra(EXPIRY_TIME_STRING);
-        expiryTimeLong = intent.getLongExtra(EXPIRY_TIME_LONG, 0);
         Boolean doDownload = intent.getBooleanExtra(DOWNLOAD, false);
         withMedia = intent.getBooleanExtra(MEDIA, false);
         updating = intent.getBooleanExtra(UPDATING, false);
@@ -100,12 +97,12 @@ public class SummaryActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         txtDescription = (TextView) findViewById(R.id.txtTourDescription);
 
-        parseDate();
 
         if (doDownload) {
             findViewById(R.id.downloadLayout).setVisibility(View.VISIBLE);
             executeDownload();
         } else {
+            parseDate();
             displaySummary();
         }
 
@@ -125,7 +122,6 @@ public class SummaryActivity extends AppCompatActivity {
      * Starts the Tour activity
      */
     public void openTourActivity() {
-
         Intent intent = new Intent(this, TourActivity.class);
         intent.putExtra(TourActivity.INTENT_KEY_ID, keyID);
         startActivity(intent);
@@ -364,6 +360,7 @@ public class SummaryActivity extends AppCompatActivity {
             // unflag this tour as having an update available
             dbHelper.flagTourUpdate(keyID, false);
         } else {
+            Log.i(TAG, "Putting row in db for " + name);
             dbHelper.putRow(keyID, tourID, keyName, name, expiryTimeString, withMedia, version);
         }
 
@@ -434,12 +431,6 @@ public class SummaryActivity extends AppCompatActivity {
                 intent.putExtra(SummaryActivity.KEY_ID, keyID);
                 intent.putExtra(SummaryActivity.TOUR_ID, tourID);
 
-                if (expiryTimeString != null) {
-                    intent.putExtra(SummaryActivity.EXPIRY_TIME_STRING, expiryTimeString);
-                } else {
-                    intent.putExtra(SummaryActivity.EXPIRY_TIME_LONG, expiryTimeLong);
-                }
-
                 intent.putExtra(SummaryActivity.DOWNLOAD, true);
                 intent.putExtra(SummaryActivity.MEDIA, false);
                 intent.putExtra(SummaryActivity.UPDATING, updating);
@@ -453,12 +444,6 @@ public class SummaryActivity extends AppCompatActivity {
                 Intent intent = new Intent(SummaryActivity.this, SummaryActivity.class);
                 intent.putExtra(SummaryActivity.KEY_ID, keyID);
                 intent.putExtra(SummaryActivity.TOUR_ID, tourID);
-
-                if (expiryTimeString != null) {
-                    intent.putExtra(SummaryActivity.EXPIRY_TIME_STRING, expiryTimeString);
-                } else {
-                    intent.putExtra(SummaryActivity.EXPIRY_TIME_LONG, expiryTimeLong);
-                }
 
                 intent.putExtra(SummaryActivity.DOWNLOAD, true);
                 intent.putExtra(SummaryActivity.MEDIA, true);
@@ -479,26 +464,15 @@ public class SummaryActivity extends AppCompatActivity {
     }
 
     /**
-     * Parses the currently set date (in Long) to an appropriate X Days - X Hours - X Minutes - X Seconds format
+     * Parses the currently set date (in Long) to an appropriate X Days - X Hours - X Minutes format
      */
     private void parseDate() {
-        long datetime = 0;
-        if (expiryTimeString != null) {
-            try {
-                datetime = TourDBManager.convertStampToMillis(expiryTimeString);
-            } catch (ParseException e) {
-                // use temp expiry for display purposes
-                datetime = Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis() + 2592000000L;
-                e.printStackTrace();
-            }
-        } else {
-            datetime = expiryTimeLong;
-        }
+        long expiryDate = TourDBManager.getInstance(getApplicationContext()).getExpiryDate(keyID);
+        long remaining = expiryDate - Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis();
 
-        long duration = datetime - Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis();
-        durationMinutes = (int) (duration / (60 * 1000) % 60);
-        durationHours = (int) (duration / (60 * 60 * 1000) % 24);
-        durationDays = (int) (duration / (24 * 60 * 60 * 1000));
+        durationMinutes = (int) (remaining / (60 * 1000) % 60);
+        durationHours = (int) (remaining / (60 * 60 * 1000) % 24);
+        durationDays = (int) (remaining / (24 * 60 * 60 * 1000));
     }
 
 }
