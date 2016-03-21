@@ -1,6 +1,10 @@
 #admin-dash-nav {
     min-height: 100vh;
-    background-color: #14233C;
+    background: #162B49; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#061730, #0f3874); /* For Safari 5.1 to 6.0 */
+    background:      -o-linear-gradient(#061730, #0f3874); /* For Opera 11.1 to 12.0 */
+    background:    -moz-linear-gradient(#061730, #0f3874); /* For Firefox 3.6 to 15 */
+    background:         linear-gradient(#061730, #0f3874); /* Standard syntax */
     padding-right: 0;
 }
 
@@ -16,22 +20,28 @@
 #admin-dash-nav-list li {
     padding: 15px 30px;
     width: 100%;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
 }
+#admin-dash-nav-list li:hover {
+    background: #0c2d5d
+}
 
-#admin-dash-nav-list li {
-    padding: 15px 30px;
-    width: 100%;
-    font-weight: 500;
-    cursor: pointer;
+#admin-dash-nav-list .fa {
+    margin-right: 10px;
 }
 
 #admin-dash-main {
     min-height: 100vh;
-} 
+}
 
 #admin-dash-help {
     min-height: 100vh;
     background-color: #fff;
+}
+
+.admin-nav-brand {
+    font-family: Pacifico;
+    margin: 0;
+    padding: 20px 25px;
 }
