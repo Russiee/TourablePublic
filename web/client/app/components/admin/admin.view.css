@@ -77,6 +77,14 @@
     color: #162B49;
 }
 
+.admin-cell-list:last-child {
+    border: 0;
+}
+
+.admin-cell-list .fa-chevron-right {
+    color: #DDD;
+    padding: 4px 0;
+}
 
 
 /* admin sidenav styles */

@@ -19,8 +19,11 @@ angular.module('tourable')
             getAdminData.then(function(response) {
                 console.log('Success: ', response.data);
                 $scope.admin = response.data;
-                getOrganization(response.data.organization.objectId);
-                getAllAdmins(response.data.organization.objectId);
+                if ($scope.admin.isSuper) {
+                    getOrganization(response.data.organization.objectId);
+                    getAllAdmins(response.data.organization.objectId);
+                    getAllTours(response.data.organization.objectId);
+                }
             }, function(error) {
                 //Console log in case we need to debug with a user
                 console.log('An error occured while retrieving the admin data: ', error);
@@ -52,6 +55,16 @@ angular.module('tourable')
             });
         }
 
+        function getAllTours (orgID) {
+            var getAllTourData = adminFactory.getAllTours(orgID);
+            getAllTourData.then(function(response) {
+                console.log('Success: ', response.data);
+                $scope.tours = response.data;
+            }, function(error) {
+                //Console log in case we need to debug with a user
+                console.log('An error occured while retrieving all tours: ', error);
+            });
+        }
 
         $scope.login = function () {
             //if already logged in
