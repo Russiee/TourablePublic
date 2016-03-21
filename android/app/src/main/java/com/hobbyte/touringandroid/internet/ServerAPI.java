@@ -5,6 +5,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
+import com.hobbyte.touringandroid.App;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -191,12 +193,11 @@ public class ServerAPI {
      * Taken from the Android
      * <a href="https://developer.android.com/training/monitoring-device-state/connectivity-monitoring.html">training guides.</a>
      *
-     * @param context an Activity
      * @return true if the device has an internet connection
      */
-    public static boolean checkConnection(Context context) {
+    public static boolean checkConnection() {
         ConnectivityManager cm =
-                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                (ConnectivityManager) App.context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 
