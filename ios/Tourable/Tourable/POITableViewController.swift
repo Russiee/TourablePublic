@@ -157,7 +157,7 @@ class POITableViewController: UITableViewController {
             
             switch row["type"] as! String{
                 
-            case "header" :
+            case "Header" :
                 
                 let label = UITextView(frame: CGRectMake(0, 0, width, 40))
                 label.textContainerInset = UIEdgeInsetsMake(10, 12, 0, 12)
