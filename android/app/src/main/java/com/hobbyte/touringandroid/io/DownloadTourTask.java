@@ -1,6 +1,5 @@
 package com.hobbyte.touringandroid.io;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -35,7 +34,6 @@ public class DownloadTourTask extends Thread {
     public static final String PROGRESS = "downloadProgress";
 
     public static final String FILE_NAME_PATTERN = "https?:\\/\\/[-\\w\\.\\/]*\\/(.+\\.(jpe?g|png|avi|mp4))";
-//    public static final String FILE_NAME_PATTERN = "https?:\\/\\/[-\\w\\.\\/]*\\/([\\p{Punct}\\w]+\\.(jpe?g|png|mp4))";
 
     private String keyID;
     private String tourID;
@@ -96,15 +94,13 @@ public class DownloadTourTask extends Thread {
 
             for (Iterator<String> i = imageURLs.iterator(); i.hasNext(); ) {
                 String urlString = i.next();
-                Log.d(TAG, urlString);
                 Matcher m = namePattern.matcher(urlString);
 
                 if (m.matches()) {
                     String img = m.group(1);
-                    Log.d(TAG, img);
                     saveFile(urlString, img, "image", 8192);
                 } else {
-                    Log.d(TAG, "Could not match " + urlString);
+                    Log.w(TAG, "Could not match " + urlString);
                 }
 
                 informActivity(++count / total);
@@ -126,15 +122,13 @@ public class DownloadTourTask extends Thread {
 
             for (Iterator<String> i = imageURLs.iterator(); i.hasNext(); ) {
                 String urlString = i.next();
-                Log.d(TAG, urlString);
                 Matcher m = namePattern.matcher(urlString);
 
                 if (m.matches()) {
                     String img = m.group(1);
-                    Log.d(TAG, img);
                     saveFile(urlString, img, "image", 8192);
                 } else {
-                    Log.d(TAG, "Could not match " + urlString);
+                    Log.w(TAG, "Could not match " + urlString);
                 }
             }
         }

@@ -110,7 +110,6 @@ public class ServerAPI {
                 in.close();
 
                 JSONObject json = new JSONObject(jsonString.toString());
-                Log.d(TAG, "Returning JSON for tour: " + json.getString("title"));
                 connection.disconnect();
 
                 return json;
