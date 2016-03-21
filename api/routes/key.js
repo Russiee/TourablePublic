@@ -163,7 +163,7 @@ var key = {
     //optional param(s) in req: none
     //required data in req.body: see expectedInput
     PUT: function(req, res) {
-        //server log for debuggin
+        //server log for debugging
         console.log("PUT KEY:\n", req.body);
         
         //isolates relevant data from request
@@ -181,7 +181,7 @@ var key = {
         var validInput = validate.validateInput(data, expectedInput);
         var parseData = validate.parseData(data, expectedInput);
         
-        //server log for debuggin
+        //server log for debugging
         console.log("Parsed Data: ", parseData);
         
         //instantiates a new query to Parse (database mount) for the Key prototype
@@ -192,7 +192,7 @@ var key = {
         query.get(id, {
             //success callback, executed if the query is successful
             success: function(key) {
-                //server log for debuggin
+                //server log for debugging
                 console.log("Key " + id + " retrieved succesfully");
                 
                 //iterate over the properties in the parsed data
@@ -205,14 +205,14 @@ var key = {
                 key.save(null, {
                     //success callback, executed if the save is successful
                     success: function(key) {
-                        //server log for debuggin
+                        //server log for debugging
                         console.log("Key " + id + " updated succesfully");
                         //send an https response with status code 200 and the updated key data in JSON format
                         res.status(200).send(key);
                     },
-                    //error callback, executed if an error occurs during the sav
+                    //error callback, executed if an error occurs during the save
                     error:  function(key, error) {
-                        //server log for debuggin
+                        //server log for debugging
                         console.log("Failed to update key " + id);
                         console.log(error);
                         //send an https response with status code 500, as well as the error data in JSON format
@@ -223,10 +223,10 @@ var key = {
             },
             //error callback, executed if an error occurs
             error: function(object, error) {
-                //server log for debuggin
+                //server log for debugging
                 console.log("Error retrieving " + id);
                 console.log(error);
-                //send an https response with status code 500
+                //send an https response with status code 404
                 res.sendStatus(404);
             }
         });
@@ -278,7 +278,7 @@ var key = {
                 //server log for debugging
                 console.log("Error retrieving " + id);
                 console.log(error);
-                //send an https response with status code 500, as well as the error data in JSON format
+                //send an https response with status code 404
                 res.sendStatus(404);
             }
         });

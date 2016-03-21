@@ -4,7 +4,7 @@ var Parse = require('parse/node').Parse;
 Parse.initialize("touring", "yF85llv84OI0NV41ieaHU7PM0oyRCMLT");
 Parse.serverURL = 'http://touring-db.herokuapp.com/parse';
 
-//instantiate organization object prototype
+//instantiate Organization object prototype
 var Organization = Parse.Object.extend("Organization");
 
 //organization module object
