@@ -143,7 +143,7 @@ public class SummaryActivity extends AppCompatActivity {
      * Display the description and information regarding the corresponding tour
      */
     private void displayTourInfo() {
-        tourJSON = FileManager.getJSON(getApplicationContext(), keyID, FileManager.TOUR_JSON);
+        tourJSON = FileManager.getJSON(keyID, FileManager.TOUR_JSON);
         TextView timeTourTakes = (TextView) findViewById(R.id.txtEstimatedTime);
 
         try {

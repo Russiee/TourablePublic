@@ -138,47 +138,6 @@ public class FileManager {
     }
 
     /**
-     * Saves an image given by a URL to the device.
-     * <p/>
-     * This method MUST NOT be called from within the main thread.
-     *
-     * @param keyID     a tour key ID
-     * @param urlString a URL to an image file
-     * @return true if the file was saved successfully
-     */
-    public static boolean saveImage(Context context, Bitmap bitmap, String urlString, String keyID) {
-            // extract image file name and save it on device
-            Matcher m = Pattern.compile(IMG_NAME).matcher(urlString);
-
-            if (m.matches()) {
-                String img = m.group(1);
-                File file = new File(context.getFilesDir(), String.format("%s/image/%s", keyID, img));
-
-                Log.d(TAG, "Saving image " + img);
-                try (FileOutputStream fos = new FileOutputStream(file)) {
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return false;
-                }
-            }
-
-        return true;
-    }
-
-    /**
-     * Saves an video given by a URL to the device.
-     * <p/>
-     * This method MUST NOT be called from within the main thread.
-     *
-     * @param keyID     a tour key ID
-     * @param urlString a URL to an video file
-     */
-    public static void saveVideo(String keyID, String urlString) {
-        //TODO
-    }
-
-    /**
      * Completely removes a tour from the device, deleting both its row in the local DB and all
      * downloaded files.
      *

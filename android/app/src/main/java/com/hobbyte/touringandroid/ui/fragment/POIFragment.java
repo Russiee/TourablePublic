@@ -97,10 +97,7 @@ public class POIFragment extends ListFragment {
             previousPOI = getArguments().getParcelable(PARAM_PREV);
             currentPOI = getArguments().getParcelable(PARAM_CURR);
 
-            poiJSON = FileManager.getJSON(
-                    getActivity().getApplicationContext(),
-                    keyID, String.format("poi/%s", objectID)
-            );
+            poiJSON = FileManager.getJSON(keyID, String.format("poi/%s", objectID));
 
         }
     }

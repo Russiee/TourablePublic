@@ -186,7 +186,7 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            bundle = FileManager.getJSON(getApplicationContext(), keyID, "bundle");
+            bundle = FileManager.getJSON(keyID, "bundle");
 
             if (bundle != null) {
                 TourBuilder builder = new TourBuilder(bundle);
