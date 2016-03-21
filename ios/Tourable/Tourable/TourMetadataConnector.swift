@@ -40,7 +40,7 @@ class TourMetadataConnector {
                     self.jsonResult = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
                     // dispatch action in the background to don't block the ui
                     dispatch_async(dispatch_get_main_queue()){
-                        TourUpdateManager.sharedInstance.receiveDataReadyFromApi(self.jsonResult)
+                        TourUpdateManager.sharedInstance.formatDataforTourSummaryAndDiplayIt(self.jsonResult)
                     }
                 }
                 catch _ as NSError{

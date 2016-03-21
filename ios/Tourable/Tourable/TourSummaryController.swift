@@ -22,7 +22,7 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
     //Formatted data to be added to the UITableView
     var summaryTableData = [String]()
     //Tuple from TourUpdateManager with current status of the tour
-    var summaryData = (timeHours: 0,timeMins: 0, isCurrent: true, expiresIn: 0)
+    var summaryData = (timeHours: 0,timeMins: 0, isCurrent: true, expiresIn: 0, expiresInHours: 0, expiresInMinutes: 0)
     //button shown if update is availble
     let updateButton = UIButton(type: UIButtonType.RoundedRect)
     //lets the class know if the tour is currently being updated
@@ -82,20 +82,32 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
     
     //Takes the data from the tuple and formats it for presentation in the tableView
     func formatDataForTable() -> [String]{
+        
         //get the current update and expiry status for the current tour
         TourUpdateManager.sharedInstance.prepareTourMangaer(tourId, tableRow: tableRow)
         //set the summary data tuple to the result of this call
         summaryData = TourUpdateManager.sharedInstance.getTourStatusInfo()
+        
         //format the strings with the data from TourUpdateManager for display on the tour summary
         var updateStatus = "Version status unkown"
         let estimatedTime = "Estimated time: \(summaryData.timeHours) hour \(summaryData.timeMins) minutes"
-        //checks the update status of the tour
+        
+        // set update sentence
         if summaryData.isCurrent {
             updateStatus = "The tour is up to date"
         }else{
             updateStatus = "An update is available"
         }
-        let timeRemaining = "Tour key expires in \(summaryData.expiresIn) days"
+        
+        // set expiry sentence
+        let timeRemaining: String
+        if summaryData.expiresIn == 0 {
+            timeRemaining = "Expires in \(summaryData.expiresInHours) hours and \(summaryData.expiresInMinutes) minutes"
+        } else {
+            timeRemaining = "Tour key expires in \(summaryData.expiresIn) days"
+        }
+        
+        
         //create an array of the data
         var result = [String]()
         result.append(estimatedTime)

@@ -14,13 +14,15 @@ public class TourUpdateManager: NSObject {
     var tourCode: String!
     var currentTourKEYmetadata: Dictionary<String,AnyObject>!
     var newTourKEYmetadata: NSDictionary!
-    
+
     //metadata to be displayed on the tourSummary
     var timeHours: Int!
     var timeMinutes: Int!
     var expiresIn: Int!
     var isTourUpTodate = true
-    
+    var expiresInHours: Int!
+    var expiresInMinutes: Int!
+
     class var sharedInstance: TourUpdateManager {
         struct Static {
             static var onceToken: dispatch_once_t = 0
@@ -28,16 +30,16 @@ public class TourUpdateManager: NSObject {
         }
         dispatch_once(&Static.onceToken) {
             Static.instance = TourUpdateManager()
-            
+
         }
         return Static.instance!
     }
-    
+
     // to be called as an initialiser to prepare the object for other methods
     func prepareTourMangaer(tourCodetoCheck: String, tableRow: Int) {
         self.tourCode = tourCodetoCheck
         self.tourTableRow = tableRow
-        
+
         // get current tourKey metadata from cache
         self.currentTourKEYmetadata = TourIdParser().getTourMetadata(tourCode)
 
@@ -47,7 +49,7 @@ public class TourUpdateManager: NSObject {
             newTourKEYmetadata = ApiConnector.sharedInstance.getTourMetadata(tourCode)
         }
     }
-    
+
     // this method received data from the api or cache and load it onto the tourSummaryViewController
     func formatDataforTourSummaryAndDiplayIt(jsonResult: NSDictionary) {
         // TOUR LENGTH HOURS AND MINUTES
@@ -64,6 +66,19 @@ public class TourUpdateManager: NSObject {
         let expiryDate = getDateFromString(currentTourKEYmetadata["expiry"] as! String)
         expiresIn = expiryDate.daysFrom(NSDate())
 
+        // if the tour lasts less than a day then return the hours and minutes
+        if expiryDate.daysFrom(NSDate()) == 0 {
+            expiresIn = 0
+            let HoursAndMinutesLeft = calculateTourLengthFromMinutes(abs(expiryDate.minutesFrom(NSDate())))
+
+            expiresInHours = HoursAndMinutesLeft.timeHours
+            expiresInMinutes = HoursAndMinutesLeft.timeMins
+        } else {
+            expiresIn = expiryDate.daysFrom(NSDate())
+            expiresInHours = 0
+            expiresInMinutes = 0
+        }
+
         // call the tour summary to update tourSummary fields
         self.triggerTourMetaDataAvailableNotification()
     }
@@ -74,10 +89,10 @@ public class TourUpdateManager: NSObject {
         let minutes = minutes % 60
         return (hours,minutes)
     }
-    
+
     // returns fields variable set when data is returned by API
-    func getTourStatusInfo() -> (timeHours: Int,timeMins: Int, isCurrent: Bool, expiresIn: Int){
-        return (self.timeHours, self.timeMinutes, self.isTourUpTodate, self.expiresIn)
+    func getTourStatusInfo() -> (timeHours: Int,timeMins: Int, isCurrent: Bool, expiresIn: Int, expiresInHours: Int, expiresInMinutes: Int){
+        return (self.timeHours, self.timeMinutes, self.isTourUpTodate, self.expiresIn, self.expiresInHours, self.expiresInMinutes)
     }
 
     // check for updates comparing freshly downloaded metadata with current stored one
