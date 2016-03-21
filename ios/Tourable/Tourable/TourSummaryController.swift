@@ -42,6 +42,8 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
         
         //add the tour description to the UI, set title and set up buttons + indicators
         UIDescriptionBox.text = topLayerTourInfo.description
+        UIDescriptionBox.contentInset = UIEdgeInsetsMake(0, 0, 20, 0)
+        UIDescriptionBox.scrollEnabled = false
       
         self.title = topLayerTourInfo.title as String
         updateIndicator.hidden = true

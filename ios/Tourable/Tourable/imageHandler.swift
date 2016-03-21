@@ -85,8 +85,9 @@ class imageHandler: NSObject {
 
         for url in urls {
             
-            if(url.characters.last == "g"){
             triggerDownloadBeginNotify()
+            if(url.characters.last == "g"){
+            
             let imageUrl = url
             let actualURL = NSURL(string: imageUrl)
         

@@ -56,7 +56,10 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
         downloadedImages++
         //Get progress as fraction of 1
         let progress = (downloadedImages/totalImagesToDownload)
-        downloadStatusLabel.text = "Downloading Media: \(Int(downloadedImages)) of \(Int(totalImagesToDownload))"
+        let progressPercentage = progress * 100
+        let distanceLabel = ((String(format: progressPercentage == floor(progressPercentage) ? "%.0f" : "%.1f", progressPercentage)) as NSString).substringWithRange(NSMakeRange(0, 2))
+        
+        downloadStatusLabel.text = "Downloading Media: \(distanceLabel)%"
 
  
         //I.e progess = 100%
@@ -85,7 +88,7 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
     func NotifiedInvalid() {
         self.busyWheel.stopAnimating()
         //Shows warning to user that tour id was invalid.
-        AlertViewBuilder.sharedInstance.showWarningAlert("Tour ID Error", message: "The tour ID entered is not valid or is out of date")
+        AlertViewBuilder.sharedInstance.showWarningAlert("Tour Key Error", message: "The tour ID entered is not valid or is out of date")
         //Closes the view and returns user to the mainTableview if key was invalid.
         performSegueWithIdentifier("cancelAdd", sender: self)
     }
@@ -95,10 +98,10 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
         newCancelButton.action = "cancelDownload"
         //saveTourButton.setTitle("Downloading...", forState: .Normal)
         //saveTourButton.enabled = false
-        let alert = UIAlertController(title: "Tour Downloard", message: "Tour key is valid! You can now download this tour. If you download it without video you will need an internet connection during the tour.", preferredStyle: UIAlertControllerStyle.Alert)
+        let alert = UIAlertController(title: "Download Tour", message: "Your tour key is valid! You can now download this tour. If you download it without media, you will need internet to view media during the tour.", preferredStyle: UIAlertControllerStyle.Alert)
         
         // add the actions (buttons)
-        alert.addAction(UIAlertAction(title: "Download without media (Smaller)", style: UIAlertActionStyle.Default, handler: { action in
+        alert.addAction(UIAlertAction(title: "Download text only (Smaller)", style: UIAlertActionStyle.Default, handler: { action in
             imageHandler.sharedInstance.imageQueue = [String]()
             self.dismissViewControllerAnimated(true, completion: nil)
         }))

@@ -27,7 +27,7 @@ class TourSectionsController: UITableViewController {
         self.title = tour.title as String 
         let subsectionArray = tour.subsections
         tourSummaryTextView.text = tour.description
-         //tourSummaryTextView.contentInset = UIEdgeInsetsMake(-10, 0, 10, 0)
+         tourSummaryTextView.textContainerInset = UIEdgeInsetsMake(12, 12, 12, 12)
         tourSummaryTextView.scrollEnabled = false
         poiArray = tour.pointsOfInterest
         var tourTitles = [String: String]()
@@ -41,7 +41,6 @@ class TourSectionsController: UITableViewController {
  
         }
 
-        tourSummaryTextView.sizeToFit()
         tourSummaryTextView.sizeToFit()
 
         
@@ -77,9 +76,9 @@ class TourSectionsController: UITableViewController {
         
         if let view = view as? UITableViewHeaderFooterView {
             view.textLabel!.backgroundColor = UIColor.clearColor()
-            view.textLabel!.font =  UIFont.systemFontOfSize(17.0)
+            view.textLabel!.font =  UIFont.systemFontOfSize(14.0)
             view.textLabel!.textColor = UIColor(red: 21/255, green: 42/255, blue: 74/255, alpha: 1.0)
-
+          //  view.frame.height = view.frame.height+10
         }
         
     }
@@ -221,6 +220,7 @@ class TourSectionsController: UITableViewController {
         backButton.title = "Back"
         navigationItem.backBarButtonItem = backButton
     }
+    
     
  override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
     let headerTitles = ["SUBSECTIONS","POINTS OF INTEREST"]
