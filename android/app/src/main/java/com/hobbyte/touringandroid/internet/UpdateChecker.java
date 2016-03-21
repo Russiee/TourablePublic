@@ -44,6 +44,8 @@ public class UpdateChecker extends Thread {
             // first check if version number has changed
             JSONObject tour = ServerAPI.getJSON(tourID, ServerAPI.TOUR);
 
+            if (tour == null) return;
+
             try {
                 int version = tour.getInt("version");
 
