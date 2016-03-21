@@ -37,7 +37,7 @@ import java.util.TimeZone;
 public class TourDBManager extends SQLiteOpenHelper {
     private static final String TAG = "TourDBManager";
 
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 4;
     public static final String DATABASE_NAME = "TourData.db";
 
     public static final String SERVER_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
@@ -57,7 +57,8 @@ public class TourDBManager extends SQLiteOpenHelper {
                     TourList.COL_TOUR_NAME + " TEXT NOT NULL," +
                     TourList.COL_DATE_EXPIRES_ON + " NUMERIC," +
                     TourList.COL_HAS_MEDIA + " INTEGER DEFAULT 0," +
-                    TourList.COL_VERSION + " NUMERIC NOT NULL" +
+                    TourList.COL_VERSION + " NUMERIC NOT NULL," +
+                    TourList.COL_HAS_UPDATE + " INTEGER DEFAULT 0" +
             ")";
 
     private static final String SQL_DELETE_TABLE =
@@ -455,17 +456,52 @@ public class TourDBManager extends SQLiteOpenHelper {
         String[] cols = {TourList.COL_HAS_MEDIA};
         String[] whereArgs = {keyID};
 
-        Cursor c = db.query(
-                TourList.TABLE_NAME, cols,
-                WHERE_KEY_ID, whereArgs,
-                null, null, null
-        );
-
+        Cursor c = db.query(TourList.TABLE_NAME, cols, WHERE_KEY_ID, whereArgs, null, null, null);
         c.moveToFirst();
-        boolean hasMedia = c.getInt(0) == 1;
 
+        boolean hasMedia = c.getInt(0) == 1;
         c.close();
+
         return hasMedia;
+    }
+
+    /**
+     * Changes the `hasUpdate` attribute on a tour.
+     *
+     * @param keyID the ID of a tour key (not the tour ID itself)
+     * @param hasUpdate true if there is a new version of the tour on the server
+     */
+    public void flagTourUpdate(String keyID, boolean hasUpdate) {
+        open(true);
+
+        ContentValues values = new ContentValues();
+        int update = hasUpdate ? 1 : 0;
+        values.put(TourList.COL_HAS_UPDATE, update);
+
+        String[] whereArgs = {keyID};
+
+        db.update(TourList.TABLE_NAME, values, WHERE_KEY_ID, whereArgs);
+    }
+
+    /**
+     * Checks if the specified tour has an update available.
+     *
+     * @param keyID the ID of a tour key (not the tour ID itself)
+     * @return true if the `hasUpdate` attribute is set to true
+     */
+    public boolean doesTourHaveUpdate(String keyID) {
+        open(false);
+
+        String[] whereArgs = {keyID};
+        String[] cols = {TourList.COL_HAS_UPDATE};
+
+        Cursor c = db.query(TourList.TABLE_NAME, cols, WHERE_KEY_ID, whereArgs, null, null, null);
+        c.moveToFirst();
+
+        boolean hasUpdate = c.getInt(0) == 1;
+        c.close();
+
+        return hasUpdate;
     }
 
     /**

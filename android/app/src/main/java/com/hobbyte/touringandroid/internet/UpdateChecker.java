@@ -68,17 +68,11 @@ public class UpdateChecker extends Thread {
             }
         }
 
-        // put the tours that need updating in shared preferences, where it will be picked up
-        // in SummaryActivity
+        // flag tours as having an update in the db. This will be picked up in SummaryActivity
         if (toUpdate.size() > 0) {
-            SharedPreferences prefs = context.getSharedPreferences(
-                    context.getString(R.string.preference_file_key),
-                    Context.MODE_PRIVATE
-            );
-
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putStringSet(context.getString(R.string.prefs_tours_to_update), toUpdate);
-            editor.apply();
+            for (String key : toUpdate) {
+                dbHelper.flagTourUpdate(key, true);
+            }
         }
 
         Log.d(TAG, String.format("There are %d tours to update", toUpdate.size()));
