@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/poiContentTextView"
-    android:textColor="@color/colorDarkText"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/colorLightBackground"
-    android:textSize="@dimen/dimension_text_size_small"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingTop="8dp"
-    android:paddingBottom="0dp" />
+    android:includeFontPadding="false"
+    android:paddingLeft="@dimen/poi_padding_side"
+    android:paddingRight="@dimen/poi_padding_side"
+    android:paddingTop="@dimen/poi_padding_top_small"
+    android:textColor="@color/colorDarkText"
+    android:textSize="@dimen/dimension_text_size_small" />

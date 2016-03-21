@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorLightBackground">
-
+    android:background="@color/colorLightBackground"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/poi_padding_top">
 
     <TextView
+        android:id="@+id/quizTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/quizTitle"
+        android:paddingLeft="@dimen/poi_padding_side"
+        android:paddingRight="@dimen/poi_padding_side"
         android:textColor="@color/colorDarkText"
-        android:padding="16dp"
         android:textSize="@dimen/dimension_text_size" />
 
     <LinearLayout
+        android:id="@+id/optionsLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/poi_padding_top_tiny"
         android:background="#ffffff"
-        android:orientation="vertical"
-        android:id="@+id/optionsLayout"
-        android:layout_marginBottom="20dp">
-    </LinearLayout>
+        android:orientation="vertical"/>
 </LinearLayout>

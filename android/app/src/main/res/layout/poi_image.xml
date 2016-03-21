@@ -1,29 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/poiImageLayout"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="7dp"
-    android:paddingBottom="7dp"
-    android:id="@+id/poiImageLayout"
+    android:background="@color/colorLightBackground"
     android:orientation="vertical"
-    android:background="@color/colorLightBackground">
+    android:paddingTop="@dimen/poi_padding_top">
 
     <ImageView
+        android:id="@+id/poiContentImageView"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="7dp"
-        android:id="@+id/poiContentImageView"/>
+        android:layout_height="wrap_content" />
 
     <TextView
+        android:id="@+id/poiContentImageDesc"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/poiContentImageDesc"
+        android:paddingLeft="@dimen/poi_padding_side"
+        android:paddingRight="@dimen/poi_padding_side"
+        android:paddingTop="@dimen/poi_padding_top_tiny"
         android:textColor="#000000"
-        android:textStyle="italic"
         android:textSize="@dimen/dimension_text_size_small"
-        android:paddingLeft="16dp"
-        android:paddingTop="8dp"
-        android:paddingRight="8dp"
-        android:paddingBottom="8dp" />
+        android:textStyle="italic" />
 
 </LinearLayout>
