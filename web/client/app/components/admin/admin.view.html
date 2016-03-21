@@ -1,1 +1,10 @@
-<ui-view></ui-view>
+<div class="row">
+    <div id="admin-dash-nav" class="col-md-3">
+        <ng-include src="'client/app/components/admin/components/admin.nav.view.html'"></ng-include>
+    </div>
+    <div class="col-md-9">
+        <ui-view></ui-view>
+    </div>
+</div>
+
+

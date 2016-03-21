@@ -31,13 +31,10 @@
     margin-right: 10px;
 }
 
-#admin-dash-main {
-    min-height: 100vh;
+.admin-main {
 }
 
-#admin-dash-help {
-    min-height: 100vh;
-    background-color: #fff;
+.admin-help {
 }
 
 .admin-nav-brand {
