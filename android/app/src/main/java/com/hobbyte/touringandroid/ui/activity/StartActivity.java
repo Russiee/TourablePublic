@@ -198,7 +198,10 @@ public class StartActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int id) {
                 EditText tourText = (EditText) view.findViewById(R.id.textKey);
-                String key = tourText.getText().toString();
+                String key = tourText.getText().toString().trim();
+
+                // remove whitespace and slashes to prevent errors further on
+                key = key.replaceAll("[\\s\\/]+", "");
                 checkTourKey(key);
             }
         });
@@ -215,8 +218,8 @@ public class StartActivity extends AppCompatActivity {
         dialog.show();
 
         Resources res = getResources();
-        dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(res.getColor(R.color.colorAccent));
-        dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(res.getColor(R.color.colorAccent));
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(res.getColor(R.color.colorAccent));
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(res.getColor(R.color.colorAccent));
     }
 
     /**
