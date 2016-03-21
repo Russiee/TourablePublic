@@ -1,4 +1,12 @@
-#admin-dash-nav {
+/* general admin view styles */
+
+#admin-view .row {
+    margin: 0;
+}
+
+/* admin sidenav styles */
+
+#admin-nav {
     min-height: 100vh;
     background: #162B49; /* For browsers that do not support gradients */
     background: -webkit-linear-gradient(#061730, #0f3874); /* For Safari 5.1 to 6.0 */
@@ -8,7 +16,7 @@
     padding-right: 0;
 }
 
-#admin-dash-nav-list {
+#admin-nav-list {
     list-style-type: none;
     color: #fff;
     margin: 0;
@@ -17,28 +25,38 @@
     padding-top: 15px;
 }
 
-#admin-dash-nav-list li {
+
+#admin-nav-list li {
     padding: 15px 30px;
     width: 100%;
     font-weight: 600;
     cursor: pointer;
 }
-#admin-dash-nav-list li:hover {
+#admin-nav-list li:hover {
     background: #0c2d5d
 }
 
-#admin-dash-nav-list .fa {
+#admin-nav-list .fa {
     margin-right: 10px;
-}
-
-.admin-main {
-}
-
-.admin-help {
 }
 
 .admin-nav-brand {
     font-family: Pacifico;
     margin: 0;
     padding: 20px 25px;
+}
+
+/* admin content section styles */
+
+#admin-content {
+    padding: 0;
+}
+
+.admin-main {
+
+}
+
+.admin-help {
+    background-color: #FFF;
+    height: 100%;
 }
