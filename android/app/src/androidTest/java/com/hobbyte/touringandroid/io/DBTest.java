@@ -145,7 +145,7 @@ public class DBTest {
     }
 
     @Test
-    public void testGetExpiredTours() {
+    public void testGetExpiredTours_1() {
         db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRES_IN_FUTURE, false, VERSION_1);
         db.putRow(KEYID_2, TOURID_2, KEY_NAME_2, NAME_2, EXPIRED_IN_PAST, false, VERSION_2);
 
@@ -153,6 +153,16 @@ public class DBTest {
 
         assertEquals(1, expiredTours.length);
         assertEquals(KEYID_2, expiredTours[0]);
+    }
+
+    @Test
+    public void testGetExpiredTours_2() {
+        db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRED_IN_PAST, false, VERSION_1);
+        db.putRow(KEYID_2, TOURID_2, KEY_NAME_2, NAME_2, EXPIRED_IN_PAST, false, VERSION_2);
+
+        String[] expiredTours = db.getExpiredTours();
+
+        assertEquals(2, expiredTours.length);
     }
 
     @Test
@@ -217,6 +227,17 @@ public class DBTest {
         Object[][] info = db.getTourUpdateInfo();
 
         assertEquals(EXPIRES_IN_FUTURE_L, (long) info[0][3]);
+    }
+
+    @Test
+    public void testUpdateFlagSetting() {
+        db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRED_IN_PAST, false, VERSION_1);
+
+        assertFalse(db.doesTourHaveUpdate(KEYID_1));
+
+        db.flagTourUpdate(KEYID_1, true);
+
+        assertTrue(db.doesTourHaveUpdate(KEYID_1));
     }
 
     @Test
