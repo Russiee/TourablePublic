@@ -73,11 +73,11 @@ tourable.factory('adminFactory', function($http, $q) {
                 });
             });
         },
-        getAllTours: function(orgID) {
+        getAllTours: function() {
             return $q(function(resolve, reject) {
                 $http({
                     method: 'GET',
-                    url: 'https://api.tourable.org/api/v1/tours?organization=' + orgID
+                    url: 'https://api.tourable.org/api/v1/tours'
                 }).then(function success(response) {
                     console.log(response);
                     resolve (response);
