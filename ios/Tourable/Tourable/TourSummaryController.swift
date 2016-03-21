@@ -219,7 +219,6 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
 
                     //tour is up to date and not being updated, show the green tick
                 }else if summaryData.isCurrent && !isUpdating{
-                    print(indexPath.row)
                     
                     if indexPath.row == 1 {
                         cell.textLabel?.text = "The tour is up to date"

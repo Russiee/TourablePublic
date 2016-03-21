@@ -48,7 +48,7 @@ public class TourUpdateManager: NSObject {
         }
     }
     
-    // this method received data from the tourMetadata and saves it into fields
+    // this method received data from the api for tourMetadata and saves it into fields
     func receiveDataReadyFromApi(jsonResult: NSDictionary) {
         // TOUR LENGTH HOURS AND MINUTES
         let minutes = jsonResult["estimatedTime"]
@@ -96,10 +96,14 @@ public class TourUpdateManager: NSObject {
     }
 
     // trigger download of the tour metadata needed on the tourSummary
-    // remember that multiples tourCodes can be associate with the same tourID (aka objectID in the tourMetada)
     func getTourMetadata() {
-        let tourConnector = TourMetadataConnector()
-        tourConnector.checkTourMetadataForUpdates(currentTourKEYmetadata["objectId"] as! String)
+        // if there is no connection get the data from the cache and load that on tourSummary
+        if ApiConnector.sharedInstance.isConnectedToNetwork() {
+            let tourConnector = TourMetadataConnector()
+            tourConnector.checkTourMetadataForUpdates(currentTourKEYmetadata["objectId"] as! String)
+        } else {
+            receiveDataReadyFromApi(currentTourKEYmetadata)
+        }
     }
 
 
