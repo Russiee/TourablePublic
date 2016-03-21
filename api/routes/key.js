@@ -342,6 +342,7 @@ function createKey (data, callback) {
     
     //temporarily save the tour (ID) string
     var tourID = data.tour;
+    //delete the tour string from the data
     delete data.tour;
 
     //add the tour property to data, but in the form of a pointer object to the Tour prototype

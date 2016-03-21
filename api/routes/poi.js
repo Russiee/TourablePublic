@@ -65,7 +65,7 @@ var poi = {
         //instantiates a new query to Parse (database mount) for the POI prototype
 		var query = new Parse.Query(POI);
         
-        //execute 'find' query and pass success and error callbacks as parameters
+        //set the limit to the appropriate value in the query
 		query.limit(parseInt(limit));
         
         //execute 'find' query and pass success and error callbacks as parameters
@@ -276,6 +276,7 @@ function createPOI (data, callback) {
     
     //temporarily save the section (ID) string
 	var sectionID = data.section;
+    //delete the section string from the data
 	delete data.section;
     
     //add the tour property to data, but in the form of a pointer object to the Tour prototype
