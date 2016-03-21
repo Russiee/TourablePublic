@@ -1,3 +1,4 @@
+//require the necessary files for this module, and initialize Parse
 var validate = require('./validate.js');
 var Parse = require('parse/node').Parse;
 Parse.initialize("touring", "yF85llv84OI0NV41ieaHU7PM0oyRCMLT");
