@@ -18,9 +18,14 @@ import java.util.ArrayList;
  */
 public class TourItemAdapter extends ArrayAdapter<TourItem> {
     private static final String TAG = "TourItemAdapter";
+    private boolean hasSubSectionText;
+    private boolean hasPOIText;
+
 
     public TourItemAdapter(Context context, ArrayList<TourItem> items) {
         super(context, 0, items);
+        hasSubSectionText = false;
+        hasPOIText = false;
     }
 
     @Override
@@ -35,15 +40,17 @@ public class TourItemAdapter extends ArrayAdapter<TourItem> {
         TextView separator = (TextView) view.findViewById(R.id.separator);
 
         if (selected.getType() == TourItem.TYPE_SUBSECTION) {
-            if(position == 0) {
+            if(!hasSubSectionText && position == 0) {
                 separator.setVisibility(View.VISIBLE);
                 separator.setText(App.context.getString(R.string.tour_activity_subsection));
+                hasSubSectionText = true;
             }
             subsectionView.setText(selected.getTitle());
         } else {
-            if(position == 0 || (position != 0) && getItem(position-1).getType() == TourItem.TYPE_SUBSECTION) {
+            if(!hasPOIText || position == 0 || ((position != 0) && getItem(position-1).getType() == TourItem.TYPE_SUBSECTION)) {
                 separator.setVisibility(View.VISIBLE);
                 separator.setText(App.context.getString(R.string.tour_activity_poi));
+                hasPOIText = true;
             }
             subsectionView.setText(selected.getTitle());
         }

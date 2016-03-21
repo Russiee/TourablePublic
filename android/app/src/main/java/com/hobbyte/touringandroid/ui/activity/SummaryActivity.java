@@ -121,7 +121,7 @@ public class SummaryActivity extends AppCompatActivity {
     protected void onPause() {
         // leaving a database instance open across activities is BAD!!
         TourDBManager.getInstance(getApplicationContext()).close();
-
+        finish();
         super.onPause();
     }
 
@@ -364,7 +364,7 @@ public class SummaryActivity extends AppCompatActivity {
 
         if (updating) {
             dbHelper.updateTourVersion(keyID, version);
-//            dbHelper.updateRow(keyID, tourID, name, String.valueOf(datetime), withMedia, version);
+            dbHelper.updateRow(keyID, tourID, name, String.valueOf(expiryTimeLong), withMedia, version);
 
             // unflag this tour as having an update available
             dbHelper.flagTourUpdate(keyID, false);

@@ -1,9 +1,14 @@
 package com.hobbyte.touringandroid.ui.activity;
 
+import android.opengl.Visibility;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.hobbyte.touringandroid.R;
+import com.hobbyte.touringandroid.internet.UpdateChecker;
+import com.hobbyte.touringandroid.io.TourDBManager;
+
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Rule;
@@ -23,10 +28,13 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withTagValue;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.core.IsNot.not;
 
 /**
  * Created by Nikita on 21/03/2016.
@@ -40,8 +48,8 @@ public class StartActivityTest {
     private String validKey;
     private String invalidKey;
     @Rule
-    public ActivityTestRule<StartActivity> mActivityRule = new ActivityTestRule<>(
-            StartActivity.class);
+    public ActivityTestRule<SplashActivity> mActivityRule = new ActivityTestRule<>(
+            SplashActivity.class);
 
     @Before
     public void initValidKey() {
@@ -86,7 +94,7 @@ public class StartActivityTest {
         enterKey(validKey);
         onView(withId(R.id.download_with_media)).perform(click());
         try {
-            Thread.sleep(10000);
+            Thread.sleep(1000);
         } catch(InterruptedException e) {
             e.printStackTrace();
         }
@@ -123,7 +131,6 @@ public class StartActivityTest {
         onView(withText("The Flat")).perform(click());
         onView(withText("Alex's Room")).perform(click());
         onView(withText("Alex's Bed")).check(matches(isDisplayed()));
-        onView(withText("Alex's Stash")).check(matches(isDisplayed()));
         onView(withText("Alex's Desk")).check(matches(isDisplayed()));
         pressBack();
         onView(withText("Peter's Room")).perform(click());
@@ -147,9 +154,6 @@ public class StartActivityTest {
         pressBack();
         onView(withText("Alex's Desk")).perform(click());
         onView(withText(containsString("Here is where Alexander Gubbay (born 1995)"))).check(matches(isDisplayed()));
-        pressBack();
-        onView(withText("Alex's Stash")).perform(click());
-        onView(withText(containsString("This body bit is not latin"))).check(matches(isDisplayed()));
         pressBack();
         pressBack();
         onView(withText("Peter's Room")).perform(click());
@@ -180,21 +184,30 @@ public class StartActivityTest {
         onView(withText(containsString("Go to Previous POI"))).check(doesNotExist());
         onData(instanceOf(String.class)).onChildView(withId(R.id.nextPOIFooter)).perform(click());
 
-        onView(withText(containsString("This body bit is not latin"))).check(matches(isDisplayed()));
-        onData(instanceOf(String.class)).onChildView(withId(R.id.nextPOIFooter)).check(matches(isDisplayed()));
-        onData(instanceOf(String.class)).onChildView(withId(R.id.previousPOIFooter)).check(matches(isDisplayed()));
-        onData(instanceOf(String.class)).onChildView(withId(R.id.nextPOIFooter)).perform(click());
-
         onView(withText(containsString("Alex's Desk"))).check(matches(isDisplayed()));
         onData(instanceOf(String.class)).onChildView(withId(R.id.previousPOIFooter)).check(matches(isDisplayed()));
         onData(instanceOf(String.class)).onChildView(withId(R.id.previousPOIFooter)).perform(click());
-        onView(withText(containsString("This body bit is not latin"))).check(matches(isDisplayed()));
-        pressBack();
-        pressBack();
-        pressBack();
-        pressBack();
-        pressBack();
-        deleteTour();
+    }
+
+    @Test
+    public void testUpdateChecker() {
+        TourDBManager db = TourDBManager.getInstance(mActivityRule.getActivity());
+        db.putRow("ZX8DHpGKxk", "cjWRKDygIZ", "KCL-1010", "Ultimate Flat Tour", "2016-06-22T00:00:00.000Z", true, 1);
+        new UpdateChecker(mActivityRule.getActivity());
+        enterTour();
+        onView(withId(R.id.updateTourText)).check(matches(withText("Update")));
+        onView(withId(R.id.updateTour)).perform(click());
+        onView(withId(R.id.download_with_media)).perform(click());
+        enterTour();
+        onView(withId(R.id.updateTourText)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+    }
+
+    @Test
+    public void testZDeleteExpired() {
+        TourDBManager db = TourDBManager.getInstance(mActivityRule.getActivity());
+        db.putRow("ZX8DHpGKxk", "cjWRKDygIZ", "KCL-1010", "Ultimate Flat Tour", "2016-01-22T00:00:00.000Z", true, 50);
+        new UpdateChecker(mActivityRule.getActivity());
+        onView(withId(R.id.tourItem)).check(doesNotExist());
     }
 
     public void enterKey(String key) {
