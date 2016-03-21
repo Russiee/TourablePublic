@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.hobbyte.touringandroid.App;
@@ -14,6 +15,7 @@ import com.hobbyte.touringandroid.io.FileManager;
 import com.hobbyte.touringandroid.io.TourDBManager;
 
 public class SplashActivity extends AppCompatActivity {
+    private static final String TAG = "SplashActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,8 @@ public class SplashActivity extends AppCompatActivity {
             try {
                 checker.start();
                 checker.join();
+
+                Log.d(TAG, String.format("Checking for updates took: %d millis", System.currentTimeMillis() - appStartTime));
 
                 // makes it last at least one second, even if update takes less.
                 long timeToSleepFor = 1000 - (System.currentTimeMillis() - appStartTime);
