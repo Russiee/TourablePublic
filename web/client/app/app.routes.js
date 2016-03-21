@@ -53,17 +53,17 @@ tourable.config(function($stateProvider, $urlRouterProvider, $locationProvider) 
     })
     .state('admin.manageTours', {
         url: "/admin/manage/tours",
-        templateUrl: "/client/app/components/admin/components/dashboard.view.html",
+        templateUrl: "/client/app/components/admin/components/manage.tour.view.html",
         authenticate: true
     })
     .state('admin.manageAdmins', {
         url: "/admin/manage/admins",
-        templateUrl: "/client/app/components/admin/components/dashboard.view.html",
+        templateUrl: "/client/app/components/admin/components/manage.admin.view.html",
         authenticate: true
     })
     .state('admin.account', {
         url: "/admin/account",
-        templateUrl: "/client/app/components/admin/components/dashboard.view.html",
+        templateUrl: "/client/app/components/admin/components/account.view.html",
         authenticate: true
     });
 });
