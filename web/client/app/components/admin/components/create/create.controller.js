@@ -1,5 +1,5 @@
 angular.module('tourable')
-    .controller('CreateCtrl', function ($scope, $location, $state, createFactory) {
+    .controller('CreateCtrl', function ($scope, $location, $state, createFactory, classDataFactory) {
 
         String.prototype.capitalize = function() {
             return this.charAt(0).toUpperCase() + this.slice(1);
@@ -11,33 +11,7 @@ angular.module('tourable')
             $state.go('admin.dashboard');
         }
 
-        $scope.classData = {
-            tour: {
-                expectedInput: [
-                    {
-                        description: "Tour Title",
-                        model: "title",
-                        type: "text",
-                        help: "Example: 'Cardiac Imaging Tour'",
-                        required: true
-                    },
-                    {
-                        description: "Tour Description",
-                        model: "description",
-                        type: "textarea-small",
-                        help: "",
-                        required: false
-                    }
-                ],
-                defaultModels: {
-                    admin: $scope.$parent.admin.objectId,
-                    isPublic : false, //expected input is a Boolean
-                    estimatedTime: 30,
-                    version: 1
-                },
-                afterCreate: "admin.manageTours"
-            }
-        }
+        $scope.classData = classDataFactory.data($scope.$parent.admin);
 
         $scope.create = function() {
             $scope.validate = true;

@@ -10,10 +10,18 @@ angular.module('tourable')
                 console.log("hello");
                 $state.go("admin.dashboard");
             } else {
+                sessionStorage.removeItem('admin');
+                sessionStorage.removeItem('organization');
+                sessionStorage.removeItem('admins');
+                sessionStorage.removeItem('tours');
                 $state.go("home");
             }
         });
 
+        $scope.admin =          JSON.parse(sessionStorage.getItem('admin'));
+        $scope.organization =   JSON.parse(sessionStorage.getItem('organization'));
+        $scope.admins =         JSON.parse(sessionStorage.getItem('admins'));
+        $scope.tours =          JSON.parse(sessionStorage.getItem('tours'));
 
         $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
             if (fromState.name === 'admin.create' && fromParams.class === 'tour') {
@@ -28,6 +36,7 @@ angular.module('tourable')
             getAdminData.then(function(response) {
                 console.log('Success: ', response.data);
                 $scope.admin = response.data;
+                sessionStorage.setItem('admin', JSON.stringify($scope.admin));
                 if ($scope.admin.isSuper) {
                     getOrganization(response.data.organization.objectId);
                     getAllAdmins(response.data.organization.objectId);
@@ -46,6 +55,7 @@ angular.module('tourable')
             getOrganizationData.then(function(response) {
                 console.log('Success: ', response.data);
                 $scope.organization = response.data;
+                sessionStorage.setItem('organization', JSON.stringify($scope.organization));
             }, function(error) {
                 //Console log in case we need to debug with a user
                 console.log('An error occured while retrieving the admin data: ', error);
@@ -57,6 +67,7 @@ angular.module('tourable')
             getAllAdminData.then(function(response) {
                 console.log('Success: ', response.data);
                 $scope.admins = response.data;
+                sessionStorage.setItem('admins', JSON.stringify($scope.admins));
                 getAllTours();
             }, function(error) {
                 //Console log in case we need to debug with a user
@@ -78,6 +89,7 @@ angular.module('tourable')
                     if (tour.admin && tour.admin.objectId === $scope.admin.objectId) {
                         console.log("Compare " + tour.admin.objectId + " to " + $scope.admin.objectId);
                         $scope.tours.thisAdmin.push(tour);
+                        sessionStorage.setItem('tours', JSON.stringify($scope.tours));
                     } else if (tour.admin) {
                         for (var _index in $scope.admins) {
                             console.log("Compare " + tour.admin.objectId + " to " + $scope.admins[_index].objectId);
