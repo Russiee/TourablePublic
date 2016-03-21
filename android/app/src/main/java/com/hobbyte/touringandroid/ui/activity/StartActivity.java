@@ -227,7 +227,7 @@ public class StartActivity extends AppCompatActivity {
 
         if (TourDBManager.getInstance(getApplicationContext()).doesTourKeyNameExist(tourKey)) {
             showToast(getString(R.string.msg_tour_exists));
-        } else if (ServerAPI.checkConnection(this)) {
+        } else if (ServerAPI.checkConnection()) {
             // only check the key if we have an internet connection
             KeyCheckTask k = new KeyCheckTask();
             k.execute(tourKey);
