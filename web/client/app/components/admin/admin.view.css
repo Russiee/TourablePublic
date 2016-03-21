@@ -35,7 +35,7 @@
     cursor: pointer;
 }
 #admin-nav-list li:hover {
-    background: #0c2d5d
+    background: #0c2d5d;
 }
 
 #admin-nav-list .fa {
@@ -54,12 +54,15 @@
     padding: 0;
 }
 
-.admin-main {
-
+.admin-main,
+.admin-help {
+    padding: 20px 30px;
 }
 
 .admin-help {
     background-color: #FFF;
+    color: #4A5F7E;
+    font-size: 12px;
 }
 
 .admin-help-bkg {
@@ -67,4 +70,12 @@
     height: 100vh;
     background-color: #FFF;
     right: 0;
+}
+
+.admin-header {
+    margin: 0;
+    padding: 0;
+    padding-top: 16px;
+    color: #162B49;
+    font-weight: 600;
 }
