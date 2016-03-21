@@ -1,7 +1,9 @@
 <div id="admin-view">
     <div class="row">
-        <div id="admin-nav" class="col-md-3">
+        <div id="admin-nav" class="col-md-3 hidden-xs hidden-sm">
             <ng-include src="'client/app/components/admin/components/admin.nav.view.html'"></ng-include>
+        </div>
+        <div class="col-md-3">
         </div>
         <div id="admin-content" class="col-md-9">
             <ui-view></ui-view>
