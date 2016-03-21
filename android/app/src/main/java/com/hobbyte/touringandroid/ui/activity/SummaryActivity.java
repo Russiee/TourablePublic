@@ -227,8 +227,8 @@ public class SummaryActivity extends AppCompatActivity {
             sb.append(" ");
             sb.append(getString(R.string.expires_in_day));
         } else {
-            //if there are no days left, then set text to red and display hours & minutes
 
+            //if there are no days left, then set text to red and display hours & minutes
             txtExpiry.setTextColor(getResources().getColor(R.color.red));
 
             //number of hours, hours or hour
