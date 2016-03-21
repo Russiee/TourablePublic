@@ -392,6 +392,27 @@ public class TourDBManager extends SQLiteOpenHelper {
     }
 
     /**
+     * Gets a tour's expiry date.
+     *
+     * @param keyID the ID of a tour key (not the tour ID itself)
+     * @return the (long) expiry date for the specified tour
+     */
+    public long getExpiryDate(String keyID) {
+        open(false);
+
+        String[] cols = {TourList.COL_DATE_EXPIRES_ON};
+        String[] whereArgs = {keyID};
+
+        Cursor c = db.query(TourList.TABLE_NAME, cols, WHERE_KEY_ID, whereArgs, null, null, null);
+        c.moveToFirst();
+
+        long expiry = c.getLong(0);
+        c.close();
+
+        return expiry;
+    }
+
+    /**
      * Checks if there are any tours in the database.
      *
      * @return true if the table is empty
