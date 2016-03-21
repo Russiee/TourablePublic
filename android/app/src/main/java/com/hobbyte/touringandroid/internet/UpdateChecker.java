@@ -27,6 +27,10 @@ public class UpdateChecker extends Thread {
 
     @Override
     public void run() {
+
+        //if no internet, don't run
+        if (!ServerAPI.checkConnection()) return;
+
         TourDBManager dbHelper = TourDBManager.getInstance(context);
 
         // has keyID, tourID, version, and expiry date
@@ -39,6 +43,8 @@ public class UpdateChecker extends Thread {
 
             // first check if version number has changed
             JSONObject tour = ServerAPI.getJSON(tourID, ServerAPI.TOUR);
+
+            if (tour == null) return;
 
             try {
                 int version = tour.getInt("version");

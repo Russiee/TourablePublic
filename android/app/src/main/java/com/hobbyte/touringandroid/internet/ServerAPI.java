@@ -14,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 
 /**
@@ -91,6 +92,7 @@ public class ServerAPI {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setDoInput(true);
+            connection.setConnectTimeout(2000);
             connection.connect();
 
             int response = connection.getResponseCode();
@@ -121,6 +123,9 @@ public class ServerAPI {
 
         } catch (JSONException jex) {
             jex.printStackTrace();
+        }catch (SocketTimeoutException e) {
+            e.printStackTrace();
+            Log.d(TAG, "Bad connection, update aborted");
         } catch (Exception e) {
             e.printStackTrace();
         }
