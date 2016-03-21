@@ -44,7 +44,7 @@
     <string name="summary_activity_estimated_time">Estimated time:</string>
     <string name="summary_activity_version_is_current">Your version is current</string>
     <string name="summary_activity_new_version_is_available">A new version is available</string>
-    <string name="expires_in">Expires in</string>
+    <string name="expires_in">Tour key expires in</string>
     <string name="expires_in_days">days</string>
     <string name="expires_in_day">day</string>
     <string name="expires_in_hours">hours</string>
