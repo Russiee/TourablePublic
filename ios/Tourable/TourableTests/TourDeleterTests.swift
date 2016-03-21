@@ -118,4 +118,6 @@ class TourDeleterTests: XCTestCase {
         XCTAssertNotNil(NSUserDefaults.standardUserDefaults().objectForKey("cjWRKDygIZ"), "Hasnt been deleted")
     }
     
+    
+    
 }

@@ -100,13 +100,14 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
     // rejects any tourIds with invalid symbols
     func cleanTourId(tourId: String) -> String {
 
-        let trimmedTourId = tourId.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        var trimmedTourId = tourId.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        //getting rid of whitespaces, \, /, ", ; as they are invalid characters in a tour
+            trimmedTourId = trimmedTourId.stringByReplacingOccurrencesOfString(" ", withString: "")
+            trimmedTourId = trimmedTourId.stringByReplacingOccurrencesOfString("/", withString: "")
+            trimmedTourId = trimmedTourId.stringByReplacingOccurrencesOfString("\"", withString: "")
+            trimmedTourId = trimmedTourId.stringByReplacingOccurrencesOfString("\\", withString: "")
+            trimmedTourId = trimmedTourId.stringByReplacingOccurrencesOfString(";", withString: "")
 
-        if trimmedTourId.containsString(" ") || trimmedTourId.containsString("/")||trimmedTourId.containsString("\"")||trimmedTourId.containsString("\\"){
-            //not possible to return nil so returns blank.
-             tourIdForSummary = ""
-             return ""
-        }
         tourIdForSummary = trimmedTourId
         return trimmedTourId
     }

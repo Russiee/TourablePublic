@@ -101,7 +101,7 @@ public class TourDeleter {
         //calls the deleteMedia function on the urls we gathered from the Tour JSON
         for url in mediaURLS{
             //currently only for .jpg as the only media type stored
-            deleteMedia(url, fileType: ".jpg")
+            deleteMedia(url, fileType: url.substringFromIndex(url.endIndex.advancedBy(-4)))
         }
         //resets the array
         mediaURLS = []
