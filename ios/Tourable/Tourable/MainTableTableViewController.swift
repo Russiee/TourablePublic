@@ -28,7 +28,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         //TODO remove this, for demo use only
         let connection: Bool = ApiConnector.sharedInstance.isConnectedToNetwork()
         //Only commented out for now as API has early date set hence always deletes the tours! ONLY TEMPORARY!
-        //checkToursToDelete()
+        checkToursToDelete()
         
         tableView.contentInset = UIEdgeInsetsMake(50, 0, 0, 0)
         

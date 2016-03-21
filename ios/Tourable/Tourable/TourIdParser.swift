@@ -50,6 +50,7 @@ public class TourIdParser {
     //Adds the metadata passed to it into the cache, after turning it into a dictonary that can be retrieved 
     // from the cache with its tour Id code
     func addTourMetaData(metadata: NSDictionary){
+
         let tourCode = metadata["code"]!
 
         let tourDict = metadata["tour"] as! NSMutableDictionary
@@ -66,7 +67,7 @@ public class TourIdParser {
         //this comes from the initialised of bundle Connector
         let bundleRoute = bundleRouteConnector()
         bundleRoute.startConnection(tourDict["objectId"] as! String)
-        
+
         let tourData = bundleRoute.getJSONResult()
         tourDataParser().saveNewTour(tourData)
         let tourTitle = tourData["title"]

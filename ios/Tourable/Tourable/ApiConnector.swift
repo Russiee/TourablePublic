@@ -42,12 +42,16 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
             do {
                 let jsonResult = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
                 self.JSONMetadataFromAPI = jsonResult
-                dispatch_async(dispatch_get_main_queue()){
-                if !self.isUpdating {
-                        _ = TourIdParser().addTourMetaData(jsonResult)
-                }
-                self.triggerValidKeyNotification()
-                //passing through the array of sections
+                if !self.checkIfTourAlreadyOutdatedWhenDownloading(jsonResult["expiry"] as! String) {
+                    dispatch_async(dispatch_get_main_queue()){
+                        if !self.isUpdating {
+                            _ = TourIdParser().addTourMetaData(jsonResult)
+                        }
+                        self.triggerValidKeyNotification()
+                    }
+                } else {
+                    print("invalid")
+                   self.triggerInvalidKeyNotification()
                 }
             }
             catch let err as NSError{
@@ -95,6 +99,16 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
         }
         notify()
         
+    }
+
+
+    // check if there is less than 1 minute left so as to prevent download of expired tours
+    func checkIfTourAlreadyOutdatedWhenDownloading(expiryString: String) -> Bool {
+        let expiryDate = TourUpdateManager.sharedInstance.getDateFromString(expiryString)
+        if expiryDate.minutesFrom(NSDate()) < 1 {
+            return true
+        }
+        return false
     }
 
     // remove the heading and trailing spaces
