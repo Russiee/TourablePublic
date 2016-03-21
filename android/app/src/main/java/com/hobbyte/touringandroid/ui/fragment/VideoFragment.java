@@ -95,6 +95,5 @@ public class VideoFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
     }
 }
