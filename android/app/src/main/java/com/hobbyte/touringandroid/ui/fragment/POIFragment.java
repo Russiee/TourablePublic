@@ -41,6 +41,12 @@ public class POIFragment extends ListFragment {
     private static final String PARAM_PREV = "prevPOI";
     private static final String PARAM_CURR = "currPOI";
 
+    private static final String HEADER = "header";
+    private static final String BODY = "body";
+    private static final String IMAGE = "image";
+    private static final String VIDEO = "video";
+    private static final String QUIZ = "quiz";
+
     public static int SCREEN_HEIGHT;
     public static int SCREEN_WIDTH;
 
@@ -127,8 +133,8 @@ public class POIFragment extends ListFragment {
             rightLayout.setVisibility(View.VISIBLE);
             rightLayout.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    ((TourActivity)getActivity()).previousPOI = currentPOI;
-                    ((TourActivity)getActivity()).loadPointOfInterest(currentPOI.getNextPOI());
+                    ((TourActivity) getActivity()).previousPOI = currentPOI;
+                    ((TourActivity) getActivity()).loadPointOfInterest(currentPOI.getNextPOI());
                 }
             });
         } else {
@@ -140,7 +146,7 @@ public class POIFragment extends ListFragment {
             leftLayout.setVisibility(View.VISIBLE);
             leftLayout.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    ((TourActivity)getActivity()).loadPointOfInterest(previousPOI);
+                    ((TourActivity) getActivity()).loadPointOfInterest(previousPOI);
                 }
             });
         } else {
@@ -153,78 +159,13 @@ public class POIFragment extends ListFragment {
 
         getListView().addFooterView(view);
 
-
         try {
             JSONArray post = poiJSON.getJSONArray("post");
-            // drop first "Head" item?
-
-            // TODO: all of this can go in a different class
             listItems = new ListViewItem[post.length()];
 
             for (int i = 0; i < post.length(); ++i) {
                 JSONObject item = post.getJSONObject(i);
-                String text;
-                String url;
-                ArrayList option;
-                int solution;
-                int type;
-
-                switch (item.getString("type")) {
-                    case "header":
-                        text = item.getString("content");
-                        if(((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
-                            if (text.equals(((AppCompatActivity) getActivity()).getSupportActionBar().getTitle().toString())) {
-                                text = "";
-                            }
-                        }
-                        url = null;
-                        option = null;
-                        solution = 0;
-                        type = PoiContentAdapter.HEADER;
-                        break;
-                    case "body":
-                        text = item.getString("content");
-                        url = null;
-                        option = null;
-                        solution = 0;
-                        type = PoiContentAdapter.BODY;
-                        break;
-                    case "image":
-                        text = item.getString("description");
-                        url = item.getString("url");
-                        option = null;
-                        solution = 0;
-                        type = PoiContentAdapter.IMAGE;
-                        break;
-                    case "video":
-                        text = item.getString("description");
-                        url = item.getString("url");
-                        option = null;
-                        solution = 0;
-                        type = PoiContentAdapter.VIDEO;
-                        break;
-                    case "quiz":
-                        text = item.getString("question");
-                        url = null;
-                        option = new ArrayList<>();
-                        JSONArray optAr = item.getJSONArray("options");
-                        for(int j = 0; j < optAr.length(); j++) {
-                            option.add(optAr.getString(j));
-                        }
-                        solution = item.getInt("solution");
-                        type = PoiContentAdapter.QUIZ;
-                        break;
-                    default:
-                        text = "";
-                        url = null;
-                        option = null;
-                        solution = 0;
-                        type = PoiContentAdapter.IGNORE_ITEM_VIEW_TYPE;
-                        Log.e(TAG, "Error creating listViewItemList");
-                        Log.e(TAG, String.format("Type: %s, Text: %s", type, text));
-                }
-
-                listItems[i] = new ListViewItem(text, type, url, option, solution);
+                listItems[i] = makeListViewItemForType(item);
             }
 
 
@@ -240,5 +181,61 @@ public class POIFragment extends ListFragment {
 
             setListAdapter(adapter);
         }
+    }
+
+    private ListViewItem makeListViewItemForType(JSONObject item) {
+        String text;
+        String url = null;
+        ArrayList<String> options = null;
+        int solution = 0;
+        int type;
+
+        try {
+            switch (item.getString("type")) {
+                case HEADER:
+                    text = item.getString("content");
+                    type = PoiContentAdapter.HEADER;
+                    break;
+                case BODY:
+                    text = item.getString("content");
+                    type = PoiContentAdapter.BODY;
+                    break;
+                case IMAGE:
+                    text = item.getString("description");
+                    url = item.getString("url");
+                    type = PoiContentAdapter.IMAGE;
+                    break;
+                case VIDEO:
+                    text = item.getString("description");
+                    url = item.getString("url");
+                    type = PoiContentAdapter.VIDEO;
+                    break;
+                case "quiz":
+                    text = item.getString("question");
+                    options = new ArrayList<>();
+                    JSONArray optAr = item.getJSONArray("options");
+
+                    for (int j = 0; j < optAr.length(); j++) {
+                        options.add(optAr.getString(j));
+                    }
+
+                    solution = item.getInt("solution");
+                    type = PoiContentAdapter.QUIZ;
+                    break;
+                default:
+                    text = "";
+                    type = PoiContentAdapter.IGNORE_ITEM_VIEW_TYPE;
+
+                    Log.e(TAG, "Error creating listViewItemList");
+                    Log.e(TAG, String.format("Type: %s, Text: %s", type, text));
+            }
+
+            return new ListViewItem(text, type, url, options, solution);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return new ListViewItem("", PoiContentAdapter.IGNORE_ITEM_VIEW_TYPE, null, null, 0);
     }
 }

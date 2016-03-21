@@ -3,7 +3,7 @@ package com.hobbyte.touringandroid.tourdata;
 import java.util.ArrayList;
 
 /**
- * Created by Nikita on 15/02/2016.
+ * Container for an individual part of a POI (text, image, etc) that gets used in the UI.
  */
 public class ListViewItem {
 
@@ -64,12 +64,4 @@ public class ListViewItem {
      * @return Solutions to the quiz
      */
     public int getSolution() { return solution; }
-    /*public void setText(String text) {
-        this.text = text;
-    }*/
-
-
-    /*public void setType(int type) {
-        this.type = type;
-    }*/
 }
