@@ -1,7 +1,5 @@
 var async = require('async');
-var Parse = require('parse/node').Parse;
-Parse.initialize("touring", "yF85llv84OI0NV41ieaHU7PM0oyRCMLT");
-Parse.serverURL = 'http://touring-db.herokuapp.com/parse';
+
 var Tour = Parse.Object.extend("Tour");
 var Section = Parse.Object.extend("Section");
 var POI = Parse.Object.extend("POI");
@@ -12,141 +10,141 @@ process.on('uncaughtException', function (err) {
 
 var bundle = {
 
-	GET: function (req, res) {
-		console.log("GET BUNDLE " + req.params.id);
-		var id = req.params.id;
-		var query = new Parse.Query(Tour);
+    GET: function (req, res) {
+        console.log("GET BUNDLE " + req.params.id);
+        var id = req.params.id;
+        var query = new Parse.Query(Tour);
 //		query.include("sections");
 //		query.include("sections.pois");
 //		query.include("sections.subsections");
 //      query.include("subsections.pois");
-		query.get(id, {
-			success: function(tour) {
-				console.log("Tour " + id + " retrieved succesfully");
-				var package = tour.toJSON();
-				createBundle(package, function(response) {
-					res.status(200).send(response);
-				});
-			},
-			error: function(object, error) {
-				console.log("Error retrieving " + id);
-				res.send(404);
-			}
-		});
-	}
+        query.get(id, {
+            success: function(tour) {
+                console.log("Tour " + id + " retrieved succesfully");
+                var package = tour.toJSON();
+                createBundle(package, function(response) {
+                    res.status(200).send(response);
+                });
+            },
+            error: function(object, error) {
+                console.log("Error retrieving " + id);
+                res.send(404);
+            }
+        });
+    }
 }
 
 function createBundle(data, mainCallback) {
-	var package = data;
-	var allSections = [];
-	var sections = [];
-	var POIs;
+    var package = data;
+    var allSections = [];
+    var sections = [];
+    var POIs;
 
-	async.series([
-		function(done) {
-			console.log("Get all sections in the tour");
-			var query = new Parse.Query(Section);
-			query.limit(-1);
-			query.equalTo("tour", {"__type":"Pointer","className":"Tour","objectId":package.objectId})
-			query.find({
-				success: function(results) {
-					console.log(results.length + " sections retrieved");
-					allSections = JSON.parse(JSON.stringify(results));
-					console.log("done");
-					done();
-				},
-				error: function(error) {
-					console.log("Failed to retrieve sections");
-					console.log(error);
-					console.log("done");
-					done();
-				}
-			});
-		},
-		function(done) {
-			console.log("Find max depth")
+    async.series([
+        function(done) {
+            console.log("Get all sections in the tour");
+            var query = new Parse.Query(Section);
+            query.limit(-1);
+            query.equalTo("tour", {"__type":"Pointer","className":"Tour","objectId":package.objectId})
+            query.find({
+                success: function(results) {
+                    console.log(results.length + " sections retrieved");
+                    allSections = JSON.parse(JSON.stringify(results));
+                    console.log("done");
+                    done();
+                },
+                error: function(error) {
+                    console.log("Failed to retrieve sections");
+                    console.log(error);
+                    console.log("done");
+                    done();
+                }
+            });
+        },
+        function(done) {
+            console.log("Find max depth")
 
-			var maxDepth = 0;
-			for (var i = 0; i < allSections.length; i++) {
-				if (allSections[i].depth > maxDepth)
-					maxDepth = allSections[i].depth
-			}
-			console.log(maxDepth);
+            var maxDepth = 0;
+            for (var i = 0; i < allSections.length; i++) {
+                if (allSections[i].depth > maxDepth)
+                    maxDepth = allSections[i].depth
+            }
+            console.log(maxDepth);
 
-			console.log("Build section hierachy");
+            console.log("Build section hierachy");
 
-			for (var j = maxDepth - 1; j >= 0; j--) {
-				for (var k = 0; k < allSections.length; k++) {
-					if (allSections[k].depth === j) {
-						for (var l = 0; l < allSections.length; l++) {
-							if (l != k && allSections[l].superSection && allSections[l].superSection.objectId === allSections[k].objectId) {
-								if (allSections[k].subsections) {
-									var temp = allSections[l];
-									delete temp.tour, delete temp.superSection;
-									allSections[k].subsections.push(temp);
-								}
-								else {
-									var temp = allSections[l];
-									delete temp.tour, delete temp.superSection;
-									allSections[k].subsections = [];
-									allSections[k].subsections.push(temp);
-								}
-							}
-						}
-					}
-				}
-			}
+            for (var j = maxDepth - 1; j >= 0; j--) {
+                for (var k = 0; k < allSections.length; k++) {
+                    if (allSections[k].depth === j) {
+                        for (var l = 0; l < allSections.length; l++) {
+                            if (l != k && allSections[l].superSection && allSections[l].superSection.objectId === allSections[k].objectId) {
+                                if (allSections[k].subsections) {
+                                    var temp = allSections[l];
+                                    delete temp.tour, delete temp.superSection;
+                                    allSections[k].subsections.push(temp);
+                                }
+                                else {
+                                    var temp = allSections[l];
+                                    delete temp.tour, delete temp.superSection;
+                                    allSections[k].subsections = [];
+                                    allSections[k].subsections.push(temp);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
-			console.log("Finished building section hierarchy")
+            console.log("Finished building section hierarchy")
 
-			done();
-		}, function(done) {
-			console.log("Get all POIs in the tour");
-			var query = new Parse.Query(POI);
-			query.limit(-1);
+            done();
+        }, function(done) {
+            console.log("Get all POIs in the tour");
+            var query = new Parse.Query(POI);
+            query.limit(-1);
 //			query.equalTo("tour", {"__type":"Pointer","className":"Tour","objectId":package.objectId})
-			query.find({
-				success: function(results) {
-					console.log(results.length + " POIs retrieved");
-					var pois = JSON.parse(JSON.stringify(results));
-					for (var i = 0; i < allSections.length; i++) {
-						for (var j = 0; j < pois.length; j++) {
-							console.log(i + " " + j);
-							if (pois[j].section && pois[j].section.objectId === allSections[i].objectId) {
-								if (allSections[i].pois) {
-									delete pois[j].section;
-									allSections[i].pois.push(pois[j]);
-								} else {
-									delete pois[j].section;
-									allSections[i].pois = [];
-									allSections[i].pois.push(pois[j]);
-								}
-							}
-						}
-					}
-					console.log("done");
-					done();
-				},
-				error: function(error) {
-					console.log("Failed to retrieve POIs");
+            query.find({
+                success: function(results) {
+                    console.log(results.length + " POIs retrieved");
+                    var pois = JSON.parse(JSON.stringify(results));
+                    for (var i = 0; i < allSections.length; i++) {
+                        for (var j = 0; j < pois.length; j++) {
+                            console.log(i + " " + j);
+                            if (pois[j].section && pois[j].section.objectId === allSections[i].objectId) {
+                                if (allSections[i].pois) {
+                                    delete pois[j].section;
+                                    allSections[i].pois.push(pois[j]);
+                                } else {
+                                    delete pois[j].section;
+                                    allSections[i].pois = [];
+                                    allSections[i].pois.push(pois[j]);
+                                }
+                            }
+                        }
+                    }
+                    console.log("done");
+                    done();
+                },
+                error: function(error) {
+                    console.log("Failed to retrieve POIs");
 
-					console.log("done");
-					done();
-				}
-			});
-		},
-		function(done) {
-			console.log("Prep sections for bundle");
+                    console.log("done");
+                    done();
+                }
+            });
+        },
+        function(done) {
+            console.log("Prep sections for bundle");
 
-			for (var i = 0; i < allSections.length; i++) {
-				if (allSections[i].superSection && allSections[i].superSection.objectId === 'null') {
-					delete allSections[i].superSection, delete allSections[i].tour;
-					sections.push(allSections[i]);
-				}
-			}
+            for (var i = 0; i < allSections.length; i++) {
+                if (allSections[i].superSection && allSections[i].superSection.objectId === 'null') {
+                    delete allSections[i].superSection, delete allSections[i].tour;
+                    sections.push(allSections[i]);
+                }
+            }
 
-			done();
-		},
+            done();
+        },
 //		function(done) {
 //			console.log("Get layer with biggest depth");
 //			var layer = [];
@@ -292,17 +290,17 @@ function createBundle(data, mainCallback) {
 //				}
 //			}, 500)
 //		},
-		function(done){
-			console.log(sections);
-			package.sections = sections;
-			console.log("Remove Metadata");
-			delete package.admin, delete package.keys, delete package.isPublic;
-			done();
-		},
-		function(){
-			mainCallback(package);
-		}
-	]);
+        function(done){
+            console.log(sections);
+            package.sections = sections;
+            console.log("Remove Metadata");
+            delete package.admin, delete package.keys, delete package.isPublic;
+            done();
+        },
+        function(){
+            mainCallback(package);
+        }
+    ]);
 }
 
 

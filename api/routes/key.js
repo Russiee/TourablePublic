@@ -2,9 +2,6 @@
 var config = require('../config.js');
 var validate = require('./validate.js');
 var http = require('http');
-var Parse = require('parse/node').Parse;
-Parse.initialize("touring", "yF85llv84OI0NV41ieaHU7PM0oyRCMLT");
-Parse.serverURL = 'http://touring-db.herokuapp.com/parse';
 
 //instantiate key and tour object prototypes
 var Key = Parse.Object.extend("Key");
