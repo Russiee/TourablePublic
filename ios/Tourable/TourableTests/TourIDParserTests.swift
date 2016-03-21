@@ -24,8 +24,7 @@ class TourIDParserTests: XCTestCase {
     }
     
     func testAddingTourId() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+ 
         XCTAssertEqual(NSUserDefaults.standardUserDefaults().objectForKey("Array")!.count, 0, "No tours been added yet")
         TourIdParser.sharedInstance.updateArray("KCL-1010", tourTitle: "Ultimate Flat Tour")
         XCTAssertEqual(NSUserDefaults.standardUserDefaults().objectForKey("Array")![0], ["Ultimate Flat Tour" : "KCL-1010" ], "should be the same, as they are the params passed into the updateArray function")
@@ -52,4 +51,90 @@ class TourIDParserTests: XCTestCase {
         
     }
     
+    func testAddTourMetaData(){
+        //create mock data
+        
+        let data = [
+            "tour": [
+                "__type": "Pointer",
+                "className": "Tour",
+                "objectId": "cjWRKDygIZ"
+            ] as NSMutableDictionary,
+            "code": "KCL-1010",
+            "updatedAt": "2016-03-20T12:10:42.175Z",
+            "createdAt": "2016-03-18T10:50:47.172Z",
+            "expiry": "2016-06-19T00:00:00.000Z",
+            "objectId": "ZX8DHpGKxk"
+        ]
+        TourIdParser().addTourMetaData(data)
+        sleep(1)
+        let returnedData = TourIdParser().getTourMetadata("KCL-1010")
+        print(data)
+        print(returnedData)
+        let originalData = data["tour"] as! NSDictionary
+        
+        
+        XCTAssertEqual(originalData["objectId"] as? String, returnedData["objectId"] as? String)
+        XCTAssertEqual(data["updatedAt"] as? String, returnedData["updatedAt"] as? String)
+    }
+    
+    func testDeleteTourIdAtRow(){
+        let data = [
+            "tour": [
+                "__type": "Pointer",
+                "className": "Tour",
+                "objectId": "cjWRKDygIZ"
+                ] as NSMutableDictionary,
+            "code": "KCL-1010",
+            "updatedAt": "2016-03-20T12:10:42.175Z",
+            "createdAt": "2016-03-18T10:50:47.172Z",
+            "expiry": "2016-06-19T00:00:00.000Z",
+            "objectId": "ZX8DHpGKxk"
+        ]
+        TourIdParser().addTourMetaData(data)
+        
+        XCTAssertEqual(TourIdParser().getAllTours().count, 1)
+        TourIdParser().deleteTourIdAtRow(0)
+        XCTAssertEqual(TourIdParser().getAllTours().count, 0)
+        
+    }
+    
+    
+    func testAddingTourIdPerformance() {
+       
+        self.measureBlock{
+            TourIdParser.sharedInstance.updateArray("KCL-1010", tourTitle: "Ultimate Flat Tour")
+        }
+       
+    }
+    
+    func testAddingAndDeletingTourIdPerformance(){
+
+        self.measureBlock{
+            TourIdParser.sharedInstance.updateArray("KCL-1010", tourTitle: "Ultimate Flat Tour")
+            TourIdParser.sharedInstance.deleteTourIdAtRow(0)
+        }
+
+    }
+    
+    
+    func testAddTourMetaDataPerformance(){
+        //create mock data
+        
+        let data = [
+            "tour": [
+                "__type": "Pointer",
+                "className": "Tour",
+                "objectId": "cjWRKDygIZ"
+                ] as NSMutableDictionary,
+            "code": "KCL-1010",
+            "updatedAt": "2016-03-20T12:10:42.175Z",
+            "createdAt": "2016-03-18T10:50:47.172Z",
+            "expiry": "2016-06-19T00:00:00.000Z",
+            "objectId": "ZX8DHpGKxk"
+        ]
+        self.measureBlock{
+            TourIdParser().addTourMetaData(data)
+        }
+    }
 }
