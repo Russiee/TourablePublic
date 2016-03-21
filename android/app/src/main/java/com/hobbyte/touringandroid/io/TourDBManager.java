@@ -155,9 +155,7 @@ public class TourDBManager extends SQLiteOpenHelper {
         open(false);
 
         String[] cols = {
-                TourList.COL_KEY_ID, TourList.COL_TOUR_ID,
-                TourList.COL_TOUR_NAME, TourList.COL_DATE_EXPIRES_ON
-        };
+                TourList.COL_KEY_ID, TourList.COL_TOUR_ID, TourList.COL_TOUR_NAME};
 
         return db.query(TourList.TABLE_NAME, cols, null, null, null, null, null);
     }

@@ -41,12 +41,11 @@ import org.json.JSONObject;
 public class StartActivity extends AppCompatActivity {
     private static final String TAG = "StartActivity";
 
+    // used when downloading a tour for the first time
     private String tourID;
     private String keyID;
     private String keyName;
-
     private String expiryTimeString;
-    private long expiryTimeLong;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,7 +153,6 @@ public class StartActivity extends AppCompatActivity {
                 final String keyID = c.getString(0);
                 final String tourID = c.getString(1);
                 String name = c.getString(2);
-                expiryTimeLong = c.getLong(3);
 
                 tour.setTag(keyID);
                 tourName.setText(name);
@@ -253,9 +251,10 @@ public class StartActivity extends AppCompatActivity {
 
         if (expiryTimeString != null) {
             intent.putExtra(SummaryActivity.EXPIRY_TIME_STRING, expiryTimeString);
-        } else {
-            intent.putExtra(SummaryActivity.EXPIRY_TIME_LONG, expiryTimeLong);
         }
+
+        expiryTimeString = null;
+        keyName = null;
 
         startActivity(intent);
     }
