@@ -2,7 +2,7 @@ angular.module('tourable')
 .factory( 'AuthService', function($rootScope, $q) {
 
     Parse.initialize("touring", "2368AB2DAA73D3CB6B55555CEAF6C");
-    Parse.serverURL = 'http://touring-db.herokuapp.com/parse';
+    Parse.serverURL = 'https://touring-db.herokuapp.com/parse';
 
 //    var currentUser;
 
