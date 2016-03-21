@@ -13,13 +13,15 @@ angular.module('tourable')
                         description: "Tour Title",
                         model: "title",
                         type: "text",
-                        help: ""
+                        help: "Example: 'Cardiac Imaging Tour'",
+                        required: true
                     },
                     {
                         description: "Tour Description",
                         model: "description",
                         type: "textarea-small",
-                        help: ""
+                        help: "",
+                        required: false
                     }
                 ],
                 afterCreate: "admin.manageTours"
@@ -27,7 +29,7 @@ angular.module('tourable')
         }
 
         $scope.create = function() {
-
+            var data =$scope.classData[$state.params.class].expectedInput;
         }
 
         //redirect back to dashboard if class is null or does not exist

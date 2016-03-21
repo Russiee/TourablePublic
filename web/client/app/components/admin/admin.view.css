@@ -180,3 +180,15 @@
     left: 0;
     width: 100vw;
 }
+
+
+/* admin create page styles */
+
+.admin-create-input {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.admin-create-container {
+
+}

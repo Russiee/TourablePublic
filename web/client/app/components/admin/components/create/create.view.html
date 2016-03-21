@@ -7,24 +7,21 @@
     </div>
     <div class="admin-help col-sm-4 hidden-xs"></div>
 </div>
-<div class="row">
-    <div class="admin-main col-sm-8 admin-account-inputs">
-        <h5 class="admin-subheader">First Name</h5>
-        <input type="text" class="form-control" ng-model="admin.firstname">
-        <h5 class="admin-subheader">Last Name</h5>
-        <input type="text" class="form-control" ng-model="admin.lastname">
-        <h5 class="admin-subheader">Email</h5>
-        <input type="text" class="form-control" ng-model="admin.email">
-
+<div class="admin-create-container">
+    <div class="row" ng-repeat="input in classData[class].expectedInput track by $index">
+        <div class="admin-main col-sm-8 admin-account-inputs admin-create-input">
+            <h5 class="admin-subheader">{{input.description}}</h5>
+            <input type="text" class="form-control" ng-model="input.value">
+        </div>
+        <div class="admin-help col-sm-4 hidden-xs">{{input.help}}</div>
     </div>
-<!--    <div class="admin-help col-sm-4 hidden-xs">help 2</div>-->
+</div>
 </div>
 <div class="row">
     <div class="admin-main col-sm-8">
-        <button class="btn admin-btn">Create new {{class.capitalize()}}</button><br>
-        <div class="admin-message admin-message-success" ng-show="accountmessage === success">Your changes have been saved successfully</div>
-        <div class="admin-message admin-message-error" ng-show="accountmessage === error">There was an error saving your changes</div>
-        <div class="admin-message admin-message-neutral" ng-show="accountmessage === neutral">You haven't modified any details</div>
+        <button class="btn admin-btn" ng-click="create()">Create</button><br>
+        <div class="admin-message admin-message-success" ng-show="accountmessage === success">Your {{class.capitalize()}} has been created successfully</div>
+        <div class="admin-message admin-message-error" ng-show="accountmessage === error">There was an error creating your {{class.capitalize()}}</div>
     </div>
     <div class="admin-help col-sm-4 hidden-xs"></div>
 </div>
