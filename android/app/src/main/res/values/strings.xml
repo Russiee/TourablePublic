@@ -55,6 +55,9 @@
 
     <string name="tour_activity_subsection">SUBSECTION</string>
     <string name="tour_activity_poi">POINT OF INTEREST</string>
+    <string name="poi_back_to_overview">Back to overview</string>
+    <string name="poi_previous">Go to previous POI</string>
+    <string name="poi_next">Go to next POI</string>
 
     <string name="msg_no_internet">No internet connection</string>
     <string name="msg_invalid_key">Invalid tour key</string>
