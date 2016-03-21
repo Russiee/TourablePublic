@@ -35,6 +35,7 @@ import java.util.ArrayList;
  */
 public class POIFragment extends ListFragment {
     private static final String TAG = "POIFragment";
+    public static final String FOOTER = "footer";
 
     private static final String PARAM_OBJECTID = "objectID";
     private static final String PARAM_KEYID = "keyId";
@@ -157,7 +158,7 @@ public class POIFragment extends ListFragment {
             view.setVisibility(View.GONE);
         }
 
-        getListView().addFooterView(view);
+        getListView().addFooterView(view, FOOTER, true);
 
         try {
             JSONArray post = poiJSON.getJSONArray("post");
