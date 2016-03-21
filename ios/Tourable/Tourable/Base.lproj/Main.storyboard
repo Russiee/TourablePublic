@@ -481,18 +481,18 @@
                         <color key="sectionIndexBackgroundColor" red="0.94117647059999998" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="sectionIndexTrackingBackgroundColor" red="0.94117647059999998" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
                         <view key="tableFooterView" contentMode="scaleToFill" id="oBU-ga-rIa">
-                            <rect key="frame" x="0.0" y="160" width="600" height="113"/>
+                            <rect key="frame" x="0.0" y="176" width="600" height="113"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CdP-TR-qf7">
-                                    <rect key="frame" x="179" y="30" width="243" height="53"/>
+                                    <rect key="frame" x="179" y="40" width="243" height="53"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="53" id="9zl-MZ-2C3"/>
                                         <constraint firstAttribute="width" constant="243" id="kBD-5u-7xi"/>
                                     </constraints>
                                     <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="15"/>
                                     <state key="normal" title="Back to overview" backgroundImage="generic_button">
-                                        <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="titleColor" red="0.086274509799999996" green="0.18039215689999999" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
                                     </state>
                                     <connections>
                                         <action selector="BackToOverView" destination="w6Y-H8-yy9" eventType="touchUpInside" id="OsO-Mk-DZy"/>
@@ -502,7 +502,7 @@
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstItem="CdP-TR-qf7" firstAttribute="centerX" secondItem="oBU-ga-rIa" secondAttribute="centerX" id="P1e-k8-fpI"/>
-                                <constraint firstItem="CdP-TR-qf7" firstAttribute="top" secondItem="oBU-ga-rIa" secondAttribute="top" constant="30" id="zHV-9v-ic5"/>
+                                <constraint firstItem="CdP-TR-qf7" firstAttribute="top" secondItem="oBU-ga-rIa" secondAttribute="top" constant="40" id="zHV-9v-ic5"/>
                             </constraints>
                         </view>
                         <prototypes>
@@ -523,11 +523,11 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" tag="998" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="PreviousPOI" id="lTA-9x-jJJ">
-                                <rect key="frame" x="0.0" y="116" width="600" height="44"/>
+                            <tableViewCell clipsSubviews="YES" tag="998" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="PreviousPOI" rowHeight="60" id="lTA-9x-jJJ">
+                                <rect key="frame" x="0.0" y="116" width="600" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lTA-9x-jJJ" id="WFm-55-d7C">
-                                    <rect key="frame" x="0.0" y="0.0" width="567" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="567" height="59"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
