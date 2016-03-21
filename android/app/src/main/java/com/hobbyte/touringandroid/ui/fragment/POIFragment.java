@@ -1,8 +1,7 @@
 package com.hobbyte.touringandroid.ui.fragment;
 
-import android.os.Bundle;
 import android.app.ListFragment;
-import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -189,7 +188,7 @@ public class POIFragment extends ListFragment {
         int type;
 
         try {
-            switch (item.getString("type")) {
+            switch (item.getString("type").toLowerCase()) {
                 case HEADER:
                     text = item.getString("content");
                     type = PoiContentAdapter.HEADER;
