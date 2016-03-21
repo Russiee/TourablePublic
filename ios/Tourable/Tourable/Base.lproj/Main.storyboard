@@ -247,17 +247,14 @@
                         <rect key="frame" x="0.0" y="64" width="600" height="492"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="redraw" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" canCancelContentTouches="NO" bouncesZoom="NO" editable="NO" text="At run time, the text here will be replaced with the tour information." translatesAutoresizingMaskIntoConstraints="NO" id="mTv-Im-kld">
-                                <rect key="frame" x="0.0" y="8" width="600" height="57"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" canCancelContentTouches="NO" bouncesZoom="NO" editable="NO" text="At run time, the text here will be replaced with the tour information." translatesAutoresizingMaskIntoConstraints="NO" id="mTv-Im-kld">
+                                <rect key="frame" x="11" y="8" width="583" height="82"/>
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="57" id="BND-qn-toa"/>
-                                </constraints>
                                 <color key="textColor" red="0.027450980390000001" green="0.24313725489999999" blue="0.45882352939999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="tableView2" alwaysBounceVertical="YES" scrollEnabled="NO" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="m9X-WR-BhL">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" restorationIdentifier="tableView2" alwaysBounceVertical="YES" scrollEnabled="NO" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="m9X-WR-BhL">
                                 <rect key="frame" x="0.0" y="80" width="600" height="237"/>
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="separatorColor" red="0.94117647059999998" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
@@ -277,7 +274,7 @@
                                 <rect key="frame" x="212" y="342" width="20" height="20"/>
                             </activityIndicatorView>
                             <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6DD-cZ-3vf">
-                                <rect key="frame" x="179" y="325" width="243" height="54"/>
+                                <rect key="frame" x="180" y="325" width="243" height="54"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="54" id="Xh8-tG-YEj"/>
                                     <constraint firstAttribute="width" constant="243" id="avt-ka-aQw"/>
@@ -295,14 +292,14 @@
                         <color key="backgroundColor" red="0.94117647059999998" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="6DD-cZ-3vf" firstAttribute="top" secondItem="m9X-WR-BhL" secondAttribute="bottom" constant="8" symbolic="YES" id="2hZ-he-Ypz"/>
-                            <constraint firstItem="mTv-Im-kld" firstAttribute="leading" secondItem="gDk-oh-3PA" secondAttribute="leading" id="CQU-Aa-EHS"/>
-                            <constraint firstItem="mTv-Im-kld" firstAttribute="trailing" secondItem="m9X-WR-BhL" secondAttribute="trailing" id="Kjq-9Z-9Hr"/>
                             <constraint firstItem="WLy-3d-JbQ" firstAttribute="top" secondItem="6DD-cZ-3vf" secondAttribute="bottom" constant="113" id="WhK-Cy-760"/>
-                            <constraint firstItem="mTv-Im-kld" firstAttribute="centerX" secondItem="6DD-cZ-3vf" secondAttribute="centerX" id="ZAC-K4-0Ow"/>
-                            <constraint firstItem="mTv-Im-kld" firstAttribute="top" secondItem="AcZ-3T-jdS" secondAttribute="bottom" constant="8" symbolic="YES" id="cdO-0Q-eb3"/>
-                            <constraint firstAttribute="trailing" secondItem="mTv-Im-kld" secondAttribute="trailing" id="gZM-EV-q81"/>
-                            <constraint firstItem="m9X-WR-BhL" firstAttribute="top" secondItem="mTv-Im-kld" secondAttribute="bottom" constant="15" id="mkJ-iz-OmE"/>
-                            <constraint firstItem="mTv-Im-kld" firstAttribute="leading" secondItem="m9X-WR-BhL" secondAttribute="leading" id="sMv-NW-pwK"/>
+                            <constraint firstItem="mTv-Im-kld" firstAttribute="centerX" secondItem="6DD-cZ-3vf" secondAttribute="centerX" constant="-1" id="ZAC-K4-0Ow"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="m9X-WR-BhL" secondAttribute="trailing" constant="-20" id="bW1-EF-f8j"/>
+                            <constraint firstItem="mTv-Im-kld" firstAttribute="top" secondItem="AcZ-3T-jdS" secondAttribute="bottom" constant="10" id="cdO-0Q-eb3"/>
+                            <constraint firstAttribute="trailing" secondItem="mTv-Im-kld" secondAttribute="trailing" constant="12" id="gZM-EV-q81"/>
+                            <constraint firstItem="m9X-WR-BhL" firstAttribute="top" secondItem="mTv-Im-kld" secondAttribute="bottom" constant="10" id="mkJ-iz-OmE"/>
+                            <constraint firstItem="mTv-Im-kld" firstAttribute="leading" secondItem="m9X-WR-BhL" secondAttribute="leading" constant="12" id="sMv-NW-pwK"/>
+                            <constraint firstItem="m9X-WR-BhL" firstAttribute="leading" secondItem="gDk-oh-3PA" secondAttribute="leadingMargin" constant="-20" id="w6d-4l-xRD"/>
                         </constraints>
                     </view>
                     <toolbarItems/>
