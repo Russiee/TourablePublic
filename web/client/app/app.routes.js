@@ -45,35 +45,30 @@ tourable.config(function($stateProvider, $urlRouterProvider, $locationProvider) 
     .state('admin.login', {
         url: "/admin/login",
         parent: 'admin',
-        templateUrl: "/client/app/components/admin/components/login.view.html",
-        controller: "AdminCtrl"
+        templateUrl: "/client/app/components/admin/components/login.view.html"
     })
     .state('admin.dashboard', {
         url: "/admin",
         parent: 'admin',
         templateUrl: "/client/app/components/admin/components/dashboard.view.html",
-        controller: "AdminCtrl",
         authenticate: true
     })
     .state('admin.manageTours', {
         url: "/admin/manage/tours",
         parent: 'admin',
         templateUrl: "/client/app/components/admin/components/dashboard.view.html",
-        controller: "AdminCtrl",
         authenticate: true
     })
     .state('admin.manageAdmins', {
         url: "/admin/manage/admins",
         parent: 'admin',
         templateUrl: "/client/app/components/admin/components/dashboard.view.html",
-        controller: "AdminCtrl",
         authenticate: true
     })
     .state('admin.account', {
         url: "/admin/account",
         parent: 'admin',
         templateUrl: "/client/app/components/admin/components/dashboard.view.html",
-        controller: "AdminCtrl",
         authenticate: true
     });
 });
