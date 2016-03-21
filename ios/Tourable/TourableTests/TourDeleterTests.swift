@@ -46,10 +46,8 @@ class TourDeleterTests: XCTestCase {
         let bundleDownload = bundleRouteConnector()
         bundleDownload.startConnection("cjWRKDygIZ")
         let data = bundleDownload.getJSONResult()
-        print(data)
         _ = tourDataParser().saveNewTour(data)
         TourIdParser.sharedInstance.updateArray("KCL-1010", tourTitle: "Ultimate Flat Tour")
-        print(NSUserDefaults.standardUserDefaults().objectForKey("Array")); print("!!!!!")
         XCTAssertEqual(NSUserDefaults.standardUserDefaults().objectForKey("Array")!.count, 1, "There should be only one tour in our array, KCL-1010")
         XCTAssertNotNil(NSUserDefaults.standardUserDefaults().objectForKey("cjWRKDygIZ"), "This is our downloaded tour. so should exist")
         TourDeleter.sharedInstance.deleteTour("KCL-1010")
@@ -81,7 +79,6 @@ class TourDeleterTests: XCTestCase {
         let bundleDownload = bundleRouteConnector()
         bundleDownload.startConnection("cjWRKDygIZ")
         let data = bundleDownload.getJSONResult()
-        print(data)
         _ = tourDataParser().saveNewTour(data)
         TourIdParser.sharedInstance.updateArray("KCL-1010", tourTitle: "Ultimate Flat Tour")
         
@@ -104,11 +101,9 @@ class TourDeleterTests: XCTestCase {
         let bundleDownload2 = bundleRouteConnector()
         bundleDownload2.startConnection("GpSEMT3hmG")
         let data2 = bundleDownload2.getJSONResult()
-        print(data2)
         _ = tourDataParser().saveNewTour(data2)
         TourIdParser.sharedInstance.updateArray("KCL-1111", tourTitle: "Royal Brompton Hospital")
         
-        print(NSUserDefaults.standardUserDefaults().objectForKey("Array")); print("!!!!!")
         XCTAssertEqual(NSUserDefaults.standardUserDefaults().objectForKey("Array")!.count, 2, "There should be 2 tours in our array, KCL-1010 and KCL-1111")
         XCTAssertNotNil(NSUserDefaults.standardUserDefaults().objectForKey("cjWRKDygIZ"), "This is our downloaded tour. so should exist")
         XCTAssertNotNil(NSUserDefaults.standardUserDefaults().objectForKey("GpSEMT3hmG"), "This is our other downloaded tour. so should exist")
@@ -117,5 +112,38 @@ class TourDeleterTests: XCTestCase {
         XCTAssertNil(NSUserDefaults.standardUserDefaults().objectForKey("GpSEMT3hmG"), "Tour should be deleted now")
         XCTAssertNotNil(NSUserDefaults.standardUserDefaults().objectForKey("cjWRKDygIZ"), "Hasnt been deleted")
     }
+    
+    
+    func testDeletingMedia(){
+        let url = "https://s3-eu-west-1.amazonaws.com/testmediahobbyte/sample_video.mp4"
+        videoHandler.sharedInstance.downloadVideo(url)
+        let metaData = [
+            "tour": [
+                "__type": "Pointer",
+                "className": "Tour",
+                "objectId": "cjWRKDygIZ"
+            ],
+            "code": "KCL-1010",
+            "updatedAt": "2016-03-20T12:10:42.175Z",
+            "createdAt": "2016-03-18T10:50:47.172Z",
+            "expiry": "2016-06-19T00:00:00.000Z",
+            "objectId": "ZX8DHpGKxk"
+        ]
+        
+        NSUserDefaults.standardUserDefaults().setObject(metaData["tour"], forKey: "KCL-1010")
+        NSUserDefaults.standardUserDefaults().synchronize()
+        let bundleDownload = bundleRouteConnector()
+        bundleDownload.startConnection("cjWRKDygIZ")
+        let data = bundleDownload.getJSONResult()
+        _ = tourDataParser().saveNewTour(data)
+        TourIdParser.sharedInstance.updateArray("KCL-1010", tourTitle: "Ultimate Flat Tour")
+        TourDeleter.sharedInstance.deleteMediaInTour("KCL-1010")
+        let fileName = String(url.hash)
+        let path = MediaHelper.sharedInstance.fileInDocumentsDirectory(fileName,fileType: ".mp4")
+        XCTAssertFalse(MediaHelper.sharedInstance.checkFileExists(path), "This video should be deleted")
+        TourDeleter.sharedInstance.deleteTour("KCL-1010")
+        
+    }
+    
     
 }

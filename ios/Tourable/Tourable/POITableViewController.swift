@@ -12,8 +12,8 @@ import AVKit
 
 class POITableViewController: UITableViewController {
     
-    var poiID = "ZUiJcyXQyG"
-    var superSectionID = "xI21AHATXD"
+    var poiID = ""
+    var superSectionID = ""
     var POIList = [String]()
     var poiViews = [UIView]()
     var nextNavigationView = [UIView]()
@@ -398,7 +398,7 @@ class POITableViewController: UITableViewController {
             cell.contentView.addSubview(poiViews[indexPath.row])
             cell.selectionStyle = UITableViewCellSelectionStyle.None
         }
-        else if (indexPath.row < (poiViews.count + nextNavigationView.count + previousNavigationView.count)){
+        else if (indexPath.row < (poiViews.count + 1)){
             var navigationToAdd: UIView
             if(nextNavigationView.count != 0){
                 cell = tableView.dequeueReusableCellWithIdentifier("NextPOI", forIndexPath: indexPath)
@@ -430,7 +430,7 @@ class POITableViewController: UITableViewController {
             print("adding navigation cell")
             
         }
-        else if (indexPath.row < (poiViews.count + nextNavigationView.count + previousNavigationView.count)){
+        else if (indexPath.row < (poiViews.count + 2)){
             cell = tableView.dequeueReusableCellWithIdentifier("PreviousPOI", forIndexPath: indexPath)
             for view in cell.contentView.subviews {
                 view.removeFromSuperview()
