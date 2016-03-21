@@ -170,19 +170,8 @@ public class SummaryActivity extends AppCompatActivity {
         updateText = (TextView) findViewById(R.id.updateTourText);
         updateTour = (LinearLayout) findViewById(R.id.updateTour);
 
-        Context context = getApplicationContext();
-        SharedPreferences prefs = context.getSharedPreferences(
-                context.getString(R.string.preference_file_key),
-                Context.MODE_PRIVATE);
-
-        Set<String> updateSet = prefs.getStringSet(context.getString(R.string.prefs_tours_to_update), null);
-        if (updateSet != null) {
-            for (String s : updateSet) {
-                if (s.equals(keyID)) {
-                    displayUpdateOption();
-                    break;
-                }
-            }
+        if (TourDBManager.getInstance(getApplicationContext()).doesTourHaveUpdate(keyID)) {
+            displayUpdateOption();
         } else {
             updateButton.setImageResource(R.mipmap.ic_check_black_24dp);
             updateButton.setColorFilter(Color.parseColor("#00ff0f"));
@@ -365,10 +354,6 @@ public class SummaryActivity extends AppCompatActivity {
     private void addTourToDB() {
         TourDBManager dbHelper = TourDBManager.getInstance(getApplicationContext());
 
-        SharedPreferences prefs = getApplicationContext().getSharedPreferences(
-                getApplicationContext().getString(R.string.preference_file_key),
-                Context.MODE_PRIVATE);
-
         String name = "empty";
         int version = 0;
 
@@ -384,15 +369,7 @@ public class SummaryActivity extends AppCompatActivity {
 //            dbHelper.updateRow(keyID, tourID, name, String.valueOf(datetime), withMedia, version);
 
             // unflag this tour as having an update available
-            Set<String> updateSet = prefs.getStringSet(getApplicationContext().getString(R.string.prefs_tours_to_update), null);
-            if (updateSet != null) {
-                for (String s : updateSet) {
-                    if (s.equals(keyID)) {
-                        updateSet.remove(keyID);
-                        break;
-                    }
-                }
-            }
+            dbHelper.flagTourUpdate(keyID, false);
         } else {
             dbHelper.putRow(keyID, tourID, keyName, name, expiryTimeString, withMedia, version);
         }
