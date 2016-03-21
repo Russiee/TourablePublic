@@ -5,6 +5,33 @@
     height: 100%;
 }
 
+#admin-view .form-control {
+    color: #4A5F7E;
+    padding: 20px;
+    border-width: 2px;
+    border-color: #D8DCE0;
+    background-color: #ecf0f1;
+    box-shadow: none;
+    border-radius: 5px;
+    -webkit-transition: background-color 150ms ease-in-out;
+       -moz-transition: background-color 150ms ease-in-out;
+         -o-transition: background-color 150ms ease-in-out;
+        -ms-transition: background-color 150ms ease-in-out;
+            transition: background-color 150ms ease-in-out;
+}
+
+#admin-view .form-control:focus {
+    background-color: #FFF;
+    border-color: #D8DCE0;
+    box-shadow: none;
+
+    -webkit-transition: background-color 150ms ease-in-out;
+       -moz-transition: background-color 150ms ease-in-out;
+         -o-transition: background-color 150ms ease-in-out;
+        -ms-transition: background-color 150ms ease-in-out;
+            transition: background-color 150ms ease-in-out;
+}
+
 /* admin sidenav styles */
 
 #admin-nav {
@@ -78,4 +105,10 @@
     padding-top: 16px;
     color: #162B49;
     font-weight: 600;
+}
+
+.admin-subheader {
+    margin: 0;
+    padding: 15px 0px;
+    color: #4A5F7E;
 }
