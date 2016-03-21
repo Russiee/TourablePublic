@@ -34,7 +34,6 @@ public class TourDeleter {
         let tour = NSUserDefaults.standardUserDefaults().objectForKey(tourID)
         //gets all the objectIDs of the tour (which we have stored in UserDefaults)
         getAllIDs(tour!["sections"] as! NSArray)
-        print(objectIDs)
         //deletes al the objectIDs from User Defaults
         for ids in objectIDs{
             NSUserDefaults.standardUserDefaults().removeObjectForKey(ids)
@@ -99,7 +98,6 @@ public class TourDeleter {
         let tour = NSUserDefaults.standardUserDefaults().objectForKey(tourID)
         //gets all the image urls of the tour (which is stored in UserDefaults)
         getAllMediaURL(tour!["sections"] as! NSArray)
-        print(mediaURLS)
         //calls the deleteMedia function on the urls we gathered from the Tour JSON
         for url in mediaURLS{
             deleteMedia(url, fileType: url.substringFromIndex(url.endIndex.advancedBy(-4)))
