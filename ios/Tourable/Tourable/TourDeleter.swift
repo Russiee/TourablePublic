@@ -100,8 +100,7 @@ public class TourDeleter {
         getAllMediaURL(tour!["sections"] as! NSArray)
         //calls the deleteMedia function on the urls we gathered from the Tour JSON
         for url in mediaURLS{
-            //currently only for .jpg as the only media type stored
-            deleteMedia(url, fileType: ".jpg")
+            deleteMedia(url, fileType: url.substringFromIndex(url.endIndex.advancedBy(-4)))
         }
         //resets the array
         mediaURLS = []
@@ -119,11 +118,11 @@ public class TourDeleter {
                         let post = pois["post"] as! NSArray
                         for items in post{
                             //get all the keys of the post entry
-                            let types = items.allKeys
+                            let types = items.allKeys as! [String]
                             //currently first one can be a url hence we dont loop through the keys
-                            if(types[0] as! String == "url"){
+                            if(types.contains("url")){
                                 //append the found url to mediaURLS
-                                mediaURLS.append((items[types[0] as! String]) as! String)
+                                mediaURLS.append(items["url"] as! String)
                             }
                         }
                     }

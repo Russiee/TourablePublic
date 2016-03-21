@@ -55,12 +55,13 @@ class APIConnectorTests: XCTestCase {
     
     
     func testPerformanceOfAPIConnectionWithKCL1010() {
+        let urlPath = "https://touring-api.herokuapp.com/api/v1/key/verify/KCL-1010"
+        let request = NSURLRequest(URL: NSURL(string: urlPath)!)
+        let config = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let session = NSURLSession(configuration: config)
+        
         self.measureBlock {
             let expectation = self.expectationWithDescription("connecting to api")
-            let urlPath = "https://touring-api.herokuapp.com/api/v1/key/verify/KCL-1010"
-            let request = NSURLRequest(URL: NSURL(string: urlPath)!)
-            let config = NSURLSessionConfiguration.defaultSessionConfiguration()
-            let session = NSURLSession(configuration: config)
             
             let task = session.dataTaskWithRequest(request) { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
                 //XCTAssertNotNil(ourData, "the data should be nil as we havent received anything yet")
@@ -228,6 +229,34 @@ class APIConnectorTests: XCTestCase {
                 print("Error: \(error.localizedDescription)")
             }
             task.cancel()
+        }
+    }
+    
+    func testCleanTourIds(){
+        let test1 = "    KCL- 1  0 1     0"
+        let test2 = "///KC/L-10/1/0/"
+        let test3 = "\\KCL-\\1010"
+        let test4 = "\"KCL\"-1010"
+        let test5 = "KC;L-;10;10"
+        let test6 = " K\\C/L;-1\"010 "
+        let ans = "KCL-1010"
+        XCTAssertEqual(ApiConnector.sharedInstance.cleanTourId(test1), ans, "should be same after trim")
+        XCTAssertEqual(ApiConnector.sharedInstance.cleanTourId(test2), ans, "should be same after trim")
+        XCTAssertEqual(ApiConnector.sharedInstance.cleanTourId(test3), ans, "should be same after trim")
+        XCTAssertEqual(ApiConnector.sharedInstance.cleanTourId(test4), ans, "should be same after trim")
+        XCTAssertEqual(ApiConnector.sharedInstance.cleanTourId(test5), ans, "should be same after trim")
+        XCTAssertEqual(ApiConnector.sharedInstance.cleanTourId(test6), ans, "should be same after trim")
+        
+    }
+    
+    func testConnectivety(){
+        let connection = ApiConnector.sharedInstance.isConnectedToNetwork()
+        if connection {
+            //as connection succeeded should be true
+            XCTAssertTrue(connection)
+        } else{
+            //as conection failed should be false
+            XCTAssertFalse(connection)
         }
     }
     
