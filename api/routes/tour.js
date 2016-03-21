@@ -8,13 +8,13 @@ Parse.serverURL = 'http://touring-db.herokuapp.com/parse';
 var Admin = Parse.Object.extend("_User");
 var Tour = Parse.Object.extend("Tour");
 
-//POI module object
-//contains functions for all REST api routes for the POI object
+//tour module object
+//contains functions for all REST api routes for the tour object
 var tour = {
 
     //GET route function
-    //returns a single POI object
-    //required param(s) in req(uest): id of the POI object to be fetched
+    //returns a single tour object
+    //required param(s) in req(uest): id of the tour object to be fetched
     //optional param(s) in req: none
     GET: function(req, res) {
         //server log for debugging
@@ -23,7 +23,7 @@ var tour = {
         //isolates id from request params
         var id = req.params.id;
         
-        //instantiates a new query to Parse (database mount) for the POI prototype
+        //instantiates a new query to Parse (database mount) for the Tour prototype
         var query = new Parse.Query(Tour);
         
         //execute query and pass the id as a parameter, as well as success and error callbacks
@@ -33,7 +33,7 @@ var tour = {
                 //server log for debugging
                 console.log("Tour " + id + " retrieved succesfully");
                 console.log(tour);
-                //send an https response with status code 200 and the POI data in JSON format
+                //send an https response with status code 200 and the tour data in JSON format
                 res.status(200).send(tour);
             },
             //error callback, executed if an error occurs
@@ -48,9 +48,9 @@ var tour = {
     },
 
     //GET_ALL route function
-    //returns as many POI objects as requested
+    //returns as many tour objects as requested
     //required param(s) in req: none
-    //optional param(s) in req: "limit" - number of POIs to be fetched, otherwise set to 20,
+    //optional param(s) in req: "limit" - number of tours to be fetched, otherwise set to 20,
     //                          "orderBy" - 'descending' or 'ascending' order
     GET_ALL: function(req, res) {
         //server log for debugging
@@ -64,7 +64,7 @@ var tour = {
         //default orderBy to null if no value is passed
         var orderBy = req.query.limit || null;
 
-        //instantiates a new query to Parse (database mount) for the POI prototype
+        //instantiates a new query to Parse (database mount) for the Tour prototype
 
         var query = new Parse.Query(Tour);
         
@@ -92,7 +92,7 @@ var tour = {
     },
 
     //POST route function
-    //creates a new POI object
+    //creates a new tour object
     //required param(s) in req: none
     //optional param(s) in req: none
     //required data in req.body: see expectedInput
@@ -128,7 +128,7 @@ var tour = {
         if (!validInput) {
             res.sendStatus(400);
         }
-        //the request is formatted correctly, call the createPOI function (separate logic function) and pass it a callback function 
+        //the request is formatted correctly, call the createTour function (separate logic function) and pass it a callback function 
         else {
             createTour(parseData, function(result) {
                 //checks the status code sent back, if there is no server error (status 500)
@@ -137,15 +137,15 @@ var tour = {
                     res.status(201).send(result);
                 }
                 else
-                //else send an https response with the error status code and data returned by the createPOI function
+                //else send an https response with the error status code and data returned by the createTour function
                     res.status(result.status).send(result.data);
             });
         }
     },
 
     //PUT route function
-    //updates an POI object
-    //required param(s) in req: id of the POI object to be updated
+    //updates an tour object
+    //required param(s) in req: id of the tour object to be updated
     //optional param(s) in req: none
     //required data in req.body: see expectedInput
     PUT: function(req, res) {
@@ -173,10 +173,10 @@ var tour = {
         //server log for debugging
         console.log("Parsed Data: ", parseData);
 
-        //instantiates a new query to Parse (database mount) for the POI prototype
+        //instantiates a new query to Parse (database mount) for the Tour prototype
         var query = new Parse.Query(Tour);
         
-        //first GET the POI object to be updated
+        //first GET the tour object to be updated
         //execute query and pass the id as a parameter, as well as success and error callbacks
         query.get(id, {
             //success callback, executed if the query is successful
@@ -186,7 +186,7 @@ var tour = {
                 
                 //iterate over the properties in the parsed data
                 for (var prop in parseData) {
-                    //override the current data in the POI object with our parsed data
+                    //override the current data in the tour object with our parsed data
                     tour.set(prop.toString(), parseData[prop]);
                 }
                 
@@ -196,7 +196,7 @@ var tour = {
                     success: function(tour) {
                         //server log for debugging
                         console.log("Tour " + id + " updated succesfully");
-                        //send an https response with status code 200 and the updated POI data in JSON format
+                        //send an https response with status code 200 and the updated tour data in JSON format
                         res.status(200).send(tour);
                     },
                     //error callback, executed if an error occurs during the save
@@ -222,8 +222,8 @@ var tour = {
     },
 
     //DELETE route function
-    //deletes an POI object
-    //required param(s) in req: id of the POI object to be deleted
+    //deletes an tour object
+    //required param(s) in req: id of the tour object to be deleted
     //optional param(s) in req: none
     DELETE: function(req, res) {
         //server log for debugging
@@ -232,10 +232,10 @@ var tour = {
         //isolates id from request params
         var id = req.params.id;
         
-        //instantiates a new query to Parse (database mount) for the POI prototype
+        //instantiates a new query to Parse (database mount) for the Tour prototype
         var query = new Parse.Query(Tour);
         
-        //first GET the POI object to be deleted
+        //first GET the tour object to be deleted
         //execute query and pass the id as a parameter, as well as success and error callbacks
         query.get(id, {
             //success callback, executed if the query is successful
@@ -274,20 +274,20 @@ var tour = {
 }
 
 //this function called when using the POST function
-//creates an POI object on the database via Parse
+//creates an tour object on the database via Parse
 function createTour (data, callback) {
 
-    //create a new instance of the POI object prototype
+    //create a new instance of the Tour object prototype
     var tour = new Tour();
     
-    //temporarily save the section (ID) string
+    //temporarily save the admin (ID) string
     var adminID = data.admin;
-    //delete the section string from the data
+    //delete the admin string from the data
     delete data.admin;
     //add the tour property to data, but in the form of a pointer object to the Tour prototype
     tour.set("admin",  {"__type":"Pointer","className":"Admin","objectId":adminID});
 
-    //execute the POI save function on the object on the database with Parse, passing success and error callbacks
+    //execute the tour save function on the object on the database with Parse, passing success and error callbacks
     tour.save(data, {
         //success callback, executed if the save is successful
         success: function(tour) {
@@ -295,7 +295,7 @@ function createTour (data, callback) {
             console.log("Created tour with ID " + tour.id + " at time " + tour.createdAt);
             console.log(tour);
             
-            //return the POI object to the callback function passed by the POST route function
+            //return the tour object to the callback function passed by the POST route function
             callback(tour);
         },
         //error callback, executed if the save fails (is unsuccessful)
