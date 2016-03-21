@@ -33,11 +33,18 @@ class TourSectionsController: UITableViewController {
         var tourTitles = [String: String]()
         let tdp = tourDataParser.init()
         tableView.tableHeaderView = tourSummaryTextView
+        
         for subsectionPointer in subsectionArray{
-            let subsectionData = tdp.getTourSection((subsectionPointer["objectId"] as? String)!)
-            tourTitles[subsectionData.title as String] =  subsectionData.sectionId
-            //appends the Names of subsections in the order they appear
-            sectionKeys.append(subsectionData.title as String)
+            if subsectionPointer["objectId"] != nil {
+                print(subsectionPointer["objectId"])
+                print(subsectionPointer)
+                break
+                let subsectionData = tdp.getTourSection((subsectionPointer["objectId"] as! String))
+                tourTitles[subsectionData.title as String] =  subsectionData.sectionId
+                //appends the Names of subsections in the order they appear
+                sectionKeys.append(subsectionData.title as String)
+            }
+          
  
         }
 
