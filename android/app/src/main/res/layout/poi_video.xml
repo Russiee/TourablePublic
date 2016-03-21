@@ -4,8 +4,7 @@
     android:id="@+id/poiContentVideoLayout"
     android:paddingTop="16dp"
     android:paddingBottom="16dp"
-    android:orientation="vertical"
-    android:background="@color/colorLightBackground">
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="fill_parent"
