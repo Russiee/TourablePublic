@@ -148,13 +148,13 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
 
     //prompt user for tour code input
     func showTourKeyAlert(){
-        let alert = UIAlertView(title: "Add New Tour", message: "Enter the key you have recieved", delegate: self, cancelButtonTitle:"Cancel")
+        let alert = UIAlertView(title: "Add New Tour", message: "Enter the provided tour key", delegate: self, cancelButtonTitle:"Cancel")
         alert.alertViewStyle = UIAlertViewStyle.PlainTextInput
         
         alert.addButtonWithTitle("Add")
         let textField = alert.textFieldAtIndex(0)
         textField?.keyboardAppearance = UIKeyboardAppearance.Alert
-        textField!.placeholder = "Enter Tour ID"
+        textField!.placeholder = "Enter Tour Key"
         alert.show()
     }
     //Alert user that the tour they are trying to add already exists.
