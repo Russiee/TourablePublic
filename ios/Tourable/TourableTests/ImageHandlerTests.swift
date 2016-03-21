@@ -88,10 +88,10 @@ class ImageHandlerTests: XCTestCase {
         imageHandler.sharedInstance.downloadMediaSet(imageHandler.sharedInstance.imageQueue)
          let expectation = self.expectationWithDescription("ImageDownloadComplete")
         
-        while imagesToDownload != urls.count-1{
+        while imagesToDownload != urls.count{
             
         }
-        if(imagesToDownload == urls.count-1){
+        if(imagesToDownload == urls.count){
             
             expectation.fulfill()
             
