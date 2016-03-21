@@ -60,16 +60,12 @@ public class TourIdParser {
         NSUserDefaults.standardUserDefaults().setObject(tourDict, forKey: tourCode as! String)
         NSUserDefaults.standardUserDefaults().synchronize()
 
-        //Give objectId of tour as param
-
-
         //this comes from the initialised of bundle Connector
         let bundleRoute = bundleRouteConnector()
         bundleRoute.startConnection(tourDict["objectId"] as! String)
         
         let tourData = bundleRoute.getJSONResult()
         tourDataParser().saveNewTour(tourData)
-        //bundleRoute.getAllPOIs((MYDAMNDATA["sections"]) as! NSArray)
         let tourTitle = tourData["title"]
         self.updateArray(tourCode as! String, tourTitle: tourTitle as! String)
 

@@ -18,12 +18,6 @@ class APIConnectorTests: XCTestCase {
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
-        var array = NSUserDefaults.standardUserDefaults().objectForKey("Array")
-        array = []
-        NSUserDefaults.standardUserDefaults().setObject(array, forKey: "Array")
-        NSUserDefaults.standardUserDefaults().synchronize()
-
-        
     }
     
     override func tearDown() {
@@ -132,6 +126,108 @@ class APIConnectorTests: XCTestCase {
                 task.cancel()
             }
             
+        }
+    }
+    
+    //the checking if data is whats expected tests will fail if the API team change the expiry dates!
+    
+    func testDataFromKCL1010IsExpected(){
+        
+        let expectedKCL1010VerifierData = [
+            "tour": [
+                "__type": "Pointer",
+                "className": "Tour",
+                "objectId": "cjWRKDygIZ"
+            ],
+            "code": "KCL-1010",
+            "updatedAt": "2016-03-20T12:10:42.175Z",
+            "createdAt": "2016-03-18T10:50:47.172Z",
+            "expiry": "2016-06-19T00:00:00.000Z",
+            "objectId": "ZX8DHpGKxk"
+        ]
+        
+        let expectation = expectationWithDescription("connection to api established and the data retrieved is correct")
+        let urlPath = "https://touring-api.herokuapp.com/api/v1/key/verify/KCL-1010"
+        let myData = NSMutableData()
+        var JSONMetadataFromAPI: NSDictionary!
+        let request = NSURLRequest(URL: NSURL(string: urlPath)!)
+        let config = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let session = NSURLSession(configuration: config)
+        
+        let task = session.dataTaskWithRequest(request) { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            
+            myData.appendData(data!)
+            do {
+                let jsonResult = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
+                JSONMetadataFromAPI = jsonResult
+                
+            }
+            catch let err as NSError{
+                print(err.description)
+            }
+            
+            XCTAssertNil(error, "there shouldn't be any error")
+            XCTAssertEqual(JSONMetadataFromAPI, expectedKCL1010VerifierData, "These should be identical")
+            expectation.fulfill()
+        }
+        task.resume()
+        
+        waitForExpectationsWithTimeout(task.originalRequest!.timeoutInterval) { error in
+            if let error = error {
+                print("Error: \(error.localizedDescription)")
+            }
+            task.cancel()
+        }
+    }
+    
+    //the checking if data is whats expected tests will fail if the API team change the expiry dates!
+    
+    func testDataFromKCL1111IsExpected(){
+        
+        let expectedKCL111VerifierData = [
+            "tour": [
+                "__type": "Pointer",
+                "className": "Tour",
+                "objectId": "GpSEMT3hmG"
+            ],
+            "code": "KCL-1111",
+            "updatedAt": "2016-03-20T11:54:18.586Z",
+            "createdAt": "2016-03-18T10:51:04.357Z",
+            "expiry": "2016-03-21T00:00:00.000Z",
+            "objectId": "BvBRrYZNPU"
+        ]
+        
+        let expectation = expectationWithDescription("connection to api established and data retrieved is correct")
+        let urlPath = "https://touring-api.herokuapp.com/api/v1/key/verify/KCL-1111"
+        let myData = NSMutableData()
+        var JSONMetadataFromAPI: NSDictionary!
+        let request = NSURLRequest(URL: NSURL(string: urlPath)!)
+        let config = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let session = NSURLSession(configuration: config)
+        
+        let task = session.dataTaskWithRequest(request) { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            
+            myData.appendData(data!)
+            do {
+                let jsonResult = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
+                JSONMetadataFromAPI = jsonResult
+                
+            }
+            catch let err as NSError{
+                print(err.description)
+            }
+            
+            XCTAssertNil(error, "there shouldn't be any error")
+            XCTAssertEqual(JSONMetadataFromAPI, expectedKCL111VerifierData, "These should be identical")
+            expectation.fulfill()
+        }
+        task.resume()
+        
+        waitForExpectationsWithTimeout(task.originalRequest!.timeoutInterval) { error in
+            if let error = error {
+                print("Error: \(error.localizedDescription)")
+            }
+            task.cancel()
         }
     }
     
