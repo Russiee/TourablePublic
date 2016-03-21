@@ -51,7 +51,7 @@ angular.module('tourable')
             var hash = path.indexOf('#');
             console.log(path.substring(0,hash));
             getSectionFromPath(path.substring(0,hash));
-            $scope.poi = $scope.section.pois[parseInt(path.substring(hash + 1))]
+            $scope.poi = $scope.section.pois[parseInt(path.substring(hash + 1))];
         }
 
         function getTourMetaData(id) {
@@ -100,14 +100,15 @@ angular.module('tourable')
         };
 
         $scope.navBack = function() {
+            var newPath;
             if ($state.current.name === 'tour.overview') {
                 $state.go('home');
             } else if ($state.current.name === 'tour.section') {
-                var newPath = $state.params.path.substring(0, $state.params.path.length - 1);
+                newPath = $state.params.path.substring(0, $state.params.path.length - 1);
                 $state.go('tour.section', {path: newPath, key: $scope.key});
             } else if ($state.current.name === 'tour.poi') {
                 var hash = $state.params.path.indexOf('#');
-                var newPath = $state.params.path.substring(0, hash);
+                newPath = $state.params.path.substring(0, hash);
                 $state.go('tour.section', {path: newPath, key: $scope.key});
             }
         };
@@ -115,12 +116,12 @@ angular.module('tourable')
         $scope.goToSection = function (index) {
             var newPath = $state.params.path + index;
             $state.go('tour.section', {path: newPath, key: $scope.key});
-        }
+        };
 
         $scope.goToPOI = function (index) {
             var newPath = $state.params.path + '#' + index;
-            $state.go('tour.poi', {path: newPath, key: $scope.key})
-        }
+            $state.go('tour.poi', {path: newPath, key: $scope.key});
+        };
 
-        $scope.solve;
+//        $scope.solve;
     });
