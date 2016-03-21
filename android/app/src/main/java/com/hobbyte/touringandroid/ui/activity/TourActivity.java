@@ -23,6 +23,7 @@ import com.hobbyte.touringandroid.tourdata.TourBuilder;
 import com.hobbyte.touringandroid.tourdata.TourItem;
 import com.hobbyte.touringandroid.ui.fragment.POIFragment;
 import com.hobbyte.touringandroid.ui.fragment.SectionFragment;
+import com.hobbyte.touringandroid.ui.util.ImageCache;
 
 import org.json.JSONObject;
 
@@ -102,8 +103,14 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
         } else if (backToSummary) {
             super.onBackPressed();
             this.finish();
-
         }
+    }
+
+    @Override
+    protected void onStop() {
+        Log.d(TAG, "onStop Called");
+        ImageCache.getInstance().clearCache();
+        super.onStop();
     }
 
     /**
@@ -111,7 +118,6 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
      *
      * @param position position of the item clicked on
      */
-
     @Override
     public void onSubSectionClicked(int position) {
         ArrayList<TourItem> contents = currentSection.getContents();
@@ -126,7 +132,8 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
             currentSection = (SubSection) contents.get(position);
             loadCurrentSection();
         } else {
-            //If the clicked POI is not in first position in the list, sets the previous POI to the POI before the selected POI
+            // if the clicked POI is not in first position in the list, sets the previous POI to
+            // the POI before the selected POI
             if ((position != 0) && contents.get(position - 1).getType() == TourItem.TYPE_POI) {
                 previousPOI = (PointOfInterest) contents.get(position - 1);
             }

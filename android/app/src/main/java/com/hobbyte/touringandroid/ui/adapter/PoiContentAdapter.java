@@ -362,6 +362,10 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
 
             if (file.exists()) {
                 Bitmap bitmap = getSampledBitmap(file);
+
+                float size = (float) bitmap.getByteCount() / (1024.0f * 1024.0f);
+                Log.i(TAG, String.format("About to add %.2f MB bitmap to cache", size));
+
                 ImageCache.getInstance().addBitmap(imgPath, bitmap);
                 return bitmap;
             }
