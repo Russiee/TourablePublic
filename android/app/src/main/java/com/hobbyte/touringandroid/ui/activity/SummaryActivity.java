@@ -251,7 +251,7 @@ public class SummaryActivity extends AppCompatActivity {
                 }
 
                 //number of minutes, minutes or minute
-                if (durationMinutes >= 1) {
+                if (durationMinutes > 1) {
                     sb.append(durationMinutes);
                     sb.append(" ");
                     sb.append(getString(R.string.expires_in_minutes));
