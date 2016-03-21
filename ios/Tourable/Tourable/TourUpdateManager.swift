@@ -99,7 +99,7 @@ public class TourUpdateManager: NSObject {
     // remember that multiples tourCodes can be associate with the same tourID (aka objectID in the tourMetada)
     func getTourMetadata() {
         let tourConnector = TourMetadataConnector()
-        tourConnector.createConnection(currentTourKEYmetadata["objectId"] as! String)
+        tourConnector.checkTourMetadataForUpdates(currentTourKEYmetadata["objectId"] as! String)
     }
 
 

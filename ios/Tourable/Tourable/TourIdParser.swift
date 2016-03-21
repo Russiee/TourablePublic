@@ -61,6 +61,8 @@ public class TourIdParser {
         NSUserDefaults.standardUserDefaults().setObject(tourDict, forKey: tourCode as! String)
         NSUserDefaults.standardUserDefaults().synchronize()
 
+        TourMetadataConnector().downloadTourUpdateMetadata(tourDict["objectId"] as! String, tourCode: tourCode as! String)
+
         //this comes from the initialised of bundle Connector
         let bundleRoute = bundleRouteConnector()
         bundleRoute.startConnection(tourDict["objectId"] as! String)

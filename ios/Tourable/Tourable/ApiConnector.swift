@@ -94,6 +94,7 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
             NSNotificationCenter.defaultCenter().postNotificationName(validIdNotificationKey, object: self)
         }
         notify()
+        
     }
 
     // remove the heading and trailing spaces

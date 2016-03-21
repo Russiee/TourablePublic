@@ -102,8 +102,6 @@ class imageHandler: NSObject {
                 }
                 }
             }else{
-                print(url)
-                print("downloading video")
                 videoHandler.sharedInstance.downloadVideo(url)
             }
         }
