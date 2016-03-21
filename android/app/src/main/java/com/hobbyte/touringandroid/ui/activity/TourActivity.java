@@ -101,8 +101,7 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
             backToSummary = true;
         } else if (backToSummary) {
             super.onBackPressed();
-            Intent intent = new Intent(this, StartActivity.class);
-            startActivity(intent);
+            this.finish();
 
         }
     }
