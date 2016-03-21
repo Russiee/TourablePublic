@@ -254,7 +254,7 @@ var admin = {
                         //send an https response with status code 200 to confirm the deletion
                         res.sendStatus(200);
                     },
-                    //error callback, executed if an occurs during deletion (delete not successful)
+                    //error callback, executed if an error occurs during deletion (delete not successful)
                     error: function(error) {
                         //server logs for debugging
                         console.log("Failed to delete " + id);

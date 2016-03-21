@@ -51,7 +51,7 @@ var key = {
     //GET_ALL route function
     //returns as many key objects as requested
     //required param(s) in req: none
-    //optional param(s) in req: "limit" - number of key to be fetched, otherwise set to 20,
+    //optional param(s) in req: "limit" - number of keys to be fetched, otherwise set to 20,
     //                          "orderBy" - 'descending' or 'ascending' order
     GET_ALL: function(req, res) {
         //server log for debugging
@@ -263,7 +263,7 @@ var key = {
                         //send an https response with status code 200 to confirm the deletion
                         res.sendStatus(200);
                     },
-                    //error callback, executed if an occurs during deletion (delete not successful)
+                    //error callback, executed if an error occurs during deletion (delete not successful)
                     error: function(error) {
                         //server log for debugging
                         console.log("Failed to delete " + id);
@@ -358,6 +358,7 @@ function createKey (data, callback) {
             //return the key object to the callback function passed by the POST route function
             callback(key);
         },
+        //error callback, executed if the save fails (is unsuccessful)
         error: function(key, error) {
             //server logs for debugging
             console.log("Failed to create key.");
