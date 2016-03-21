@@ -43,6 +43,7 @@ angular.module('tourable')
                 script += ".subsections[" + hierachy[s] + "]";
             }
             console.log(script);
+            /*jshint -W061 */
             eval(script);
         }
 
