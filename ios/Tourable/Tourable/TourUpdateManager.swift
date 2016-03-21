@@ -40,7 +40,8 @@ public class TourUpdateManager: NSObject {
         
         // get current tourKey metadata from cache
         self.currentTourKEYmetadata = TourIdParser().getTourMetadata(tourCode)
-        
+        print("//////")
+        print(self.currentTourKEYmetadata)
         // get new tourKey metadata
         if ApiConnector.sharedInstance.isConnectedToNetwork() {
             ApiConnector.sharedInstance.initiateConnection(tourCode, isCheckingForUpdate: true)
