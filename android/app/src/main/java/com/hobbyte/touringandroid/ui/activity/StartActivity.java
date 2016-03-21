@@ -1,9 +1,7 @@
 package com.hobbyte.touringandroid.ui.activity;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
@@ -346,22 +344,6 @@ public class StartActivity extends AppCompatActivity {
                     expiryTimeString = null;
                 }
 
-                SharedPreferences prefs = getApplicationContext().getSharedPreferences(
-                        getString(R.string.preference_file_key),
-                        Context.MODE_PRIVATE);
-
-                /*
-                The JSON returned above is purely for the key. It contains several key pieces of
-                information:
-                    - keyID used to create a folder for storing tour media
-                    - tourID used to fetch the tour bundle
-                    - expiresAt needs to be stored in the local DB
-                All other info comes from the tour/bundle json, which will be saved on the device.
-                 */
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putString(getString(R.string.prefs_current_tour), tourID);
-                editor.putString(getString(R.string.prefs_current_key), keyID);
-                editor.apply();
                 return true;
             }
             return false;

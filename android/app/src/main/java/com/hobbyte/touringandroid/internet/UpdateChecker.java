@@ -1,10 +1,8 @@
 package com.hobbyte.touringandroid.internet;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.hobbyte.touringandroid.R;
 import com.hobbyte.touringandroid.io.TourDBManager;
 
 import org.json.JSONException;
