@@ -39,8 +39,7 @@ tourable.config(function($stateProvider, $urlRouterProvider, $locationProvider) 
 
     .state('admin', {
         templateUrl: "/client/app/components/admin/admin.view.html",
-        controller: "AdminCtrl",
-        authenticate: true
+        controller: "AdminCtrl"
     })
     .state('admin.login', {
         url: "/admin/login",
@@ -64,6 +63,12 @@ tourable.config(function($stateProvider, $urlRouterProvider, $locationProvider) 
     .state('admin.account', {
         url: "/admin/account",
         templateUrl: "/client/app/components/admin/components/account.view.html",
+        authenticate: true
+    })
+    .state('admin.create', {
+        url: "/admin/create/:class",
+        templateUrl: "/client/app/components/admin/components/create/create.view.html",
+        controller: "CreateCtrl",
         authenticate: true
     });
 });
