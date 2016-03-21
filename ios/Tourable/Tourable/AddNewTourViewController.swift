@@ -56,7 +56,10 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
         downloadedImages++
         //Get progress as fraction of 1
         let progress = (downloadedImages/totalImagesToDownload)
-        downloadStatusLabel.text = "Downloading Media: \(Int(downloadedImages)) of \(Int(totalImagesToDownload))"
+        let progressPercentage = progress * 100
+        let distanceLabel = ((String(format: progressPercentage == floor(progressPercentage) ? "%.0f" : "%.1f", progressPercentage)) as NSString).substringWithRange(NSMakeRange(0, 2))
+        
+        downloadStatusLabel.text = "Downloading Media: \(distanceLabel)%"
 
  
         //I.e progess = 100%

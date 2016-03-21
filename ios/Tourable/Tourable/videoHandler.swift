@@ -29,6 +29,20 @@ class videoHandler {
             }
         }
     }
+    
+    func triggerDownloadCompleteNotify() {
+        NSNotificationCenter.defaultCenter().addObserver(
+            self,
+            selector: "NotifiedFinishedDownloading",
+            name: "NotifiedFinishedDownloading",
+            object: nil)
+        func notify() {
+            NSNotificationCenter.defaultCenter().postNotificationName(endDownloadKey, object: self)
+            
+        }
+        notify()
+    }
+    
     //Saves the video binary file under the specified name.
     func saveVideo(videoData: NSData, name: String ) -> Bool{
         //The name is hashed to ensure it is uniqe and compatible with iOS filesystem
@@ -38,6 +52,7 @@ class videoHandler {
         //write the file to disk at the specified path.
         let result = videoData.writeToFile(path, atomically: true)
         //returns success status.
+        triggerDownloadCompleteNotify()
         return result
     }
     

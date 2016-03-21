@@ -205,7 +205,7 @@
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="Your Tours" id="lbB-tE-EcH">
                         <barButtonItem key="backBarButtonItem" title="Back" id="UTf-sz-Ubf"/>
-                        <barButtonItem key="rightBarButtonItem" title="About   " id="9za-Rm-K55">
+                        <barButtonItem key="rightBarButtonItem" title="About  " id="9za-Rm-K55">
                             <color key="tintColor" red="1" green="1" blue="1" alpha="0.40000000000000002" colorSpace="calibratedRGB"/>
                             <connections>
                                 <segue destination="5ld-DC-wWd" kind="show" id="RmJ-ph-6cW"/>
