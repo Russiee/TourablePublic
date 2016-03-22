@@ -48,6 +48,8 @@ var section = {
     //required param(s) in req: none
     //optional param(s) in req: "limit" - number of sections to be fetched, otherwise set to 20,
     //                          "orderBy" - 'descending' or 'ascending' order
+    //                          "superSection" - the id of the superSection that the query results should be filtered for
+
     GET_ALL: function(req, res) {
         //server log for debugging
         console.log("GET ALL SECTIONS");
@@ -58,6 +60,8 @@ var section = {
         var limit = req.query.limit || 20;
         //default orderBy to null if no value is passed
         var orderBy = req.query.orderBy || null;
+        //default superSection to null if no value is passed
+        var superSection = req.query.superSection || null;
 
         //instantiates a new query to Parse (database mount) for the section prototype
         var query = new Parse.Query(Section);
@@ -68,6 +72,11 @@ var section = {
         //if orderBy was passed as a param, sort the query by that value
         if (orderBy) {
             query.ascending(orderBy);
+        }
+
+        //if superSection was passed as a param, sort the query by that value
+        if (superSection) {
+            query.equalTo("superSection",{"__type":"Pointer","className":"Section","objectId":superSection})
         }
 
         //execute 'find' query and pass success and error callbacks as parameters
