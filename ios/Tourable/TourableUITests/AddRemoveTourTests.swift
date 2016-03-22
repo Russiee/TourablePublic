@@ -115,10 +115,43 @@ class AddRemoveTourTests: XCTestCase {
         cell.tap()
         sleep(1)
         tablesQuery.buttons["Back to overview"].tap()
-        
     }
 
+    
+    func testNavigateTourAndPlayVideo() {
+        
+        let app = XCUIApplication()
+        let tablesQueryBeginning = app.tables
+        tablesQueryBeginning.buttons["Add Tour"].tap()
+        
+        let collectionViewsQuery = app.alerts["Add New Tour"].collectionViews
+        collectionViewsQuery.textFields["Enter Tour Key"].typeText("KCL-1111")
+        collectionViewsQuery.buttons["Add"].tap()
+        sleep(10)
+        app.alerts["Download Tour"].collectionViews.buttons["Download with media (Larger)"].tap()
+        
+        let tablesQuery2 = app.tables
+        let tablesQuery = tablesQuery2
+        tablesQuery.staticTexts["Royal Brompton Test Tour"].tap()
+        app.buttons["Start Tour"].tap()
+        tablesQuery.staticTexts["The Imaging Facilities"].tap()
+        tablesQuery.staticTexts["Specific Medical Imaging Hallway"].tap()
+        tablesQuery.staticTexts["Medical Machine ABC"].tap()
+        tablesQuery2.childrenMatchingType(.Cell).elementBoundByIndex(1).tap()
+        sleep(6)
+        app.buttons["Done"].tap()
 
+        app.navigationBars["Medical Machine ABC"].childrenMatchingType(.Button).matchingIdentifier("Back").elementBoundByIndex(0).tap()
+        app.navigationBars["Specific Medical Imaging Hallway"].childrenMatchingType(.Button).elementBoundByIndex(0).tap()
+        app.navigationBars["The Imaging Facilities"].childrenMatchingType(.Button).matchingIdentifier("Back").elementBoundByIndex(0).tap()
+        
+        let backButton = app.navigationBars["Royal Brompton Test Tour"].childrenMatchingType(.Button).matchingIdentifier("Back").elementBoundByIndex(0)
+        backButton.tap()
+        backButton.tap()
+        tablesQuery.staticTexts["Royal Brompton Test Tour"].swipeLeft()
+        tablesQuery.buttons["Delete"].tap()
+        
+    }
     
     
 }
