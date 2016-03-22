@@ -5,7 +5,14 @@ angular.module('tourable')
             return this.charAt(0).toUpperCase() + this.slice(1);
         }
 
-        $scope.class = $state.params.class;
+        for (var index in $scope.$parent.tours.all) {
+            if ($scope.$parent.tours.all[index].objectId === $state.params.id) {
+                $scope.tour = $scope.$parent.tours.all[index];
+            }
+        }
+
+        console.log($scope.tour);
+
 
 //        if (!$scope.$parent.admin) {
 //            $state.go('admin.dashboard');

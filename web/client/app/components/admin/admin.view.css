@@ -38,6 +38,7 @@
     border: 2px;
     background-color: #D8DCE0;
     color: #162B49;
+    min-width: 100px;
 }
 
 .admin-message {
@@ -75,13 +76,23 @@
     border-bottom-color: #ECF0F1;
     border-bottom-width: 1px;
     color: #162B49;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
 }
 
-.admin-cell-list:last-child {
+.admin-cell-list li:last-child {
     border: 0;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
 }
 
-.admin-cell-list .fa-chevron-right {
+.admin-cell-list li:only-child {
+    border: 0;
+    border-radius: 5px;
+}
+
+.admin-cell-list .fa-chevron-right,
+.admin-cell-list .fa-plus {
     color: #DDD;
     padding: 4px 0;
 }
@@ -116,6 +127,7 @@
     font-weight: 600;
     cursor: pointer;
 }
+
 #admin-nav-list li:hover {
     background: #0c2d5d;
 }
@@ -186,7 +198,7 @@
 }
 
 
-/* admin create page styles */
+/* admin create & edit page styles */
 
 .admin-create-input {
     padding-top: 0;
@@ -195,4 +207,13 @@
 
 .admin-create-container {
 
+}
+
+textarea {
+    resize: vertical;
+}
+
+.admin-edit-new-li {
+    background-color: #FEFEFE;
+    font-weight: 500;
 }

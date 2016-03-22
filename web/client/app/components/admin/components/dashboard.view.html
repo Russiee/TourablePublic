@@ -8,3 +8,15 @@
     </div>
     <div class="admin-help col-sm-4 hidden-xs"></div>
 </div>
+<div class="row">
+    <div class="admin-main col-sm-8">
+        <h5 class="admin-subheader no-padding-top">Basics Statistics</h5>
+        <ul class="admin-cell-list">
+            <li class="cursor-pointer">{{admins.length}} Admin<span ng-if="admins.length !== 1">s</span></li>
+            <li class="cursor-pointer">{{tours.otherAdmins.length + tours.thisAdmin.length}} Tour<span ng-if="admins.length !== 1">s</span></li>
+        </ul>
+    </div>
+    <div class="admin-help admin-subheader-offset col-md-4 hidden-xs">
+        These are basic statistics about your organization.
+    </div>
+</div>

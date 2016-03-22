@@ -1,0 +1,44 @@
+<div class="row">
+    <div class="admin-help-bkg col-sm-3 hidden-xs hidden-sm"></div>
+</div>
+<div class="row">
+    <div class="admin-main col-sm-8">
+        <h3 class="admin-header">Edit {{tour.title}}</h3>
+    </div>
+    <div class="admin-help col-sm-4 hidden-xs"></div>
+</div>
+<div class="admin-create-container">
+    <div class="row">
+        <div class="admin-main col-sm-8 admin-account-inputs admin-create-input">
+            <h5 class="admin-subheader">Tour Title</h5>
+            <input type="text" class="form-control" ng-model="tour.title" ng-disabled="saving">
+            <div class="admin-message admin-message-error" ng-show="validate && !tour.title">Tour titles are required.</div>
+        </div>
+        <div class="admin-help admin-subheader-offset col-sm-4 hidden-xs"></div>
+    </div>
+    <div class="row">
+        <div class="admin-main col-sm-8 admin-account-inputs admin-create-input">
+            <h5 class="admin-subheader">Tour Description</h5>
+            <textarea type="text" class="form-control" ng-model="tour.description" ng-disabled="saving" rows="3"></textarea>
+        </div>
+        <div class="admin-help admin-subheader-offset col-sm-4 hidden-xs"></div>
+    </div>
+    <div class="admin-main col-sm-8">
+        <h5 class="admin-subheader no-padding-top">Main Sections</h5>
+        <ul class="admin-cell-list">
+            <div ng-repeat="section in tour.sections track by $index">
+                <li class="cursor-pointer">{{section.title}}<i class="fa fa-chevron-right pull-right"></i></li>
+            </div>
+            <li class="cursor-pointer admin-edit-new-li" ng-click="createSection()"><i>Add a new section</i><i class="fa fa-plus pull-right"></i></li>
+        </ul>
+    </div>
+</div>
+<div class="row">
+    <div class="admin-main col-sm-8">
+        <button class="btn admin-btn" ng-click="create()" ng-disabled="creating">Save</button><br>
+        <h5 ng-show="creating" class="admin-subheader"><i class="fa fa-spin fa-cog"></i> Saving your tour...</h5>
+        <div class="admin-message admin-message-success" ng-show="accountmessage === success">Your tour has been saved  successfully</div>
+        <div class="admin-message admin-message-error" ng-show="accountmessage === error">There was an error saving the tour</div>
+    </div>
+    <div class="admin-help col-sm-4 hidden-xs"></div>
+</div>

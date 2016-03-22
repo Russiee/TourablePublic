@@ -85,11 +85,12 @@ angular.module('tourable')
                 console.log('Success: ', response.data);
                 $scope.tours = {
                     thisAdmin: [],
-                    otherAdmins: []
+                    otherAdmins: [],
+                    all: []
                 };
                 for (var index in response.data) {
                     var tour = response.data[index];
-
+                    $scope.tours.all.push(tour);
                     if (tour.admin && tour.admin.objectId === $scope.admin.objectId) {
                         console.log("Compare " + tour.admin.objectId + " to " + $scope.admin.objectId);
                         $scope.tours.thisAdmin.push(tour);
