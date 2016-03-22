@@ -50,6 +50,8 @@ var key = {
     //required param(s) in req: none
     //optional param(s) in req: "limit" - number of keys to be fetched, otherwise set to 20,
     //                          "orderBy" - 'descending' or 'ascending' order
+    //                          "tour" - the id of the tour that the query results should be filtered for
+
     GET_ALL: function(req, res) {
         //server log for debugging
         console.log("GET ALL KEYS");
@@ -60,6 +62,8 @@ var key = {
         var limit = req.query.limit || 20;
         //default orderBy to null if no value is passed
         var orderBy = req.query.orderBy || null;
+        //default tour to null if no value is passed
+        var tour = req.query.tour || null;
 
         //instantiates a new query to Parse (database mount) for the Key prototype
         var query = new Parse.Query(Key);
@@ -67,6 +71,11 @@ var key = {
         //if orderBy was passed as a param, sort the query by that value
         if (orderBy) {
             query.ascending(orderBy);
+        }
+
+        //if tour was passed as a param, sort the query by that value
+        if (tour) {
+            query.equalTo("tour",{"__type":"Pointer","className":"Tour","objectId":tour})
         }
 
         //set the limit to the appropriate value in the query
