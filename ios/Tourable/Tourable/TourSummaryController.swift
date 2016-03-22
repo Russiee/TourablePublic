@@ -156,7 +156,8 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
         updateIndicator.hidden = false
         updateIndicator.startAnimating()
         beginTourButton.enabled = false
-
+        
+        self.navigationItem.setHidesBackButton(true, animated: true)
         TourUpdateManager.sharedInstance.triggerUpdate()
     }
 
@@ -233,6 +234,7 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
                 }else if summaryData.isCurrent && !isUpdating{
                     
                     if indexPath.row == 1 {
+                        self.navigationItem.setHidesBackButton(false, animated: true)
                         cell.textLabel?.text = "The tour is up to date"
                     }
                     
