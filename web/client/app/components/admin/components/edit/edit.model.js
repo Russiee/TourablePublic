@@ -23,7 +23,7 @@ tourable.factory('editFactory', function($http, $q) {
             return $q(function(resolve, reject) {
                 $http({
                     method: 'GET',
-                    url: 'https://api.tourable.org/api/v1/tour/' + id
+                    url: 'https://api.tourable.org/api/v1/bundle/' + id
                 }).then(function success(response) {
                     console.log(response);
                     resolve (response);

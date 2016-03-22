@@ -80,15 +80,10 @@
     border-top-left-radius: 5px;
 }
 
-.admin-cell-list li:last-child {
+.admin-cell-list:last-child {
     border: 0;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
-}
-
-.admin-cell-list li:only-child {
-    border: 0;
-    border-radius: 5px;
 }
 
 .admin-cell-list .fa-chevron-right,
@@ -211,9 +206,4 @@
 
 textarea {
     resize: vertical;
-}
-
-.admin-edit-new-li {
-    background-color: #FEFEFE;
-    font-weight: 500;
 }

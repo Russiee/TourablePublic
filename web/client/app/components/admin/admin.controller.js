@@ -13,6 +13,7 @@ angular.module('tourable')
                 sessionStorage.removeItem('organization');
                 sessionStorage.removeItem('admins');
                 sessionStorage.removeItem('tours');
+                sessionStorage.removeItem('tour');
                 $state.go("home");
             }
         });
