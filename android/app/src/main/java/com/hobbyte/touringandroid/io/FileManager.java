@@ -26,7 +26,7 @@ public class FileManager {
 
 
     /**
-     * Loads a json from the tour directory, using StartActivity's application context.
+     * Loads a json from the tour directory, using the default application context.
      *
      * @param keyID    the keyID of the tour
      * @param filename the name of the file to be loaded
@@ -55,7 +55,6 @@ public class FileManager {
 
             while ((line = in.readLine()) != null) {
                 text.append(line);
-                text.append("\n");
             }
             in.close();
             return new JSONObject(text.toString());
@@ -110,10 +109,10 @@ public class FileManager {
     }
 
     /**
-     * Saves a JSONObject to the local (internal) storage, using StartActivity's application context.
+     * Saves a JSONObject to the local (internal) storage, using the default application context.
      *
-     * @param keyID      keyID of the tour
      * @param jsonObject the object to store
+     * @param keyID      keyID of the tour
      * @param filename   the name of this JSON. BUNDLE_JSON or TOUR_JSON
      */
     public static void saveJSON(JSONObject jsonObject, String keyID, String filename) {
@@ -123,6 +122,7 @@ public class FileManager {
     /**
      * Saves a JSONObject to the local (internal) storage.
      *
+     * @param context    the context to use when saving
      * @param keyID      keyID of the tour
      * @param jsonObject the object to store
      * @param filename   the name of this JSON. BUNDLE_JSON or TOUR_JSON
@@ -130,7 +130,6 @@ public class FileManager {
     public static void saveJSON(Context context, JSONObject jsonObject, String keyID, String filename) {
         Log.d(TAG, "Saving " + filename);
 
-        System.out.println(keyID + " " + context.getFilesDir().toString());
         File tourFolder = new File(context.getFilesDir(), keyID);
         File tourFile = new File(tourFolder, filename);
 
@@ -149,11 +148,11 @@ public class FileManager {
      * @param context the calling Activity
      * @param keyID   the key ID for a specific tour
      */
-    public static int removeTour(Context context, String keyID) {
+    public static void removeTour(Context context, String keyID) {
         TourDBManager dbHelper = TourDBManager.getInstance(context);
         dbHelper.deleteTour(keyID);
 
-        return deleteTourFiles(context, keyID);
+        deleteTourFiles(context, keyID);
     }
 
     /**
@@ -162,11 +161,9 @@ public class FileManager {
      * @param context the calling Activity
      * @param keyID the key ID for a specific tour
      */
-    private static int deleteTourFiles(Context context, String keyID) {
+    private static void deleteTourFiles(Context context, String keyID) {
         Log.d(TAG, "Deleting tour files for " + keyID);
         DeleteTourTask task = new DeleteTourTask(context, keyID);
         task.start();
-
-        return task.getCount();
     }
 }

@@ -20,7 +20,6 @@ class DeleteTourTask extends Thread {
 
     private File filesDir;
     private String keyID;
-    private int count = 0;
 
     public DeleteTourTask(Context context, String keyID) {
         this.keyID = keyID;
@@ -32,6 +31,7 @@ class DeleteTourTask extends Thread {
         File tourDir = new File(filesDir, keyID);
 
         if (tourDir.exists() && tourDir.isDirectory()) {
+            int count = 0;
             boolean b;
 
             /*
@@ -67,9 +67,5 @@ class DeleteTourTask extends Thread {
 
             Log.d(TAG, "Deleted " + count + " files/folders");
         }
-    }
-
-    public int getCount() {
-        return count;
     }
 }
