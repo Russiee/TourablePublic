@@ -117,24 +117,4 @@ class TourIDParserTests: XCTestCase {
 
     }
     
-    
-    func testAddTourMetaDataPerformance(){
-        //create mock data
-        
-        let data = [
-            "tour": [
-                "__type": "Pointer",
-                "className": "Tour",
-                "objectId": "cjWRKDygIZ"
-                ] as NSMutableDictionary,
-            "code": "KCL-1010",
-            "updatedAt": "2016-03-20T12:10:42.175Z",
-            "createdAt": "2016-03-18T10:50:47.172Z",
-            "expiry": "2016-06-19T00:00:00.000Z",
-            "objectId": "ZX8DHpGKxk"
-        ]
-        self.measureBlock{
-            TourIdParser().addTourMetaData(data)
-        }
-    }
 }

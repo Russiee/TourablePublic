@@ -331,7 +331,7 @@ class POITableViewController: UITableViewController {
                 button.backgroundColor = UIColor.whiteColor()
                 button.setTitleColor(UIColor.blackColor(), forState: .Normal)
                 
-                button.setTitle(row["question"] as! String, forState: UIControlState.Normal)
+                button.setTitle(row["question"] as? String, forState: UIControlState.Normal)
                 button.addTarget(self, action: "quizButtonAction:", forControlEvents: UIControlEvents.TouchUpInside)
                 button.tag = quizes.count-1
                 poiViews.append(button)

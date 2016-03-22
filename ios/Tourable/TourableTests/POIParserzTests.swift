@@ -141,7 +141,7 @@ class POIParserTests: XCTestCase {
         
         self.measureBlock{
             
-            let result = POIParser().getTourSection("testing123")
+            _ = POIParser().getTourSection("testing123")
             
         }
         

@@ -40,26 +40,27 @@ class KeyVerifyConnector: NSObject, NSURLConnectionDelegate{
         let config = NSURLSessionConfiguration.defaultSessionConfiguration()
         let session = NSURLSession(configuration: config)
         
+        
+        //creates and runs the request to the server for key verifcation data.
         let task = session.dataTaskWithRequest(request) { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
             
-            do {
+            do { //Parses the response into JSON data
                 let jsonResult = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
                 self.JSONMetadataFromAPI = jsonResult
                 if !self.checkIfTourAlreadyOutdatedWhenDownloading(jsonResult["expiry"] as! String) {
-                    print("inside if")
+
                     dispatch_sync(dispatch_get_main_queue()){
                         
                         if !self.isUpdating {
-                            print("in here")
+                            //If not updating continue to save the rest of the tour objects.
                             _ = TourIdParser().addTourMetaData(jsonResult)
-                            
                         }
-                        
+                        //Trigger the notification to observers that the key is valid.
                         self.triggerValidKeyNotification()
                     }
                     
                 } else {
-                    
+                    //Key is not valid, notify observers.
                     print("invalid")
                     dispatch_async(dispatch_get_main_queue()){
                         
@@ -69,7 +70,7 @@ class KeyVerifyConnector: NSObject, NSURLConnectionDelegate{
                 }
             }
             catch let err as NSError{
-                //Need to let user know if the tourID they entered was faulty here
+                //Let user know if the tourID they entered was faulty here
                 print(err.description)
                 dispatch_async(dispatch_get_main_queue()){
                     self.triggerInvalidKeyNotification()

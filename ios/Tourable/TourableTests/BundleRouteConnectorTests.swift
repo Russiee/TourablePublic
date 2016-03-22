@@ -89,8 +89,8 @@ class BundleRouteConnectorTests: XCTestCase {
             do {
                  let jsonResultFromAPI = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
                 //passing through the array of sections
-                XCTAssertEqual(jsonResultFromAPI["description"] as! String, bundleRouteDataDescription, "they should be identical")
-                XCTAssertEqual(jsonResultFromAPI["title"] as! String, bundleRouteDatatitle, "titles should match")
+                XCTAssertEqual((jsonResultFromAPI["description"] as! String), bundleRouteDataDescription, "they should be identical")
+                XCTAssertEqual((jsonResultFromAPI["title"] as! String), bundleRouteDatatitle, "titles should match")
                 
             }
             catch let err as NSError{
@@ -117,8 +117,8 @@ class BundleRouteConnectorTests: XCTestCase {
         let brc = bundleRouteConnector()
         brc.startConnection("cjWRKDygIZ")
         let jsonResultFromAPI = brc.getJSONResult()
-        XCTAssertEqual(jsonResultFromAPI["description"] as! String, bundleRouteDataDescription, "they should be identical")
-        XCTAssertEqual(jsonResultFromAPI["title"] as! String, bundleRouteDatatitle, "titles should match")
+        XCTAssertEqual(jsonResultFromAPI["description"] as? String, bundleRouteDataDescription, "they should be identical")
+        XCTAssertEqual(jsonResultFromAPI["title"] as? String, bundleRouteDatatitle, "titles should match")
 
         
     }
