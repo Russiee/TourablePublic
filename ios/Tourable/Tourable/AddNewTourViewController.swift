@@ -133,10 +133,10 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
     
     //Method for hiding all other items in the view besides teh busy wheel. 
     //Visibility:True = hides all items
-    func hideButtonsForBusyWheel(visibility: Bool){
+    func hideButtonsForBusyWheel(isHidden: Bool){
 
         downloadBackground.hidden = true
-        downloadStatusLabel.hidden = visibility
-        tourDescriptionLabel.hidden = visibility
+        downloadStatusLabel.hidden = isHidden
+        tourDescriptionLabel.hidden = isHidden
     }
 }

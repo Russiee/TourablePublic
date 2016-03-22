@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+///Reprisents a quiz object, with a question, options and a correct answer
 class Quiz: NSObject {
     
     var question: String!
