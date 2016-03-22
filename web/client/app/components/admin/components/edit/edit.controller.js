@@ -21,6 +21,7 @@ angular.module('tourable')
             } else if (toState.name === 'admin.edit.section') {
                 getSectionData();
                 getSubsectionData();
+                getPOIdata();
             }
         });
 
@@ -34,6 +35,7 @@ angular.module('tourable')
         } else if ($state.current.name === 'admin.edit.section') {
             getSectionData();
             getSubsectionData();
+            getPOIdata();
         }
 
         function getTourData() {
@@ -67,8 +69,10 @@ angular.module('tourable')
             getSection.then(function(response) {
                 console.log('Section: ', response.data);
                 var subsections = $scope.section.subsections;
+                var pois = $scope.section.pois;
                 $scope.section = response.data;
                 $scope.section.subsections = subsections;
+                $scope.section.pois = pois;
                 sessionStorage.setItem('section', JSON.stringify($scope.tour.keys));
             }, function(error) {
                 //Console log in case we need to debug with a user
@@ -81,6 +85,18 @@ angular.module('tourable')
             getSubsections.then(function(response) {
                 console.log('Subsection: ', response.data);
                 $scope.section.subsections = response.data;
+                sessionStorage.setItem('section', JSON.stringify($scope.section));
+            }, function(error) {
+                //Console log in case we need to debug with a user
+                console.log('An error occured while retrieving the admin data: ', error);
+            });
+        }
+
+        function getPOIdata () {
+            var getPOIs = editFactory.getPOIs($state.params.id);
+            getPOIs.then(function(response) {
+                console.log('POIs: ', response.data);
+                $scope.section.pois = response.data;
                 sessionStorage.setItem('section', JSON.stringify($scope.section));
             }, function(error) {
                 //Console log in case we need to debug with a user
