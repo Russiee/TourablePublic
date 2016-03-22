@@ -87,7 +87,7 @@ class TourUpdateManagerTests: XCTestCase {
         XCTAssertEqual(expectedHours , HoursAndMinutes.timeHours)
         XCTAssertEqual(expectedMinutes , HoursAndMinutes.timeMins)
     }
-    
+
     func testCalculateTourLengthFromMinutes3() {
         let HoursAndMinutes = TourUpdateManager.sharedInstance.calculateTourLengthFromMinutes(462)
         
@@ -95,9 +95,8 @@ class TourUpdateManagerTests: XCTestCase {
         let expectedMinutes = 42
         XCTAssertEqual(expectedHours , HoursAndMinutes.timeHours)
         XCTAssertEqual(expectedMinutes , HoursAndMinutes.timeMins)
-        
     }
-    
+
     func testPrepareTourMangaer() {
         TourUpdateManager.sharedInstance.prepareTourMangaer("KCL-1010", tableRow: 3)
         let expectedTourCode = "KCL-1010"
@@ -105,8 +104,53 @@ class TourUpdateManagerTests: XCTestCase {
         XCTAssertEqual(expectedTourCode, TourUpdateManager.sharedInstance.tourCode)
         XCTAssertEqual(expectedIndexPath, TourUpdateManager.sharedInstance.tourTableRow)
     }
-    
-        
+
+
+    func testformatDataforTourSummaryAndDiplayIt() {
+        let jsonMetadata = [
+            "admin" :     [
+                "__type" : "Pointer",
+                "className" : "Admin",
+                "objectId" : "0tOD0B8AOn",
+            ],
+            "createdAt" : "2016-02-24T12:18:39.855Z",
+            "description" : "This tour is for testing and review use only and will not be released to the public. Public tours will include the Royal Brompton Hospital Cardiac Imaging Department",
+            "estimatedTime" : 120,
+            "isPublic" : 1,
+            "objectId" : "cjWRKDygIZ",
+            "title" : "Ultimate Flat Tour",
+            "updatedAt" : "2016-03-22T13:53:10.338Z",
+            "version" : 20
+        ]
+
+        TourUpdateManager.sharedInstance.formatDataforTourSummaryAndDiplayIt(jsonMetadata)
+
+        let expectedTimeHours = 2
+        let expectedTimeMinutes = 0
+        let expectedIsTourUpTodate = true
+        let expiryDate = TourUpdateManager.sharedInstance.getDateFromString("2016-03-22T13:53:10.338Z")
+
+        if expiryDate.daysFrom(NSDate()) == 0 {
+            let HoursAndMinutesLeft = TourUpdateManager.sharedInstance.calculateTourLengthFromMinutes(abs(expiryDate.minutesFrom(NSDate())))
+            let expectedExpiresInHours = HoursAndMinutesLeft.timeHours
+            let expectedExpiresInMinutes = HoursAndMinutesLeft.timeMins
+
+            // is the minutes are negative tour is already expired
+            if expiryDate.minutesFrom(NSDate()) > 0 {
+                XCTAssertEqual(expectedExpiresInHours, TourUpdateManager.sharedInstance.expiresInHours)
+                XCTAssertEqual(expectedExpiresInMinutes, TourUpdateManager.sharedInstance.expiresInMinutes)
+            }
+
+        } else {
+            let expectedExpiresIn = expiryDate.daysFrom(NSDate())
+            XCTAssertEqual(expectedExpiresIn, TourUpdateManager.sharedInstance.expiresIn)
+        }
+
+        XCTAssertEqual(expectedTimeHours, TourUpdateManager.sharedInstance.timeHours)
+        XCTAssertEqual(expectedTimeMinutes, TourUpdateManager.sharedInstance.timeMinutes)
+        XCTAssertEqual(expectedIsTourUpTodate, TourUpdateManager.sharedInstance.isTourUpTodate)
+    }
+
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measureBlock {
