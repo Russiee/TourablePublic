@@ -111,12 +111,10 @@ public class TourDeleter {
         
         for subsection in tour{
             let keys = subsection.allKeys
-            print(keys)
             for value in keys{
                 if value as! String == "pois"{
                     let POIS = subsection["pois"] as! NSArray
                     for pois in POIS{
-                        print(pois)
                         if (pois.allKeys as! [String]).contains("post"){
                             let post = pois["post"] as! NSArray
                             for items in post{
