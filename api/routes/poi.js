@@ -48,6 +48,8 @@ var poi = {
     //required param(s) in req: none
     //optional param(s) in req: "limit" - number of POIs to be fetched, otherwise set to 20,
     //                          "orderBy" - 'descending' or 'ascending' order
+    //                          "section" - the id of the section that the query results should be filtered for
+
     GET_ALL: function(req, res) {
         //server log for debugging
         console.log("GET ALL POINTS OF INTEREST");
@@ -58,6 +60,8 @@ var poi = {
         var limit = req.query.limit || 20;
         //default orderBy to null if no value is passed
         var orderBy = req.query.orderBy || null;
+        //default section to null if no value is passed
+        var section = req.query.section || null;
 
         //instantiates a new query to Parse (database mount) for the POI prototype
         var query = new Parse.Query(POI);
@@ -68,6 +72,11 @@ var poi = {
         //if orderBy was passed as a param, sort the query by that value
         if (orderBy) {
             query.ascending(orderBy);
+        }
+
+        //if section was passed as a param, sort the query by that value
+        if (section) {
+            query.equalTo("section",{"__type":"Pointer","className":"Section","objectId":section})
         }
 
         //execute 'find' query and pass success and error callbacks as parameters
