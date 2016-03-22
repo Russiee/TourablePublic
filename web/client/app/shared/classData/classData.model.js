@@ -1,5 +1,53 @@
 tourable.factory('classDataFactory', function() {
     return {
+        admin: function (organization) {
+            return {
+                        expectedInput: [
+                            {
+                                description: "First Name",
+                                model: "firstname",
+                                type: "text",
+                                help: "",
+                                required: true
+                            },
+                            {
+                                description: "Last Name",
+                                model: "lastname",
+                                type: "text",
+                                help: "",
+                                required: true
+                            },
+                            {
+                                description: "Email",
+                                model: "lastname",
+                                type: "text",
+                                help: "",
+                                required: true
+                            },
+                            {
+                                description: "Temporary Password",
+                                model: "password",
+                                type: "password",
+                                help: "",
+                                required: true
+                            },
+                            {
+                                description: "Is this a super admin?",
+                                model: "password",
+                                type: "boolean",
+                                help: "Super admins can manage admins and edit every tour in an organization",
+                                required: true
+                            }
+                        ],
+                        defaultModels: {
+                            organization: organization
+                        },
+                        afterCreate: {
+                            route: "admin.manageAdmins",
+                            options: {}
+                        }
+                    }
+                },
         tour: function (admin) {
             return {
                         expectedInput: [
