@@ -115,19 +115,21 @@ public class TourDeleter {
                 if value as! String == "pois"{
                     let POIS = subsection["pois"] as! NSArray
                     for pois in POIS{
-                        let post = pois["post"] as! NSArray
-                        for items in post{
-                            //get all the keys of the post entry
-                            let types = items.allKeys as! [String]
-                            //currently first one can be a url hence we dont loop through the keys
-                            if(types.contains("url")){
-                                //append the found url to mediaURLS
-                                mediaURLS.append(items["url"] as! String)
+                        if (pois.allKeys as! [String]).contains("post"){
+                            let post = pois["post"] as! NSArray
+                            for items in post{
+                                //get all the keys of the post entry
+                                let types = items.allKeys as! [String]
+                                //currently first one can be a url hence we dont loop through the keys
+                                if(types.contains("url")){
+                                    //append the found url to mediaURLS
+                                    mediaURLS.append(items["url"] as! String)
+                                }
                             }
                         }
                     }
                 }
-                //if is a subsection recall this method
+                    //if is a subsection recall this method
                 else if((value as! String) == "subsections"){
                     getAllMediaURL(subsection["subsections"] as! NSArray)
                 }
