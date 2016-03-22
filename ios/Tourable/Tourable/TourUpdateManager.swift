@@ -61,7 +61,7 @@ public class TourUpdateManager: NSObject {
 
         // TOUR UPDATE STATUS
         // you will need to pass jsonResult["version"] to the isTourUpToDate()
-        isTourUpTodate = self.isTourUpToDate(jsonResult["version"] as! Int)
+        isTourUpTodate = self.isTourUpToDate(currentTourKEYmetadata["version"] as! Int ,versionFreshFromAPI: jsonResult["version"] as! Int)
 
         // EXPIRY DATE
         let expiryDate = getDateFromString(currentTourKEYmetadata["expiry"] as! String)
@@ -98,12 +98,10 @@ public class TourUpdateManager: NSObject {
 
     // check for updates comparing freshly downloaded metadata with current stored one
     // if there are updates the user is asked if he wants to download them
-    func isTourUpToDate(versionFreshFromAPI: Int) -> Bool {
+    func isTourUpToDate(currentVersion: Int, versionFreshFromAPI: Int) -> Bool {
         if self.newTourKEYmetadata != nil {
             // when you change it as it not programmatic 
             // is gonna be something like that currentTourmetadata["version"] as! Int
-            let currentVersion = currentTourKEYmetadata["version"] as! Int
-
             if currentVersion < versionFreshFromAPI {
                 return false
             }
