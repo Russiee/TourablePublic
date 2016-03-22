@@ -1,9 +1,11 @@
 package com.hobbyte.touringandroid.ui.activity;
 
 import android.opengl.Visibility;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.test.RenamingDelegatingContext;
 
 import com.hobbyte.touringandroid.R;
 import com.hobbyte.touringandroid.internet.UpdateChecker;
@@ -47,6 +49,9 @@ public class StartActivityTest {
 
     private String validKey;
     private String invalidKey;
+    private TourDBManager db;
+    RenamingDelegatingContext context;
+
     @Rule
     public ActivityTestRule<SplashActivity> mActivityRule = new ActivityTestRule<>(
             SplashActivity.class);
@@ -55,8 +60,13 @@ public class StartActivityTest {
     public void initValidKey() {
         validKey = "KCL-1010";
         invalidKey = "invalidText";
-    }
+        context = new RenamingDelegatingContext(
+                InstrumentationRegistry.getInstrumentation().getTargetContext(), "test_"
+        );
 
+        db = TourDBManager.getInstance(context);
+    }
+/*
     @Test
     public void ATestEnterCorrectKey() {
         enterKey(validKey);
@@ -188,14 +198,15 @@ public class StartActivityTest {
         onData(instanceOf(String.class)).onChildView(withId(R.id.previousPOIFooter)).check(matches(isDisplayed()));
         onData(instanceOf(String.class)).onChildView(withId(R.id.previousPOIFooter)).perform(click());
     }
-
+*/
     @Test
     public void testUpdateChecker() {
-        TourDBManager db = TourDBManager.getInstance(mActivityRule.getActivity());
-        db.putRow("ZX8DHpGKxk", "cjWRKDygIZ", "KCL-1010", "Ultimate Flat Tour", "2016-06-22T00:00:00.000Z", true, 1);
-        new UpdateChecker(mActivityRule.getActivity());
-        enterTour();
-        onView(withId(R.id.updateTourText)).check(matches(withText("Update")));
+        deleteTour();
+        enterKey("KCL-TEST-UPDATED");
+        onView(withId(R.id.download_with_media)).perform(click());
+        db.updateTourVersion("qcyq1p1Yje", 0);
+        new UpdateChecker(context);
+        onView(withText("TEST_UPDATED_TOUR")).perform(click());
         onView(withId(R.id.updateTour)).perform(click());
         onView(withId(R.id.download_with_media)).perform(click());
         enterTour();
@@ -204,10 +215,9 @@ public class StartActivityTest {
 
     @Test
     public void testZDeleteExpired() {
-        TourDBManager db = TourDBManager.getInstance(mActivityRule.getActivity());
-        db.putRow("ZX8DHpGKxk", "cjWRKDygIZ", "KCL-1010", "Ultimate Flat Tour", "2016-01-22T00:00:00.000Z", true, 50);
-        new UpdateChecker(mActivityRule.getActivity());
-        onView(withId(R.id.tourItem)).check(doesNotExist());
+        db.putRow("5D8LIPxDBG", "N3l3tuYFka", "KCL-TEST-EXPIRED", "TEST_EXPIRED_TOUR", "2016-01-01T00:00:00.000Z", false, 1);
+        new UpdateChecker(context);
+        onView(withText("TEST_EXPIRED_TOUR")).check(doesNotExist());
     }
 
     public void enterKey(String key) {
