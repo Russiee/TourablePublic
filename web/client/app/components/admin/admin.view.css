@@ -146,6 +146,10 @@
     font-size: 12px;
 }
 
+.admin-subheader-offset {
+    padding-top: 47px;
+}
+
 .admin-help-bkg {
     position: fixed;
     height: 100vh;
