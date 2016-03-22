@@ -72,6 +72,8 @@ router.get('/v1/section/:id', section.GET);
 router.get('/v1/sections', section.GET_ALL);
 router.post('/v1/section/', section.POST);
 router.put('/v1/section/:id', section.PUT);
+//necessary for CORS
+router.options('/v1/section/:id', function(req, res) { res.json({}) });
 router.delete('/v1/section/:id', section.DELETE);
 
 //Key routes
