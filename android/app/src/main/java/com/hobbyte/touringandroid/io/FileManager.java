@@ -1,7 +1,6 @@
 package com.hobbyte.touringandroid.io;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.hobbyte.touringandroid.App;
@@ -11,12 +10,9 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * A class with static methods for doing IO with the device's internal storage.
@@ -24,15 +20,13 @@ import java.util.regex.Pattern;
 public class FileManager {
     private static final String TAG = "FileManager";
 
-    public static final String IMG_NAME = "https?:\\/\\/[\\w\\.\\/]*\\/(\\w*\\.(jpe?g|png))";
-
     public static final String TOUR_JSON = "tour";
     public static final String BUNDLE_JSON = "bundle";
     public static final String KEY_JSON = "key";
 
 
     /**
-     * Loads a json from the tour directory, using StartActivity's application context.
+     * Loads a json from the tour directory, using the default application context.
      *
      * @param keyID    the keyID of the tour
      * @param filename the name of the file to be loaded
@@ -61,7 +55,6 @@ public class FileManager {
 
             while ((line = in.readLine()) != null) {
                 text.append(line);
-                text.append("\n");
             }
             in.close();
             return new JSONObject(text.toString());
@@ -76,14 +69,23 @@ public class FileManager {
     }
 
     /**
-     * Creates the folders that the app will store the tour data in
+     * Creates the folders that the app will store the tour data in, using the default application
+     * context.
      *
      * @param keyID the keyID of the tour. This is the unique identifier of the tour.
      */
     public static void makeTourDirectories(String keyID) {
+        makeTourDirectories(App.context, keyID);
+    }
 
+    /**
+     * Creates the folders that the app will store the tour data in, using a provided context.
+     *
+     * @param keyID the keyID of the tour. This is the unique identifier of the tour.
+     */
+    public static void makeTourDirectories(Context context, String keyID) {
         //...com.hobbyte.touring/files/
-        File tourFolder = new File(App.context.getFilesDir(), keyID);
+        File tourFolder = new File(context.getFilesDir(), keyID);
         boolean foldersCreatedSuccessfully = tourFolder.mkdir();
 
         //...com.hobbyte.touring/files/keyID/poi/
@@ -99,16 +101,18 @@ public class FileManager {
         foldersCreatedSuccessfully = videoFolder.mkdir() && foldersCreatedSuccessfully;
 
         //logging
-        if (foldersCreatedSuccessfully) Log.i(TAG, "folders created successfully");
-        else Log.e(TAG, "error creating folders");
-
+        if (foldersCreatedSuccessfully)  {
+            Log.i(TAG, "folders created successfully");
+        } else {
+            Log.e(TAG, "error creating folders");
+        }
     }
 
     /**
-     * Saves a JSONObject to the local (internal) storage, using StartActivity's application context.
+     * Saves a JSONObject to the local (internal) storage, using the default application context.
      *
-     * @param keyID      keyID of the tour
      * @param jsonObject the object to store
+     * @param keyID      keyID of the tour
      * @param filename   the name of this JSON. BUNDLE_JSON or TOUR_JSON
      */
     public static void saveJSON(JSONObject jsonObject, String keyID, String filename) {
@@ -118,6 +122,7 @@ public class FileManager {
     /**
      * Saves a JSONObject to the local (internal) storage.
      *
+     * @param context    the context to use when saving
      * @param keyID      keyID of the tour
      * @param jsonObject the object to store
      * @param filename   the name of this JSON. BUNDLE_JSON or TOUR_JSON
@@ -125,7 +130,6 @@ public class FileManager {
     public static void saveJSON(Context context, JSONObject jsonObject, String keyID, String filename) {
         Log.d(TAG, "Saving " + filename);
 
-        System.out.println(keyID + " " + context.getFilesDir().toString());
         File tourFolder = new File(context.getFilesDir(), keyID);
         File tourFile = new File(tourFolder, filename);
 
@@ -145,7 +149,7 @@ public class FileManager {
      * @param keyID   the key ID for a specific tour
      */
     public static void removeTour(Context context, String keyID) {
-        TourDBManager dbHelper = TourDBManager.getInstance(context.getApplicationContext());
+        TourDBManager dbHelper = TourDBManager.getInstance(context);
         dbHelper.deleteTour(keyID);
 
         deleteTourFiles(context, keyID);
@@ -157,7 +161,7 @@ public class FileManager {
      * @param context the calling Activity
      * @param keyID the key ID for a specific tour
      */
-    public static void deleteTourFiles(Context context, String keyID) {
+    private static void deleteTourFiles(Context context, String keyID) {
         Log.d(TAG, "Deleting tour files for " + keyID);
         DeleteTourTask task = new DeleteTourTask(context, keyID);
         task.start();

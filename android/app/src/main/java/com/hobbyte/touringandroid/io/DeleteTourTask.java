@@ -12,10 +12,10 @@ import java.io.File;
  * <li>2) the key ID</li>
  * </ul>
  * </p>
- * There is no need to use this class yourself - use {@link FileManager#removeTour(Context, String)}
- * instead.
+ * There is no need to use this class yourself (nor can you, outside this package) - use
+ * {@link FileManager#removeTour(Context, String)} instead.
  */
-public class DeleteTourTask extends Thread {
+class DeleteTourTask extends Thread {
     private static final String TAG = "DeleteTourTask";
 
     private File filesDir;
@@ -31,22 +31,20 @@ public class DeleteTourTask extends Thread {
         File tourDir = new File(filesDir, keyID);
 
         if (tourDir.exists() && tourDir.isDirectory()) {
-            Log.d(TAG, "About to start deleting files");
-
-            int fileCount = 0;
-            int dirCount = 0;
+            int count = 0;
+            boolean b;
 
             /*
             Have to delete the tour JSON, plus folders containing sections, pois, images, and video
              */
-            new File(tourDir, "tour").delete();
-            fileCount++;
+            b = new File(tourDir, "tour").delete();
+            if (b) count++;
 
-            new File(tourDir, "bundle").delete();
-            fileCount++;
+            b = new File(tourDir, "bundle").delete();
+            if (b) count++;
 
-            new File(tourDir, "key").delete();
-            fileCount++;
+            b = new File(tourDir, "key").delete();
+            if (b) count++;
 
             String[] dirs = {"poi", "image", "video"};
 
@@ -55,19 +53,19 @@ public class DeleteTourTask extends Thread {
 
                 if (dir.exists() && dir.isDirectory()) {
                     for (File f : dir.listFiles()) {
-                        f.delete();
-                        fileCount++;
+                        b = f.delete();
+                        if (b) count++;
                     }
 
-                    dir.delete();
-                    dirCount++;
+                    b = dir.delete();
+                    if (b) count++;
                 }
             }
 
-            tourDir.delete();
-            dirCount++;
+            b = tourDir.delete();
+            if (b) count++;
 
-            Log.d(TAG, "Deleted " + fileCount + " files and " + dirCount + " folders");
+            Log.d(TAG, "Deleted " + count + " files/folders");
         }
     }
 }
