@@ -186,11 +186,11 @@
 			isa = PBXGroup;
 			children = (
 				E536DCD81C6510FD00A7B2FC /* Info.plist */,
+				7A9118C71C945990008BF835 /* TourUpdateManagerTests.swift */,
 				FAB946A11CA039F4003A09F9 /* TourDeleterTests.swift */,
 				FAB9469F1CA039E8003A09F9 /* APIConnectorTests.swift */,
 				E58E7C881CA03D5000D6D654 /* BundleRouteConnectorTests.swift */,
 				E591E5EA1CA14779000F6DBD /* POIConnectorTests.swift */,
-				7A9118C71C945990008BF835 /* TourUpdateManagerTests.swift */,
 				E58E7C801C9F1C5800D6D654 /* TourIDParserTests.swift */,
 				7A738BEA1CA175B000D00C38 /* TourDataParserzTests.swift */,
 				FA0532C31C9C3B5000C5DF26 /* VideoHandlerTests.swift */,
@@ -223,13 +223,13 @@
 		FA2164921C7B482B0056FF02 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				7A432AB01C8B69AB007482F8 /* TourUpdateManager.swift */,
 				E536DCBE1C6510FC00A7B2FC /* AppDelegate.swift */,
 				FA0A51731C77482D00E4F733 /* tourDataParser.swift */,
 				FA4D0F5E1C6A4D08007D79E3 /* TourIdParser.swift */,
 				E5007F841C8B6ACA0041B31C /* TourDeleter.swift */,
 				FAE5F69E1C789D4000346321 /* POIParser.swift */,
 				FAD929691C95BDCD0030BA7F /* ImageLoader.swift */,
+				7A432AB01C8B69AB007482F8 /* TourUpdateManager.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";

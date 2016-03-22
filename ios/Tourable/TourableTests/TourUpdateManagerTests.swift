@@ -70,6 +70,32 @@ class TourUpdateManagerTests: XCTestCase {
         XCTAssertEqual("__NSDate", String(actualDateMirror.subjectType))
     }
     
+    func testCalculateTourLengthFromMinutes1() {
+        let HoursAndMinutes = TourUpdateManager.sharedInstance.calculateTourLengthFromMinutes(60)
+        let timeArray = [1, 0]
+        XCTAssertEqual(timeArray, HoursAndMinutes)
+    }
+    
+    func testCalculateTourLengthFromMinutes2() {
+        let HoursAndMinutes = TourUpdateManager.sharedInstance.calculateTourLengthFromMinutes(43)
+        let timeArray = [0, 43]
+        XCTAssertEqual(timeArray, HoursAndMinutes)
+    }
+    
+    func testCalculateTourLengthFromMinutes3() {
+        let HoursAndMinutes = TourUpdateManager.sharedInstance.calculateTourLengthFromMinutes(462)
+        let timeArray = [7, 42]
+        XCTAssertEqual(timeArray, HoursAndMinutes)
+    }
+    
+    func testPrepareTourMangaer() {
+        TourUpdateManager.sharedInstance.prepareTourMangaer("KCL-1010", 3)
+        let expectedTourCode = "KCL-1010"
+        let expectedIndexPath = 3
+        XCTAssertEqual(expectedTourCode, TourUpdateManager.sharedInstance.tourCode)
+        XCTAssertEqual(expectedIndexPath, TourUpdateManager.sharedInstance.tourTableRow)
+    }
+    
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measureBlock {
