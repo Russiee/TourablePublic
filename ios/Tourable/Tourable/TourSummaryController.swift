@@ -7,7 +7,7 @@
 //
 
 import UIKit
-let updateAvailableKey = "updateAvailable"
+let TourSummaryMetaDataAvailable = "TourSummaryMetaDataAvailable"
 
 class TourSummaryController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
@@ -22,12 +22,14 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
     //Formatted data to be added to the UITableView
     var summaryTableData = [String]()
     //Tuple from TourUpdateManager with current status of the tour
-    var summaryData = (timeHours: 0,timeMins: 0, isCurrent: true, expiresIn: 0)
+    var summaryData = (timeHours: 0,timeMins: 0, isCurrent: true, expiresIn: 0, expiresInHours: 0, expiresInMinutes: 0)
     //button shown if update is availble
     let updateButton = UIButton(type: UIButtonType.RoundedRect)
     //lets the class know if the tour is currently being updated
     var isUpdating = false
 
+    @IBOutlet weak var fetchingMetadataIndicator: UIActivityIndicatorView!
+    
     //Outlets to various static UI elements
     @IBOutlet weak var beginTourButton: UIButton!
     @IBOutlet weak var UIDescriptionBox: UITextView!
@@ -56,37 +58,56 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
         //notify this class about the status of update downloads
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedDownloading", name: beginDownloadKey, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedFinishedDownloading", name: endDownloadKey, object: nil)
-        // Notification for TourUpdateManager called when there is an update available
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedUpdateAvailable", name: updateAvailableKey, object: nil)
-       
-        //get the latest formatted data for the ui.
-        summaryTableData = formatDataForTable(tourId, tableRow: tableRow)
+        // Notification for TourUpdateManager called when metadata for the summary is ready to be displayed
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedTourSummaryMetaDataAvailable", name: TourSummaryMetaDataAvailable, object: nil)
+
+        
+        // hide table view and show spinning wheel while downloading metadata
+        self.tableView.hidden = true
+        self.fetchingMetadataIndicator.hidden = false
+        self.fetchingMetadataIndicator.startAnimating()
+        
+        // download tourSummary data and then updated the view automatically with notifiers
+        TourUpdateManager.sharedInstance.prepareTourMangaer(tourId, tableRow: tableRow)
+        TourUpdateManager.sharedInstance.getTourMetadata()
+
+
         //set the data source and deligate of the table to this class.
         tableView.dataSource = self
         tableView.delegate = self
         //make the table only as big as the number of nows.
         tableView.tableFooterView = UIView(frame: CGRectZero)
         tableView.rowHeight = 60.0
-         // code that checks for updates. not working atm.
-        TourUpdateManager.sharedInstance.checkForUpdates()
     }
     
     //Takes the data from the tuple and formats it for presentation in the tableView
-    func formatDataForTable(tourId: String, tableRow: Int) -> [String]{
+    func formatDataForTable() -> [String]{
+        
         //get the current update and expiry status for the current tour
-        TourUpdateManager.sharedInstance.getCurrentData(tourId, tableRow: tableRow)
+        TourUpdateManager.sharedInstance.prepareTourMangaer(tourId, tableRow: tableRow)
         //set the summary data tuple to the result of this call
         summaryData = TourUpdateManager.sharedInstance.getTourStatusInfo()
+        
         //format the strings with the data from TourUpdateManager for display on the tour summary
         var updateStatus = "Version status unkown"
         let estimatedTime = "Estimated time: \(summaryData.timeHours) hour \(summaryData.timeMins) minutes"
-        //checks the update status of the tour
+        
+        // set update sentence
         if summaryData.isCurrent {
-            updateStatus = "Your version is current"
+            updateStatus = "The tour is up to date"
         }else{
             updateStatus = "An update is available"
         }
-        let timeRemaining = "Tour key expires in \(summaryData.expiresIn) days"
+        
+        // set expiry sentence
+        let timeRemaining: String
+        if summaryData.expiresIn == 0 {
+            timeRemaining = "Expires in \(summaryData.expiresInHours) hours and \(summaryData.expiresInMinutes) minutes"
+        } else {
+            timeRemaining = "Tour key expires in \(summaryData.expiresIn) days"
+        }
+        
+        
         //create an array of the data
         var result = [String]()
         result.append(estimatedTime)
@@ -113,17 +134,20 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
         beginTourButton.enabled = false
     }
     
-    // triggered if the TourUpdateManager sends the notification that an update is available
-    func NotifiedUpdateAvailable(){
+    // triggered if the TourUpdateManager has received latest Metadata for the current tour to be displayed
+    // this method saved the new sentences to be displayed and reload table
+    func NotifiedTourSummaryMetaDataAvailable(){
         summaryData.isCurrent = false
+        // UPDATED FIELDS HERE AND THEN RELOAD DATA
+        self.summaryTableData = formatDataForTable()
         tableView.reloadData()
     }
-    
+
     //user has tapped update tour, modify UI and begin update.
     @IBAction func updateButtonClicked(sender: AnyObject){
         //let class know that tour is being updated
         isUpdating = true
-        
+
         //hide update button and show busy wheel. Updates begin button.
         updateButton.removeFromSuperview()
         tableView.reloadData()
@@ -133,22 +157,21 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
         updateIndicator.startAnimating()
         beginTourButton.enabled = false
         
-        //trigger update
+        self.navigationItem.setHidesBackButton(true, animated: true)
         TourUpdateManager.sharedInstance.triggerUpdate()
-        
     }
-    
+
     // increase counter to activate user wheel
     func NotifiedDownloading(){
         imageCount++
     }
-    
+
     // decrease the counter to stop the busy wheel.
     func NotifiedFinishedDownloading(){
-        
+
         //decrement number of images left to download
         imageCount--
-        
+
         // if 0 stop animation, update data sources.
         if imageCount == 0{
             updateIndicator.stopAnimating()
@@ -156,9 +179,9 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
             beginTourButton.setTitle("Begin Tour", forState: .Normal)
             beginTourButton.enabled = true
             beginTourButton.enabled = true
-            
+
             isUpdating = false
-            summaryTableData = formatDataForTable(tourId, tableRow: tableRow)
+
             //shouldnt need this next line in final version
             summaryData.isCurrent = true
             tableView.reloadData()
@@ -171,52 +194,66 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return summaryTableData.count // Most of the time my data source is an array of something...  will replace with the actual name of the data source
+        return 3 //number of rows on the tourSummary is always the same
     }
     
     //
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         //get the cell at that point in the table
         let cell = tableView.dequeueReusableCellWithIdentifier("fakeCell")! as UITableViewCell
-        //set the text of the row
-        cell.textLabel?.text = summaryTableData[indexPath.row]
         
-        //time is running out, highlight expiry red
-        if indexPath.row == 2 && summaryData.expiresIn < 3{
-            cell.textLabel?.textColor = UIColor.redColor()
-        }
-        
-        //Set the dynamic content of the update status row.
-        if indexPath.row == 1 {
-            //tour is not upto date and not currently being updated, show update button.
-            if !summaryData.isCurrent && !isUpdating{
-                updateButton.frame = CGRectMake(40, 60, 75, 24)
-                updateButton.center = CGPoint(x: view.bounds.width * 0.85, y: 60.0 / 2.0)
-                updateButton.layer.cornerRadius = 3
-                updateButton.layer.borderWidth = 1
-                updateButton.layer.borderColor = updateButton.titleLabel?.textColor.CGColor
-                updateButton.addTarget(self, action: "updateButtonClicked:", forControlEvents: UIControlEvents.TouchUpInside)
-                updateButton.setTitle("UPDATE", forState: UIControlState.Normal)
-                cell.addSubview(updateButton)
+        if summaryTableData.count > 0 {
             
-            //tour is up to date and not being updated, show the green tick
-            }else if summaryData.isCurrent && !isUpdating{
-                
-                let tick_image = UIImage(named: "green_tick")
-                let tickFrame = UIImageView(image: tick_image)
-                tickFrame.center = CGPoint(x: view.bounds.width * 0.95, y: 60.0 / 2.0)
-                cell.addSubview(tickFrame)
-             
-            //Tour is being updated, show the busy wheel
-            }else{
-                
-                updateIndicator.frame = CGRectMake(40, 60, 75, 24)
-                updateIndicator.center = CGPoint(x: view.bounds.width * 0.90, y: 60.0 / 2.0)
-                cell.addSubview(updateIndicator)
-                
+            // show table and hide spinning wheel
+            self.tableView.hidden = false
+            self.fetchingMetadataIndicator.stopAnimating()
+            self.fetchingMetadataIndicator.hidden = true
+
+            //set the text of the row
+            cell.textLabel?.text = summaryTableData[indexPath.row]
+
+            //highlight expiry in red if there is little time left
+            if indexPath.row == 2 && summaryData.expiresIn < 3 {
+                cell.textLabel?.textColor = UIColor.redColor()
             }
+
+            //Set the dynamic content of the update status row.
+            if indexPath.row == 1 {
+                //tour is not upto date and not currently being updated, show update button.
+                if !summaryData.isCurrent && !isUpdating{
+                    updateButton.frame = CGRectMake(40, 60, 75, 24)
+                    updateButton.center = CGPoint(x: view.bounds.width * 0.85, y: 60.0 / 2.0)
+                    updateButton.layer.cornerRadius = 3
+                    updateButton.layer.borderWidth = 1
+                    updateButton.layer.borderColor = updateButton.titleLabel?.textColor.CGColor
+                    updateButton.addTarget(self, action: "updateButtonClicked:", forControlEvents: UIControlEvents.TouchUpInside)
+                    updateButton.setTitle("UPDATE", forState: UIControlState.Normal)
+                    cell.addSubview(updateButton)
+
+                    //tour is up to date and not being updated, show the green tick
+                }else if summaryData.isCurrent && !isUpdating{
+                    
+                    if indexPath.row == 1 {
+                        self.navigationItem.setHidesBackButton(false, animated: true)
+                        cell.textLabel?.text = "The tour is up to date"
+                    }
+                    
+                    let tick_image = UIImage(named: "green_tick")
+                    let tickFrame = UIImageView(image: tick_image)
+                    tickFrame.center = CGPoint(x: view.bounds.width * 0.95, y: 60.0 / 2.0)
+                    cell.addSubview(tickFrame)
+
+                    //Tour is being updated, show the busy wheel
+                }else{
+                    
+                    updateIndicator.frame = CGRectMake(40, 60, 75, 24)
+                    updateIndicator.center = CGPoint(x: view.bounds.width * 0.90, y: 60.0 / 2.0)
+                    cell.addSubview(updateIndicator)
+
+                }
+            }
+
         }
-        
         return cell
     }
 }

@@ -8,16 +8,21 @@
 
 import Foundation
 
-public class TourUpdateManager {
+public class TourUpdateManager: NSObject {
 
     var tourTableRow: Int!
     var tourCode: String!
-    var currentMetadata: Dictionary<String,AnyObject>!
-    var newMetadata: NSDictionary!
-    var alreadyFetchedMetadata = false
-    
-    // created just to initialise blank field object in other classes
-  
+    var currentTourKEYmetadata: Dictionary<String,AnyObject>!
+    var newTourKEYmetadata: NSDictionary!
+
+    //metadata to be displayed on the tourSummary
+    var timeHours: Int!
+    var timeMinutes: Int!
+    var expiresIn: Int!
+    var isTourUpTodate = true
+    var expiresInHours: Int!
+    var expiresInMinutes: Int!
+
     class var sharedInstance: TourUpdateManager {
         struct Static {
             static var onceToken: dispatch_once_t = 0
@@ -25,56 +30,104 @@ public class TourUpdateManager {
         }
         dispatch_once(&Static.onceToken) {
             Static.instance = TourUpdateManager()
-            
+
         }
         return Static.instance!
     }
 
-
-   func getCurrentData(tourCodetoCheck: String, tableRow: Int) {
+    // to be called as an initialiser to prepare the object for other methods
+    func prepareTourMangaer(tourCodetoCheck: String, tableRow: Int) {
         self.tourCode = tourCodetoCheck
         self.tourTableRow = tableRow
-        self.currentMetadata = TourIdParser().getTourMetadata(tourCode)
-    }
 
-    // download fresh metadata for the tour if there is internet connection
-    func downloadNewMetadata() {
+        // get current tourKey metadata from cache
+        self.currentTourKEYmetadata = TourIdParser().getTourMetadata(tourCode)
+
+        // get new tourKey metadata
         if ApiConnector.sharedInstance.isConnectedToNetwork() {
             ApiConnector.sharedInstance.initiateConnection(tourCode, isCheckingForUpdate: true)
-            newMetadata = ApiConnector.sharedInstance.getTourMetadata(tourCode)
+            newTourKEYmetadata = ApiConnector.sharedInstance.getTourMetadata(tourCode)
         }
+    }
+
+    // this method received data from the api or cache and load it onto the tourSummaryViewController
+    func formatDataforTourSummaryAndDiplayIt(jsonResult: NSDictionary) {
+        // TOUR LENGTH HOURS AND MINUTES
+        let minutes = jsonResult["estimatedTime"]
+        let estimatedLenght = calculateTourLengthFromMinutes(minutes as! Int)
+        timeHours = estimatedLenght.timeHours
+        timeMinutes = estimatedLenght.timeMins
+
+        // TOUR UPDATE STATUS
+        // you will need to pass jsonResult["version"] to the isTourUpToDate()
+        isTourUpTodate = self.isTourUpToDate(jsonResult["version"] as! Int)
+
+        // EXPIRY DATE
+        let expiryDate = getDateFromString(currentTourKEYmetadata["expiry"] as! String)
+        expiresIn = expiryDate.daysFrom(NSDate())
+
+        // if the tour lasts less than a day then return the hours and minutes
+        if expiryDate.daysFrom(NSDate()) == 0 {
+            expiresIn = 0
+            let HoursAndMinutesLeft = calculateTourLengthFromMinutes(abs(expiryDate.minutesFrom(NSDate())))
+
+            expiresInHours = HoursAndMinutesLeft.timeHours
+            expiresInMinutes = HoursAndMinutesLeft.timeMins
+        } else {
+            expiresIn = expiryDate.daysFrom(NSDate())
+            expiresInHours = 0
+            expiresInMinutes = 0
+        }
+
+        // call the tour summary to update tourSummary fields
+        self.triggerTourMetaDataAvailableNotification()
+    }
+
+    // receive minutes as a paramenter and return hours and minutes of that length
+    private func calculateTourLengthFromMinutes(minutes: Int) -> (timeHours: Int, timeMins: Int) {
+        let hours = minutes / 60
+        let minutes = minutes % 60
+        return (hours,minutes)
+    }
+
+    // returns fields variable set when data is returned by API
+    func getTourStatusInfo() -> (timeHours: Int,timeMins: Int, isCurrent: Bool, expiresIn: Int, expiresInHours: Int, expiresInMinutes: Int){
+        return (self.timeHours, self.timeMinutes, self.isTourUpTodate, self.expiresIn, self.expiresInHours, self.expiresInMinutes)
     }
 
     // check for updates comparing freshly downloaded metadata with current stored one
     // if there are updates the user is asked if he wants to download them
-    func checkForUpdates() {
-        downloadNewMetadata()
-        
-        if self.newMetadata != nil {
-            
-            let currentDate = obtainDateFromString(currentMetadata["updatedAt"] as! String)
-            let newDate = obtainDateFromString(newMetadata["updatedAt"] as! String)
-            
-             let comparisonResultString = compareDates(currentDate, newDate: newDate)
-            // check if the current date is less recent than the one in the metadata. If yes, ask the user to update tour.
-            if comparisonResultString == "ascending" {
-                //self.triggerUpdateAvailableNotification()
+    func isTourUpToDate(versionFreshFromAPI: Int) -> Bool {
+        if self.newTourKEYmetadata != nil {
+            // when you change it as it not programmatic 
+            // is gonna be something like that currentTourmetadata["version"] as! Int
+            let currentVersion = currentTourKEYmetadata["version"] as! Int
+
+            if currentVersion < versionFreshFromAPI {
+                return false
             }
         }
+        return true
     }
+
+    // trigger download of the tour metadata needed on the tourSummary
+    func getTourMetadata() {
+        // if there is no connection get the data from the cache and load that on tourSummary
+        if ApiConnector.sharedInstance.isConnectedToNetwork() {
+            let tourConnector = TourMetadataConnector()
+            tourConnector.checkTourMetadataForUpdates(currentTourKEYmetadata["objectId"] as! String)
+        } else {
+            formatDataforTourSummaryAndDiplayIt(currentTourKEYmetadata)
+        }
+    }
+
 
     // check if a project is out to date comparing metadata with current today's date.
     // if the project is out to date, it is deleted after informing the user
     func checkIfOutdatedAndDeleteProject() {
-        // in this way the metadata is downloaded only once when opening the app.
-        if !alreadyFetchedMetadata {
-            downloadNewMetadata()
-            alreadyFetchedMetadata = true
-        }
-        
-        if self.newMetadata != nil {
+        if self.newTourKEYmetadata != nil {
             let todaysDate = NSDate()
-            let expiresDate = obtainDateFromString(currentMetadata["expiresAt"] as! String)
+            let expiresDate = getDateFromString(currentTourKEYmetadata["expiry"] as! String)
 
             let comparisonResulFromString = compareDates(todaysDate, newDate: expiresDate)
             if comparisonResulFromString == "descending" {
@@ -100,7 +153,7 @@ public class TourUpdateManager {
     }
     
     // receive a string of format "yyyy-MM-dd'T'hh:mm:ss.SSSz" and returns an NSDate object
-    func obtainDateFromString(date: String) -> NSDate {
+    func getDateFromString(date: String) -> NSDate {
         let enUSPOSIXLocale: NSLocale = NSLocale(localeIdentifier: "en_US")
         let dateFormatter = NSDateFormatter()
         dateFormatter.locale = enUSPOSIXLocale
@@ -108,33 +161,67 @@ public class TourUpdateManager {
         return dateFormatter.dateFromString(date)!
     }
     
-    // trigger notification when there is an update avaiable
-    func triggerUpdateAvailableNotification() {
+    // trigger fields to be updated in the TourSummary when TourMetadata Arrived
+    func triggerTourMetaDataAvailableNotification() {
         NSNotificationCenter.defaultCenter().addObserver(
             self,
             selector: "Tour Update Available:",
             name: "Tour Update Notification",
             object: nil)
         func notify() {
-            NSNotificationCenter.defaultCenter().postNotificationName(updateAvailableKey, object: self)
-
+            NSNotificationCenter.defaultCenter().postNotificationName(TourSummaryMetaDataAvailable, object: self)
         }
         notify()
     }
-    //get the current status of the tour from the latest data on the api. Returns a tuple
-    func getTourStatusInfo() -> (timeHours: Int,timeMins: Int, isCurrent: Bool, expiresIn: Int){
-    
-        //place holder information, this will need implementation
-        let timeHours = 1
-        let timeMins = 30
-        let isCurrent = true
-        let expiresIn = 7
-        return (timeHours, timeMins, isCurrent, expiresIn)
-    }
 
-    // called from the tourSummary when the user confirms to download the updates
+    // called from the tourSummary when the user clikes the updates in the TourSummary
     func triggerUpdate() {
-        TourDeleter().deleteTour(tourCode)
+        // GET RID OF NOTIFIER!
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedValid", name: validIdNotificationKey, object: nil)
+        TourDeleter.sharedInstance.deleteTour(tourCode)
         ApiConnector.sharedInstance.initiateConnection(tourCode, isCheckingForUpdate: false)
+    }
+    
+    // images re-downloaded only when it's notified to do so
+    func NotifiedValid(){
+        sleep(1)
+        imageHandler.sharedInstance.downloadMediaSet(imageHandler.sharedInstance.imageQueue)
+    }
+}
+
+// credit to: Leo Dabus
+// http://stackoverflow.com/questions/27182023/getting-the-difference-between-two-nsdates-in-months-days-hours-minutes-seconds
+extension NSDate {
+    func yearsFrom(date:NSDate) -> Int{
+        return NSCalendar.currentCalendar().components(.Year, fromDate: date, toDate: self, options: []).year
+    }
+    func monthsFrom(date:NSDate) -> Int{
+        return NSCalendar.currentCalendar().components(.Month, fromDate: date, toDate: self, options: []).month
+    }
+    func weeksFrom(date:NSDate) -> Int{
+        return NSCalendar.currentCalendar().components(.WeekOfYear, fromDate: date, toDate: self, options: []).weekOfYear
+    }
+    func daysFrom(date:NSDate) -> Int{
+        return NSCalendar.currentCalendar().components(.Day, fromDate: date, toDate: self, options: []).day
+    }
+    func hoursFrom(date:NSDate) -> Int{
+        return NSCalendar.currentCalendar().components(.Hour, fromDate: date, toDate: self, options: []).hour
+    }
+    func minutesFrom(date:NSDate) -> Int{
+        return NSCalendar.currentCalendar().components(.Minute, fromDate: date, toDate: self, options: []).minute
+    }
+    func secondsFrom(date:NSDate) -> Int{
+        return NSCalendar.currentCalendar().components(.Second, fromDate: date, toDate: self, options: []).second
+    }
+    
+    func offsetFrom(date:NSDate) -> String {
+        if yearsFrom(date)   > 0 { return "\(yearsFrom(date))y"   }
+        if monthsFrom(date)  > 0 { return "\(monthsFrom(date))M"  }
+        if weeksFrom(date)   > 0 { return "\(weeksFrom(date))w"   }
+        if daysFrom(date)    > 0 { return "\(daysFrom(date))d"    }
+        if hoursFrom(date)   > 0 { return "\(hoursFrom(date))h"   }
+        if minutesFrom(date) > 0 { return "\(minutesFrom(date))m" }
+        if secondsFrom(date) > 0 { return "\(secondsFrom(date))s" }
+        return ""
     }
 }

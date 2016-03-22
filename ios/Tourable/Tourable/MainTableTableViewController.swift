@@ -28,7 +28,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         //TODO remove this, for demo use only
         let connection: Bool = ApiConnector.sharedInstance.isConnectedToNetwork()
         //Only commented out for now as API has early date set hence always deletes the tours! ONLY TEMPORARY!
-        //checkToursToDelete()
+        checkToursToDelete()
         
         tableView.contentInset = UIEdgeInsetsMake(50, 0, 0, 0)
         
@@ -139,8 +139,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     // triggerd in ViewDidLoad, it iterates the list of tours and deletes the outdated one.
     func checkToursToDelete() {
         for var indexRow = 0; indexRow < tourTitles.count; indexRow++ {
-            TourUpdateManager.sharedInstance.getCurrentData(tourIDs[indexRow], tableRow: indexRow)
-            // Need to find a better way to do this, it is causing the tour to be downloaed twice.
+            TourUpdateManager.sharedInstance.prepareTourMangaer(tourIDs[indexRow], tableRow: indexRow)
             TourUpdateManager.sharedInstance.checkIfOutdatedAndDeleteProject()
         }
     }
@@ -169,7 +168,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
                 //checks if the tour already exists. If not:
                 // passes the entered tourId into the tourParser
                 let tours = TourIdParser.sharedInstance.getAllTourIDs()
-                if tours.contains(Field!.text!){
+                if tours.contains(ApiConnector.sharedInstance.cleanTourId(Field!.text!)){
                     //Tour already exists
                     AlertViewBuilder.sharedInstance.showWarningAlert("Tour Add Error", message: "A tour with that key already exists")
                 }else{
