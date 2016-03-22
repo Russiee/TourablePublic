@@ -17,6 +17,8 @@ import com.hobbyte.touringandroid.io.TourDBManager;
 public class SplashActivity extends AppCompatActivity {
     private static final String TAG = "SplashActivity";
 
+    private boolean updateFinished = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +39,13 @@ public class SplashActivity extends AppCompatActivity {
         SplashActivity.this.finish();
 
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
+
+    /**
+     * Checks if the activity has finished updating/deleting tours. Used in testing.
+     */
+    public boolean isFinished() {
+        return updateFinished;
     }
 
     /**
@@ -80,6 +89,7 @@ public class SplashActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             TourDBManager.getInstance(App.context).close();
+            updateFinished = true;
             goToStartActivity();
         }
     }
