@@ -149,11 +149,11 @@ public class FileManager {
      * @param context the calling Activity
      * @param keyID   the key ID for a specific tour
      */
-    public static void removeTour(Context context, String keyID) {
+    public static int removeTour(Context context, String keyID) {
         TourDBManager dbHelper = TourDBManager.getInstance(context);
         dbHelper.deleteTour(keyID);
 
-        deleteTourFiles(context, keyID);
+        return deleteTourFiles(context, keyID);
     }
 
     /**
@@ -162,9 +162,11 @@ public class FileManager {
      * @param context the calling Activity
      * @param keyID the key ID for a specific tour
      */
-    private static void deleteTourFiles(Context context, String keyID) {
+    private static int deleteTourFiles(Context context, String keyID) {
         Log.d(TAG, "Deleting tour files for " + keyID);
         DeleteTourTask task = new DeleteTourTask(context, keyID);
         task.start();
+
+        return task.getCount();
     }
 }
