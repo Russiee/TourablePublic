@@ -6,6 +6,7 @@ import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.hobbyte.touringandroid.App;
+import com.hobbyte.touringandroid.io.TourDBManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,19 +17,19 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.text.ParseException;
 
 /**
  * This class provides some static methods for sending requests to the server and processing
  * responses.
  */
 public class ServerAPI {
-    private static final String TAG = "ServerAPI";
-
-    private static final String BASE_URl = "https://touring-api.herokuapp.com/api/v1";
     public static final String KEY_VALIDATION = "/key/verify/";
     public static final String BUNDLE = "/bundle/";
     public static final String TOUR = "/tour/";
     public static final String KEY = "/key/";
+    private static final String TAG = "ServerAPI";
+    private static final String BASE_URl = "https://touring-api.herokuapp.com/api/v1";
 
     /**
      * Asks the server if a provided Tour Key is a real, valid key. If it is, return the
@@ -52,24 +53,44 @@ public class ServerAPI {
                 BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String line = in.readLine();
 
+                //read response into string
                 while (line != null) {
                     jsonString.append(line);
                     line = in.readLine();
                 }
 
+                //close connection
                 in.close();
                 connection.disconnect();
 
-                Log.d(TAG, "Valid key: " + tourKey);
+                //convert response to json object
                 JSONObject json = new JSONObject(jsonString.toString());
+
+                //check if key has expired
+                //return null if it has
+                long newExpiry = TourDBManager.convertStampToMillis(json.getString("expiry"));
+                if (newExpiry < System.currentTimeMillis()) {
+                    Log.d(TAG, String.format("Key Expired: keyExpiry: %d, current time %d",
+                            newExpiry, System.currentTimeMillis()));
+                    return null;
+                }
+
+                //valid key
                 String tourID = json.getJSONObject("tour").getString("objectId");
+
+                Log.d(TAG, "Valid key: " + tourKey);
                 Log.d(TAG, "Fetched tourId: " + tourID);
+
                 return json;
+
             } else {
                 Log.d(TAG, "Invalid key: " + tourKey);
                 connection.disconnect();
                 return null;
             }
+        } catch (ParseException e) {
+            e.printStackTrace();
+            Log.e(TAG, "couldn't parse expiry");
         } catch (JSONException jex) {
             jex.printStackTrace();
             Log.e(TAG, "Something went wrong with the JSON!");
@@ -123,7 +144,7 @@ public class ServerAPI {
 
         } catch (JSONException jex) {
             jex.printStackTrace();
-        }catch (SocketTimeoutException e) {
+        } catch (SocketTimeoutException e) {
             e.printStackTrace();
             Log.d(TAG, "Bad connection, update aborted");
         } catch (Exception e) {
