@@ -30,8 +30,6 @@ import com.hobbyte.touringandroid.io.TourDBManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-
 /**
  * @author Jonathan
  * @author Max
@@ -332,15 +330,6 @@ public class StartActivity extends AppCompatActivity {
 
                 try {
 
-                    //check if key has expired
-                    //return false if it has
-                    long newExpiry = TourDBManager.convertStampToMillis(keyJSON.getString("expiry"));
-                    if (newExpiry < System.currentTimeMillis()) {
-                        Log.d(TAG, String.format("Key Expired: keyExpiry: %d, current time %d",
-                                newExpiry, System.currentTimeMillis()));
-                        return false;
-                    }
-
                     //get tour info
                     tourID = keyJSON.getJSONObject("tour").getString("objectId");
                     keyID = keyJSON.getString("objectId");
@@ -351,9 +340,6 @@ public class StartActivity extends AppCompatActivity {
                     FileManager.saveJSON(keyJSON, keyID, FileManager.KEY_JSON);
                     Log.i(TAG, "KeyJSON saved");
 
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                    return false;
                 } catch (JSONException e) {
                     e.printStackTrace();
                     tourID = null;
