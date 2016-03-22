@@ -26,7 +26,7 @@ class mediaHelper: XCTestCase {
         // Use XCTAssert and related functions to verify your tests produce the correct results.
         
         let expectation = expectationWithDescription("imageDownload")
-        MediaHelper.sharedInstance.getDataFromUrl(NSURL(string: "https://s3-eu-west-1.amazonaws.com/testmediahobbyte/alex%27s+desk.jpg")!) { (data, response, error)  in
+        MediaHelper.sharedInstance.getDataFromUrl(NSURL(string: "https://i.imgur.com/6UMNM1j.jpg")!) { (data, response, error)  in
             dispatch_async(dispatch_get_main_queue()) { () -> Void in
                 guard let _ = data where error == nil else {
                     XCTFail()
@@ -47,7 +47,7 @@ class mediaHelper: XCTestCase {
     func testVideoDownload() {
 
         let expectation = expectationWithDescription("videoDownload")
-        MediaHelper.sharedInstance.getDataFromUrl(NSURL(string: "https://s3-eu-west-1.amazonaws.com/testmediahobbyte/sample_video.mp4")!) { (data, response, error)  in
+        MediaHelper.sharedInstance.getDataFromUrl(NSURL(string: "https://s3-eu-west-1.amazonaws.com/practicemediabrompton/ER_heart_test.mp4")!) { (data, response, error)  in
             dispatch_async(dispatch_get_main_queue()) { () -> Void in
                 guard let _ = data where error == nil else {
                     XCTFail()
@@ -99,7 +99,7 @@ class mediaHelper: XCTestCase {
     func testImageDLPerformance(){
         self.measureBlock{
             let expectation = self.expectationWithDescription("ImageDownloadPerformance")
-            MediaHelper.sharedInstance.getDataFromUrl(NSURL(string: "https://s3-eu-west-1.amazonaws.com/testmediahobbyte/alex%27s+bed.jpg")!) { (data, response, error)  in
+            MediaHelper.sharedInstance.getDataFromUrl(NSURL(string: "https://i.imgur.com/6UMNM1j.jpg")!) { (data, response, error)  in
                 dispatch_async(dispatch_get_main_queue()) { () -> Void in
                     guard let _ = data where error == nil else {
                         XCTFail()
@@ -122,7 +122,7 @@ class mediaHelper: XCTestCase {
         
         self.measureBlock{
             let expectation = self.expectationWithDescription("videoDownloadPerformance")
-            MediaHelper.sharedInstance.getDataFromUrl(NSURL(string: "https://s3-eu-west-1.amazonaws.com/testmediahobbyte/sample_video.mp4")!) { (data, response, error)  in
+            MediaHelper.sharedInstance.getDataFromUrl(NSURL(string: "https://s3-eu-west-1.amazonaws.com/practicemediabrompton/ER_heart_test.mp4")!) { (data, response, error)  in
                 dispatch_async(dispatch_get_main_queue()) { () -> Void in
                     guard let _ = data where error == nil else {
                         XCTFail()
