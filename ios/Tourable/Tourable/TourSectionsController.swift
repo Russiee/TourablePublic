@@ -36,13 +36,12 @@ class TourSectionsController: UITableViewController {
         
         for subsectionPointer in subsectionArray{
             if subsectionPointer["objectId"] != nil {
-                print(subsectionPointer["objectId"])
-                print(subsectionPointer)
-                break
+                print((subsectionPointer["objectId"] as! String))
                 let subsectionData = tdp.getTourSection((subsectionPointer["objectId"] as! String))
                 tourTitles[subsectionData.title as String] =  subsectionData.sectionId
                 //appends the Names of subsections in the order they appear
                 sectionKeys.append(subsectionData.title as String)
+                break
             }
           
  
