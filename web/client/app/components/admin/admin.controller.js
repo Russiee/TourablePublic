@@ -1,6 +1,11 @@
 angular.module('tourable')
     .controller('AdminCtrl', function ($rootScope, $scope, AuthService, $state, $location, adminFactory) {
 
+
+        if ($state.current.name !== 'admin.login') {
+            $rootScope.loadingLight = true;
+        }
+
         $scope.$state = $state;
         $scope.accountmessage = "";
 
@@ -44,6 +49,8 @@ angular.module('tourable')
                 if ($scope.admin.isSuper) {
                     getOrganization(response.data.organization.objectId);
                     getAllAdmins(response.data.organization.objectId);
+                } else {
+                    $rootScope.loadingLight = false;
                 }
             }, function(error) {
                 //Console log in case we need to debug with a user
@@ -59,10 +66,10 @@ angular.module('tourable')
                 console.log('Success: ', response.data);
                 $scope.organization = response.data;
                 sessionStorage.setItem('organization', JSON.stringify($scope.organization));
-                $scope.loading = false;
+                $rootScope.loadingLight = false;
             }, function(error) {
                 //Console log in case we need to debug with a user
-                $scope.loading = false;
+                $rootScope.loadingLight = false;
                 console.log('An error occured while retrieving the admin data: ', error);
             });
         }
