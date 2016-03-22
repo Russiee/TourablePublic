@@ -217,7 +217,7 @@ class APIConnectorTests: XCTestCase {
             catch let err as NSError{
                 print(err.description)
             }
-
+            print(JSONMetadataFromAPI)
             XCTAssertNil(error, "there shouldn't be any error")
             XCTAssertEqual(JSONMetadataFromAPI, expectedKCL111VerifierData, "These should be identical")
             expectation.fulfill()
@@ -246,7 +246,8 @@ class APIConnectorTests: XCTestCase {
             "objectId": "ZX8DHpGKxk"
         ]
         
-        ApiConnector.sharedInstance.initiateConnection("KCL-1010", isCheckingForUpdate: false)
+        KeyVerifyConnector.sharedInstance.initiateKeyVerifyConnection("KCL-1010", isCheckingForUpdate: false)
+        sleep(10)
         let returnedData = TourIdParser().getTourMetadata("KCL-1010")
         let originalData = data["tour"] as! NSDictionary
         XCTAssertEqual(originalData["objectId"] as? String, returnedData["objectId"] as? String)
@@ -258,20 +259,18 @@ class APIConnectorTests: XCTestCase {
         let test2 = "///KC/L-10/1/0/"
         let test3 = "\\KCL-\\1010"
         let test4 = "\"KCL\"-1010"
-        let test5 = "KC;L-;10;10"
-        let test6 = " K\\C/L;-1\"010 "
         let ans = "KCL-1010"
-        XCTAssertEqual(ApiConnector.sharedInstance.cleanTourId(test1), ans, "should be same after trim")
-        XCTAssertEqual(ApiConnector.sharedInstance.cleanTourId(test2), ans, "should be same after trim")
-        XCTAssertEqual(ApiConnector.sharedInstance.cleanTourId(test3), ans, "should be same after trim")
-        XCTAssertEqual(ApiConnector.sharedInstance.cleanTourId(test4), ans, "should be same after trim")
-        XCTAssertEqual(ApiConnector.sharedInstance.cleanTourId(test5), ans, "should be same after trim")
-        XCTAssertEqual(ApiConnector.sharedInstance.cleanTourId(test6), ans, "should be same after trim")
+        XCTAssertEqual(KeyVerifyConnector.sharedInstance.cleanTourCode(test1), ans, "should be same after trim")
+        XCTAssertEqual(KeyVerifyConnector.sharedInstance.cleanTourCode(test2), ans, "should be same after trim")
+        XCTAssertEqual(KeyVerifyConnector.sharedInstance.cleanTourCode(test3), ans, "should be same after trim")
+        XCTAssertEqual(KeyVerifyConnector.sharedInstance.cleanTourCode(test4), ans, "should be same after trim")
+
+
         
     }
     
     func testConnectivety(){
-        let connection = ApiConnector.sharedInstance.isConnectedToNetwork()
+        let connection = KeyVerifyConnector.sharedInstance.isConnectedToNetwork()
         if connection {
             //as connection succeeded should be true
             XCTAssertTrue(connection)

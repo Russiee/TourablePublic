@@ -24,20 +24,20 @@ class VideoHandlerTests: XCTestCase {
 
    func testDownload(){
         //Sanitise environment
-        TourDeleter.sharedInstance.deleteMedia("https://s3-eu-west-1.amazonaws.com/testmediahobbyte/sample_video.mp4", fileType: ".mp4")
-        let video = videoHandler().loadVideoPath("https://s3-eu-west-1.amazonaws.com/testmediahobbyte/sample_video.mp4")
+        TourDeleter.sharedInstance.deleteMedia("https://s3-eu-west-1.amazonaws.com/practicemediabrompton/ER_heart_test.mp4", fileType: ".mp4")
+        let video = videoHandler().loadVideoPath("https://s3-eu-west-1.amazonaws.com/practicemediabrompton/ER_heart_test.mp4")
         XCTAssertNotNil(video)
-        XCTAssertEqual(video?.absoluteString, "https://s3-eu-west-1.amazonaws.com/testmediahobbyte/sample_video.mp4")
+        XCTAssertEqual(video?.absoluteString, "https://s3-eu-west-1.amazonaws.com/practicemediabrompton/ER_heart_test.mp4")
     }
     
 
     func testUrlPerformance() {
         // This is an example of a performance test case.
         self.measureBlock {
-            TourDeleter.sharedInstance.deleteMedia("https://s3-eu-west-1.amazonaws.com/testmediahobbyte/sample_video.mp4", fileType: ".mp4")
-            let video = videoHandler().loadVideoPath("https://s3-eu-west-1.amazonaws.com/testmediahobbyte/sample_video.mp4")
+            TourDeleter.sharedInstance.deleteMedia("https://s3-eu-west-1.amazonaws.com/practicemediabrompton/ER_heart_test.mp4", fileType: ".mp4")
+            let video = videoHandler().loadVideoPath("https://s3-eu-west-1.amazonaws.com/practicemediabrompton/ER_heart_test.mp4")
             XCTAssertNotNil(video)
-            XCTAssertEqual(video?.absoluteString, "https://s3-eu-west-1.amazonaws.com/testmediahobbyte/sample_video.mp4")
+            XCTAssertEqual(video?.absoluteString, "https://s3-eu-west-1.amazonaws.com/practicemediabrompton/ER_heart_test.mp4")
 
         }
     }

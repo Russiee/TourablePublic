@@ -46,9 +46,11 @@ class KeyVerifyConnector: NSObject, NSURLConnectionDelegate{
                 let jsonResult = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
                 self.JSONMetadataFromAPI = jsonResult
                 if !self.checkIfTourAlreadyOutdatedWhenDownloading(jsonResult["expiry"] as! String) {
+                    print("inside if")
                     dispatch_sync(dispatch_get_main_queue()){
+                        
                         if !self.isUpdating {
-                            
+                            print("in here")
                             _ = TourIdParser().addTourMetaData(jsonResult)
                             
                         }

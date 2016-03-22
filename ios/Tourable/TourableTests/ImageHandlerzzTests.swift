@@ -54,9 +54,9 @@ class ImageHandlerTests: XCTestCase {
     func testImageQueue(){
         
         var urls = [String]()
-        urls.append("https://s3-eu-west-1.amazonaws.com/testmediahobbyte/alex%27s+bed.jpg")
-        urls.append("https://s3-eu-west-1.amazonaws.com/testmediahobbyte/alex%27s+desk.jpg")
-        urls.append("https://s3-eu-west-1.amazonaws.com/testmediahobbyte/peter%27s+bed.jpg")
+        urls.append("https://i.imgur.com/6UMNM1j.jpg")
+        urls.append("https://i.imgur.com/RjKvEd0.jpg")
+        urls.append("http://i.imgur.com/T3bVKsH.jpg")
         imageHandler.sharedInstance.queueImage(urls)
         XCTAssertEqual(imageHandler.sharedInstance.imageQueue.count, 3)
         imageHandler.sharedInstance.imageQueue.removeAll()
@@ -76,12 +76,11 @@ class ImageHandlerTests: XCTestCase {
     
     func testImageDownloadComplete(){
         
-        
+        imageHandler.sharedInstance.imageQueue.removeAll()
         var urls = [String]()
-        urls.append("https://s3-eu-west-1.amazonaws.com/testmediahobbyte/alex%27s+bed.jpg")
-        urls.append("https://s3-eu-west-1.amazonaws.com/testmediahobbyte/alex%27s+desk.jpg")
-        urls.append("https://s3-eu-west-1.amazonaws.com/testmediahobbyte/peter%27s+bed.jpg")
-        urls.append("https://s3-eu-west-1.amazonaws.com/testmediahobbyte/sample_video.mp4")
+        urls.append("https://i.imgur.com/6UMNM1j.jpg")
+        urls.append("https://i.imgur.com/RjKvEd0.jpg")
+        urls.append("http://i.imgur.com/T3bVKsH.jpg")
         
         imageHandler.sharedInstance.queueImage(urls)
         
@@ -109,11 +108,11 @@ class ImageHandlerTests: XCTestCase {
     }
     
     func testImageQueuePerformance(){
-        
+        imageHandler.sharedInstance.imageQueue.removeAll()
         var urls = [String]()
-        urls.append("https://s3-eu-west-1.amazonaws.com/testmediahobbyte/alex%27s+bed.jpg")
-        urls.append("https://s3-eu-west-1.amazonaws.com/testmediahobbyte/alex%27s+desk.jpg")
-        urls.append("https://s3-eu-west-1.amazonaws.com/testmediahobbyte/peter%27s+bed.jpg")
+        urls.append("https://i.imgur.com/6UMNM1j.jpg")
+        urls.append("https://i.imgur.com/RjKvEd0.jpg")
+        urls.append("http://i.imgur.com/T3bVKsH.jpg")
         
         self.measureBlock{
             imageHandler.sharedInstance.queueImage(urls)
