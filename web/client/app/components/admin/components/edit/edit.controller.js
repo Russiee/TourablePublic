@@ -19,18 +19,21 @@ angular.module('tourable')
                 getTourData();
                 getKeyData();
             } else if (toState.name === 'admin.edit.section') {
-                 getSectionData();
+                getSectionData();
+                getSubsectionData();
             }
         });
 
 
         $scope.tour = {};
+        $scope.section = {};
 
         if ($state.current.name === 'admin.edit.tour') {
             getTourData();
             getKeyData();
         } else if ($state.current.name === 'admin.edit.section') {
             getSectionData();
+            getSubsectionData();
         }
 
         function getTourData() {
@@ -63,8 +66,22 @@ angular.module('tourable')
             var getSection = editFactory.getSection($state.params.id);
             getSection.then(function(response) {
                 console.log('Section: ', response.data);
+                var subsections = $scope.section.subsections;
                 $scope.section = response.data;
+                $scope.section.subsections = subsections;
                 sessionStorage.setItem('section', JSON.stringify($scope.tour.keys));
+            }, function(error) {
+                //Console log in case we need to debug with a user
+                console.log('An error occured while retrieving the admin data: ', error);
+            });
+        }
+
+        function getSubsectionData () {
+            var getSubsections = editFactory.getSubsections($state.params.id);
+            getSubsections.then(function(response) {
+                console.log('Subsection: ', response.data);
+                $scope.section.subsections = response.data;
+                sessionStorage.setItem('section', JSON.stringify($scope.section));
             }, function(error) {
                 //Console log in case we need to debug with a user
                 console.log('An error occured while retrieving the admin data: ', error);
