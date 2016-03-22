@@ -194,7 +194,7 @@ class APIConnectorTests: XCTestCase {
             "code": "KCL-1111",
             "updatedAt": "2016-03-22T13:55:28.044Z",
             "createdAt": "2016-03-18T10:51:04.357Z",
-            "expiry": "2016-03-21T00:00:00.000Z",
+            "expiry": "2016-03-24T00:00:00.000Z",
             "objectId": "BvBRrYZNPU"
         ]
         

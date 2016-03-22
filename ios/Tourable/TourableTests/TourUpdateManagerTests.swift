@@ -21,7 +21,7 @@ class TourUpdateManagerTests: XCTestCase {
         super.tearDown()
     }
 
-    func testCreatedDateFromString() {
+    func testGetDateFromString() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
         let dateInString = "2016-02-24T12:32:06.952Z"
@@ -68,6 +68,213 @@ class TourUpdateManagerTests: XCTestCase {
         let actualDate = TourUpdateManager.sharedInstance.getDateFromString(dateInString)
         let actualDateMirror = Mirror(reflecting: actualDate) // mirror copy of the object to access type
         XCTAssertEqual("__NSDate", String(actualDateMirror.subjectType))
+    }
+    
+    
+    func testCalculateTourLengthFromMinutes1() {
+        let HoursAndMinutes = TourUpdateManager.sharedInstance.calculateTourLengthFromMinutes(60)
+        let expectedHours = 1
+        let expectedMinutes = 0
+        XCTAssertEqual(expectedHours , HoursAndMinutes.timeHours)
+        XCTAssertEqual(expectedMinutes , HoursAndMinutes.timeMins)
+    }
+    
+    func testCalculateTourLengthFromMinutes2() {
+        let HoursAndMinutes = TourUpdateManager.sharedInstance.calculateTourLengthFromMinutes(43)
+
+        let expectedHours = 0
+        let expectedMinutes = 43
+        XCTAssertEqual(expectedHours , HoursAndMinutes.timeHours)
+        XCTAssertEqual(expectedMinutes , HoursAndMinutes.timeMins)
+    }
+
+    func testCalculateTourLengthFromMinutes3() {
+        let HoursAndMinutes = TourUpdateManager.sharedInstance.calculateTourLengthFromMinutes(462)
+        
+        let expectedHours = 7
+        let expectedMinutes = 42
+        XCTAssertEqual(expectedHours , HoursAndMinutes.timeHours)
+        XCTAssertEqual(expectedMinutes , HoursAndMinutes.timeMins)
+    }
+
+    func testPrepareTourMangaer() {
+        TourUpdateManager.sharedInstance.setTourCodeAndTableRow("KCL-1010", tableRow: 3)
+        let expectedTourCode = "KCL-1010"
+        let expectedIndexPath = 3
+        XCTAssertEqual(expectedTourCode, TourUpdateManager.sharedInstance.tourCode)
+        XCTAssertEqual(expectedIndexPath, TourUpdateManager.sharedInstance.tourTableRow)
+    }
+
+
+    func testformatDataforTourSummaryAndDiplayIt() {
+        let jsonMetadata = [
+            "admin" :     [
+                "__type" : "Pointer",
+                "className" : "Admin",
+                "objectId" : "0tOD0B8AOn",
+            ],
+            "createdAt" : "2016-02-24T12:18:39.855Z",
+            "description" : "This tour is for testing and review use only and will not be released to the public. Public tours will include the Royal Brompton Hospital Cardiac Imaging Department",
+            "estimatedTime" : 120,
+            "isPublic" : 1,
+            "objectId" : "cjWRKDygIZ",
+            "title" : "Ultimate Flat Tour",
+            "updatedAt" : "2016-03-22T13:53:10.338Z",
+            "version" : 20
+        ]
+        
+
+        TourUpdateManager.sharedInstance.currentTourKEYmetadata = ["version" : 20, "expiry": "2016-09-22T13:53:10.338Z"]
+        TourUpdateManager.sharedInstance.formatDataforTourSummaryAndDiplayIt(jsonMetadata)
+
+        let expectedTimeHours = 2
+        let expectedTimeMinutes = 0
+        let expectedIsTourUpTodate = true
+        let expiryDate = TourUpdateManager.sharedInstance.getDateFromString("2016-09-22T13:53:10.338Z")
+
+        if expiryDate.daysFrom(NSDate()) == 0 {
+            let HoursAndMinutesLeft = TourUpdateManager.sharedInstance.calculateTourLengthFromMinutes(abs(expiryDate.minutesFrom(NSDate())))
+            let expectedExpiresInHours = HoursAndMinutesLeft.timeHours
+            let expectedExpiresInMinutes = HoursAndMinutesLeft.timeMins
+
+            // is the minutes are negative tour is already expired
+            if expiryDate.minutesFrom(NSDate()) > 0 {
+                XCTAssertEqual(expectedExpiresInHours, TourUpdateManager.sharedInstance.expiresInHours)
+                XCTAssertEqual(expectedExpiresInMinutes, TourUpdateManager.sharedInstance.expiresInMinutes)
+            }
+
+        } else {
+            let expectedExpiresIn = expiryDate.daysFrom(NSDate())
+            XCTAssertEqual(expectedExpiresIn, TourUpdateManager.sharedInstance.expiresIn)
+        }
+
+        XCTAssertEqual(expectedTimeHours, TourUpdateManager.sharedInstance.timeHours)
+        XCTAssertEqual(expectedTimeMinutes, TourUpdateManager.sharedInstance.timeMinutes)
+        XCTAssertEqual(expectedIsTourUpTodate, TourUpdateManager.sharedInstance.isTourUpTodate)
+    }
+
+    
+    func testIsTourUpdateTrue() {
+        let currentVersion = 10
+        let newVersion = 10
+        let expectedIsUpToDate = true
+        let isUptoDate = TourUpdateManager.sharedInstance.isTourUpToDate(currentVersion, versionFreshFromAPI: newVersion)
+        XCTAssertEqual(expectedIsUpToDate, isUptoDate)
+    }
+    
+    func testIsTourUpdateFalse() {
+        let currentVersion = 10
+        let newVersion = 12
+        let expectedIsUpToDate = false
+        let expectedIsUpToDateWithoutConnection = true
+        let isUptoDate = TourUpdateManager.sharedInstance.isTourUpToDate(currentVersion, versionFreshFromAPI: newVersion)
+        if ApiConnector.sharedInstance.isConnectedToNetwork() {
+           XCTAssertEqual(expectedIsUpToDate, isUptoDate)
+        } else {
+            XCTAssertEqual(expectedIsUpToDateWithoutConnection, isUptoDate)
+        }
+    }
+    
+    func testDaysFrom1() {
+        // prepare date formatter
+        let enUSPOSIXLocale: NSLocale = NSLocale(localeIdentifier: "en_US")
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.locale = enUSPOSIXLocale
+        dateFormatter.dateFormat = "YYYY-MM-dd'T'HH:mm:ss.SSS'Z'"
+        
+        // generate two date
+        let date1 = dateFormatter.dateFromString("2016-02-24T00:00:00.000Z")
+        let date2 = dateFormatter.dateFromString("2016-02-24T00:00:00.000Z")
+        let daysOfDifference = date1?.daysFrom(date2!)
+        
+        let expectedDifference = 0
+        
+        XCTAssertEqual(expectedDifference, daysOfDifference)
+    }
+    
+    func testDaysFrom2() {
+        // prepare date formatter
+        let enUSPOSIXLocale: NSLocale = NSLocale(localeIdentifier: "en_US")
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.locale = enUSPOSIXLocale
+        dateFormatter.dateFormat = "YYYY-MM-dd'T'HH:mm:ss.SSS'Z'"
+        
+        // generate two date
+        let date1 = dateFormatter.dateFromString("2016-02-24T00:00:00.000Z")
+        let date2 = dateFormatter.dateFromString("2016-02-14T00:00:00.000Z")
+        let daysOfDifference = date1?.daysFrom(date2!)
+        
+        let expectedDifference = 10
+        
+        XCTAssertEqual(expectedDifference, daysOfDifference)
+    }
+    
+    func testHoursFrom1() {
+        // prepare date formatter
+        let enUSPOSIXLocale: NSLocale = NSLocale(localeIdentifier: "en_US")
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.locale = enUSPOSIXLocale
+        dateFormatter.dateFormat = "YYYY-MM-dd'T'HH:mm:ss.SSS'Z'"
+        
+        // generate two date
+        let date1 = dateFormatter.dateFromString("2016-02-24T02:00:00.000Z")
+        let date2 = dateFormatter.dateFromString("2016-02-24T00:00:00.000Z")
+        let daysOfDifference = date1?.hoursFrom(date2!)
+        
+        let expectedDifference = 2
+        
+        XCTAssertEqual(expectedDifference, daysOfDifference)
+    }
+    
+    func testHoursFrom2() {
+        // prepare date formatter
+        let enUSPOSIXLocale: NSLocale = NSLocale(localeIdentifier: "en_US")
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.locale = enUSPOSIXLocale
+        dateFormatter.dateFormat = "YYYY-MM-dd'T'HH:mm:ss.SSS'Z'"
+        
+        // generate two date
+        let date1 = dateFormatter.dateFromString("2016-02-24T00:35:00.000Z")
+        let date2 = dateFormatter.dateFromString("2016-02-24T00:00:00.000Z")
+        let daysOfDifference = date1?.daysFrom(date2!)
+        
+        let expectedDifference = 0
+        
+        XCTAssertEqual(expectedDifference, daysOfDifference)
+    }
+    
+    func testMinutesFrom1() {
+        // prepare date formatter
+        let enUSPOSIXLocale: NSLocale = NSLocale(localeIdentifier: "en_US")
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.locale = enUSPOSIXLocale
+        dateFormatter.dateFormat = "YYYY-MM-dd'T'HH:mm:ss.SSS'Z'"
+        
+        // generate two date
+        let date1 = dateFormatter.dateFromString("2016-02-24T00:35:00.000Z")
+        let date2 = dateFormatter.dateFromString("2016-02-24T00:00:00.000Z")
+        let daysOfDifference = date1?.minutesFrom(date2!)
+        
+        let expectedDifference = 35
+        
+        XCTAssertEqual(expectedDifference, daysOfDifference)
+    }
+    
+    func testMinutesFrom2() {
+        // prepare date formatter
+        let enUSPOSIXLocale: NSLocale = NSLocale(localeIdentifier: "en_US")
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.locale = enUSPOSIXLocale
+        dateFormatter.dateFormat = "YYYY-MM-dd'T'HH:mm:ss.SSS'Z'"
+        
+        // generate two date
+        let date1 = dateFormatter.dateFromString("2016-02-24T00:00:30.000Z")
+        let date2 = dateFormatter.dateFromString("2016-02-24T00:00:00.000Z")
+        let daysOfDifference = date1?.daysFrom(date2!)
+        
+        let expectedDifference = 0
+        
+        XCTAssertEqual(expectedDifference, daysOfDifference)
     }
     
     func testPerformanceExample() {
