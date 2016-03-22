@@ -16,8 +16,20 @@ angular.module('tourable')
         var getTour = editFactory.getTour($state.params.id);
         getTour.then(function(response) {
             console.log('Success: ', response.data);
+            var keys = $scope.tour.keys;
             $scope.tour = response.data;
+            $scope.tour.keys = keys;
             sessionStorage.setItem('tour', JSON.stringify($scope.tour));
+        }, function(error) {
+            //Console log in case we need to debug with a user
+            console.log('An error occured while retrieving the admin data: ', error);
+        });
+
+        var getKeys = editFactory.getKeys($state.params.id);
+        getKeys.then(function(response) {
+            console.log('Keys: ', response.data);
+            $scope.tour.keys = response.data;
+            sessionStorage.setItem('tour.keys', JSON.stringify($scope.tour.keys));
         }, function(error) {
             //Console log in case we need to debug with a user
             console.log('An error occured while retrieving the admin data: ', error);

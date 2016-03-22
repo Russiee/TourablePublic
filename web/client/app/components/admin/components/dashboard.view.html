@@ -4,7 +4,7 @@
 <div class="row">
     <div class="admin-main col-sm-8">
         <h3 class="admin-header">{{organization.name}}</h3>
-        <h5 class="admin-subheader">Welcome back, {{admin.firstname}}.</h5>
+        <h5 class="admin-subheader" ng-show="admin.firstname">Welcome back, {{admin.firstname}}.</h5>
     </div>
     <div class="admin-help col-sm-4 hidden-xs"></div>
 </div>
