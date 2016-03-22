@@ -13,6 +13,7 @@ Parse.serverURL = config.database().serverURL;
 app.use(function(req, res, next) {
     //console.log("Running CORS middlesware");
     res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });

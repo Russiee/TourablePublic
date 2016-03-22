@@ -58,7 +58,8 @@
 <div class="row">
     <div class="admin-main col-sm-8">
         <button class="btn admin-btn" ng-click="save()" ng-disabled="saving">Save</button>
-        <button class="btn admin-btn admin-delete-btn" ng-click="delete()" ng-disabled="saving">Delete</button>
+        <button class="btn admin-btn admin-delete-btn" ng-click="deleteSwitch++" ng-disabled="saving" ng-show="deleteSwitch === 0">Delete</button>
+        <button class="btn admin-btn admin-delete-btn" ng-click="delete()" ng-disabled="saving" ng-show="deleteSwitch === 1">Are you sure?</button>
         <br>
         <h5 ng-show="creating" class="admin-subheader"><i class="fa fa-spin fa-cog"></i> Saving your tour...</h5>
         <div class="admin-message admin-message-success" ng-show="accountmessage === success">Your tour has been saved  successfully</div>

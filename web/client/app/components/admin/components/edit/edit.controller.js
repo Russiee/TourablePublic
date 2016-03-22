@@ -34,6 +34,7 @@ angular.module('tourable')
 
         $scope.tour = {};
         $scope.section = {};
+        $scope.deleteSwitch = 0;
 
         if ($state.current.name === 'admin.edit.tour') {
 
@@ -105,6 +106,35 @@ angular.module('tourable')
                 console.log('POIs: ', response.data);
                 $scope.section.pois = response.data;
                 sessionStorage.setItem('section', JSON.stringify($scope.section));
+            }, function(error) {
+                //Console log in case we need to debug with a user
+                console.log('An error occured while retrieving the admin data: ', error);
+            });
+        }
+
+        $scope.delete = function() {
+            deleteObject();
+        }
+
+        function deleteObject () {
+            var deleteObj = editFactory.delete($state.current.name.substring($state.current.name.lastIndexOf('.') + 1), $state.params.id);
+            deleteObj.then(function(response) {
+                console.log('DELETE response: ', response.data);
+                if ($state.current.name === 'admin.edit.tour') {
+                    $state.go('admin.manageTours');
+                } else if ($state.current.name === 'admin.edit.section') {
+                    if ($scope.section.superSection.objectId) {
+                        $state.go('admin.edit.section', {
+                            className: 'section',
+                            id: $scope.section.superSection.objectId
+                        });
+                    } else if ($scope.tour.objectId) {
+                         $state.go('admin.edit.tour', {
+                            className: 'section',
+                            id: $scope.tour.objectId
+                        });
+                    }
+                }
             }, function(error) {
                 //Console log in case we need to debug with a user
                 console.log('An error occured while retrieving the admin data: ', error);
