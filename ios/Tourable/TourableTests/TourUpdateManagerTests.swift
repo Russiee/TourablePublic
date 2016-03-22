@@ -122,13 +122,15 @@ class TourUpdateManagerTests: XCTestCase {
             "updatedAt" : "2016-03-22T13:53:10.338Z",
             "version" : 20
         ]
+        
 
+        TourUpdateManager.sharedInstance.currentTourKEYmetadata = ["version" : 20, "expiry": "2016-09-22T13:53:10.338Z"]
         TourUpdateManager.sharedInstance.formatDataforTourSummaryAndDiplayIt(jsonMetadata)
 
         let expectedTimeHours = 2
         let expectedTimeMinutes = 0
         let expectedIsTourUpTodate = true
-        let expiryDate = TourUpdateManager.sharedInstance.getDateFromString("2016-03-22T13:53:10.338Z")
+        let expiryDate = TourUpdateManager.sharedInstance.getDateFromString("2016-09-22T13:53:10.338Z")
 
         if expiryDate.daysFrom(NSDate()) == 0 {
             let HoursAndMinutesLeft = TourUpdateManager.sharedInstance.calculateTourLengthFromMinutes(abs(expiryDate.minutesFrom(NSDate())))

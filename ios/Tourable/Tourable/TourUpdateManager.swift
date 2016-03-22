@@ -71,13 +71,12 @@ public class TourUpdateManager: NSObject {
 
         // EXPIRY DATE
         let expiryDate = getDateFromString(currentTourKEYmetadata["expiry"] as! String)
-        expiresIn = expiryDate.daysFrom(NSDate())
 
         // if the tour lasts less than a day then return the hours and minutes
         if expiryDate.daysFrom(NSDate()) == 0 {
             expiresIn = 0
-            let HoursAndMinutesLeft = calculateTourLengthFromMinutes(abs(expiryDate.minutesFrom(NSDate())))
 
+            let HoursAndMinutesLeft = calculateTourLengthFromMinutes(abs(expiryDate.minutesFrom(NSDate())))
             expiresInHours = HoursAndMinutesLeft.timeHours
             expiresInMinutes = HoursAndMinutesLeft.timeMins
         } else {
