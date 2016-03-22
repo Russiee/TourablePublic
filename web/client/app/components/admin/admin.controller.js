@@ -5,10 +5,9 @@ angular.module('tourable')
         $scope.accountmessage = "";
 
         $scope.$on('loginStatusChanged', function (event, isLoggedIn) {
-            console.log("hello");
             if (isLoggedIn){
-                console.log("hello");
                 $state.go("admin.dashboard");
+                getAdmin();
             } else {
                 sessionStorage.removeItem('admin');
                 sessionStorage.removeItem('organization');
@@ -32,6 +31,10 @@ angular.module('tourable')
         });
 
         if (AuthService.isLoggedIn()) {
+            getAdmin();
+        }
+
+        function getAdmin () {
             var getAdminData = adminFactory.getAdmin(AuthService.currentUser().id);
             getAdminData.then(function(response) {
                 console.log('Success: ', response.data);
@@ -47,7 +50,6 @@ angular.module('tourable')
                 //Redirect back to homepage
                 $location.url('/');
             });
-
         }
 
         function getOrganization (id) {
