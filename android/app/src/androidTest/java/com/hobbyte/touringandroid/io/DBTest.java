@@ -240,6 +240,7 @@ public class DBTest {
 
         Cursor c = db.getRow(KEYID_1);
         int count = c.getCount();
+        c.moveToFirst();
         String tourID = c.getString(2); // should be the tour id from the first row that was entered
         c.close();
 
@@ -285,7 +286,7 @@ public class DBTest {
         db.flagTourUpdate(KEYID_1, true);
         assertTrue(db.doesTourHaveUpdate(KEYID_1));
 
-        db.flagTourUpdate(KEYID_1, true);
+        db.flagTourUpdate(KEYID_1, false);
         assertFalse(db.doesTourHaveUpdate(KEYID_1));
     }
 
