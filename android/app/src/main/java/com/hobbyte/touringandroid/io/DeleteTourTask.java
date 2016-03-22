@@ -12,10 +12,10 @@ import java.io.File;
  * <li>2) the key ID</li>
  * </ul>
  * </p>
- * There is no need to use this class yourself - use {@link FileManager#removeTour(Context, String)}
- * instead.
+ * There is no need to use this class yourself (nor can you, outside this package) - use
+ * {@link FileManager#removeTour(Context, String)} instead.
  */
-public class DeleteTourTask extends Thread {
+class DeleteTourTask extends Thread {
     private static final String TAG = "DeleteTourTask";
 
     private File filesDir;
