@@ -90,21 +90,17 @@ public class FileManagerTest {
      * Make sure that FileManager can load a JSONObject which we can get values from.
      */
     @Test
-    public void testJsonLoading() {
+    public void testJsonLoading() throws Exception {
         JSONObject json = FileManager.getJSON(context, KEY_ID, JSON_FILENAME);
         assertNotNull(json); // will be null if an exception was thrown inside the method
 
         // make sure the JSON object we loaded has the expected values
-        try {
-            assertEquals("Dijkstra", json.getString("name"));
-            assertEquals("boss", json.getString("profession"));
+        assertEquals("Dijkstra", json.getString("name"));
+        assertEquals("boss", json.getString("profession"));
 
-            JSONArray a = json.getJSONArray("protoges");
-            assertEquals(3, a.length());
-            assertEquals("andrew", a.getString(0));
-        } catch (JSONException e) {
-            assertTrue(false); // trigger failure
-        }
+        JSONArray a = json.getJSONArray("proteges");
+        assertEquals(3, a.length());
+        assertEquals("andrew", a.getString(0));
     }
 
     /**
