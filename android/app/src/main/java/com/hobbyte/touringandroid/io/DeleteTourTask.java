@@ -20,6 +20,7 @@ class DeleteTourTask extends Thread {
 
     private File filesDir;
     private String keyID;
+    private int count = 0;
 
     public DeleteTourTask(Context context, String keyID) {
         this.keyID = keyID;
@@ -31,22 +32,19 @@ class DeleteTourTask extends Thread {
         File tourDir = new File(filesDir, keyID);
 
         if (tourDir.exists() && tourDir.isDirectory()) {
-            Log.d(TAG, "About to start deleting files");
-
-            int fileCount = 0;
-            int dirCount = 0;
+            boolean b;
 
             /*
             Have to delete the tour JSON, plus folders containing sections, pois, images, and video
              */
-            new File(tourDir, "tour").delete();
-            fileCount++;
+            b = new File(tourDir, "tour").delete();
+            if (b) count++;
 
-            new File(tourDir, "bundle").delete();
-            fileCount++;
+            b = new File(tourDir, "bundle").delete();
+            if (b) count++;
 
-            new File(tourDir, "key").delete();
-            fileCount++;
+            b = new File(tourDir, "key").delete();
+            if (b) count++;
 
             String[] dirs = {"poi", "image", "video"};
 
@@ -55,19 +53,23 @@ class DeleteTourTask extends Thread {
 
                 if (dir.exists() && dir.isDirectory()) {
                     for (File f : dir.listFiles()) {
-                        f.delete();
-                        fileCount++;
+                        b = f.delete();
+                        if (b) count++;
                     }
 
-                    dir.delete();
-                    dirCount++;
+                    b = dir.delete();
+                    if (b) count++;
                 }
             }
 
-            tourDir.delete();
-            dirCount++;
+            b = tourDir.delete();
+            if (b) count++;
 
-            Log.d(TAG, "Deleted " + fileCount + " files and " + dirCount + " folders");
+            Log.d(TAG, "Deleted " + count + " files/folders");
         }
+    }
+
+    public int getCount() {
+        return count;
     }
 }
