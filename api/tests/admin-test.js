@@ -19,12 +19,13 @@ var adminTest = {
         date = Date.now();
 
         var admin  = {
-        "organization": ""+pointerID,
-        "username": "Tester Name " + date,
-        "email": "test" + date + "@email.com",
-        "password": "hi",
-        "isSuper": true
-
+            "organization": ""+pointerID,
+            "username": "Tester Name " + date,
+            "firstname": "First",
+            "lastname": "Last",
+            "email": "test" + date + "@email.com",
+            "password": "hi",
+            "isSuper": true
         };
         //sends object to API
         request(url)
@@ -37,6 +38,8 @@ var adminTest = {
               }
               res.body.should.have.property("organization");
               res.body.should.have.property("username");
+              res.body.should.have.property("firstname");
+              res.body.should.have.property("lastname");
               res.body.should.have.property("email");
               res.body.should.have.property("isSuper");
               res.status.should.be.equal(201);
@@ -63,6 +66,8 @@ var adminTest = {
             }
             res.body.username.should.equal("Tester Name " + date);
             res.body.email.should.equal("test" + date + "@email.com");
+            res.body.firstname.should.equal("First");
+            res.body.lastname.should.equal("Last");
             res.body.isSuper.should.equal(true);
             res.body.organization.should.not.equal(null);
             callback();
