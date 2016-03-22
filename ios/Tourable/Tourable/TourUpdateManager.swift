@@ -53,6 +53,7 @@ public class TourUpdateManager: NSObject {
     // this method received data from the api or cache and load it onto the tourSummaryViewController
     func formatDataforTourSummaryAndDiplayIt(jsonResult: NSDictionary) {
         // TOUR LENGTH HOURS AND MINUTES
+        print(jsonResult)
         let minutes = jsonResult["estimatedTime"]
         let estimatedLenght = calculateTourLengthFromMinutes(minutes as! Int)
         timeHours = estimatedLenght.timeHours
@@ -84,7 +85,7 @@ public class TourUpdateManager: NSObject {
     }
 
     // receive minutes as a paramenter and return hours and minutes of that length
-    private func calculateTourLengthFromMinutes(minutes: Int) -> (timeHours: Int, timeMins: Int) {
+    func calculateTourLengthFromMinutes(minutes: Int) -> (timeHours: Int, timeMins: Int) {
         let hours = minutes / 60
         let minutes = minutes % 60
         return (hours,minutes)
