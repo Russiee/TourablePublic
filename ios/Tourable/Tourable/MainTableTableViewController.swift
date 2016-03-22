@@ -25,9 +25,6 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         tourIDs = tourParser.getAllTourIDs()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "Notified", name: TableUpdateNotificationKey, object: nil)
         self.clearsSelectionOnViewWillAppear = false
-        //TODO remove this, for demo use only
-        let connection: Bool = ApiConnector.sharedInstance.isConnectedToNetwork()
-        //Only commented out for now as API has early date set hence always deletes the tours! ONLY TEMPORARY!
         checkToursToDelete()
         
         tableView.contentInset = UIEdgeInsetsMake(50, 0, 0, 0)
@@ -168,13 +165,13 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
                 //checks if the tour already exists. If not:
                 // passes the entered tourId into the tourParser
                 let tours = TourIdParser.sharedInstance.getAllTourIDs()
-                if tours.contains(ApiConnector.sharedInstance.cleanTourId(Field!.text!)){
+                if tours.contains(KeyVerifyConnector.sharedInstance.cleanTourCode(Field!.text!)){
                     //Tour already exists
                     AlertViewBuilder.sharedInstance.showWarningAlert("Tour Add Error", message: "A tour with that key already exists")
                 }else{
-                    if ApiConnector.sharedInstance.isConnectedToNetwork(){
+                    if KeyVerifyConnector.sharedInstance.isConnectedToNetwork(){
                     //Tour does not exist. Procede.
-                    ApiConnector.sharedInstance.initiateConnection(Field!.text!, isCheckingForUpdate: false)
+                    KeyVerifyConnector.sharedInstance.initiateKeyVerifyConnection(Field!.text!, isCheckingForUpdate: false)
                     // goes to the AddNewTourPage
                     performSegueWithIdentifier("goToAddTour", sender: self)
                     // to change the background image

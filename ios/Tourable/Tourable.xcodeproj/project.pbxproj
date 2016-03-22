@@ -42,7 +42,7 @@
 		FA6FD54B1C8A2DCE0033964F /* MediaHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6FD54A1C8A2DCE0033964F /* MediaHelper.swift */; };
 		FA7936AC1C8A4C2B006AD406 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA7936AB1C8A4C2B006AD406 /* AVKit.framework */; };
 		FA9803291C666195001D23E2 /* MainTableTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9803281C666195001D23E2 /* MainTableTableViewController.swift */; };
-		FAB049191C6E34BF00679C10 /* ApiConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB049181C6E34BF00679C10 /* ApiConnector.swift */; };
+		FAB049191C6E34BF00679C10 /* KeyVerifyConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB049181C6E34BF00679C10 /* KeyVerifyConnector.swift */; };
 		FAB946A01CA039E8003A09F9 /* APIConnectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB9469F1CA039E8003A09F9 /* APIConnectorTests.swift */; };
 		FAB946A21CA039F4003A09F9 /* TourDeleterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB946A11CA039F4003A09F9 /* TourDeleterTests.swift */; };
 		FACF41081C8F1D74000C2D5A /* NavViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACF41071C8F1D74000C2D5A /* NavViewController.swift */; };
@@ -111,7 +111,7 @@
 		FA6FD54A1C8A2DCE0033964F /* MediaHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaHelper.swift; sourceTree = "<group>"; };
 		FA7936AB1C8A4C2B006AD406 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		FA9803281C666195001D23E2 /* MainTableTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTableTableViewController.swift; sourceTree = "<group>"; };
-		FAB049181C6E34BF00679C10 /* ApiConnector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiConnector.swift; sourceTree = "<group>"; };
+		FAB049181C6E34BF00679C10 /* KeyVerifyConnector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyVerifyConnector.swift; sourceTree = "<group>"; };
 		FAB9469F1CA039E8003A09F9 /* APIConnectorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIConnectorTests.swift; sourceTree = "<group>"; };
 		FAB946A11CA039F4003A09F9 /* TourDeleterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TourDeleterTests.swift; sourceTree = "<group>"; };
 		FACF41071C8F1D74000C2D5A /* NavViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavViewController.swift; sourceTree = "<group>"; };
@@ -237,7 +237,7 @@
 		FA2164931C7B48A10056FF02 /* Connectivity */ = {
 			isa = PBXGroup;
 			children = (
-				FAB049181C6E34BF00679C10 /* ApiConnector.swift */,
+				FAB049181C6E34BF00679C10 /* KeyVerifyConnector.swift */,
 				FA0A516F1C772AAD00E4F733 /* bundleRouteConnector.swift */,
 				FAE5F69C1C789D2500346321 /* POIConnector.swift */,
 				FA2BB2971C78F46500D784E8 /* imageHandler.swift */,
@@ -412,7 +412,7 @@
 				7A432AB11C8B69AB007482F8 /* TourUpdateManager.swift in Sources */,
 				E536DCC71C6510FD00A7B2FC /* Tourable.xcdatamodeld in Sources */,
 				FA0A517B1C775C3700E4F733 /* TourSectionsController.swift in Sources */,
-				FAB049191C6E34BF00679C10 /* ApiConnector.swift in Sources */,
+				FAB049191C6E34BF00679C10 /* KeyVerifyConnector.swift in Sources */,
 				FAD9296A1C95BDCD0030BA7F /* ImageLoader.swift in Sources */,
 				FA9803291C666195001D23E2 /* MainTableTableViewController.swift in Sources */,
 				FA1C8C321C9C14AE0055BB49 /* QuizTableViewController.swift in Sources */,

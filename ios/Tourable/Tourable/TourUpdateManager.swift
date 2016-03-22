@@ -44,9 +44,9 @@ public class TourUpdateManager: NSObject {
         self.currentTourKEYmetadata = TourIdParser().getTourMetadata(tourCode)
 
         // get new tourKey metadata
-        if ApiConnector.sharedInstance.isConnectedToNetwork() {
-            ApiConnector.sharedInstance.initiateConnection(tourCode, isCheckingForUpdate: true)
-            newTourKEYmetadata = ApiConnector.sharedInstance.getTourMetadata(tourCode)
+        if KeyVerifyConnector.sharedInstance.isConnectedToNetwork() {
+            KeyVerifyConnector.sharedInstance.initiateKeyVerifyConnection(tourCode, isCheckingForUpdate: true)
+            newTourKEYmetadata = KeyVerifyConnector.sharedInstance.getTourMetadata(tourCode)
         }
     }
 
@@ -115,7 +115,7 @@ public class TourUpdateManager: NSObject {
     // trigger download of the tour metadata needed on the tourSummary
     func getTourMetadata() {
         // if there is no connection get the data from the cache and load that on tourSummary
-        if ApiConnector.sharedInstance.isConnectedToNetwork() {
+        if KeyVerifyConnector.sharedInstance.isConnectedToNetwork() {
             let tourConnector = TourMetadataConnector()
             tourConnector.checkTourMetadataForUpdates(currentTourKEYmetadata["objectId"] as! String)
         } else {
@@ -179,7 +179,7 @@ public class TourUpdateManager: NSObject {
         // GET RID OF NOTIFIER!
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedValid", name: validIdNotificationKey, object: nil)
         TourDeleter.sharedInstance.deleteTour(tourCode)
-        ApiConnector.sharedInstance.initiateConnection(tourCode, isCheckingForUpdate: false)
+        KeyVerifyConnector.sharedInstance.initiateKeyVerifyConnection(tourCode, isCheckingForUpdate: false)
     }
     
     // images re-downloaded only when it's notified to do so
