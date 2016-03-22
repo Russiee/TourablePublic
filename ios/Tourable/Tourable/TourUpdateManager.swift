@@ -105,7 +105,7 @@ public class TourUpdateManager: NSObject {
     // check for updates comparing freshly downloaded metadata with current stored one
     // if there are updates the user is asked if he wants to download them
     func isTourUpToDate(currentVersion: Int, versionFreshFromAPI: Int) -> Bool {
-        if self.newTourKEYmetadata != nil {
+        if ApiConnector.sharedInstance.isConnectedToNetwork() {
             if currentVersion < versionFreshFromAPI {
                 return false
             }

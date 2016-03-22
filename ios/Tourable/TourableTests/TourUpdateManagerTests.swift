@@ -98,7 +98,7 @@ class TourUpdateManagerTests: XCTestCase {
     }
 
     func testPrepareTourMangaer() {
-        TourUpdateManager.sharedInstance.prepareTourMangaer("KCL-1010", tableRow: 3)
+        TourUpdateManager.sharedInstance.setTourCodeAndTableRow("KCL-1010", tableRow: 3)
         let expectedTourCode = "KCL-1010"
         let expectedIndexPath = 3
         XCTAssertEqual(expectedTourCode, TourUpdateManager.sharedInstance.tourCode)
@@ -164,9 +164,14 @@ class TourUpdateManagerTests: XCTestCase {
         let currentVersion = 10
         let newVersion = 12
         let expectedIsUpToDate = false
+        let expectedIsUpToDateWithoutConnection = true
         let isUptoDate = TourUpdateManager.sharedInstance.isTourUpToDate(currentVersion, versionFreshFromAPI: newVersion)
-        XCTAssertEqual(expectedIsUpToDate, isUptoDate)
-    }
+        if ApiConnector.sharedInstance.isConnectedToNetwork() {
+           XCTAssertEqual(expectedIsUpToDate, isUptoDate)
+        } else {
+            XCTAssertEqual(expectedIsUpToDateWithoutConnection, isUptoDate)
+        }
+    }  
     
     
     func testPerformanceExample() {
