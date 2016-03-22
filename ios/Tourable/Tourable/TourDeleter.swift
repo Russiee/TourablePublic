@@ -131,7 +131,6 @@ public class TourDeleter {
                 }
                     //if is a subsection recall this method
                 else if((value as! String) == "subsections"){
-                    print("going to next subsection")
                     getAllMediaURL(subsection["subsections"] as! NSArray)
                 }
             }
