@@ -76,6 +76,7 @@ tourable.config(function($stateProvider, $urlRouterProvider, $locationProvider) 
     .state('admin.edit', {
         templateUrl: "/client/app/components/admin/components/edit/edit.view.html",
         controller: "EditCtrl",
+        parent: "admin",
         authenticate: true
     })
     .state('admin.edit.tour', {

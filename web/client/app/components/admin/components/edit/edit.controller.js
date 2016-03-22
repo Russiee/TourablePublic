@@ -12,16 +12,22 @@ angular.module('tourable')
         }
 
         $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
-            if (!toParams.id) {
-                $state.go('admin.manageTours');
-            }
+
             if (toState.name === 'admin.edit.tour') {
-                getTourData();
-                getKeyData();
+                if (!toParams.id) {
+                    $state.go('admin.manageTours');
+                } else {
+                    getTourData();
+                    getKeyData();
+                }
             } else if (toState.name === 'admin.edit.section') {
-                getSectionData();
-                getSubsectionData();
-                getPOIdata();
+                if (!toParams.id) {
+                    $state.go('admin.manageTours');
+                } else {
+                    getSectionData();
+                    getSubsectionData();
+                    getPOIdata();
+                }
             }
         });
 
@@ -30,6 +36,7 @@ angular.module('tourable')
         $scope.section = {};
 
         if ($state.current.name === 'admin.edit.tour') {
+
             getTourData();
             getKeyData();
         } else if ($state.current.name === 'admin.edit.section') {
