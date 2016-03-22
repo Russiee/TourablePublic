@@ -36,10 +36,10 @@ public class DBTest {
     private static String NAME_1 = "iLuvTestsTour";
     private static String NAME_2 = "iHateTestsTour";
 
-    private static String EXPIRES_IN_FUTURE = "2017-04-01T00:00:00.000Z";
+    private static String EXPIRES_IN_FUTURE = "2017-04-01T00:00:00.123Z";
     private static String EXPIRED_IN_PAST = "2016-03-01T00:00:00.000Z";
-    private static long EXPIRES_IN_FUTURE_L = 1491004800000L;
-    private static long EXPIRED_IN_PAST_L = 1456790400000L;
+    private static long EXPIRES_IN_FUTURE_L = 1491004800123L; // calculated with Epoch converter on the web
+    private static long EXPIRED_IN_PAST_L = 1456790400000L; // calculated with Epoch converter on the web
 
     private static int VERSION_1 = 33;
     private static int VERSION_2 = 12;
@@ -54,6 +54,9 @@ public class DBTest {
         db = TourDBManager.getInstance(context);
     }
 
+    /**
+     * Make sure that the db is empty at initialisation (and after {@link #tearDown()} is called.
+     */
     @Test
     public void testEmpty() {
         assertTrue(db.dbIsEmpty());
@@ -62,6 +65,9 @@ public class DBTest {
         assertFalse(db.dbIsEmpty());
     }
 
+    /**
+     * Make sure that the values we pass to the method are the ones that are stored.
+     */
     @Test
     public void areRowsInsertedProperly_nonDates() {
         db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRES_IN_FUTURE, true, VERSION_1);
@@ -85,6 +91,9 @@ public class DBTest {
         assertEquals(VERSION_1, version);
     }
 
+    /**
+     * Make sure that the date-string we pass to the method is converted and stored properly.
+     */
     @Test
     public void areRowsInsertedProperly_dates() {
         db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRES_IN_FUTURE, true, VERSION_1);
@@ -98,12 +107,15 @@ public class DBTest {
         assertEquals(EXPIRES_IN_FUTURE_L, expires);
     }
 
+    /**
+     * Make sure that the method only deletes the specified tour.
+     */
     @Test
     public void testRowDeletion_single() {
         db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRES_IN_FUTURE, false, VERSION_1);
         db.putRow(KEYID_2, TOURID_2, KEY_NAME_2, NAME_2, EXPIRES_IN_FUTURE, false, VERSION_2);
 
-        db.deleteTour(KEYID_2);
+        db.deleteTour(KEYID_2); // method under test
 
         assertFalse(db.dbIsEmpty());
 
@@ -114,6 +126,9 @@ public class DBTest {
         assertEquals(0, count);
     }
 
+    /**
+     * Make sure that deleting multiple tours at once works.
+     */
     @Test
     public void testRowDeletion_multi() {
         db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRES_IN_FUTURE, false, VERSION_1);
@@ -121,16 +136,19 @@ public class DBTest {
 
         String[] toDelete = {KEYID_1, KEYID_2};
 
-        db.deleteTours(toDelete);
+        db.deleteTours(toDelete); // method under test
         assertTrue(db.dbIsEmpty());
     }
 
+    /**
+     * Make sure that the expected info is fetched by getTourUpdateInfo().
+     */
     @Test
     public void correctUpdateInfo() {
         db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRES_IN_FUTURE, false, VERSION_1);
         db.putRow(KEYID_2, TOURID_2, KEY_NAME_2, NAME_2, EXPIRES_IN_FUTURE, false, VERSION_2);
 
-        Object[][] info = db.getTourUpdateInfo();
+        Object[][] info = db.getTourUpdateInfo(); // method under test
         assertEquals(2, info.length);
 
         Object[] row = info[0];
@@ -144,17 +162,23 @@ public class DBTest {
         assertEquals(VERSION_2, row[2]);
     }
 
+    /**
+     * Make sure that only expired tours are fetched by the method, when only one is out of date.
+     */
     @Test
     public void testGetExpiredTours_1() {
         db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRES_IN_FUTURE, false, VERSION_1);
         db.putRow(KEYID_2, TOURID_2, KEY_NAME_2, NAME_2, EXPIRED_IN_PAST, false, VERSION_2);
 
-        String[] expiredTours = db.getExpiredTours();
+        String[] expiredTours = db.getExpiredTours(); // method under test
 
         assertEquals(1, expiredTours.length);
         assertEquals(KEYID_2, expiredTours[0]);
     }
 
+    /**
+     * Make sure that only expired tours are fetched by the method, when both are out of date.
+     */
     @Test
     public void testGetExpiredTours_2() {
         db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRED_IN_PAST, false, VERSION_1);
@@ -165,6 +189,9 @@ public class DBTest {
         assertEquals(2, expiredTours.length);
     }
 
+    /**
+     * Make sure that the method correctly identifies the tour as existing.
+     */
     @Test
     public void testTourExists() {
         db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRES_IN_FUTURE, false, VERSION_1);
@@ -173,6 +200,9 @@ public class DBTest {
         assertTrue(tour1Exists);
     }
 
+    /**
+     * Make sure that the method correctly identifies the tour as not existing.
+     */
     @Test
     public void testTourDoesNotExist() {
         db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRES_IN_FUTURE, false, VERSION_1);
@@ -181,54 +211,72 @@ public class DBTest {
         assertFalse(tour2Exists);
     }
 
+    /**
+     * Make sure that boolean conversion works properly on `hasVideo` field.
+     */
     @Test
     public void testTourHasVideo() {
         db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRES_IN_FUTURE, true, VERSION_1);
+        db.putRow(KEYID_2, TOURID_2, KEY_NAME_2, NAME_2, EXPIRES_IN_FUTURE, false, VERSION_2);
 
-        boolean hasMedia = db.doesTourHaveMedia(KEYID_1);
-        assertTrue(hasMedia);
+        boolean hasMedia_1 = db.doesTourHaveMedia(KEYID_1);
+        boolean hasMedia_2 = db.doesTourHaveMedia(KEYID_2);
+
+        assertTrue(hasMedia_1);
+        assertFalse(hasMedia_2);
     }
 
-    @Test
-    public void testTourDoesNotHaveVideo() {
-        db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRES_IN_FUTURE, false, VERSION_1);
-
-        boolean hasMedia = db.doesTourHaveMedia(KEYID_1);
-        assertFalse(hasMedia);
-    }
-
+    /**
+     * Make sure that trying to insert a row with an already existing keyID is ignored by the DB.
+     */
     @Test
     public void cannotPutDuplicateKeyIDs() {
         db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRES_IN_FUTURE, false, VERSION_1);
+
+        // this should internally throw an SQLiteConstraintException error, because keyID is
+        // a primary key attribute. This error does not affect the app's runtime and does
+        // not enter the new row into the table.
         db.putRow(KEYID_1, TOURID_2, KEY_NAME_2, NAME_2, EXPIRES_IN_FUTURE, true, VERSION_2);
 
         Cursor c = db.getRow(KEYID_1);
         int count = c.getCount();
+        c.moveToFirst();
+        String tourID = c.getString(2); // should be the tour id from the first row that was entered
         c.close();
 
         assertEquals(1, count);
+        assertEquals(TOURID_1, tourID);
     }
 
+    /**
+     * Make sure that we can increment a tour's version number correctly.
+     */
     @Test
     public void testVersionUpdateWorks() {
         db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRES_IN_FUTURE, false, VERSION_1);
 
-        db.updateTourVersion(KEYID_1, VERSION_1 + 1);
+        db.updateTourVersion(KEYID_1, VERSION_1 + 1); // method under test
         Object[][] info = db.getTourUpdateInfo();
 
         assertEquals(VERSION_1 + 1, (int) info[0][2]);
     }
 
+    /**
+     * Make sure we can change a tour's expiry date correctly.
+     */
     @Test
     public void testExpiryUpdateWorks() {
         db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRED_IN_PAST, false, VERSION_1);
 
-        db.updateTourExpiry(KEYID_1, EXPIRES_IN_FUTURE_L);
+        db.updateTourExpiry(KEYID_1, EXPIRES_IN_FUTURE_L); // method under test
         Object[][] info = db.getTourUpdateInfo();
 
         assertEquals(EXPIRES_IN_FUTURE_L, (long) info[0][3]);
     }
 
+    /**
+     * Make sure that we can correctly change whether or not a tour has an update available
+     */
     @Test
     public void testUpdateFlagSetting() {
         db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRED_IN_PAST, false, VERSION_1);
@@ -236,10 +284,15 @@ public class DBTest {
         assertFalse(db.doesTourHaveUpdate(KEYID_1));
 
         db.flagTourUpdate(KEYID_1, true);
-
         assertTrue(db.doesTourHaveUpdate(KEYID_1));
+
+        db.flagTourUpdate(KEYID_1, false);
+        assertFalse(db.doesTourHaveUpdate(KEYID_1));
     }
 
+    /**
+     * Make sure that date conversion works internally.
+     */
     @Test
     public void testGetExpiryDate() {
         db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRED_IN_PAST, false, VERSION_1);
@@ -247,6 +300,10 @@ public class DBTest {
         assertEquals(EXPIRED_IN_PAST_L, db.getExpiryDate(KEYID_1));
     }
 
+    /**
+     * A more explicit test of the method that actually does all of the string -> long time
+     * conversion.
+     */
     @Test
     public void timeConverterWorks() {
         long converted;
@@ -259,6 +316,9 @@ public class DBTest {
         assertEquals(EXPIRED_IN_PAST_L, converted);
     }
 
+    /**
+     * Make sure that the method only accepts a properly formatted timestamp string.
+     */
     @Test
     public void timeConverterWorks_not() {
         String timestamp = "2016-24-03 13:43:06";
@@ -272,6 +332,9 @@ public class DBTest {
         assertEquals(0, converted);
     }
 
+    /**
+     * Start each test with a fresh database.
+     */
     @After
     public void tearDown() {
         db.clearTable();

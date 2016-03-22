@@ -18,6 +18,12 @@ import static org.junit.Assert.assertTrue;
 @RunWith(AndroidJUnit4.class)
 public class ServerAPITest {
 
+    private static final String GOOD_KEY_CODE = "KCL-1010";
+    private static final String BAD_KEY_CODE = "not-a-key";
+    private static final String EXPIRED_KEY_CODE = "KCL-TEST-EXPIRED";
+    private static final String GOOD_TOUR_ID = "cjWRKDygIZ";
+    private static final String BAD_TOUR_ID = "not-an-id";
+
     /**
      * Checks that the ServerAPI call to CheckKeyValidity is correct
      *
@@ -27,13 +33,11 @@ public class ServerAPITest {
     public void checkKeyValidity_valid() throws Exception {
 
         //values to test
-        String testKey = "KCL-1010";
-        String expectedTourID = "cjWRKDygIZ";
         String expectedClassName = "Tour";
         JSONObject keyJSON;
 
         //use valid key
-        keyJSON = ServerAPI.checkKeyValidity(testKey);
+        keyJSON = ServerAPI.checkKeyValidity(GOOD_KEY_CODE);
         assertNotNull(keyJSON);
 
         //get data from json
@@ -41,9 +45,8 @@ public class ServerAPITest {
         String className = keyJSON.getJSONObject("tour").getString("className");
 
         //check it's correct
-        assertEquals(tourID, expectedTourID);
-        assertEquals(className, expectedClassName);
-
+        assertEquals(GOOD_TOUR_ID, tourID);
+        assertEquals(expectedClassName, className);
     }
 
     /**
@@ -54,11 +57,10 @@ public class ServerAPITest {
     public void checkKeyValidity_invalid() throws Exception {
 
         //values to test
-        String testKey = "not-a-key-test";
         JSONObject keyJSON;
 
         //performs call
-        keyJSON = ServerAPI.checkKeyValidity(testKey);
+        keyJSON = ServerAPI.checkKeyValidity(BAD_KEY_CODE);
 
         //check
         assertEquals(keyJSON, null);
@@ -72,11 +74,10 @@ public class ServerAPITest {
     public void checkKeyValidity_expired() throws Exception {
 
         //values to test
-        String testKey = "KCL-TEST-EXPIRED";
         JSONObject keyJSON;
 
         //perform call
-        keyJSON = ServerAPI.checkKeyValidity(testKey);
+        keyJSON = ServerAPI.checkKeyValidity(EXPIRED_KEY_CODE);
 
         //check
         assertEquals(keyJSON, null);
@@ -90,18 +91,15 @@ public class ServerAPITest {
     @Test
     public void checkGetJSON_valid_bundle() throws Exception {
 
-        //value to test
-        String id = "cjWRKDygIZ";
-
         //perform call
-        JSONObject bundleJSON = ServerAPI.getJSON(id, ServerAPI.BUNDLE);
+        JSONObject bundleJSON = ServerAPI.getJSON(GOOD_TOUR_ID, ServerAPI.BUNDLE);
 
         //we should get a response back
-        assert bundleJSON != null;
+        assertNotNull(bundleJSON);
 
         //bundle is the only response to contain this array
         JSONArray sections = bundleJSON.getJSONArray("sections");
-        assert sections != null;
+        assertNotNull(sections);
 
         String sectionsString = sections.toString();
         //only poi objects have post and therefore only the bundle
@@ -110,8 +108,7 @@ public class ServerAPITest {
         assertTrue(sectionsString.contains("post"));
 
         //both the bundle and the tour contain the description tag, but the keyJSON doesn't
-        assert bundleJSON.getString("description") != null;
-
+        assertNotNull(bundleJSON.getString("description"));
     }
 
     /**
@@ -121,22 +118,18 @@ public class ServerAPITest {
     @Test
     public void checkGetJSON_valid_tour() throws Exception {
 
-        //value to test
-        String id = "cjWRKDygIZ";
-
         //perform action
-        JSONObject tourJSON = ServerAPI.getJSON(id, ServerAPI.TOUR);
+        JSONObject tourJSON = ServerAPI.getJSON(GOOD_TOUR_ID, ServerAPI.TOUR);
 
         //should get a result
-        assert tourJSON != null;
+        assertNotNull(tourJSON);
 
         //only poi objects have this array and therefore only the bundle
         //therefore we assertNull
         assertFalse(tourJSON.has("sections"));
 
         //both the bundle and the tour contain the description tag, but the keyJSON doesn't
-        assert tourJSON.getString("description") != null;
-
+        assertNotNull(tourJSON.getString("description"));
     }
 
     /**
@@ -146,11 +139,8 @@ public class ServerAPITest {
     @Test
     public void checkGetJSON_invalid() throws Exception {
 
-        //value to test
-        String id = "not-an-id";
-
         //perform action
-        JSONObject tourJSON = ServerAPI.getJSON(id, ServerAPI.TOUR);
+        JSONObject tourJSON = ServerAPI.getJSON(BAD_TOUR_ID, ServerAPI.TOUR);
 
         //should get null back
         assertEquals(tourJSON, null);
