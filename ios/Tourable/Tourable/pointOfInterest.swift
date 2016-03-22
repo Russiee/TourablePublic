@@ -8,6 +8,8 @@
 
 import Foundation
 
+
+///Reprisents a pointOfInterest in the tour.
 class pointOfInterest {
     //DateTime item was created at
     var createdAt: String!
@@ -24,6 +26,7 @@ class pointOfInterest {
     //Last time update was made to the poi
     var updatedAt: String!
     
+    ///Constructor for a point of interest, expecting all data.
     init(objectId: String, description: String, createdAt: String, post: NSArray, section: NSDictionary, title: String, updatedAt: String) {
         self.objectId = objectId
         self.description = description
@@ -38,10 +41,13 @@ class pointOfInterest {
         
     }
     
-    
+    ///Points of interest are responsible for their own content. This method triggers the POI 
+    ///to download all the content is requires.
     func downloadContent() {
-        var urlsToDownload = [String]()
         
+        //The urls of media required.
+        var urlsToDownload = [String]()
+        //For every item in the post, if it is a URL add it to the list of reuired URLs.
         for item in post {
             if let url: String? = item["url"] as? String{
                 if  url != nil{
@@ -49,6 +55,7 @@ class pointOfInterest {
                 }
             }
         }
+        //Queue all of the required images in the central image handler.
         imageHandler.sharedInstance.queueImage(urlsToDownload)
         
         

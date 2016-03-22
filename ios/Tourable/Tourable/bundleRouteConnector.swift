@@ -10,7 +10,7 @@ class bundleRouteConnector: NSObject, NSURLConnectionDelegate{
     override init() { }
 
     //Makes the connection to the API
-    func startConnection( objectID: String){
+    func initiateBundleConnection( objectID: String){
         //Reseting data to blank with every new connection
 
         //The path to where the Tour Data is stored
@@ -35,7 +35,7 @@ class bundleRouteConnector: NSObject, NSURLConnectionDelegate{
     }
 
     
-    // called to retrieve the data returned by the API
+    // called to retrieve the data returned by the API, runs synchronusly
     func getJSONResult() -> NSDictionary {
         while(jsonResultFromAPI == nil){
             

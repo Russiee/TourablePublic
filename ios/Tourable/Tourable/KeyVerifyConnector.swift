@@ -7,6 +7,7 @@
 //
 // internet connectivity code from: http://stackoverflow.com/questions/25623272/how-to-use-scnetworkreachability-in-swift/25623647#25623647
 //See isConnectedToNetwork for full credit.
+
 import Foundation
 import UIKit
 import SystemConfiguration
@@ -16,49 +17,60 @@ let invalidIdNotificationKey = "InvalidKeyEnteredNotification"
 let validIdNotificationKey = "ValidKeyEnteredNotification"
 var tourIdForSummary = ""
 
-class ApiConnector: NSObject, NSURLConnectionDelegate{
+class KeyVerifyConnector: NSObject, NSURLConnectionDelegate{
     
-   static let sharedInstance = ApiConnector()
+   static let sharedInstance = KeyVerifyConnector()
     
-    lazy var data = NSMutableData()
-    var urlPath: String = ""
     var JSONMetadataFromAPI: NSDictionary!
     var isUpdating = false
     
-    func initiateConnection( var tourCode: String, isCheckingForUpdate: Bool){
+    
+    ///Connects to the API, tkaing the tour code as an input to check if the key is valid. It does this by checking the result and calling
+    ///The correct notifier asynchronusly, either triggerValidKeyNotification or triggerInvalidKeyNotification.
+    ///If not in update mode, it will trigger asynchronus methods to update the cache with the new data.
+    func initiateKeyVerifyConnection( var tourCode: String, isCheckingForUpdate: Bool){
+        
+        //Set update status and sanitise tour code.
         isUpdating = isCheckingForUpdate
-        //let resetData = NSMutableData()
-        //Reseting data to blank with every new connection
-       // data = resetData
-        tourCode = cleanTourId(tourCode)
+        tourCode = cleanTourCode(tourCode)
         //The path to where the verifer is stored
-        let urlPath = "https://touring-api.herokuapp.com/api/v1/key/verify/" + tourCode
-        let request = NSURLRequest(URL: NSURL(string: urlPath)!)
+    
+        //Set up the configuration of the NSURL session for connection to the API
+        let request = NSURLRequest(URL: NSURL(string: "https://touring-api.herokuapp.com/api/v1/key/verify/" + tourCode)!)
         let config = NSURLSessionConfiguration.defaultSessionConfiguration()
         let session = NSURLSession(configuration: config)
         
+        
+        //creates and runs the request to the server for key verifcation data.
         let task = session.dataTaskWithRequest(request) { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            self.data.appendData(data!)
-            do {
+            
+            do { //Parses the response into JSON data
                 let jsonResult = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
                 self.JSONMetadataFromAPI = jsonResult
                 if !self.checkIfTourAlreadyOutdatedWhenDownloading(jsonResult["expiry"] as! String) {
+
                     dispatch_sync(dispatch_get_main_queue()){
+                        
                         if !self.isUpdating {
-                            
+                            //If not updating continue to save the rest of the tour objects.
                             _ = TourIdParser().addTourMetaData(jsonResult)
                         }
+                        //Trigger the notification to observers that the key is valid.
                         self.triggerValidKeyNotification()
                     }
+                    
                 } else {
+                    //Key is not valid, notify observers.
                     print("invalid")
                     dispatch_async(dispatch_get_main_queue()){
+                        
                         self.triggerInvalidKeyNotification()
                     }
+                    
                 }
             }
             catch let err as NSError{
-                //Need to let user know if the tourID they entered was faulty here
+                //Let user know if the tourID they entered was faulty here
                 print(err.description)
                 dispatch_async(dispatch_get_main_queue()){
                     self.triggerInvalidKeyNotification()
@@ -69,7 +81,7 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
         task.resume()
     }
 
-    //send a notification that the tour id
+    ///send a notification that the tour id is valid and has been parsed correctly.
     func triggerInvalidKeyNotification() {
         NSNotificationCenter.defaultCenter().addObserver(
             self,
@@ -83,6 +95,8 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
         notify()
     }
     
+    ///A synchronus method to get return from API. Will hold unitl data is returned.
+    ///This is useful for some UI blocking waits.
     func getTourMetadata(tourCode: String) -> NSDictionary {
         // if the network call is not finished retrieve the tour metadata from the cache
         if JSONMetadataFromAPI != nil {
@@ -92,7 +106,7 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
         }
     }
     
-    //Send a notifcation that the tour id entered was valid and parsed correctly
+    ///Sends a notifcation that the tour id entered was valid and parsed correctly
     func triggerValidKeyNotification() {
         NSNotificationCenter.defaultCenter().addObserver(
             self,
@@ -107,7 +121,8 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
     }
 
 
-    // check if there is less than 1 minute left so as to prevent download of expired tours
+    /// check if there is less than 1 minute left so as to prevent download of expired tours
+    /// Will return false if tour is out of date or has less than 1 min remaining.
     func checkIfTourAlreadyOutdatedWhenDownloading(expiryString: String) -> Bool {
         let expiryDate = TourUpdateManager.sharedInstance.getDateFromString(expiryString)
         if expiryDate.minutesFrom(NSDate()) < 1 {
@@ -116,17 +131,16 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
         return false
     }
 
-    // remove the heading and trailing spaces
+    // remove heading and trailing white spaces
     // rejects any tourIds with invalid symbols
-    func cleanTourId(tourId: String) -> String {
+    func cleanTourCode(tourId: String) -> String {
 
         var trimmedTourId = tourId.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-        //getting rid of whitespaces, \, /, ", ; as they are invalid characters in a tour
+        //getting rid of whitespaces, \, /, " as they are invalid characters in a tour
             trimmedTourId = trimmedTourId.stringByReplacingOccurrencesOfString(" ", withString: "")
             trimmedTourId = trimmedTourId.stringByReplacingOccurrencesOfString("/", withString: "")
             trimmedTourId = trimmedTourId.stringByReplacingOccurrencesOfString("\"", withString: "")
             trimmedTourId = trimmedTourId.stringByReplacingOccurrencesOfString("\\", withString: "")
-            //trimmedTourId = trimmedTourId.stringByReplacingOccurrencesOfString(";", withString: "")
 
         tourIdForSummary = trimmedTourId
         return trimmedTourId
@@ -134,6 +148,7 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
     
     //checks if the device currently has an active internet connection.
     func isConnectedToNetwork() -> Bool {
+        
         //Code and comment guidance from http://stackoverflow.com/questions/25623272/how-to-use-scnetworkreachability-in-swift/25623647#25623647
         //With thanks to user: Martin R http://stackoverflow.com/users/1187415/martin-r
         //Creates the socket address structure.
