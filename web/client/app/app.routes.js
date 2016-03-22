@@ -66,7 +66,7 @@ tourable.config(function($stateProvider, $urlRouterProvider, $locationProvider) 
         authenticate: true
     })
     .state('admin.create', {
-        url: "/admin/create/:class",
+        url: "/admin/create/:className?tour&super",
         templateUrl: "/client/app/components/admin/components/create/create.view.html",
         controller: "CreateCtrl",
         authenticate: true

@@ -16,7 +16,7 @@ tourable.factory('classDataFactory', function() {
                             description: "Tour Description",
                             model: "description",
                             type: "textarea-small",
-                            help: "",
+                            help: "Don't worry, you will be able to edit and expand this later.",
                             required: false
                         }
                     ],
