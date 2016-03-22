@@ -135,8 +135,6 @@ public class TourUpdateManager: NSObject {
             let comparisonResulFromString = compareDates(todaysDate, newDate: expiresDate)
             if comparisonResulFromString == "descending" {
                 TourDeleter().deleteTour(tourCode)
-            } else if comparisonResulFromString == "same" {
-                // warn the user that the this is the last day they can open the project
             }
         }
     }
