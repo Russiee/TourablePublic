@@ -13,6 +13,7 @@ angular.module('tourable')
 
         $scope.class = $state.params.className;
         $scope.tour = $state.params.tour;
+        $scope.section = $state.params.section;
         $scope.superSection = $state.params.superSection;
         $scope.depth = $state.params.depth;
 
@@ -42,7 +43,14 @@ angular.module('tourable')
             } else {
                 $scope.classData = classDataFactory.key($scope.tour);
             }
-        } else {
+        } else if ($scope.class === 'poi') {
+            alert($scope.section);
+            if (!$scope.section) {
+                $state.go('admin.dashboard');
+            } else {
+                $scope.classData = classDataFactory.poi($scope.section);
+            }
+        }else {
             $state.go('admin.dashboard');
         }
 

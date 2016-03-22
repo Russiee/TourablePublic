@@ -97,11 +97,6 @@ tourable.factory('classDataFactory', function() {
                 },
         key: function (tour) {
             return {
-//                var expectedInput = {
-//            "code": "", //expected input is a String
-//            "tour": "",
-//            "expiry": ""
-//        };
                         expectedInput: [
                             {
                                 description: "Key Code",
@@ -129,6 +124,35 @@ tourable.factory('classDataFactory', function() {
                         }
                     }
                 },
-
+        poi: function (section) {
+            return {
+                        expectedInput: [
+                            {
+                                description: "POI Title",
+                                model: "title",
+                                type: "text",
+                                help: "Example: 'Exercise machine A'",
+                                required: true
+                            },
+                            {
+                                description: "POI Post",
+                                model: "post",
+                                type: "post",
+                                help: "",
+                                required: false
+                            }
+                        ],
+                        defaultModels: {
+                            description: " ",
+                            section: section,
+                        },
+                        afterCreate: {
+                            route: "admin.edit.section",
+                            options: {
+                                id: section
+                            }
+                        }
+                    }
+                },
     };
 });
