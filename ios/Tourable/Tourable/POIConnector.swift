@@ -30,6 +30,7 @@ class POIConnector: NSObject, NSURLConnectionDelegate {
                 let jsonResult: NSDictionary = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
 
                 //SAVE JSON
+                print(jsonResult)
                 POIParser.init().savePOI(jsonResult)
             }
             catch _ as NSError{
@@ -39,5 +40,9 @@ class POIConnector: NSObject, NSURLConnectionDelegate {
         }
         
         task.resume()
+    }
+    
+    func noContent(){
+        POIParser().createEmptyPOI()
     }
 }

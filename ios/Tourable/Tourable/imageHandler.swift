@@ -84,7 +84,10 @@ class imageHandler: NSObject {
         countOfImages = countOfImages + urls.count
 
         for url in urls {
-            
+            if url == " "{
+            triggerDownloadBeginNotify()
+            triggerDownloadCompleteNotify()
+            }else{
             triggerDownloadBeginNotify()
             if(url.characters.last == "g"){
             
@@ -104,6 +107,7 @@ class imageHandler: NSObject {
             }else{
                 videoHandler.sharedInstance.downloadVideo(url)
             }
+        }
         }
         
         imageQueue.removeAll()

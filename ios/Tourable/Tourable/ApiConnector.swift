@@ -27,9 +27,9 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
     
     func initiateConnection( var tourCode: String, isCheckingForUpdate: Bool){
         isUpdating = isCheckingForUpdate
-        let resetData = NSMutableData()
+        //let resetData = NSMutableData()
         //Reseting data to blank with every new connection
-        data = resetData
+       // data = resetData
         tourCode = cleanTourId(tourCode)
         //The path to where the verifer is stored
         let urlPath = "https://touring-api.herokuapp.com/api/v1/key/verify/" + tourCode
@@ -43,8 +43,9 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
                 let jsonResult = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
                 self.JSONMetadataFromAPI = jsonResult
                 if !self.checkIfTourAlreadyOutdatedWhenDownloading(jsonResult["expiry"] as! String) {
-                    dispatch_async(dispatch_get_main_queue()){
+                    dispatch_sync(dispatch_get_main_queue()){
                         if !self.isUpdating {
+                            
                             _ = TourIdParser().addTourMetaData(jsonResult)
                         }
                         self.triggerValidKeyNotification()
@@ -125,7 +126,7 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
             trimmedTourId = trimmedTourId.stringByReplacingOccurrencesOfString("/", withString: "")
             trimmedTourId = trimmedTourId.stringByReplacingOccurrencesOfString("\"", withString: "")
             trimmedTourId = trimmedTourId.stringByReplacingOccurrencesOfString("\\", withString: "")
-            trimmedTourId = trimmedTourId.stringByReplacingOccurrencesOfString(";", withString: "")
+            //trimmedTourId = trimmedTourId.stringByReplacingOccurrencesOfString(";", withString: "")
 
         tourIdForSummary = trimmedTourId
         return trimmedTourId

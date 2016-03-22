@@ -33,11 +33,15 @@ class TourSectionsController: UITableViewController {
         var tourTitles = [String: String]()
         let tdp = tourDataParser.init()
         tableView.tableHeaderView = tourSummaryTextView
+        
         for subsectionPointer in subsectionArray{
-            let subsectionData = tdp.getTourSection((subsectionPointer["objectId"] as? String)!)
-            tourTitles[subsectionData.title as String] =  subsectionData.sectionId
-            //appends the Names of subsections in the order they appear
-            sectionKeys.append(subsectionData.title as String)
+            if subsectionPointer["objectId"] != nil {
+                let subsectionData = tdp.getTourSection((subsectionPointer["objectId"] as! String))
+                tourTitles[subsectionData.title as String] =  subsectionData.sectionId
+                //appends the Names of subsections in the order they appear
+                sectionKeys.append(subsectionData.title as String)
+            }
+          
  
         }
 
@@ -172,12 +176,9 @@ class TourSectionsController: UITableViewController {
             let  empty_state_image = UIImage(named: "empty_ts_placeholder")
             let empty_state_label = UIImageView(image: empty_state_image)
             empty_state_label.contentMode = .ScaleAspectFit
-
-            // style it as necessary
-
-            tableView.backgroundView = empty_state_label
+            self.view.backgroundColor = UIColor(red: 21/255, green: 42/255, blue: 74/255, alpha: 1.0)
             tableView.separatorStyle = UITableViewCellSeparatorStyle.None
-        } else {
+                    } else {
             tableView.backgroundView = nil
             tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
         }
