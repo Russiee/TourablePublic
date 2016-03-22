@@ -44,7 +44,6 @@ angular.module('tourable')
                 $scope.classData = classDataFactory.key($scope.tour);
             }
         } else if ($scope.class === 'poi') {
-            alert($scope.section);
             if (!$scope.section) {
                 $state.go('admin.dashboard');
             } else {
@@ -94,5 +93,39 @@ angular.module('tourable')
             return prepped;
         }
 
+        $scope.createPostItem = function (type) {
+            console.log($scope.classData);
+            if (!$scope.classData.expectedInput[1].value) {
+                $scope.classData.expectedInput[1].value = [];
+            }
+            $scope.classData.expectedInput[1].value.push({
+                type: type
+            });
+        }
+
+        //http://jsfiddle.net/danialfarid/0mz6ff9o/135/
+
+//        $scope.uploadFiles = function(file, errFiles) {
+//            $scope.f = file;
+//            $scope.errFile = errFiles && errFiles[0];
+//            if (file) {
+//                file.upload = Upload.upload({
+//                    url: 'https://angular-file-upload-cors-srv.appspot.com/upload',
+//                    data: {file: file}
+//                });
+//
+//                file.upload.then(function (response) {
+//                    $timeout(function () {
+//                        file.result = response.data;
+//                    });
+//                }, function (response) {
+//                    if (response.status > 0)
+//                        $scope.errorMsg = response.status + ': ' + response.data;
+//                }, function (evt) {
+//                    file.progress = Math.min(100, parseInt(100.0 *
+//                                             evt.loaded / evt.total));
+//                });
+//            }
+//        }
 
     });

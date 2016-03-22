@@ -223,3 +223,21 @@ textarea {
     margin-left: 15px;
     background-color: #FFB2B1;
 }
+
+.admin-preview-btn {
+    margin-left: 15px;
+}
+
+.admin-create-post {
+    padding-left: 15px;
+}
+
+.admin-create-post-buttons {
+    margin-top: 20px;
+    margin-left: -15px;
+}
+
+.admin-create-post-buttons button:focus {
+    outline: 0;
+}
+

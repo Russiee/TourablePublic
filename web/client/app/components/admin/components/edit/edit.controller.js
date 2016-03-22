@@ -33,6 +33,8 @@ angular.module('tourable')
 
 
         $scope.tour = sessionStorage.getItem('tour') || {};
+        $scope.keys = {};
+
         $scope.section = sessionStorage.getItem('section') || {};
         $scope.deleteSwitch = 0;
 
@@ -67,7 +69,8 @@ angular.module('tourable')
             var getKeys = editFactory.getKeys($state.params.id);
             getKeys.then(function(response) {
                 console.log('Keys: ', response.data);
-                $scope.tour.keys = response.data;
+//                $scope.tour.keys = response.data;
+                $scope.keys = response.data;
                 sessionStorage.setItem('tour.keys', JSON.stringify($scope.tour.keys));
             }, function(error) {
                 //Console log in case we need to debug with a user

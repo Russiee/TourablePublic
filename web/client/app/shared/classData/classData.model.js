@@ -136,7 +136,7 @@ tourable.factory('classDataFactory', function() {
                             },
                             {
                                 description: "POI Post",
-                                model: "post",
+                                model: [],
                                 type: "post",
                                 help: "",
                                 required: false
