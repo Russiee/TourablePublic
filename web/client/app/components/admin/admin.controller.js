@@ -67,6 +67,7 @@ angular.module('tourable')
                 $scope.organization = response.data;
                 sessionStorage.setItem('organization', JSON.stringify($scope.organization));
                 $rootScope.loadingLight = false;
+                $rootScope.loading = false;
             }, function(error) {
                 //Console log in case we need to debug with a user
                 $rootScope.loadingLight = false;
@@ -120,7 +121,7 @@ angular.module('tourable')
         }
 
         $scope.login = function () {
-            $scope.loading = true;
+            $rootScope.loading = true;
             //if already logged in
             if (AuthService.isLoggedIn()) {
                 $state.go("admin.dashboard");
