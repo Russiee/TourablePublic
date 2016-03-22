@@ -207,6 +207,74 @@ class TourUpdateManagerTests: XCTestCase {
         XCTAssertEqual(expectedDifference, daysOfDifference)
     }
     
+    func testHoursFrom1() {
+        // prepare date formatter
+        let enUSPOSIXLocale: NSLocale = NSLocale(localeIdentifier: "en_US")
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.locale = enUSPOSIXLocale
+        dateFormatter.dateFormat = "YYYY-MM-dd'T'HH:mm:ss.SSS'Z'"
+        
+        // generate two date
+        let date1 = dateFormatter.dateFromString("2016-02-24T02:00:00.000Z")
+        let date2 = dateFormatter.dateFromString("2016-02-24T00:00:00.000Z")
+        let daysOfDifference = date1?.hoursFrom(date2!)
+        
+        let expectedDifference = 2
+        
+        XCTAssertEqual(expectedDifference, daysOfDifference)
+    }
+    
+    func testHoursFrom2() {
+        // prepare date formatter
+        let enUSPOSIXLocale: NSLocale = NSLocale(localeIdentifier: "en_US")
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.locale = enUSPOSIXLocale
+        dateFormatter.dateFormat = "YYYY-MM-dd'T'HH:mm:ss.SSS'Z'"
+        
+        // generate two date
+        let date1 = dateFormatter.dateFromString("2016-02-24T00:35:00.000Z")
+        let date2 = dateFormatter.dateFromString("2016-02-24T00:00:00.000Z")
+        let daysOfDifference = date1?.daysFrom(date2!)
+        
+        let expectedDifference = 0
+        
+        XCTAssertEqual(expectedDifference, daysOfDifference)
+    }
+    
+    func testMinutesFrom1() {
+        // prepare date formatter
+        let enUSPOSIXLocale: NSLocale = NSLocale(localeIdentifier: "en_US")
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.locale = enUSPOSIXLocale
+        dateFormatter.dateFormat = "YYYY-MM-dd'T'HH:mm:ss.SSS'Z'"
+        
+        // generate two date
+        let date1 = dateFormatter.dateFromString("2016-02-24T00:35:00.000Z")
+        let date2 = dateFormatter.dateFromString("2016-02-24T00:00:00.000Z")
+        let daysOfDifference = date1?.minutesFrom(date2!)
+        
+        let expectedDifference = 35
+        
+        XCTAssertEqual(expectedDifference, daysOfDifference)
+    }
+    
+    func testMinutesFrom2() {
+        // prepare date formatter
+        let enUSPOSIXLocale: NSLocale = NSLocale(localeIdentifier: "en_US")
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.locale = enUSPOSIXLocale
+        dateFormatter.dateFormat = "YYYY-MM-dd'T'HH:mm:ss.SSS'Z'"
+        
+        // generate two date
+        let date1 = dateFormatter.dateFromString("2016-02-24T00:00:30.000Z")
+        let date2 = dateFormatter.dateFromString("2016-02-24T00:00:00.000Z")
+        let daysOfDifference = date1?.daysFrom(date2!)
+        
+        let expectedDifference = 0
+        
+        XCTAssertEqual(expectedDifference, daysOfDifference)
+    }
+    
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measureBlock {
