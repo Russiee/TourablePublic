@@ -23,10 +23,13 @@ angular.module('tourable')
             }
         });
 
-        getTourData();
-        getKeyData();
 
-        if ($state.current.name === 'admin.edit.section') {
+        $scope.tour = {};
+
+        if ($state.current.name === 'admin.edit.tour') {
+            getTourData();
+            getKeyData();
+        } else if ($state.current.name === 'admin.edit.section') {
             getSectionData();
         }
 

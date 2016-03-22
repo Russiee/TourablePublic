@@ -3,7 +3,7 @@
 </div>
 <div class="row">
     <div class="admin-main col-sm-8">
-        <h3 class="admin-header">Edit {{section.title}}</h3>
+        <h3 class="admin-header">Edit Section '{{section.title}}'</h3>
     </div>
     <div class="admin-help col-sm-4 hidden-xs"></div>
 </div>
@@ -28,7 +28,7 @@
             <h5 class="admin-subheader no-padding-top">Subsections</h5>
             <ul class="admin-cell-list">
                 <div ng-repeat="subsection in section.subsections track by $index">
-                    <li class="cursor-pointer">{{subsection.title}}<i class="fa fa-chevron-right pull-right"></i></li>
+                    <li class="cursor-pointer" ui-sref="admin.edit.section({id: subsection.objectId})">{{subsection.title}}<i class="fa fa-chevron-right pull-right"></i></li>
                 </div>
                 <li class="cursor-pointer admin-edit-new-li" ng-click="createTopSection()"><i>Add a new subsection</i><i class="fa fa-plus pull-right"></i></li>
             </ul>
