@@ -85,8 +85,9 @@ class imageHandler: NSObject {
 
         for url in urls {
             if url == " "{
-            triggerDownloadBeginNotify()
-            triggerDownloadCompleteNotify()
+           // triggerDownloadBeginNotify()
+                sleep(1)
+           // triggerDownloadCompleteNotify()
             }else{
             triggerDownloadBeginNotify()
             if(url.characters.last == "g"){
