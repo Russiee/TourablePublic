@@ -13,9 +13,9 @@ tourable.factory('classDataFactory', function() {
                             {
                                 description: "Tour Description",
                                 model: "description",
-                                type: "textarea-small",
+                                type: "textarea",
                                 help: "Don't worry, you will be able to edit and expand this later.",
-                                required: false
+                                required: true
                             }
                         ],
                         defaultModels: {
@@ -43,9 +43,9 @@ tourable.factory('classDataFactory', function() {
                             {
                                 description: "Section Description",
                                 model: "description",
-                                type: "textarea-small",
-                                help: "Don't worry, you will be able to edit and expand this later.",
-                                required: false
+                                type: "textarea",
+                                help: "",
+                                required: true
                             }
                         ],
                         defaultModels: {
@@ -77,7 +77,7 @@ tourable.factory('classDataFactory', function() {
                             {
                                 description: "Section Description",
                                 model: "description",
-                                type: "textarea-small",
+                                type: "textarea",
                                 help: "Don't worry, you will be able to edit and expand this later.",
                                 required: false
                             }
@@ -94,6 +94,41 @@ tourable.factory('classDataFactory', function() {
                             }
                         }
                     }
-                }
+                },
+        key: function (tour) {
+            return {
+//                var expectedInput = {
+//            "code": "", //expected input is a String
+//            "tour": "",
+//            "expiry": ""
+//        };
+                        expectedInput: [
+                            {
+                                description: "Key Code",
+                                model: "code",
+                                type: "text",
+                                help: "Create a new key code, i.e. 'RBH-1010'",
+                                required: true
+                            },
+                            {
+                                description: "Expiry Date",
+                                model: "expiry",
+                                type: "date",
+                                help: "Select the data and time when you want the key to expire.",
+                                required: true
+                            }
+                        ],
+                        defaultModels: {
+                            tour: tour
+                        },
+                        afterCreate: {
+                            route: "admin.edit.tour",
+                            options: {
+                                id: tour
+                            }
+                        }
+                    }
+                },
+
     };
 });

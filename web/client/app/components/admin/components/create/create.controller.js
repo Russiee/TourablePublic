@@ -36,6 +36,12 @@ angular.module('tourable')
                     $scope.classData = classDataFactory.topSection($scope.tour, $scope.depth);
                 }
             }
+        } else if ($scope.class === 'key') {
+            if (!$scope.tour) {
+                $state.go('admin.dashboard');
+            } else {
+                $scope.classData = classDataFactory.key($scope.tour);
+            }
         } else {
             $state.go('admin.dashboard');
         }

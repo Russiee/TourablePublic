@@ -24,7 +24,7 @@ angular.module('tourable')
         $scope.tours =          JSON.parse(sessionStorage.getItem('tours'));
 
         $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
-            if (fromState.name === 'admin.create' && fromParams.class === 'tour') {
+            if (fromState.name === 'admin.create' && fromParams.className === 'tour') {
                 getAllTours();
             } else if (fromState.name === 'admin.create' && fromParams.class === 'admin') {
                 getAllAdmins();

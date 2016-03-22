@@ -44,4 +44,11 @@ angular.module('tourable')
             });
         }
 
+        $scope.createKey = function () {
+            $state.go('admin.create', {
+                className: 'key',
+                tour: $state.params.id
+            });
+        }
+
     });
