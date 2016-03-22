@@ -207,3 +207,8 @@
 textarea {
     resize: vertical;
 }
+
+.admin-delete-btn {
+    margin-left: 15px;
+    background-color: #FFB2B1;
+}

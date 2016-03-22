@@ -35,7 +35,13 @@ angular.module('tourable')
             console.log('An error occured while retrieving the admin data: ', error);
         });
 
-//        $scope.createSection = function() {
-//            $state.go('admin.create' {className})
-//        }
+        $scope.createTopSection = function() {
+            $state.go('admin.create', {
+                className: 'section',
+                tour: $state.params.id,
+                superSection: "",
+                depth: 0
+            });
+        }
+
     });

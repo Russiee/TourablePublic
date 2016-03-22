@@ -8,7 +8,7 @@
     <div class="admin-help col-sm-4 hidden-xs"></div>
 </div>
 <div class="admin-create-container">
-    <div class="row" ng-repeat="input in classData[class].expectedInput track by $index">
+    <div class="row" ng-repeat="input in classData.expectedInput track by $index">
         <div class="admin-main col-sm-8 admin-account-inputs admin-create-input">
             <h5 class="admin-subheader">{{input.description}}</h5>
             <input type="text" class="form-control" ng-model="input.value" ng-disabled="creating">
