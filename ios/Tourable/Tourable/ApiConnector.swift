@@ -27,9 +27,9 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
     
     func initiateConnection( var tourCode: String, isCheckingForUpdate: Bool){
         isUpdating = isCheckingForUpdate
-        let resetData = NSMutableData()
+        //let resetData = NSMutableData()
         //Reseting data to blank with every new connection
-        data = resetData
+       // data = resetData
         tourCode = cleanTourId(tourCode)
         //The path to where the verifer is stored
         let urlPath = "https://touring-api.herokuapp.com/api/v1/key/verify/" + tourCode

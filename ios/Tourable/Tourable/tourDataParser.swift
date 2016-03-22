@@ -78,15 +78,14 @@ class tourDataParser{
         saveTourSection(data)
         
         //Saves the top level tour which maps to the key stored in the metadata.
-        let tourTopLevelSection = (data["sections"]as! NSArray)[0] as! NSDictionary
-
-
-        if tourTopLevelSection["subsections"] != nil{
-        let tourSubsections = tourTopLevelSection["subsections"] as! NSArray
-             self.saveSubsections(tourSubsections)
+        for tourTopLevelSection in data["sections"] as! NSArray{
+            let topSection = tourTopLevelSection as! NSDictionary
+            if topSection["subsections"] != nil{
+                let tourSubsections = tourTopLevelSection["subsections"] as! NSArray
+                self.saveSubsections(tourSubsections)
+            }
+            self.saveTourSection(tourTopLevelSection as! NSDictionary)
         }
-        self.saveTourSection(tourTopLevelSection)
-       
     }
     
     func saveSubsections(tourSubsections: NSArray){

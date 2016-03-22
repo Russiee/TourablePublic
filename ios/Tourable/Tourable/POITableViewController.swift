@@ -154,8 +154,10 @@ class POITableViewController: UITableViewController {
         let width = UIScreen.mainScreen().bounds.size.width
         
         for row in post{
-            
-            switch row["type"] as! String{
+            print("========")
+            print(row)
+            let type = (row["type"] as! String).lowercaseString
+            switch type{
                 
             case "Header" :
                 
