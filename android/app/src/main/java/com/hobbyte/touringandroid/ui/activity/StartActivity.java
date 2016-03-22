@@ -1,5 +1,6 @@
 package com.hobbyte.touringandroid.ui.activity;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -307,7 +308,7 @@ public class StartActivity extends AppCompatActivity {
         });
 
         dialog.show();
-        dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorAccent));
+        dialog.getButton(Dialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorAccent));
     }
 
     /**
