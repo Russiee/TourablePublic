@@ -92,7 +92,9 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
      */
     @Override
     public void onBackPressed() {
-        if (backStack.size() > 1) {
+        if(getFragmentManager().getBackStackEntryAt(getFragmentManager().getBackStackEntryCount()-1).getName() != null) {
+            loadPointOfInterest(currentPOI);
+        } else if (backStack.size() > 1) {
             currentSection = backStack.getLast();
             backStack.removeLast();
             backToSummary = false;
