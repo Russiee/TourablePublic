@@ -21,7 +21,7 @@ class TourUpdateManagerTests: XCTestCase {
         super.tearDown()
     }
 
-    func testCreatedDateFromString() {
+    func testGetDateFromString() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
         let dateInString = "2016-02-24T12:32:06.952Z"
@@ -151,6 +151,24 @@ class TourUpdateManagerTests: XCTestCase {
         XCTAssertEqual(expectedIsTourUpTodate, TourUpdateManager.sharedInstance.isTourUpTodate)
     }
 
+    
+    func testIsTourUpdateTrue() {
+        let currentVersion = 10
+        let newVersion = 10
+        let expectedIsUpToDate = true
+        let isUptoDate = TourUpdateManager.sharedInstance.isTourUpToDate(currentVersion, versionFreshFromAPI: newVersion)
+        XCTAssertEqual(expectedIsUpToDate, isUptoDate)
+    }
+    
+    func testIsTourUpdateFalse() {
+        let currentVersion = 10
+        let newVersion = 12
+        let expectedIsUpToDate = false
+        let isUptoDate = TourUpdateManager.sharedInstance.isTourUpToDate(currentVersion, versionFreshFromAPI: newVersion)
+        XCTAssertEqual(expectedIsUpToDate, isUptoDate)
+    }
+    
+    
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measureBlock {

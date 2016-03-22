@@ -37,8 +37,8 @@ public class TourUpdateManager: NSObject {
 
     // to be called as an initialiser to prepare the object for other methods
     func prepareTourMangaer(tourCodetoCheck: String, tableRow: Int) {
-        self.tourCode = tourCodetoCheck
-        self.tourTableRow = tableRow
+        
+        setTourCodeAndTableRow(tourCodetoCheck, tableRow: tableRow)
 
         // get current tourKey metadata from cache
         self.currentTourKEYmetadata = TourIdParser().getTourMetadata(tourCode)
@@ -50,6 +50,12 @@ public class TourUpdateManager: NSObject {
         }
     }
 
+    // set field variables when preparing the class object for the various tasks of the class
+    func setTourCodeAndTableRow(tourCodetoCheck: String, tableRow: Int) {
+        self.tourCode = tourCodetoCheck
+        self.tourTableRow = tableRow
+    }
+    
     // this method received data from the api or cache and load it onto the tourSummaryViewController
     func formatDataforTourSummaryAndDiplayIt(jsonResult: NSDictionary) {
         // TOUR LENGTH HOURS AND MINUTES
@@ -100,8 +106,6 @@ public class TourUpdateManager: NSObject {
     // if there are updates the user is asked if he wants to download them
     func isTourUpToDate(currentVersion: Int, versionFreshFromAPI: Int) -> Bool {
         if self.newTourKEYmetadata != nil {
-            // when you change it as it not programmatic 
-            // is gonna be something like that currentTourmetadata["version"] as! Int
             if currentVersion < versionFreshFromAPI {
                 return false
             }
@@ -200,5 +204,4 @@ extension NSDate {
     func minutesFrom(date:NSDate) -> Int{
         return NSCalendar.currentCalendar().components(.Minute, fromDate: date, toDate: self, options: []).minute
     }
-
 }
