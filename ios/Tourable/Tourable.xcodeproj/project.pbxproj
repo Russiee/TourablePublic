@@ -14,6 +14,7 @@
 		7A738BF31CA176AE00D00C38 /* ImageHandlerzzTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A738BF21CA176AE00D00C38 /* ImageHandlerzzTests.swift */; };
 		7A9118C81C945990008BF835 /* TourUpdateManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9118C71C945990008BF835 /* TourUpdateManagerTests.swift */; };
 		7ACD54651C9DA89400920F58 /* TourMetadataConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ACD54641C9DA89400920F58 /* TourMetadataConnector.swift */; };
+		7AF66F341CA0B1F400CBDAB5 /* AddRemoveTourTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF66F331CA0B1F400CBDAB5 /* AddRemoveTourTests.swift */; };
 		E5007F851C8B6ACA0041B31C /* TourDeleter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5007F841C8B6ACA0041B31C /* TourDeleter.swift */; };
 		E5012B8F1C8DDF3500A64038 /* POITableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5012B8E1C8DDF3500A64038 /* POITableViewController.swift */; };
 		E536DCBF1C6510FD00A7B2FC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E536DCBE1C6510FC00A7B2FC /* AppDelegate.swift */; };
@@ -78,6 +79,7 @@
 		7A738BF21CA176AE00D00C38 /* ImageHandlerzzTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageHandlerzzTests.swift; sourceTree = "<group>"; };
 		7A9118C71C945990008BF835 /* TourUpdateManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TourUpdateManagerTests.swift; sourceTree = "<group>"; };
 		7ACD54641C9DA89400920F58 /* TourMetadataConnector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TourMetadataConnector.swift; sourceTree = "<group>"; };
+		7AF66F331CA0B1F400CBDAB5 /* AddRemoveTourTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddRemoveTourTests.swift; sourceTree = "<group>"; };
 		E5007F841C8B6ACA0041B31C /* TourDeleter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TourDeleter.swift; sourceTree = "<group>"; };
 		E5012B8E1C8DDF3500A64038 /* POITableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = POITableViewController.swift; sourceTree = "<group>"; };
 		E536DCBB1C6510FC00A7B2FC /* Tourable.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tourable.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -216,6 +218,7 @@
 			children = (
 				FA1C8C3C1C9C1E9C0055BB49 /* TourableUITests.swift */,
 				FA1C8C3E1C9C1E9C0055BB49 /* Info.plist */,
+				7AF66F331CA0B1F400CBDAB5 /* AddRemoveTourTests.swift */,
 			);
 			path = TourableUITests;
 			sourceTree = "<group>";
@@ -454,6 +457,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA1C8C3D1C9C1E9C0055BB49 /* TourableUITests.swift in Sources */,
+				7AF66F341CA0B1F400CBDAB5 /* AddRemoveTourTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
