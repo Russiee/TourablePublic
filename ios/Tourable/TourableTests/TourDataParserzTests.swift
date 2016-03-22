@@ -10,7 +10,7 @@ import XCTest
 @testable import Tourable
 
 class TestTourDataParser: XCTestCase {
-
+    
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -20,28 +20,28 @@ class TestTourDataParser: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
-
-
+    
+    
     //Test the download of tour by triggering download and confirming result contains the correct tour markers
     func testTopLevelTourCreation() {
-       
+        
         let bundleDownload = bundleRouteConnector()
         bundleDownload.startConnection("cjWRKDygIZ")
         let data = bundleDownload.getJSONResult()
         let result = tourDataParser().createNewTour(data)
-
-
+        
+        
         //Check result has all asociated types that are required.
-
+        
         XCTAssertNotNil(result)
         XCTAssertNotNil(result.title.rangeOfString("title"))
         XCTAssertNotNil(result.title.rangeOfString("type"))
         XCTAssertNotNil(result.title.rangeOfString("Content"))
         
     }
-
+    
     //Test the persisting a tour to NSUserDefaults, by saving a sample tour and then reading it again to confirm
-
+    
     func testTourSave(){
         let bundleDownload = bundleRouteConnector()
         bundleDownload.startConnection("cjWRKDygIZ")
@@ -52,12 +52,12 @@ class TestTourDataParser: XCTestCase {
         print(result.sectionId)
         XCTAssertEqual(result.title, "Alex's Room")
         XCTAssertEqual(result.sectionId, "xI21AHATXD")
-
+        
     }
     
-
+    
     //test performance of persisting a tour to NSUserDefaults
-
+    
     func testSavePerformance(){
         
         self.measureBlock {
@@ -68,7 +68,7 @@ class TestTourDataParser: XCTestCase {
         }
     }
     
-
+    
     //Test performance of reading a tour from persistant storage
     func testReadPerformance(){
         
@@ -84,8 +84,8 @@ class TestTourDataParser: XCTestCase {
             XCTAssertEqual(result.sectionId, "xI21AHATXD")
         }
     }
-
-
+    
+    
     func testDownloadPerformanceExample() {
         
         self.measureBlock {
@@ -94,7 +94,7 @@ class TestTourDataParser: XCTestCase {
         }
     }
     func testParsePerformance(){
-       
+        
         
         let bundleDownload = bundleRouteConnector()
         bundleDownload.startConnection("cjWRKDygIZ")
@@ -105,5 +105,5 @@ class TestTourDataParser: XCTestCase {
         }
         
     }
-
+    
 }

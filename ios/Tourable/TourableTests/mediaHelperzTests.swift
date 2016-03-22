@@ -10,7 +10,7 @@ import XCTest
 @testable import Tourable
 
 class mediaHelper: XCTestCase {
-
+    
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -20,7 +20,7 @@ class mediaHelper: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
-
+    
     func testImageDownload() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
@@ -31,21 +31,21 @@ class mediaHelper: XCTestCase {
                 guard let _ = data where error == nil else {
                     XCTFail()
                     return
-
+                    
                 }
                 expectation.fulfill()
             }
         }
-
-            self.waitForExpectationsWithTimeout(20) { error in
-                if let error = error {
-                    print("Error: \(error.localizedDescription)")
-                }
+        
+        self.waitForExpectationsWithTimeout(20) { error in
+            if let error = error {
+                print("Error: \(error.localizedDescription)")
             }
         }
+    }
     
     func testVideoDownload() {
-
+        
         let expectation = expectationWithDescription("videoDownload")
         MediaHelper.sharedInstance.getDataFromUrl(NSURL(string: "https://s3-eu-west-1.amazonaws.com/practicemediabrompton/ER_heart_test.mp4")!) { (data, response, error)  in
             dispatch_async(dispatch_get_main_queue()) { () -> Void in
@@ -65,7 +65,7 @@ class mediaHelper: XCTestCase {
         }
     }
     
-   
+    
     
     func testFileExists(){
         
@@ -76,24 +76,24 @@ class mediaHelper: XCTestCase {
         
         XCTAssertTrue(result)
         
-       XCTAssertTrue(MediaHelper.sharedInstance.checkFileExists(path))
+        XCTAssertTrue(MediaHelper.sharedInstance.checkFileExists(path))
     }
     
     
-  
-
+    
+    
     func testExistCheckPerformance() {
         // This is an example of a performance test case.
-    
-            let image = UIImage(named: "PlayButton")
-            let pngImageData = UIImagePNGRepresentation(image!)
-            let path = MediaHelper.sharedInstance.fileInDocumentsDirectory("playButton", fileType: ".png")
-            let result = pngImageData!.writeToFile(path, atomically: true)
-            
-            XCTAssertTrue(result)
-             self.measureBlock {
+        
+        let image = UIImage(named: "PlayButton")
+        let pngImageData = UIImagePNGRepresentation(image!)
+        let path = MediaHelper.sharedInstance.fileInDocumentsDirectory("playButton", fileType: ".png")
+        let result = pngImageData!.writeToFile(path, atomically: true)
+        
+        XCTAssertTrue(result)
+        self.measureBlock {
             XCTAssertTrue(MediaHelper.sharedInstance.checkFileExists(path))
-            }
+        }
     }
     
     func testImageDLPerformance(){
@@ -117,7 +117,7 @@ class mediaHelper: XCTestCase {
             }
         }
     }
-
+    
     func testVideoDownloadPerformance(){
         
         self.measureBlock{

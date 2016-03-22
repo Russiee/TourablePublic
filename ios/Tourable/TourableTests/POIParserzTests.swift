@@ -10,7 +10,7 @@ import XCTest
 @testable import Tourable
 
 class POIParserTests: XCTestCase {
-
+    
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -20,9 +20,9 @@ class POIParserTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
-
+    
     func testMockPOICreation() {
-       
+        
         //Create mock data
         var post = [NSDictionary]()
         var postObject = Dictionary<String, String>()
@@ -32,7 +32,7 @@ class POIParserTests: XCTestCase {
         post.append(postNSDictonary)
         
         let section = NSDictionary()
-
+        
         var data = Dictionary<String, AnyObject>()
         data["objectId"] = "testing123"
         data["description"] = "This is a test point of interest object"
@@ -55,7 +55,7 @@ class POIParserTests: XCTestCase {
     }
     
     func testPersistOfMockPOI(){
-    
+        
         
         //Create mock data
         var post = [NSDictionary]()
@@ -77,7 +77,7 @@ class POIParserTests: XCTestCase {
         data["updatedAt"] = "2016-03-13T17:42:09.534Z"
         
         POIParser().savePOI(data)
-       let result = POIParser().getTourSection("testing123")
+        let result = POIParser().getTourSection("testing123")
         XCTAssertNotNil(result)
         XCTAssertEqual(result.objectId, "testing123")
         XCTAssertEqual(result.description, "This is a test point of interest object")
@@ -86,12 +86,12 @@ class POIParserTests: XCTestCase {
         XCTAssertTrue(result.section.isKindOfClass(NSDictionary))
         XCTAssertEqual(result.title, "Test Point of Interest 1")
         XCTAssertEqual(result.updatedAt, "2016-03-13T17:42:09.534Z")
-
-
+        
+        
     }
     
     func testMockPOIPersistPerformance(){
-    
+        
         //Create mock data
         var post = [NSDictionary]()
         var postObject = Dictionary<String, String>()
@@ -138,18 +138,18 @@ class POIParserTests: XCTestCase {
         data["title"] = "Test Point of Interest 1"
         data["updatedAt"] = "2016-03-13T17:42:09.534Z"
         POIParser().savePOI(data)
-
-        self.measureBlock{
         
-        let result = POIParser().getTourSection("testing123")
+        self.measureBlock{
+            
+            let result = POIParser().getTourSection("testing123")
             
         }
         
     }
-
+    
     func testPOICreationPerformance() {
         // This is an example of a performance test case.
-       
+        
         //Create mock data
         var post = [NSDictionary]()
         var postObject = Dictionary<String, String>()
@@ -177,5 +177,5 @@ class POIParserTests: XCTestCase {
         
         
     }
-
+    
 }

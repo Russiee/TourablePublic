@@ -29,7 +29,7 @@ class ImageHandlerTests: XCTestCase {
     func testImagePersist() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
-
+        
         let image = UIImage(named: "test")
         TourDeleter().deleteMedia("test", fileType: ".png")
         XCTAssertTrue(imageHandler.sharedInstance.saveImage(image!, name: "test"))
@@ -37,7 +37,7 @@ class ImageHandlerTests: XCTestCase {
         XCTAssertNotNil(image2)
         XCTAssertEqual(image?.size.height, (image2?.size.height)!/2)
         XCTAssertEqual(image?.size.width, (image2?.size.width)!/2)
-  
+        
     }
     
     func testEmptyImageLoad(){
@@ -74,8 +74,8 @@ class ImageHandlerTests: XCTestCase {
         imagesDownloaded++
     }
     
-     func testImageDownloadComplete(){
-    
+    func testImageDownloadComplete(){
+        
         
         var urls = [String]()
         urls.append("https://s3-eu-west-1.amazonaws.com/testmediahobbyte/alex%27s+bed.jpg")
@@ -86,7 +86,7 @@ class ImageHandlerTests: XCTestCase {
         imageHandler.sharedInstance.queueImage(urls)
         
         imageHandler.sharedInstance.downloadMediaSet(imageHandler.sharedInstance.imageQueue)
-         let expectation = self.expectationWithDescription("ImageDownloadComplete")
+        let expectation = self.expectationWithDescription("ImageDownloadComplete")
         
         while imagesToDownload != urls.count{
             
@@ -149,11 +149,11 @@ class ImageHandlerTests: XCTestCase {
             TourDeleter().deleteMedia("test", fileType: ".png")
             
             self.measureBlock{
-            XCTAssertTrue(imageHandler.sharedInstance.saveImage(image!, name: "test"))
-            let image2 = imageHandler.sharedInstance.loadImageFromPath("test")
+                XCTAssertTrue(imageHandler.sharedInstance.saveImage(image!, name: "test"))
+                let image2 = imageHandler.sharedInstance.loadImageFromPath("test")
             }
             
-                
+            
             
         }
     }

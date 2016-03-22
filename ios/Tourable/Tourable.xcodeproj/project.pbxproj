@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		7A432AB11C8B69AB007482F8 /* TourUpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A432AB01C8B69AB007482F8 /* TourUpdateManager.swift */; };
+		7A738BEB1CA175B000D00C38 /* TourDataParserzTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A738BEA1CA175B000D00C38 /* TourDataParserzTests.swift */; };
+		7A738BED1CA1760A00D00C38 /* mediaHelperzTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A738BEC1CA1760A00D00C38 /* mediaHelperzTests.swift */; };
+		7A738BEF1CA1763F00D00C38 /* POIParserzTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A738BEE1CA1763F00D00C38 /* POIParserzTests.swift */; };
+		7A738BF31CA176AE00D00C38 /* ImageHandlerzzTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A738BF21CA176AE00D00C38 /* ImageHandlerzzTests.swift */; };
 		7A9118C81C945990008BF835 /* TourUpdateManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9118C71C945990008BF835 /* TourUpdateManagerTests.swift */; };
 		7ACD54651C9DA89400920F58 /* TourMetadataConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ACD54641C9DA89400920F58 /* TourMetadataConnector.swift */; };
 		E5007F851C8B6ACA0041B31C /* TourDeleter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5007F841C8B6ACA0041B31C /* TourDeleter.swift */; };
@@ -68,6 +72,10 @@
 
 /* Begin PBXFileReference section */
 		7A432AB01C8B69AB007482F8 /* TourUpdateManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TourUpdateManager.swift; sourceTree = "<group>"; };
+		7A738BEA1CA175B000D00C38 /* TourDataParserzTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TourDataParserzTests.swift; sourceTree = "<group>"; };
+		7A738BEC1CA1760A00D00C38 /* mediaHelperzTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = mediaHelperzTests.swift; sourceTree = "<group>"; };
+		7A738BEE1CA1763F00D00C38 /* POIParserzTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = POIParserzTests.swift; sourceTree = "<group>"; };
+		7A738BF21CA176AE00D00C38 /* ImageHandlerzzTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageHandlerzzTests.swift; sourceTree = "<group>"; };
 		7A9118C71C945990008BF835 /* TourUpdateManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TourUpdateManagerTests.swift; sourceTree = "<group>"; };
 		7ACD54641C9DA89400920F58 /* TourMetadataConnector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TourMetadataConnector.swift; sourceTree = "<group>"; };
 		E5007F841C8B6ACA0041B31C /* TourDeleter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TourDeleter.swift; sourceTree = "<group>"; };
@@ -95,13 +103,10 @@
 		FA1C8C3A1C9C1E9C0055BB49 /* TourableUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TourableUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA1C8C3C1C9C1E9C0055BB49 /* TourableUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TourableUITests.swift; sourceTree = "<group>"; };
 		FA1C8C3E1C9C1E9C0055BB49 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		FA1C8C441C9C1F140055BB49 /* TourDataParserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TourDataParserTests.swift; sourceTree = "<group>"; };
-		FA1F63641C9C5B1600952E03 /* mediaHelperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = mediaHelperTests.swift; sourceTree = "<group>"; };
 		FA2BB2971C78F46500D784E8 /* imageHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = imageHandler.swift; sourceTree = "<group>"; };
 		FA4D0F5E1C6A4D08007D79E3 /* TourIdParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TourIdParser.swift; sourceTree = "<group>"; };
 		FA4EBABF1C68CC1100E6E601 /* AddNewTourViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNewTourViewController.swift; sourceTree = "<group>"; };
 		FA56AD7A1C8C614B00F200B9 /* AlertViewBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertViewBuilder.swift; sourceTree = "<group>"; };
-		FA5C8ED61C9D9CB4002F554C /* ImageHandlerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageHandlerTests.swift; sourceTree = "<group>"; };
 		FA6FD5481C8A2D880033964F /* videoHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = videoHandler.swift; sourceTree = "<group>"; };
 		FA6FD54A1C8A2DCE0033964F /* MediaHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaHelper.swift; sourceTree = "<group>"; };
 		FA7936AB1C8A4C2B006AD406 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
@@ -110,7 +115,6 @@
 		FAB9469F1CA039E8003A09F9 /* APIConnectorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIConnectorTests.swift; sourceTree = "<group>"; };
 		FAB946A11CA039F4003A09F9 /* TourDeleterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TourDeleterTests.swift; sourceTree = "<group>"; };
 		FACF41071C8F1D74000C2D5A /* NavViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavViewController.swift; sourceTree = "<group>"; };
-		FAD0BB5C1C9D767000FEC01A /* POIParserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = POIParserTests.swift; sourceTree = "<group>"; };
 		FAD1B1531C6BAEB400CA5327 /* TourSummaryController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TourSummaryController.swift; sourceTree = "<group>"; };
 		FAD929691C95BDCD0030BA7F /* ImageLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
 		FAD9296B1C95E9B60030BA7F /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
@@ -188,11 +192,11 @@
 				E591E5EA1CA14779000F6DBD /* POIConnectorTests.swift */,
 				7A9118C71C945990008BF835 /* TourUpdateManagerTests.swift */,
 				E58E7C801C9F1C5800D6D654 /* TourIDParserTests.swift */,
-				FA1C8C441C9C1F140055BB49 /* TourDataParserTests.swift */,
+				7A738BEA1CA175B000D00C38 /* TourDataParserzTests.swift */,
 				FA0532C31C9C3B5000C5DF26 /* VideoHandlerTests.swift */,
-				FA1F63641C9C5B1600952E03 /* mediaHelperTests.swift */,
-				FAD0BB5C1C9D767000FEC01A /* POIParserTests.swift */,
-				FA5C8ED61C9D9CB4002F554C /* ImageHandlerTests.swift */,
+				7A738BEC1CA1760A00D00C38 /* mediaHelperzTests.swift */,
+				7A738BEE1CA1763F00D00C38 /* POIParserzTests.swift */,
+				7A738BF21CA176AE00D00C38 /* ImageHandlerzzTests.swift */,
 			);
 			path = TourableTests;
 			sourceTree = "<group>";
@@ -431,37 +435,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A738BEB1CA175B000D00C38 /* TourDataParserzTests.swift in Sources */,
 				FAB946A01CA039E8003A09F9 /* APIConnectorTests.swift in Sources */,
-				FA1F63661C9C5E2800952E03 /* MediaHelper.swift in Sources */,
 				E58E7C811C9F1C5800D6D654 /* TourIDParserTests.swift in Sources */,
-				FA1F63651C9C5B1600952E03 /* mediaHelperTests.swift in Sources */,
-				FA1C8C451C9C1F140055BB49 /* TourDataParserTests.swift in Sources */,
 				FA0532C41C9C3B5000C5DF26 /* VideoHandlerTests.swift in Sources */,
-				FAD0BB5D1C9D767000FEC01A /* POIParserTests.swift in Sources */,
-				FA5C8ED71C9D9CB4002F554C /* ImageHandlerTests.swift in Sources */,
 				E591E5EB1CA14779000F6DBD /* POIConnectorTests.swift in Sources */,
-				7A9118C91C94B8DE008BF835 /* tourDataParser.swift in Sources */,
+				7A738BF31CA176AE00D00C38 /* ImageHandlerzzTests.swift in Sources */,
+				7A738BED1CA1760A00D00C38 /* mediaHelperzTests.swift in Sources */,
+				7A738BEF1CA1763F00D00C38 /* POIParserzTests.swift in Sources */,
 				7A9118C81C945990008BF835 /* TourUpdateManagerTests.swift in Sources */,
 				FAB946A21CA039F4003A09F9 /* TourDeleterTests.swift in Sources */,
 				E58E7C891CA03D5000D6D654 /* BundleRouteConnectorTests.swift in Sources */,
-				7AC168E21C99BDDA006064FD /* TourDeleter.swift in Sources */,
-				7AC168DF1C99BDCF006064FD /* MediaHelper.swift in Sources */,
-				7AC168DD1C99BDCA006064FD /* imageHandler.swift in Sources */,
-				7AC168D91C99BDB6006064FD /* TourSummaryController.swift in Sources */,
-				7AC168DE1C99BDCC006064FD /* videoHandler.swift in Sources */,
-				7AC168DB1C99BDC5006064FD /* bundleRouteConnector.swift in Sources */,
-				7AC168E61C99BDE5006064FD /* pointOfInterest.swift in Sources */,
-				7AC168D81C99BDB3006064FD /* AddNewTourViewController.swift in Sources */,
-				7AC168E51C99BDE2006064FD /* tourSection.swift in Sources */,
-				7AC168D51C99BD96006064FD /* tourDataParser.swift in Sources */,
-				7AC168D71C99BDB0006064FD /* TourSectionsController.swift in Sources */,
-				7AC168E01C99BDD1006064FD /* AppDelegate.swift in Sources */,
-				7AC168DA1C99BDC1006064FD /* ApiConnector.swift in Sources */,
-				7AC168DC1C99BDC7006064FD /* POIConnector.swift in Sources */,
-				7AC168D61C99BD9C006064FD /* TourUpdateManager.swift in Sources */,
-				7AC168E71C99BE0D006064FD /* AlertViewBuilder.swift in Sources */,
-				7A3744561C9B54140054745B /* ImageLoader.swift in Sources */,
-				7A9118C81C945990008BF835 /* TourUpdateManagerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
