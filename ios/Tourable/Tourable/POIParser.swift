@@ -34,6 +34,12 @@ class POIParser{
 
         self.createNewPOI(data).downloadContent()
     }
+    
+    func createEmptyPOI(){
+        
+         imageHandler.sharedInstance.queueImage([" "])
+        
+    }
 
     //Retrives the JSON from the cache and returns a POI object created from it
     func getTourSection(objectId: String)-> pointOfInterest{

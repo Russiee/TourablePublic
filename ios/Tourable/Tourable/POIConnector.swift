@@ -40,4 +40,8 @@ class POIConnector: NSObject, NSURLConnectionDelegate {
         
         task.resume()
     }
+    
+    func noContent(){
+        POIParser().createEmptyPOI()
+    }
 }

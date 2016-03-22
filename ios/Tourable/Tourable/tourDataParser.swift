@@ -62,18 +62,25 @@ class tourDataParser{
         NSUserDefaults.standardUserDefaults().synchronize()
         //Makes sure that all sections are recursivley downloaded.
         
-        createNewTour(data).downloadPOIcontent()
+       let returnValue = createNewTour(data)
+        returnValue.downloadPOIcontent()
+     
     }
     
     func getTourSection(objectId: String)-> tourSection{
         let data = NSUserDefaults.standardUserDefaults().objectForKey(objectId) as! NSDictionary
-        return createNewTour(data)
+        let returnVlaue = createNewTour(data)
+       
+        return returnVlaue
     }
 
     func saveNewTour(data: NSDictionary){
         saveTourSection(data)
+        
         //Saves the top level tour which maps to the key stored in the metadata.
         let tourTopLevelSection = (data["sections"]as! NSArray)[0] as! NSDictionary
+
+
         if tourTopLevelSection["subsections"] != nil{
         let tourSubsections = tourTopLevelSection["subsections"] as! NSArray
              self.saveSubsections(tourSubsections)

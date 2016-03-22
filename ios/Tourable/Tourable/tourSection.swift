@@ -36,11 +36,16 @@ class tourSection{
 
     // download the content for all the POI (called when you save a tour section)
     func downloadPOIcontent() {
+      
         for poi in pointsOfInterest{
             //Dont move this, for god sake.
-            let poic = POIConnector.init()
+            let poic = POIConnector()
             let objectId = poi["objectId"] as! String
             poic.initateConnection(objectId)
+        }
+        if pointsOfInterest.count == 0{
+            let poic = POIConnector()
+            poic.noContent()
         }
     }
 }

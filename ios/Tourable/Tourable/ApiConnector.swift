@@ -43,8 +43,9 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
                 let jsonResult = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
                 self.JSONMetadataFromAPI = jsonResult
                 if !self.checkIfTourAlreadyOutdatedWhenDownloading(jsonResult["expiry"] as! String) {
-                    dispatch_async(dispatch_get_main_queue()){
+                    dispatch_sync(dispatch_get_main_queue()){
                         if !self.isUpdating {
+                            
                             _ = TourIdParser().addTourMetaData(jsonResult)
                         }
                         self.triggerValidKeyNotification()
@@ -125,7 +126,7 @@ class ApiConnector: NSObject, NSURLConnectionDelegate{
             trimmedTourId = trimmedTourId.stringByReplacingOccurrencesOfString("/", withString: "")
             trimmedTourId = trimmedTourId.stringByReplacingOccurrencesOfString("\"", withString: "")
             trimmedTourId = trimmedTourId.stringByReplacingOccurrencesOfString("\\", withString: "")
-            trimmedTourId = trimmedTourId.stringByReplacingOccurrencesOfString(";", withString: "")
+            //trimmedTourId = trimmedTourId.stringByReplacingOccurrencesOfString(";", withString: "")
 
         tourIdForSummary = trimmedTourId
         return trimmedTourId
