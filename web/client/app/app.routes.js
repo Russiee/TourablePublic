@@ -80,17 +80,17 @@ tourable.config(function($stateProvider, $urlRouterProvider, $locationProvider) 
     })
     .state('admin.edit.tour', {
         url: "/admin/edit/tour/:id",
-        templateUrl: "/client/app/components/admin/components/edit/edit.tour.view.html",
+        templateUrl: "/client/app/components/admin/components/edit/components/edit.tour.view.html",
         authenticate: true
     })
     .state('admin.edit.section', {
         url: "/admin/edit/section/:id",
-        templateUrl: "/client/app/components/admin/components/edit/edit.section.view.html",
+        templateUrl: "/client/app/components/admin/components/edit/components/edit.section.view.html",
         authenticate: true
     })
     .state('admin.edit.poi', {
         url: "/admin/edit/poi/:id",
-        templateUrl: "/client/app/components/admin/components/edit/edit.poi.view.html",
+        templateUrl: "/client/app/components/admin/components/edit/components/edit.poi.view.html",
         authenticate: true
     });
 });
