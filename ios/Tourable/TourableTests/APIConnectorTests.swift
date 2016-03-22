@@ -232,6 +232,27 @@ class APIConnectorTests: XCTestCase {
         }
     }
     
+    func testInitiateConnection(){
+        let data = [
+            "tour": [
+                "__type": "Pointer",
+                "className": "Tour",
+                "objectId": "cjWRKDygIZ"
+                ] as NSMutableDictionary,
+            "code": "KCL-1010",
+            "updatedAt": "2016-03-20T12:10:42.175Z",
+            "createdAt": "2016-03-18T10:50:47.172Z",
+            "expiry": "2016-06-19T00:00:00.000Z",
+            "objectId": "ZX8DHpGKxk"
+        ]
+        
+        ApiConnector.sharedInstance.initiateConnection("KCL-1010", isCheckingForUpdate: false)
+        let returnedData = TourIdParser().getTourMetadata("KCL-1010")
+        let originalData = data["tour"] as! NSDictionary
+        XCTAssertEqual(originalData["objectId"] as? String, returnedData["objectId"] as? String)
+        
+    }
+    
     func testCleanTourIds(){
         let test1 = "    KCL- 1  0 1     0"
         let test2 = "///KC/L-10/1/0/"
