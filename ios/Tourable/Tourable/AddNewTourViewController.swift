@@ -52,7 +52,6 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
         newCancelButton.action = "cancelDownload"
         self.busyWheel.startAnimating()
         self.busyWheel.hidden = false
-            downloadBackground.hidden = false
         downloadedImages++
         //Get progress as fraction of 1
         let progress = (downloadedImages/totalImagesToDownload)
@@ -114,6 +113,8 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
             imageHandler.sharedInstance.downloadMediaSet(imageHandler.sharedInstance.imageQueue)
             //self.busyWheel.stopAnimating()
             self.hideButtonsForBusyWheel(false)
+            self.downloadBackground.hidden = false
+            self.downloadStatusLabel.text = "Downloading Media: 0%"
         }))
         
         // show the alert
