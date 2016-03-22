@@ -1,4 +1,4 @@
-//
+    //
 //  AddRemoveTourTests.swift
 //  Tourable
 //
@@ -9,10 +9,10 @@
 import XCTest
 
 class AddRemoveTourTests: XCTestCase {
-    
+
     override func setUp() {
         super.setUp()
-       
+
         // Put setup code here. This method is called before the invocation of each test method in the class.
         
         // In UI tests it is usually best to stop immediately when a failure occurs.
@@ -22,13 +22,27 @@ class AddRemoveTourTests: XCTestCase {
 
         // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
     }
-    
+
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
 
-    func testAddTour() {
+    func testAddingAndDeletingTour() {
+        let app = XCUIApplication()
+        let tablesQuery = app.tables
+        tablesQuery.buttons["Add Tour"].tap()
+
+        let collectionViewsQuery = app.alerts["Add New Tour"].collectionViews
+        collectionViewsQuery.textFields["Enter Tour Key"].typeText("KCL-1010")
+        collectionViewsQuery.buttons["Add"].tap()
+        sleep(8)
+        app.alerts["Download Tour"].collectionViews.buttons["Download text only (Smaller)"].tap()
+        tablesQuery.staticTexts["Ultimate Flat Tour"].swipeLeft()
+        tablesQuery.buttons["Delete"].tap()
+    }
+
+    func testAddTourWithMedia() {
         
         let app = XCUIApplication()
         
@@ -44,22 +58,30 @@ class AddRemoveTourTests: XCTestCase {
         
         let addButton = collectionViewsQuery.buttons["Add"]
         addButton.tap()
-        sleep(5)
+        sleep(10)
         app.alerts["Download Tour"].collectionViews.buttons["Download with media (Larger)"].tap()
         
     }
     
-    func testAddTourFail() {
+    func testAddTourWithoutMedia() {
         
         let app = XCUIApplication()
-        app.tables.buttons["Add Tour"].tap()
+        
+        if app.tables["Empty list"].buttons.count != 0 {
+            app.tables["Empty list"].buttons["Add Tour"].tap()
+        } else {
+            app.tables.buttons["Add Tour"].tap()
+        }
         
         let collectionViewsQuery = app.alerts["Add New Tour"].collectionViews
         collectionViewsQuery.textFields["Enter Tour Key"].typeText("KCL-1010")
         collectionViewsQuery.buttons["Add"].tap()
+        sleep(10)
+        app.alerts["Download Tour"].collectionViews.buttons["Download text only (Smaller)"].tap()
         
-        let cancelButton = app.alerts["Tour Add Error"].collectionViews.buttons["Cancel"]
-        cancelButton.tap()
     }
-
+    
+  
+    
+    
 }
