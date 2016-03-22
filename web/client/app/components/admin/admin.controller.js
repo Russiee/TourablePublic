@@ -58,8 +58,10 @@ angular.module('tourable')
                 console.log('Success: ', response.data);
                 $scope.organization = response.data;
                 sessionStorage.setItem('organization', JSON.stringify($scope.organization));
+                $scope.loading = false;
             }, function(error) {
                 //Console log in case we need to debug with a user
+                $scope.loading = false;
                 console.log('An error occured while retrieving the admin data: ', error);
             });
         }
@@ -109,6 +111,7 @@ angular.module('tourable')
         }
 
         $scope.login = function () {
+            $scope.loading = true;
             //if already logged in
             if (AuthService.isLoggedIn()) {
                 $state.go("admin.dashboard");
