@@ -464,7 +464,7 @@ public class SummaryActivity extends AppCompatActivity {
     }
 
     /**
-     * Parses the currently set date (in Long) to an appropriate X Days - X Hours - X Minutes format
+     * Parses the curren    tly set date (in Long) to an appropriate X Days - X Hours - X Minutes format
      */
     private void parseDate() {
         long expiryDate = TourDBManager.getInstance(getApplicationContext()).getExpiryDate(keyID);

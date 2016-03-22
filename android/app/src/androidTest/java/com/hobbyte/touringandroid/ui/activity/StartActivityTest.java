@@ -1,14 +1,11 @@
 package com.hobbyte.touringandroid.ui.activity;
 
-import android.opengl.Visibility;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.RenamingDelegatingContext;
 
 import com.hobbyte.touringandroid.R;
-import com.hobbyte.touringandroid.internet.UpdateChecker;
 import com.hobbyte.touringandroid.io.TourDBManager;
 
 import org.junit.Before;
@@ -30,13 +27,10 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withTagValue;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.core.IsNot.not;
 
 /**
  * Created by Nikita on 21/03/2016.
@@ -66,7 +60,7 @@ public class StartActivityTest {
 
         db = TourDBManager.getInstance(context);
     }
-/*
+
     @Test
     public void ATestEnterCorrectKey() {
         enterKey(validKey);
@@ -194,30 +188,16 @@ public class StartActivityTest {
         onView(withText(containsString("Go to Previous POI"))).check(doesNotExist());
         onData(instanceOf(String.class)).onChildView(withId(R.id.nextPOIFooter)).perform(click());
 
-        onView(withText(containsString("Alex's Desk"))).check(matches(isDisplayed()));
+        onView(withText(containsString("Alexander Gubbay (born 1995)"))).check(matches(isDisplayed()));
         onData(instanceOf(String.class)).onChildView(withId(R.id.previousPOIFooter)).check(matches(isDisplayed()));
         onData(instanceOf(String.class)).onChildView(withId(R.id.previousPOIFooter)).perform(click());
-    }
-*/
-    @Test
-    public void testUpdateChecker() {
-        deleteTour();
-        enterKey("KCL-TEST-UPDATED");
-        onView(withId(R.id.download_with_media)).perform(click());
-        db.updateTourVersion("qcyq1p1Yje", 0);
-        new UpdateChecker(context);
-        onView(withText("TEST_UPDATED_TOUR")).perform(click());
-        onView(withId(R.id.updateTour)).perform(click());
-        onView(withId(R.id.download_with_media)).perform(click());
-        enterTour();
-        onView(withId(R.id.updateTourText)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
-    }
-
-    @Test
-    public void testZDeleteExpired() {
-        db.putRow("5D8LIPxDBG", "N3l3tuYFka", "KCL-TEST-EXPIRED", "TEST_EXPIRED_TOUR", "2016-01-01T00:00:00.000Z", false, 1);
-        new UpdateChecker(context);
-        onView(withText("TEST_EXPIRED_TOUR")).check(doesNotExist());
+        pressBack();
+        pressBack();
+        pressBack();
+        pressBack();
+        pressBack();
+        onView(withId(R.id.tourItem)).perform(longClick());
+        onView(withText("Delete")).perform(click());
     }
 
     public void enterKey(String key) {

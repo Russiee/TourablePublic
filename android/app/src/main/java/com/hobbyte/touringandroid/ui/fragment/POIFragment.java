@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -124,6 +125,13 @@ public class POIFragment extends ListFragment {
         TextView rightPOI = (TextView) view.findViewById(R.id.nextPOIFooter);
         LinearLayout leftLayout = (LinearLayout) view.findViewById(R.id.leftLayout);
         TextView leftPOI = (TextView) view.findViewById(R.id.previousPOIFooter);
+        Button backToSection = (Button) view.findViewById(R.id.backToSectionButton);
+        backToSection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
         //Checks next Point of Interest, if not null sets layout to visisble and configures onClickListener
         if (currentPOI.getNextPOI() != null) {
             rightPOI.setText("Go to Next POI (" + currentPOI.getNextPOI().getTitle() + ")");
