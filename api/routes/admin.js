@@ -124,6 +124,8 @@ var admin = {
         var expectedInput = {
             "username": "", //expected input is a String
             "email": "",
+            "firstname": "",
+            "lastname": "",
             "password": "",
             "organization": "",
             "isSuper": false //expected input is a Boolean
