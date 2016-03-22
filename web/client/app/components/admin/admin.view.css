@@ -38,6 +38,7 @@
     border: 2px;
     background-color: #D8DCE0;
     color: #162B49;
+    min-width: 100px;
 }
 
 .admin-message {
@@ -75,13 +76,18 @@
     border-bottom-color: #ECF0F1;
     border-bottom-width: 1px;
     color: #162B49;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
 }
 
 .admin-cell-list:last-child {
     border: 0;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
 }
 
-.admin-cell-list .fa-chevron-right {
+.admin-cell-list .fa-chevron-right,
+.admin-cell-list .fa-plus {
     color: #DDD;
     padding: 4px 0;
 }
@@ -116,6 +122,7 @@
     font-weight: 600;
     cursor: pointer;
 }
+
 #admin-nav-list li:hover {
     background: #0c2d5d;
 }
@@ -134,6 +141,7 @@
 
 #admin-content {
     padding: 0;
+    padding-bottom: 30px;
 }
 
 .admin-main,
@@ -144,6 +152,10 @@
 .admin-help {
     color: #4A5F7E;
     font-size: 12px;
+}
+
+.admin-subheader-offset {
+    padding-top: 47px;
 }
 
 .admin-help-bkg {
@@ -182,7 +194,7 @@
 }
 
 
-/* admin create page styles */
+/* admin create & edit page styles */
 
 .admin-create-input {
     padding-top: 0;
@@ -191,4 +203,13 @@
 
 .admin-create-container {
 
+}
+
+textarea {
+    resize: vertical;
+}
+
+.admin-delete-btn {
+    margin-left: 15px;
+    background-color: #FFB2B1;
 }

@@ -5,18 +5,26 @@ angular.module('tourable')
         $scope.accountmessage = "";
 
         $scope.$on('loginStatusChanged', function (event, isLoggedIn) {
-            console.log("hello");
             if (isLoggedIn){
-                console.log("hello");
                 $state.go("admin.dashboard");
+                getAdmin();
             } else {
+                sessionStorage.removeItem('admin');
+                sessionStorage.removeItem('organization');
+                sessionStorage.removeItem('admins');
+                sessionStorage.removeItem('tours');
+                sessionStorage.removeItem('tour');
                 $state.go("home");
             }
         });
 
+        $scope.admin =          JSON.parse(sessionStorage.getItem('admin'));
+        $scope.organization =   JSON.parse(sessionStorage.getItem('organization'));
+        $scope.admins =         JSON.parse(sessionStorage.getItem('admins'));
+        $scope.tours =          JSON.parse(sessionStorage.getItem('tours'));
 
         $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
-            if (fromState.name === 'admin.create' && fromParams.class === 'tour') {
+            if (fromState.name === 'admin.create' && fromParams.className === 'tour') {
                 getAllTours();
             } else if (fromState.name === 'admin.create' && fromParams.class === 'admin') {
                 getAllAdmins();
@@ -24,10 +32,15 @@ angular.module('tourable')
         });
 
         if (AuthService.isLoggedIn()) {
+            getAdmin();
+        }
+
+        function getAdmin () {
             var getAdminData = adminFactory.getAdmin(AuthService.currentUser().id);
             getAdminData.then(function(response) {
                 console.log('Success: ', response.data);
                 $scope.admin = response.data;
+                sessionStorage.setItem('admin', JSON.stringify($scope.admin));
                 if ($scope.admin.isSuper) {
                     getOrganization(response.data.organization.objectId);
                     getAllAdmins(response.data.organization.objectId);
@@ -38,7 +51,6 @@ angular.module('tourable')
                 //Redirect back to homepage
                 $location.url('/');
             });
-
         }
 
         function getOrganization (id) {
@@ -46,8 +58,11 @@ angular.module('tourable')
             getOrganizationData.then(function(response) {
                 console.log('Success: ', response.data);
                 $scope.organization = response.data;
+                sessionStorage.setItem('organization', JSON.stringify($scope.organization));
+                $scope.loading = false;
             }, function(error) {
                 //Console log in case we need to debug with a user
+                $scope.loading = false;
                 console.log('An error occured while retrieving the admin data: ', error);
             });
         }
@@ -57,6 +72,7 @@ angular.module('tourable')
             getAllAdminData.then(function(response) {
                 console.log('Success: ', response.data);
                 $scope.admins = response.data;
+                sessionStorage.setItem('admins', JSON.stringify($scope.admins));
                 getAllTours();
             }, function(error) {
                 //Console log in case we need to debug with a user
@@ -70,14 +86,16 @@ angular.module('tourable')
                 console.log('Success: ', response.data);
                 $scope.tours = {
                     thisAdmin: [],
-                    otherAdmins: []
+                    otherAdmins: [],
+                    all: []
                 };
                 for (var index in response.data) {
                     var tour = response.data[index];
-
+                    $scope.tours.all.push(tour);
                     if (tour.admin && tour.admin.objectId === $scope.admin.objectId) {
                         console.log("Compare " + tour.admin.objectId + " to " + $scope.admin.objectId);
                         $scope.tours.thisAdmin.push(tour);
+                        sessionStorage.setItem('tours', JSON.stringify($scope.tours));
                     } else if (tour.admin) {
                         for (var _index in $scope.admins) {
                             console.log("Compare " + tour.admin.objectId + " to " + $scope.admins[_index].objectId);
@@ -95,6 +113,7 @@ angular.module('tourable')
         }
 
         $scope.login = function () {
+            $scope.loading = true;
             //if already logged in
             if (AuthService.isLoggedIn()) {
                 $state.go("admin.dashboard");

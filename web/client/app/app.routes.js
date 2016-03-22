@@ -66,9 +66,31 @@ tourable.config(function($stateProvider, $urlRouterProvider, $locationProvider) 
         authenticate: true
     })
     .state('admin.create', {
-        url: "/admin/create/:class",
+        url: "/admin/create/:className?tour&superSection?depth",
         templateUrl: "/client/app/components/admin/components/create/create.view.html",
         controller: "CreateCtrl",
+        authenticate: true
+    })
+
+
+    .state('admin.edit', {
+        templateUrl: "/client/app/components/admin/components/edit/edit.view.html",
+        controller: "EditCtrl",
+        authenticate: true
+    })
+    .state('admin.edit.tour', {
+        url: "/admin/edit/tour/:id",
+        templateUrl: "/client/app/components/admin/components/edit/edit.tour.view.html",
+        authenticate: true
+    })
+    .state('admin.edit.section', {
+        url: "/admin/edit/section/:id",
+        templateUrl: "/client/app/components/admin/components/edit/edit.section.view.html",
+        authenticate: true
+    })
+    .state('admin.edit.poi', {
+        url: "/admin/edit/poi/:id",
+        templateUrl: "/client/app/components/admin/components/edit/edit.poi.view.html",
         authenticate: true
     });
 });
