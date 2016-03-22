@@ -81,7 +81,44 @@ class AddRemoveTourTests: XCTestCase {
         
     }
     
-  
+    func testNavigateTourBetweenPOIs() {
+        
+        let app = XCUIApplication()
+        let tablesQuery = app.tables
+        tablesQuery.buttons["Add Tour"].tap()
+        
+        let collectionViewsQuery = app.alerts["Add New Tour"].collectionViews
+        collectionViewsQuery.textFields["Enter Tour Key"].typeText("KCL-1111")
+        collectionViewsQuery.buttons["Add"].tap()
+        sleep(10)
+        app.alerts["Download Tour"].collectionViews.buttons["Download with media (Larger)"].tap()
+        let tablesQuery2 = tablesQuery
+        tablesQuery2.staticTexts["Royal Brompton Test Tour"].tap()
+        app.buttons["Start Tour"].tap()
+        sleep(1)
+        tablesQuery2.staticTexts["The Imaging Facilities"].tap()
+        sleep(1)
+        tablesQuery2.staticTexts["Medical Imaging Room 1"].tap()
+        sleep(1)
+        tablesQuery2.staticTexts["Medical Machine ZYX"].tap()
+        sleep(1)
+        let cell = tablesQuery.childrenMatchingType(.Cell).elementBoundByIndex(1)
+        sleep(1)
+        cell.tap()
+        sleep(1)
+        tablesQuery2.staticTexts["  Go to next POI (Medical Machine XYZ)"].tap()
+        sleep(1)
+        cell.childrenMatchingType(.TextView).element.tap()
+        sleep(1)
+        tablesQuery2.staticTexts["  Go to previous POI (Medical Machine ZYX)"].tap()
+        sleep(1)
+        cell.tap()
+        sleep(1)
+        tablesQuery.buttons["Back to overview"].tap()
+        
+    }
+
+
     
     
 }
