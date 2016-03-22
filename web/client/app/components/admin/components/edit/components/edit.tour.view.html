@@ -35,7 +35,7 @@
             <h5 class="admin-subheader no-padding-top">Main Sections</h5>
             <ul class="admin-cell-list">
                 <div ng-repeat="section in tour.sections track by $index">
-                    <li class="cursor-pointer" ui-sref="admin.edit.section({id: section.id})">{{section.title}}<i class="fa fa-chevron-right pull-right"></i></li>
+                    <li class="cursor-pointer" ui-sref="admin.edit.section({id: section.objectId})">{{section.title}}<i class="fa fa-chevron-right pull-right"></i></li>
                 </div>
                 <li class="cursor-pointer admin-edit-new-li" ng-click="createTopSection()"><i>Add a new section</i><i class="fa fa-plus pull-right"></i></li>
             </ul>
