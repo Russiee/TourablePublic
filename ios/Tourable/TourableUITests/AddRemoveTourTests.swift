@@ -8,11 +8,12 @@
 
 import XCTest
 
+
 class AddRemoveTourTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-
+        
         // Put setup code here. This method is called before the invocation of each test method in the class.
         
         // In UI tests it is usually best to stop immediately when a failure occurs.
@@ -31,7 +32,22 @@ class AddRemoveTourTests: XCTestCase {
     func testOpenAboutPage() {
         let app = XCUIApplication()
         app.navigationBars["Your Tours"].buttons["About  "].tap()
-        app.navigationBars["entryController"].childrenMatchingType(.Button).matchingIdentifier("Back").elementBoundByIndex(0).tap()
+        app.buttons["Support site"].tap()
+    }
+    
+    func testAboutPage(){
+        
+        
+        let app = XCUIApplication()
+        let aboutButton = app.navigationBars["Your Tours"].buttons["About  "]
+        aboutButton.tap()
+        app.images["header"].tap()
+        
+        let backButton = app.navigationBars["entryController"].childrenMatchingType(.Button).matchingIdentifier("Back").elementBoundByIndex(0)
+        backButton.tap()
+        aboutButton.tap()
+        backButton.tap()
+        
         
     }
     
@@ -43,12 +59,14 @@ class AddRemoveTourTests: XCTestCase {
         let collectionViewsQuery = app.alerts["Add New Tour"].collectionViews
         collectionViewsQuery.textFields["Enter Tour Key"].typeText("KCL-0000")
         collectionViewsQuery.buttons["Add"].tap()
+        sleep(10)
         app.alerts["Download Tour"].collectionViews.buttons["Download text only (Smaller)"].tap()
+        sleep(20)
         tablesQuery.staticTexts["test"].swipeLeft()
         tablesQuery.buttons["Delete"].tap()
     }
 
-    func testAddAndDeleteTourWithMedia() {
+    func testAddAndTourWithMedia() {
         
         let app = XCUIApplication()
         let tablesQuery = app.tables
@@ -61,9 +79,7 @@ class AddRemoveTourTests: XCTestCase {
         addButton.tap()
         sleep(10)
         app.alerts["Download Tour"].collectionViews.buttons["Download with media (Larger)"].tap()
-        sleep(80) // very slow to download
-        let tablesQuery2 = app.tables
-        tablesQuery2.staticTexts["Ultimate Flat Tour"].swipeLeft()
+        sleep(10)
         
     }
 
@@ -101,14 +117,27 @@ class AddRemoveTourTests: XCTestCase {
         tablesQuery.buttons["Delete"].tap()
     }
    
-    
-    func testNaviateTourAndClickQuiz() {
+    func testAddInvalidTour() {
         
         let app = XCUIApplication()
+        app.tables["Empty list"].buttons["Add Tour"].tap()
+        
+        let collectionViewsQuery = app.alerts["Add New Tour"].collectionViews
+        collectionViewsQuery.textFields["Enter Tour Key"].typeText("KNOTVALIDTOURKEY")
+        collectionViewsQuery.buttons["Add"].tap()
+        sleep(2)
+        app.alerts["Tour Key Error"].collectionViews.buttons["Cancel"].tap()
+        
+    }
+    
+    
+    func testNaviateTourAndClickQuiz() {
+
+        let app = XCUIApplication()
         let tablesQuery = app.tables
-        
+
         tablesQuery.staticTexts["Ultimate Flat Tour"].tap()
-        
+      
         app.buttons["Start Tour"].tap()
         tablesQuery.staticTexts["The Flat"].tap()
         tablesQuery.staticTexts["Alex's Room"].tap()
@@ -118,5 +147,6 @@ class AddRemoveTourTests: XCTestCase {
         tablesQuery.staticTexts["a"].tap()
         
     }
+
 
 }
