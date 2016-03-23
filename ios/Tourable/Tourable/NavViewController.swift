@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+///Class that sets the navigation bar to be the correct colour and text size.
 class NavViewController: UINavigationController, UIViewControllerTransitioningDelegate {
 
     override func viewDidLoad() {
@@ -19,16 +19,11 @@ class NavViewController: UINavigationController, UIViewControllerTransitioningDe
         UINavigationBar.appearance().tintColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.64)
         //set title colour
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName : UIColor.whiteColor()]
-        
-        
-        
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
-    
 
     /*
     // MARK: - Navigation

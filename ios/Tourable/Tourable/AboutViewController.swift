@@ -12,16 +12,16 @@ class AboutViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
     }
 
+    //Links the issues/feedback to a place where user can email us.
     @IBAction func supportButtonPressed(sender: AnyObject) {
         if let requestUrl = NSURL(string: "http://alexgubbay152.wix.com/tourable") {
             UIApplication.sharedApplication().openURL(requestUrl)
         }
     }
-    
+
+    //Link to where we got the icons from.
     @IBAction func icons8ButtonPressed(sender: AnyObject) {
         if let requestUrl = NSURL(string: "https://icons8.com") {
             UIApplication.sharedApplication().openURL(requestUrl)

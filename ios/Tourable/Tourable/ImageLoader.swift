@@ -10,7 +10,7 @@
 import UIKit
 import Foundation
 
-
+///ImageLoader class deals with the streaming of loading media. If the user downloaded the tour without media, but now has internet connection the media is downloaded and shown.
 class ImageLoader {
     
     let cache = NSCache()

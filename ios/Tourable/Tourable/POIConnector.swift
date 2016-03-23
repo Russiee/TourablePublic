@@ -7,8 +7,7 @@
 //
 
 import Foundation
-//Handles API connectivity for points of interest. As these are handled differently to 
-//tour sections
+///POIConnector is responsible for connecting to the API and downloading the content for the POI.
 class POIConnector: NSObject, NSURLConnectionDelegate {
     
     var urlPath: String = ""

@@ -33,7 +33,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
     
     //to check if should be emptry screen when cancelling a tour download
     override func viewWillAppear(animated: Bool) {
-        //makes sure Tool bar is visible again after coming back from Tour
+        //makes sure Tool bar is hidden
         self.navigationController?.setToolbarHidden(true, animated: false)
         checkStateOfScreen()
         tableView.tableFooterView = addTourButtonView
@@ -71,15 +71,14 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
 
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        //setting the table cells to display the tour titles that are on the device.
         let cell = tableView.dequeueReusableCellWithIdentifier("tableCell", forIndexPath: indexPath)
-
-        // Configure the cell...
         cell.textLabel?.text = tourTitles[indexPath.row]
         return cell
     }
 
 
-    // a function to tell change the background image when loading the app AND when deleting a cell results in no tours left
+    ///Checks if theres no tours and adjusts the background image as necessary. If no tours, then creates a "Add Tour" button, otherwise adds it but in different colours and below the tours we have currently.
     func checkStateOfScreen(){
          tableView.rowHeight = 60.0
         if tourTitles.count == 0 {
@@ -133,7 +132,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         
     }
     
-    // triggerd in ViewDidLoad, it iterates the list of tours and deletes the outdated one.
+    //triggerd in ViewDidLoad, it iterates the list of tours and deletes the outdated one.
     func checkToursToDelete() {
         for var indexRow = 0; indexRow < tourTitles.count; indexRow++ {
             TourUpdateManager.sharedInstance.prepareTourMangaer(tourIDs[indexRow], tableRow: indexRow)
@@ -141,8 +140,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         }
     }
 
-
-    //prompt user for tour code input
+    ///Prompts input of a tour code from the user.
     func showTourKeyAlert(){
         let alert = UIAlertView(title: "Add New Tour", message: "Enter the provided tour key", delegate: self, cancelButtonTitle:"Cancel")
         alert.alertViewStyle = UIAlertViewStyle.PlainTextInput
@@ -153,29 +151,30 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         textField!.placeholder = "Enter Tour Key"
         alert.show()
     }
-    //Alert user that the tour they are trying to add already exists.
 
-    //controls the behavior of the alerts for user tour code entry
+    ///Controls the behavior of the alerts for user tour code entry
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
         switch buttonIndex{
             case 1: //gets text field and hides keyboard in preperation for segue
                 let Field = alertView.textFieldAtIndex(0)
                 alertView.textFieldAtIndex(0)?.resignFirstResponder()
                 
-                //checks if the tour already exists. If not:
-                // passes the entered tourId into the tourParser
+                //checks if the tour already exists. If not: passes the tour code into APIConnector.
                 let tours = TourIdParser.sharedInstance.getAllTourIDs()
+                //clean the input first, to get rid of any unwanted characters.
                 if tours.contains(KeyVerifyConnector.sharedInstance.cleanTourCode(Field!.text!)){
                     //Tour already exists
                     AlertViewBuilder.sharedInstance.showWarningAlert("Tour Add Error", message: "A tour with that key already exists")
                 }else{
                     if KeyVerifyConnector.sharedInstance.isConnectedToNetwork(){
-                    //Tour does not exist. Procede.
-                    KeyVerifyConnector.sharedInstance.initiateKeyVerifyConnection(Field!.text!, isCheckingForUpdate: false)
-                    // goes to the AddNewTourPage
-                    performSegueWithIdentifier("goToAddTour", sender: self)
-                    // to change the background image
-                    tableView.backgroundView = nil
+
+                        //Tour does not exist. Procede.
+                        KeyVerifyConnector.sharedInstance.initiateKeyVerifyConnection(Field!.text!, isCheckingForUpdate: false)
+                        //Goes to the AddNewTourPage
+                        performSegueWithIdentifier("goToAddTour", sender: self)
+                        //Change the background image
+                        tableView.backgroundView = nil
+
                     }else{
                         AlertViewBuilder.sharedInstance.showWarningAlert("No Internet Connection", message: "No internet connection detected. Please check and retry.")
                     }
@@ -186,26 +185,25 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         }
     }
 
-   //Deletes data from the table and updates the cache to reflect his.
+    //Deletes data from the table and NSUserDefaults and updates them accordingly
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
-            
+
+            //Delete media of tour first, then tour itself.
             TourDeleter.sharedInstance.deleteMediaInTour(tourIDs[indexPath.row])
             TourDeleter.sharedInstance.deleteTour(tourIDs[indexPath.row])
             tourTitles = tourParser.getAllTours()
             checkStateOfScreen()
+
             //Reload Table
             tableView.reloadData()
 
-            
         } else if editingStyle == .Insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }
 
-    // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
@@ -226,6 +224,4 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
             }
         }
     }
-
-
 }

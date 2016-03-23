@@ -35,7 +35,7 @@ class bundleRouteConnector: NSObject, NSURLConnectionDelegate{
     }
 
     
-    // called to retrieve the data returned by the API, runs synchronusly
+    ///Retrieves the data returned by the API, runs synchronusly.
     func getJSONResult() -> NSDictionary {
         while(jsonResultFromAPI == nil){
             

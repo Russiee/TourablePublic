@@ -17,9 +17,10 @@ let invalidIdNotificationKey = "InvalidKeyEnteredNotification"
 let validIdNotificationKey = "ValidKeyEnteredNotification"
 var tourIdForSummary = ""
 
+///KeyVerifyConnector is responsible for connecting to the API and to check if a tour exists for key entered by user. If it exists then it continue onto download the meta data.
 class KeyVerifyConnector: NSObject, NSURLConnectionDelegate{
     
-   static let sharedInstance = KeyVerifyConnector()
+    static let sharedInstance = KeyVerifyConnector()
     
     var JSONMetadataFromAPI: NSDictionary!
     var isUpdating = false
@@ -81,7 +82,7 @@ class KeyVerifyConnector: NSObject, NSURLConnectionDelegate{
         task.resume()
     }
 
-    ///send a notification that the tour id is valid and has been parsed correctly.
+    ///Send a notification that the tour id is valid and has been parsed correctly.
     func triggerInvalidKeyNotification() {
         NSNotificationCenter.defaultCenter().addObserver(
             self,
@@ -95,8 +96,7 @@ class KeyVerifyConnector: NSObject, NSURLConnectionDelegate{
         notify()
     }
     
-    ///A synchronus method to get return from API. Will hold unitl data is returned.
-    ///This is useful for some UI blocking waits.
+    ///A synchronus method to get return from API. Will hold until data is returned. This is useful for some UI blocking waits.
     func getTourMetadata(tourCode: String) -> NSDictionary {
         // if the network call is not finished retrieve the tour metadata from the cache
         if JSONMetadataFromAPI != nil {
@@ -121,7 +121,7 @@ class KeyVerifyConnector: NSObject, NSURLConnectionDelegate{
     }
 
 
-    /// check if there is less than 1 minute left so as to prevent download of expired tours
+    /// Check if there is less than 1 minute left so as to prevent download of expired tours
     /// Will return false if tour is out of date or has less than 1 min remaining.
     func checkIfTourAlreadyOutdatedWhenDownloading(expiryString: String) -> Bool {
         let expiryDate = TourUpdateManager.sharedInstance.getDateFromString(expiryString)
@@ -131,16 +131,16 @@ class KeyVerifyConnector: NSObject, NSURLConnectionDelegate{
         return false
     }
 
-    // remove heading and trailing white spaces
+    // remove heading and trailing white spaces, removes /,\,"
     // rejects any tourIds with invalid symbols
     func cleanTourCode(tourId: String) -> String {
 
         var trimmedTourId = tourId.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
         //getting rid of whitespaces, \, /, " as they are invalid characters in a tour
-            trimmedTourId = trimmedTourId.stringByReplacingOccurrencesOfString(" ", withString: "")
-            trimmedTourId = trimmedTourId.stringByReplacingOccurrencesOfString("/", withString: "")
-            trimmedTourId = trimmedTourId.stringByReplacingOccurrencesOfString("\"", withString: "")
-            trimmedTourId = trimmedTourId.stringByReplacingOccurrencesOfString("\\", withString: "")
+        trimmedTourId = trimmedTourId.stringByReplacingOccurrencesOfString(" ", withString: "")
+        trimmedTourId = trimmedTourId.stringByReplacingOccurrencesOfString("/", withString: "")
+        trimmedTourId = trimmedTourId.stringByReplacingOccurrencesOfString("\"", withString: "")
+        trimmedTourId = trimmedTourId.stringByReplacingOccurrencesOfString("\\", withString: "")
 
         tourIdForSummary = trimmedTourId
         return trimmedTourId

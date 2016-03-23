@@ -8,14 +8,14 @@
 
 import UIKit
 
-
+///Class that handles quiz view.
 class QuizTableViewController: UITableViewController{
-    
+
     var quiz : Quiz!
-   // @IBOutlet weak var questionTitle: UILabel!
-    
+    // @IBOutlet weak var questionTitle: UILabel!
+
     @IBOutlet weak var questionTitle: UILabel!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         questionTitle.text = quiz.question as String
@@ -27,39 +27,37 @@ class QuizTableViewController: UITableViewController{
         self.tableView.delegate = self
         // Uncomment the following line to preserve selection between presentations
         self.clearsSelectionOnViewWillAppear = true
-        
+
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         self.tableView.reloadData()
         // tableView.tableFooterView = UIView(frame: CGRectZero)
         
     }
-    
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    // MARK: - Table view data source
-    
+
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
-    
+
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
+        //We want as many rows as there are options.
         return quiz.options.count
     }
-    
+
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("test", forIndexPath: indexPath)
+        //Setting the cells text to the quiz options.
         cell.textLabel?.text = (quiz.options[indexPath.row] as! String)
-        // Configure the cell...
         return cell
     }
+
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
+        //Handles if the correct answer to the quiz was selected or not.
         let indexPath = tableView.indexPathForSelectedRow
         let currentCell = tableView.cellForRowAtIndexPath(indexPath!)! as UITableViewCell
         let correctCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: quiz.correct, inSection: 0))

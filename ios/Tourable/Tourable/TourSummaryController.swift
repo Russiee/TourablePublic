@@ -9,6 +9,7 @@
 import UIKit
 let TourSummaryMetaDataAvailable = "TourSummaryMetaDataAvailable"
 
+///TourSummaryController is responsible to show the user the Tour Summary information before beggining the tour.
 class TourSummaryController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     //Tour code that identifies the tour
@@ -218,7 +219,7 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
 
             //Set the dynamic content of the update status row.
             if indexPath.row == 1 {
-                //tour is not upto date and not currently being updated, show update button.
+                //tour is not up to date and not currently being updated, show update button.
                 if !summaryData.isCurrent && !isUpdating{
                     updateButton.frame = CGRectMake(40, 60, 75, 24)
                     updateButton.center = CGPoint(x: view.bounds.width * 0.85, y: 60.0 / 2.0)

@@ -8,6 +8,7 @@
 
 import Foundation
 
+///TourMetadataConnector is responsible for connecting to the API and downloading the meta data for the tour.
 class TourMetadataConnector {
 
         lazy var data = NSMutableData()
