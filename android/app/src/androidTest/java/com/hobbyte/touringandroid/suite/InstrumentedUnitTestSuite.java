@@ -4,6 +4,7 @@ import com.hobbyte.touringandroid.internet.ServerAPITest;
 import com.hobbyte.touringandroid.internet.UpdateCheckerTest;
 import com.hobbyte.touringandroid.io.DBTest;
 import com.hobbyte.touringandroid.io.DeleteTourTaskTest;
+import com.hobbyte.touringandroid.io.DownloadTourTaskTest;
 import com.hobbyte.touringandroid.io.FileManagerTest;
 import com.hobbyte.touringandroid.tourdata.PointOfInterestTest;
 import com.hobbyte.touringandroid.tourdata.SubSectionTest;
@@ -17,7 +18,8 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        DBTest.class, DeleteTourTaskTest.class, FileManagerTest.class, PointOfInterestTest.class,
-        ServerAPITest.class, SubSectionTest.class, TourBuilderTest.class, UpdateCheckerTest.class
+        DBTest.class, DeleteTourTaskTest.class, DownloadTourTaskTest.class, FileManagerTest.class,
+        PointOfInterestTest.class, ServerAPITest.class, SubSectionTest.class, TourBuilderTest.class,
+        UpdateCheckerTest.class
 })
 public class InstrumentedUnitTestSuite {}
