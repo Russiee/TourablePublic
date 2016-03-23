@@ -1,6 +1,8 @@
 angular.module('tourable')
     .controller('TourCtrl', function ($rootScope, $scope, $location, $state, keyFactory, tourFactory) {
 
+        $rootScope.loading = true;
+
         if ($state.current.name === "tour.section" && $state.params.path.length === 0) {
             $location.url('/tour?key=' + $scope.key);
         }
@@ -46,6 +48,9 @@ angular.module('tourable')
             console.log(script);
             /*jshint -W061 */
             eval(script);
+            if ($state.current.name === "tour.section") {
+                $rootScope.loading = false;
+            }
         }
 
         function getPOIFromPath(path) {
@@ -53,6 +58,9 @@ angular.module('tourable')
             console.log(path.substring(0,hash));
             getSectionFromPath(path.substring(0,hash));
             $scope.poi = $scope.section.pois[parseInt(path.substring(hash + 1))];
+            if ($state.current.name === "tour.poi") {
+                $rootScope.loading = false;
+            }
         }
 
         function getTourMetaData(id) {
@@ -63,9 +71,16 @@ angular.module('tourable')
                 if (!$scope.tour) {
                     $scope.tour = response.data;
                 }
+                if ($state.current.name === "tour.overview") {
+                    $rootScope.loading = false;
+                }
             }, function (error) {
                 console.log("Error fetching tour metadata: ", error);
+                if ($state.current.name === "tour.odverview") {
+                    $rootScope.loading = false;
+                }
             });
+
         }
 
         function getTourBundle(id) {

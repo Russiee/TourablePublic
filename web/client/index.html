@@ -26,6 +26,8 @@
 
     </head>
     <body>
+        <ng-include src="'client/app/shared/loading/loading.view.html'" ng-show="loading"></ng-include>
+        <ng-include src="'client/app/shared/loading/loading.light.view.html'" ng-show="loadingLight"></ng-include>
         <ui-view></ui-view>
         <!-- files injected by gulp-inject -->
         <!-- inject:js -->

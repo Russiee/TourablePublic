@@ -12,13 +12,14 @@
     font-family: Pacifico;
     color: #fff;
     text-align: center;
+    font-size: 40px;
 }
 
 #key-form {
     max-width: 400px;
     margin: 0 auto;
     padding: 30px;
-    margin-top: 200px;
+    margin-top: 20vh;
 }
 
 #key-form input {
@@ -47,7 +48,8 @@
     margin-top: 10px;
     margin-bottom: 30px;
     color: #D8DCE0;
-    font-size: 10px;
+    font-size: 14px;
+    font-weight: 400;
 }
 
 .app-badges {
@@ -60,4 +62,27 @@
     max-width: 135px;
     display: inline-block;
     cursor: pointer;
+}
+
+.home-admin-login {
+    margin: 0 auto;
+    display: block;
+    margin-top: 20px;
+    border-radius: 5px;
+    padding: 10px 20px;
+    border-color: #D8DCE0;
+    border-width: 1px;
+    border-style: solid;
+    background-color: transparent;
+    color: #D8DCE0;
+    min-width: 100px;
+}
+
+.home-admin-login:hover {
+    border-color: #D8DCE0;
+    background-color: #D8DCE0;
+}
+
+.home-admin-login:focus {
+    outline: 0 !important;
 }
