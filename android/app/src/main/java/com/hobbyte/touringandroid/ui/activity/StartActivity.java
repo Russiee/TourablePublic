@@ -139,8 +139,6 @@ public class StartActivity extends AppCompatActivity {
             // fetches a cursor at position -1
             Cursor c = dbHelper.getTourDisplayInfo();
 
-            Log.d(TAG, DatabaseUtils.dumpCursorToString(c)); // TODO remove this at some point
-
             while (c.moveToNext()) {
                 // for each tour, add an item with tour name and expiry date
                 View tourItem = getLayoutInflater().inflate(R.layout.text_tour_item, layout, false);
@@ -195,7 +193,7 @@ public class StartActivity extends AppCompatActivity {
                 String key = tourText.getText().toString().trim();
 
                 // remove whitespace and slashes to prevent errors further on
-                key = key.replaceAll("[\\s\\/]+", "");
+                key = key.replaceAll("[\\s\\/\\\\]+", "");
                 checkTourKey(key);
             }
         });

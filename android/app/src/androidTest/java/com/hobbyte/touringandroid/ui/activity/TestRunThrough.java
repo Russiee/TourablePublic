@@ -35,11 +35,10 @@ import static org.hamcrest.Matchers.instanceOf;
 /**
  * Created by Nikita on 21/03/2016.
  */
-
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 
-public class StartActivityTest {
+public class TestRunThrough {
 
     private String validKey;
     private String invalidKey;
