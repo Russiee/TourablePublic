@@ -133,7 +133,7 @@ class POITableViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {s
+    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
     
@@ -156,7 +156,7 @@ class POITableViewController: UITableViewController {
                 label.textContainerInset = UIEdgeInsetsMake(10, 12, 0, 12)
                 label.editable = false
                 label.font = UIFont.boldSystemFontOfSize(18)
-                label.text = "\(row["content"] as! String) "
+                label.text = "\(row["content"] as? String) "
                 
                 label.sizeToFit()
                 label.textAlignment = NSTextAlignment.Center
