@@ -68,14 +68,17 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
     private Bitmap loadingBitmap;
     private String keyID;
 
+    POIFragment fragment;
+
     // needed to prevent ListView recycling form making many duplicate quizzes
     private Quiz quiz;
 
-    public PoiContentAdapter(Context context, ListViewItem[] content, String keyID) {
+    public PoiContentAdapter(Context context, ListViewItem[] content, String keyID, POIFragment fragment) {
         super(context, 0, content);
         this.keyID = keyID;
         items = content;
         namePattern = Pattern.compile(FILE_NAME_PATTERN);
+        this.fragment = fragment;
 
         // load a low-resolution placeholder that will initially be used in place of actual images
         // and will be replaced as soon as a requested image has loaded
@@ -413,50 +416,34 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
             options.inJustDecodeBounds = true;
             BitmapFactory.decodeFile(file.getAbsolutePath(), options);
 
-            // then calculate the factor by which we can sub-sample the actual image, and load the
-            // sub-sampled bitmap
-            options.inSampleSize = calculateSampleSize(options);
-            options.inJustDecodeBounds = false;
+            ///get dimensions of the view that we want to show the image in
+            int[] dimens = fragment.getLayoutViewDimensions();
+            int viewWidth = dimens[0];
+            int viewHeight = dimens[1];
 
+            //get the resolution of the image and the fragment view
+            int mpFile = options.outHeight * options.outWidth;
+            int mpView = viewHeight * viewWidth;
+
+            //calculate the factor by which we can sub-sample the saved image
+            options.inSampleSize = (int) ((1.41 * mpFile) / mpView);
+
+            //now load file, but only load the size we need, not the whole thing
+            options.inJustDecodeBounds = false;
             Bitmap sampledBM = BitmapFactory.decodeFile(file.getAbsolutePath(), options);
 
+            //scale image to fit width
+            int newWidth = viewWidth;
+            int newHeight = (int) (((float) sampledBM.getHeight()) * (((float) viewWidth) / ((float) sampledBM.getWidth())));
 
-
-            int newWidth = POIFragment.SCREEN_WIDTH;
-            int newHeight = sampledBM.getHeight() * (POIFragment.SCREEN_WIDTH / sampledBM.getWidth());
-
-            Log.d(TAG, "newHeight: " + newHeight);
-            Log.d(TAG, "newWidth: " + newWidth);
-
-            if (newHeight > POIFragment.SCREEN_HEIGHT - 100) {
-                newHeight = POIFragment.SCREEN_HEIGHT;
-                float ratio = (float)POIFragment.SCREEN_HEIGHT / (float) sampledBM.getHeight();
-                newWidth = (int) (sampledBM.getWidth() * ratio);
+            //if image is taller than the screen, scale to the height of the fragment view instead
+            if (newHeight > viewHeight) {
+                newHeight = viewHeight;
+                newWidth = (int) (((float) sampledBM.getWidth()) * (((float) viewHeight) / ((float) sampledBM.getHeight())));
             }
 
-            return Bitmap.createScaledBitmap(sampledBM, newWidth, newHeight, true);
-
-        }
-
-        /**
-         * Calculates the sample size value to use when loading the image, as a power of two (as
-         * directed).
-         */
-        private int calculateSampleSize(BitmapFactory.Options options) {
-            final int imgHeight = options.outHeight;
-            final int imgWidth = options.outWidth;
-            int sampleSize = 1;
-
-            int height = POIFragment.SCREEN_HEIGHT / 2;
-
-            if (imgHeight > height || imgWidth > POIFragment.SCREEN_WIDTH) {
-                while ((imgHeight / sampleSize > height) &&
-                        (imgWidth / sampleSize > POIFragment.SCREEN_WIDTH)) {
-                    sampleSize *= 2;
-                }
-            }
-
-            return sampleSize;
+            //return the bitmap for the screen
+            return Bitmap.createScaledBitmap(sampledBM, newWidth, newHeight, false);
         }
     }
 }

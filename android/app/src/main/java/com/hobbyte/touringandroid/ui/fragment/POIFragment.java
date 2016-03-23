@@ -2,16 +2,16 @@ package com.hobbyte.touringandroid.ui.fragment;
 
 import android.app.ListFragment;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.hobbyte.touringandroid.App;
 import com.hobbyte.touringandroid.R;
 import com.hobbyte.touringandroid.io.FileManager;
 import com.hobbyte.touringandroid.tourdata.ListViewItem;
@@ -47,9 +47,6 @@ public class POIFragment extends ListFragment {
     private static final String IMAGE = "image";
     private static final String VIDEO = "video";
     private static final String QUIZ = "quiz";
-
-    public static int SCREEN_HEIGHT;
-    public static int SCREEN_WIDTH;
 
     private String keyID;
     private String objectID;
@@ -89,7 +86,6 @@ public class POIFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setScreenDimensions();
 
         if (getArguments() != null) {
             objectID = getArguments().getString(PARAM_OBJECTID);
@@ -106,19 +102,6 @@ public class POIFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_poi, container, false);
-    }
-
-    private void setScreenDimensions() {
-        DisplayMetrics metrics = App.context.getResources().getDisplayMetrics();
-        SCREEN_WIDTH = metrics.widthPixels;
-        SCREEN_HEIGHT = metrics.heightPixels;
-
-        LinearLayout l = (LinearLayout) getActivity().findViewById(R.id.fragmentID);
-        SCREEN_WIDTH = l.getWidth();
-        SCREEN_HEIGHT = l.getHeight();
-
-        Log.d(TAG, "Layout width: " + SCREEN_WIDTH);
-        Log.d(TAG, "Layout height: " + SCREEN_HEIGHT);
     }
 
     @Override
@@ -188,7 +171,7 @@ public class POIFragment extends ListFragment {
         if (listItems != null) {
             PoiContentAdapter adapter = new PoiContentAdapter(
                     getActivity().getApplicationContext(),
-                    listItems, keyID
+                    listItems, keyID, this
             );
 
             setListAdapter(adapter);
@@ -249,5 +232,20 @@ public class POIFragment extends ListFragment {
         }
 
         return new ListViewItem("", PoiContentAdapter.IGNORE_ITEM_VIEW_TYPE, null, null, 0);
+    }
+
+
+    public int[] getLayoutViewDimensions() {
+        Toolbar l = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        View content = getActivity().getWindow().findViewById(Window.ID_ANDROID_CONTENT);
+
+        int contentViewWidth = content.getWidth();
+        int contentViewHeight = content.getHeight() - l.getHeight();
+
+        //logging
+        Log.d(TAG, "contentViewHeight: " + contentViewHeight);
+        Log.d(TAG, "contentViewWidth: " + contentViewWidth);
+
+        return new int[]{contentViewWidth, contentViewHeight};
     }
 }
