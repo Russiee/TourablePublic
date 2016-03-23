@@ -84,14 +84,15 @@ class TourMetadataConnector {
 
     // update the cache when the tourMetadata is downloaded It is stored in the same cache dictionary of the tourKey
     func saveUpdateMetadata(metadata: NSDictionary, objectId: String, tourCode: String){
-
-        var tourDict = NSUserDefaults.standardUserDefaults().objectForKey(tourCode) as! [String : AnyObject]
-
-        tourDict["version"] = metadata["version"]
-        tourDict["estimatedTime"] =  metadata["estimatedTime"]
-
-        NSUserDefaults.standardUserDefaults().setObject(tourDict, forKey: tourCode)
-        NSUserDefaults.standardUserDefaults().synchronize()
+        let dict = NSUserDefaults.standardUserDefaults().objectForKey(tourCode)
+        if dict != nil{
+                var tourDict = dict as! [String : AnyObject]
+                tourDict["version"] = metadata["version"]
+                tourDict["estimatedTime"] =  metadata["estimatedTime"]
+                NSUserDefaults.standardUserDefaults().setObject(tourDict, forKey: tourCode)
+                NSUserDefaults.standardUserDefaults().synchronize()
+        }
+        //otherwise do nothing
     }
 
 }

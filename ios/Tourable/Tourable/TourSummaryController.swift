@@ -37,6 +37,7 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
     @IBOutlet weak var tableView: UITableView!
     
     override func viewWillAppear(animated: Bool) {
+        print("PROBLEM IS IN TOUR SUMMARY CONTROLLER")
         //Get the object id of the tour based on the tourcode given from the table
         objectId =  TourIdParser.sharedInstance.getTourMetadata(tourId)["objectId"] as! String
         //gets the information about the tour to be displayed in the summary
@@ -70,7 +71,7 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
         // download tourSummary data and then updated the view automatically with notifiers
         TourUpdateManager.sharedInstance.prepareTourMangaer(tourId, tableRow: tableRow)
         TourUpdateManager.sharedInstance.getTourMetadata()
-
+        print("PROBLEM IS IN TOUR SUMMARY CONTROLLER")
 
         //set the data source and deligate of the table to this class.
         tableView.dataSource = self

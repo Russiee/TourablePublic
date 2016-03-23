@@ -37,7 +37,7 @@ public class TourUpdateManager: NSObject {
 
     // to be called as an initialiser to prepare the object for other methods
     func prepareTourMangaer(tourCodetoCheck: String, tableRow: Int) {
-        
+        print("check prepare tour manager")
         setTourCodeAndTableRow(tourCodetoCheck, tableRow: tableRow)
 
         // get current tourKey metadata from cache
@@ -52,6 +52,7 @@ public class TourUpdateManager: NSObject {
 
     // set field variables when preparing the class object for the various tasks of the class
     func setTourCodeAndTableRow(tourCodetoCheck: String, tableRow: Int) {
+        print("check table row")
         self.tourCode = tourCodetoCheck
         self.tourTableRow = tableRow
     }
@@ -59,7 +60,7 @@ public class TourUpdateManager: NSObject {
     // this method received data from the api or cache and load it onto the tourSummaryViewController
     func formatDataforTourSummaryAndDiplayIt(jsonResult: NSDictionary) {
         // TOUR LENGTH HOURS AND MINUTES
-        print(jsonResult)
+        print("check out of table format data")
         let minutes = jsonResult["estimatedTime"]
         let estimatedLenght = calculateTourLengthFromMinutes(minutes as! Int)
         timeHours = estimatedLenght.timeHours
@@ -114,6 +115,7 @@ public class TourUpdateManager: NSObject {
 
     // trigger download of the tour metadata needed on the tourSummary
     func getTourMetadata() {
+        print("check metadata")
         // if there is no connection get the data from the cache and load that on tourSummary
         if KeyVerifyConnector.sharedInstance.isConnectedToNetwork() {
             let tourConnector = TourMetadataConnector()
@@ -127,6 +129,7 @@ public class TourUpdateManager: NSObject {
     // check if a project is out to date comparing metadata with current today's date.
     // if the project is out to date, it is deleted after informing the user
     func checkIfOutdatedAndDeleteProject() {
+        print("check out of date")
         if self.newTourKEYmetadata != nil {
             let todaysDate = NSDate()
             let expiresDate = getDateFromString(currentTourKEYmetadata["expiry"] as! String)

@@ -115,7 +115,7 @@ class BundleRouteConnectorTests: XCTestCase {
         let bundleRouteDataDescription = "This tour is for testing and review use only and will not be released to the public. Public tours will include the Royal Brompton Hospital Cardiac Imaging Department"
         let bundleRouteDatatitle = "Ultimate Flat Tour"
         let brc = bundleRouteConnector()
-        brc.startConnection("cjWRKDygIZ")
+        brc.initiateBundleConnection("cjWRKDygIZ")
         let jsonResultFromAPI = brc.getJSONResult()
         XCTAssertEqual(jsonResultFromAPI["description"] as? String, bundleRouteDataDescription, "they should be identical")
         XCTAssertEqual(jsonResultFromAPI["title"] as? String, bundleRouteDatatitle, "titles should match")

@@ -21,6 +21,22 @@ class mediaHelper: XCTestCase {
         super.tearDown()
     }
     
+    
+    func testExistCheckPerformance() {
+        // This is an example of a performance test case.
+        
+        let image = UIImage(named: "PlayButton")
+        let pngImageData = UIImagePNGRepresentation(image!)
+        let path = MediaHelper.sharedInstance.fileInDocumentsDirectory("playButton", fileType: ".png")
+        let result = pngImageData!.writeToFile(path, atomically: true)
+        
+        XCTAssertTrue(result)
+        self.measureBlock {
+            XCTAssertTrue(MediaHelper.sharedInstance.checkFileExists(path))
+        }
+    }
+    
+    
     func testImageDownload() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
@@ -81,21 +97,7 @@ class mediaHelper: XCTestCase {
     
     
     
-    
-    func testExistCheckPerformance() {
-        // This is an example of a performance test case.
-        
-        let image = UIImage(named: "PlayButton")
-        let pngImageData = UIImagePNGRepresentation(image!)
-        let path = MediaHelper.sharedInstance.fileInDocumentsDirectory("playButton", fileType: ".png")
-        let result = pngImageData!.writeToFile(path, atomically: true)
-        
-        XCTAssertTrue(result)
-        self.measureBlock {
-            XCTAssertTrue(MediaHelper.sharedInstance.checkFileExists(path))
-        }
-    }
-    
+  
     func testImageDLPerformance(){
         self.measureBlock{
             let expectation = self.expectationWithDescription("ImageDownloadPerformance")

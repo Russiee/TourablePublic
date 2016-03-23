@@ -83,7 +83,13 @@ public class TourIdParser {
 
     //Gets the dictonary from the cache with the tour code passed to it
     func getTourMetadata(tourCode: String) -> Dictionary<String,AnyObject> {
-        return NSUserDefaults.standardUserDefaults().objectForKey(tourCode) as! [String : AnyObject]
+        let result = NSUserDefaults.standardUserDefaults().objectForKey(tourCode)
+        if result != nil{
+             return result as! [String : AnyObject]
+        }else{
+            return Dictionary<String,AnyObject>()
+        }
+        
     }
 
     //Notifies observers that the table of tour Ids has been updated.
