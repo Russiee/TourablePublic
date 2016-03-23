@@ -153,5 +153,11 @@ class AddRemoveTourTests: XCTestCase {
         
     }
     
+    func testOpenAboutPage() {
+        let app = XCUIApplication()
+        app.navigationBars["Your Tours"].buttons["About  "].tap()
+        app.navigationBars["entryController"].childrenMatchingType(.Button).matchingIdentifier("Back").elementBoundByIndex(0).tap()
+        
+    }
     
 }
