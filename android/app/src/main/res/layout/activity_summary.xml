@@ -189,7 +189,8 @@
                 android:paddingTop="20dp"
                 android:text="@string/summary_activity_start_tour"
                 android:textSize="@dimen/dimension_text_size_small"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:onClick="openTourActivity"/>
         </RelativeLayout>
     </RelativeLayout>
 </RelativeLayout>
