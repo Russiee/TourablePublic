@@ -3,7 +3,7 @@
 </div>
 <div class="row">
     <div class="admin-main col-sm-8">
-        <h3 class="admin-header">Create a {{class.capitalize()}}</h3>
+        <h3 class="admin-header">Create a <span ng-if="class !== 'poi'">{{class.capitalize()}}</span><span ng-if="class === 'poi'">{{class.toUpperCase()}}</span></h3>
     </div>
     <div class="admin-help col-sm-4 hidden-xs"></div>
 </div>
@@ -15,11 +15,56 @@
 
             <input type="text" class="form-control" ng-model="input.value" ng-disabled="creating" ng-if="input.type === 'text'">
 
+
             <textarea type="text" class="form-control" ng-model="input.value" ng-disabled="creating" rows="3" ng-if="input.type === 'textarea'"></textarea>
 
-             <input type="datetime-local" class="form-control" ng-model="input.value" ng-disabled="creating" ng-if="input.type === 'date'">
+            <div ng-if="input.type === 'boolean'">
+                <button class="btn admin-btn-small" ng-click="input.value = true" ng-disabled="creating" ng-class="input.value === true ? 'admin-btn-radio-on' : ''">Yes</button>
+                <button class="btn admin-btn-small" ng-click="input.value = false" ng-disabled="creating" ng-class="input.value === false ? 'admin-btn-radio-off' : ''">No</button>
+            </div>
 
-            <div class="admin-message admin-message-error" ng-show="validate && !input.value && input.required">This is a required input</div>
+            <input type="datetime-local" class="form-control" ng-model="input.value" ng-disabled="creating" ng-if="input.type === 'date'">
+
+            <div ng-if="input.type === 'post'" class="admin-create-post">
+                <div ng-repeat="item in input.value">
+                    <h5 class="admin-subheader">{{item.type.capitalize()}}</h5>
+
+                    <input type="text" class="form-control" ng-model="item.value" ng-disabled="creating" ng-if="item.type === 'header'">
+
+                    <input type="text" class="form-control" ng-model="item.value" ng-disabled="creating" ng-if="item.type === 'header'">
+
+                    <textarea type="text" class="form-control" ng-model="item.value" ng-disabled="creating" rows="3" ng-if="item.type === 'body'"></textarea>
+
+                    <div ng-if="item.type === 'image' || item.type === 'video'">
+                        <div s3-upload bucket="s3Bucket" ng-model="item.url"
+                             s3-upload-options="{getOptionsUri: s3OptionsUri, folder: section.id + '/'}"></div>
+                        <!-- http://jsfiddle.net/danialfarid/0mz6ff9o/135/ -->
+<!--
+                          <button type="file" ngf-select="uploadFiles($file, $invalidFiles)" accept="image/*" class="admin-btn-small">
+                              Select File</button>
+                          <br><br>
+                          File:
+                          <div style="font:smaller">{{f.name}} {{errFile.name}} {{errFile.$error}} {{errFile.$errorParam}}
+                              <span class="progress" ng-show="f.progress >= 0">
+                                  <div style="width:{{f.progress}}%"
+                                       ng-bind="f.progress + '%'"></div>
+                              </span>
+                          </div>
+                          {{errorMsg}}
+-->
+                    </div>
+                </div>
+
+                <div class="admin-create-post-buttons">
+                    <button class="btn admin-btn-small" ng-click="createPostItem('header')" ng-disabled="creating">Add Header</button>
+                    <button class="btn admin-btn-small" ng-click="createPostItem('body')" ng-disabled="creating">Add Body</button>
+                    <button class="btn admin-btn-small" ng-click="createPostItem('image')" ng-disabled="creating">Add Image</button>
+                    <button class="btn admin-btn-small" ng-click="createPostItem('video')" ng-disabled="creating">Add Video</button>
+                    <button class="btn admin-btn-small" ng-click="createPostItem('quiz')" ng-disabled="creating">Add Quiz</button>
+                </div>
+            </div>
+
+            <div class="admin-message admin-message-error" ng-show="validate && input.value === undefined && input.required">This is a required input</div>
         </div>
         <div class="admin-help admin-subheader-offset col-sm-4 hidden-xs">{{input.help}}</div>
     </div>
@@ -27,10 +72,10 @@
 </div>
 <div class="row">
     <div class="admin-main col-sm-8">
-        <button class="btn admin-btn" ng-click="create()" ng-disabled="creating">Create this {{class.capitalize()}}</button><br>
-        <h5 ng-show="creating" class="admin-subheader"><i class="fa fa-spin fa-cog"></i> Creating your {{class.capitalize()}}...</h5>
-        <div class="admin-message admin-message-success" ng-show="accountmessage === success">Your {{class.capitalize()}} has been created successfully</div>
-        <div class="admin-message admin-message-error" ng-show="accountmessage === error">There was an error creating your {{class.capitalize()}}</div>
+        <button class="btn admin-btn" ng-click="create()" ng-disabled="creating">Create <span ng-if="class !== 'poi'">{{class.capitalize()}}</span><span ng-if="class === 'poi'">{{class.toUpperCase()}}</span></button><br>
+        <h5 ng-show="creating" class="admin-subheader"><i class="fa fa-spin fa-cog"></i> Creating your <span ng-if="class !== 'poi'">{{class.capitalize()}}</span><span ng-if="class === 'poi'">{{class.toUpperCase()}}</span>...</h5>
+        <div class="admin-message admin-message-success" ng-show="accountmessage === success">Your <span ng-if="class !== 'poi'">{{class.capitalize()}}</span><span ng-if="class === 'poi'">{{class.toUpperCase()}}</span> has been created successfully</div>
+        <div class="admin-message admin-message-error" ng-show="accountmessage === error">There was an error creating your <span ng-if="class !== 'poi'">{{class.capitalize()}}</span><span ng-if="class === 'poi'">{{class.toUpperCase()}}</span></div>
     </div>
     <div class="admin-help col-sm-4 hidden-xs"></div>
 </div>

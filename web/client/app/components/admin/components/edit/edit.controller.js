@@ -1,6 +1,8 @@
 angular.module('tourable')
     .controller('EditCtrl', function ($rootScope, $scope, $state, editFactory) {
 
+        $rootScope.loadingLight = true;
+
         for (var index in $scope.$parent.tours.all) {
             if ($scope.$parent.tours.all[index].objectId === $state.params.id) {
                 $scope.tour = $scope.$parent.tours.all[index];
@@ -21,7 +23,7 @@ angular.module('tourable')
                     getKeyData();
                 }
             } else if (toState.name === 'admin.edit.section') {
-                if (!toParams.id) {
+                if (!toParams.id && toParams.id !== null) {
                     $state.go('admin.manageTours');
                 } else {
                     getSectionData();
@@ -32,17 +34,23 @@ angular.module('tourable')
         });
 
 
-        $scope.tour = {};
-        $scope.section = {};
+        $scope.tour = sessionStorage.getItem('tour') || {};
+        $scope.keys = {};
+
+        $scope.section = sessionStorage.getItem('section') || {};
+        $scope.deleteSwitch = 0;
 
         if ($state.current.name === 'admin.edit.tour') {
-
             getTourData();
             getKeyData();
         } else if ($state.current.name === 'admin.edit.section') {
-            getSectionData();
-            getSubsectionData();
-            getPOIdata();
+            if ($state.params.id && $state.params.id !== "null") {
+                getSectionData();
+                getSubsectionData();
+                getPOIdata();
+            } else {
+                $state.go('admin.manageTours');
+            }
         }
 
         function getTourData() {
@@ -53,6 +61,7 @@ angular.module('tourable')
                 $scope.tour = response.data;
                 $scope.tour.keys = keys;
                 sessionStorage.setItem('tour', JSON.stringify($scope.tour));
+                $rootScope.loadingLight = false;
             }, function(error) {
                 //Console log in case we need to debug with a user
                 console.log('An error occured while retrieving the admin data: ', error);
@@ -63,7 +72,8 @@ angular.module('tourable')
             var getKeys = editFactory.getKeys($state.params.id);
             getKeys.then(function(response) {
                 console.log('Keys: ', response.data);
-                $scope.tour.keys = response.data;
+//                $scope.tour.keys = response.data;
+                $scope.keys = response.data;
                 sessionStorage.setItem('tour.keys', JSON.stringify($scope.tour.keys));
             }, function(error) {
                 //Console log in case we need to debug with a user
@@ -84,6 +94,7 @@ angular.module('tourable')
             }, function(error) {
                 //Console log in case we need to debug with a user
                 console.log('An error occured while retrieving the admin data: ', error);
+                $state.go('admin.edit.tour')
             });
         }
 
@@ -111,12 +122,68 @@ angular.module('tourable')
             });
         }
 
+        $scope.delete = function() {
+            deleteObject();
+        }
+
+        function deleteObject () {
+            var deleteObj = editFactory.delete($state.current.name.substring($state.current.name.lastIndexOf('.') + 1), $state.params.id);
+            deleteObj.then(function(response) {
+                console.log('DELETE response: ', response.data);
+                if ($state.current.name === 'admin.edit.tour') {
+                    $state.go('admin.manageTours');
+                } else if ($state.current.name === 'admin.edit.section') {
+                    if ($scope.section.superSection.objectId !== "null") {
+                        $state.go('admin.edit.section', {
+                            className: 'section',
+                            id: $scope.section.superSection.objectId
+                        });
+                    } else if ($scope.tour.objectId) {
+                         $state.go('admin.edit.tour', {
+                            className: 'tour',
+                            id: $scope.tour.objectId
+                        });
+                    }
+                }
+            }, function(error) {
+                //Console log in case we need to debug with a user
+                console.log('An error occured while retrieving the admin data: ', error);
+                if ($scope.section.superSection.objectId !== "null") {
+                    $state.go('admin.edit.section', {
+                        className: 'section',
+                        id: $scope.section.superSection.objectId
+                    });
+                } else if ($scope.tour.objectId) {
+                     $state.go('admin.edit.tour', {
+                        className: 'tour',
+                        id: $scope.tour.objectId
+                    });
+                }
+            });
+        }
+
         $scope.createTopSection = function() {
             $state.go('admin.create', {
                 className: 'section',
                 tour: $state.params.id,
                 superSection: "",
                 depth: 0
+            });
+        }
+
+        $scope.createSubsection = function() {
+            $state.go('admin.create', {
+                className: 'section',
+                tour: $state.params.id,
+                superSection: $scope.section.objectId,
+                depth: $scope.section.depth + 1
+            });
+        }
+
+        $scope.createPOI = function() {
+            $state.go('admin.create', {
+                className: 'poi',
+                section: $scope.section.objectId,
             });
         }
 

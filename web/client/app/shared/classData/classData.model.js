@@ -1,5 +1,53 @@
 tourable.factory('classDataFactory', function() {
     return {
+        admin: function (organization) {
+            return {
+                        expectedInput: [
+                            {
+                                description: "First Name",
+                                model: "firstname",
+                                type: "text",
+                                help: "",
+                                required: true
+                            },
+                            {
+                                description: "Last Name",
+                                model: "lastname",
+                                type: "text",
+                                help: "",
+                                required: true
+                            },
+                            {
+                                description: "Email",
+                                model: "email",
+                                type: "text",
+                                help: "",
+                                required: true
+                            },
+                            {
+                                description: "Temporary Password",
+                                model: "password",
+                                type: "text",
+                                help: "",
+                                required: true
+                            },
+                            {
+                                description: "Is this a super admin?",
+                                model: "isSuper",
+                                type: "boolean",
+                                help: "Super admins can manage admins and edit every tour in an organization",
+                                required: true
+                            }
+                        ],
+                        defaultModels: {
+                            organization: organization
+                        },
+                        afterCreate: {
+                            route: "admin.manageAdmins",
+                            options: {}
+                        }
+                    }
+                },
         tour: function (admin) {
             return {
                         expectedInput: [
@@ -97,11 +145,6 @@ tourable.factory('classDataFactory', function() {
                 },
         key: function (tour) {
             return {
-//                var expectedInput = {
-//            "code": "", //expected input is a String
-//            "tour": "",
-//            "expiry": ""
-//        };
                         expectedInput: [
                             {
                                 description: "Key Code",
@@ -129,6 +172,35 @@ tourable.factory('classDataFactory', function() {
                         }
                     }
                 },
-
+        poi: function (section) {
+            return {
+                        expectedInput: [
+                            {
+                                description: "POI Title",
+                                model: "title",
+                                type: "text",
+                                help: "Example: 'Exercise machine A'",
+                                required: true
+                            },
+                            {
+                                description: "POI Post",
+                                model: [],
+                                type: "post",
+                                help: "",
+                                required: false
+                            }
+                        ],
+                        defaultModels: {
+                            description: " ",
+                            section: section,
+                        },
+                        afterCreate: {
+                            route: "admin.edit.section",
+                            options: {
+                                id: section
+                            }
+                        }
+                    }
+                },
     };
 });

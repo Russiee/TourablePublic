@@ -13,6 +13,7 @@ Parse.serverURL = config.database().serverURL;
 app.use(function(req, res, next) {
     //console.log("Running CORS middlesware");
     res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
@@ -56,8 +57,7 @@ router.delete('/v1/organization/:id', organization.DELETE);
 router.get('/v1/admin/:id', admin.GET);
 router.get('/v1/admins', admin.GET_ALL);
 router.post('/v1/admin/', admin.POST);
-router.put('/v1/admin/:id', admin.PUT);
-router.delete('/v1/admin/:id', admin.DELETE);
+//No admin put or delete as this must be done directly via Parse when the user is logged in
 
 //Tour routes
 router.get('/v1/tour/:id',tour.GET);

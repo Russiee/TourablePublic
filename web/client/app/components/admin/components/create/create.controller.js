@@ -9,14 +9,14 @@ angular.module('tourable')
             $state.go('admin.dashboard');
         }
 
-
-
         $scope.class = $state.params.className;
         $scope.tour = $state.params.tour;
+        $scope.section = $state.params.section;
         $scope.superSection = $state.params.superSection;
         $scope.depth = $state.params.depth;
+        $scope.organization = $state.params.organization;
 
-        console.log("States",$state.params);
+        console.log("States", $state.params);
 
         if ($scope.class === 'tour') {
             $scope.classData = classDataFactory.tour($scope.$parent.admin);
@@ -42,7 +42,19 @@ angular.module('tourable')
             } else {
                 $scope.classData = classDataFactory.key($scope.tour);
             }
-        } else {
+        } else if ($scope.class === 'poi') {
+            if (!$scope.section) {
+                $state.go('admin.dashboard');
+            } else {
+                $scope.classData = classDataFactory.poi($scope.section);
+            }
+        } else if ($scope.class === 'admin') {
+            if (!$scope.organization) {
+                $state.go('admin.manageAdmins');
+            } else {
+                $scope.classData = classDataFactory.admin($scope.organization);
+            }
+        }else {
             $state.go('admin.dashboard');
         }
 
@@ -83,8 +95,45 @@ angular.module('tourable')
                 console.log(data[index].value);
                 prepped[data[index].model] = data[index].value;
             }
+            if ($scope.class === 'admin') {
+                prepped.username = prepped.email;
+            }
             return prepped;
         }
 
+        $scope.createPostItem = function (type) {
+            console.log($scope.classData);
+            if (!$scope.classData.expectedInput[1].value) {
+                $scope.classData.expectedInput[1].value = [];
+            }
+            $scope.classData.expectedInput[1].value.push({
+                type: type
+            });
+        }
+
+        //http://jsfiddle.net/danialfarid/0mz6ff9o/135/
+
+//        $scope.uploadFiles = function(file, errFiles) {
+//            $scope.f = file;
+//            $scope.errFile = errFiles && errFiles[0];
+//            if (file) {
+//                file.upload = Upload.upload({
+//                    url: 'https://angular-file-upload-cors-srv.appspot.com/upload',
+//                    data: {file: file}
+//                });
+//
+//                file.upload.then(function (response) {
+//                    $timeout(function () {
+//                        file.result = response.data;
+//                    });
+//                }, function (response) {
+//                    if (response.status > 0)
+//                        $scope.errorMsg = response.status + ': ' + response.data;
+//                }, function (evt) {
+//                    file.progress = Math.min(100, parseInt(100.0 *
+//                                             evt.loaded / evt.total));
+//                });
+//            }
+//        }
 
     });

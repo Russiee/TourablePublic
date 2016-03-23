@@ -11,26 +11,6 @@ angular.module('tourable')
 //        });
 
     return {
-//        signup: function(firstname, lastname, email, phone, pass) {
-//            var user = new Parse.User();
-//            user.set("username", email);
-//            user.set("password", pass);
-//            user.set("email", email);
-//            user.set("firstname", firstname);
-//            user.set("lastname", lastname);
-//
-//            user.signUp(null, {
-//                success: function(user) {
-//                    $rootScope.$broadcast('loginStatusChanged', true);
-//                    return true;
-//                },
-//                error: function(user, error) {
-//                    // Show the error message somewhere and let the user try again.
-//                    console.log("Error: " + error.code + " " + error.message);
-//                    return false;
-//                }
-//            });
-//        },
         login: function(email, pass) {
             Parse.User.logIn(email, pass, {
                 success: function(user) {

@@ -22,7 +22,8 @@ var config = {
             return {
                 appID: "touring-testing",
                 masterKey: "B9pOdZStXFqj48739yOO0B64MTtbv9Tf",
-                serverURL: "https://touring-db-testing.herokuapp.com/parse"
+//                serverURL: "https://touring-db-testing.herokuapp.com/parse"
+                serverURL: "http://localhost:1337/parse"
             };
         }
     }

@@ -1,8 +1,9 @@
+
 .loading-window {
     width: 100vw;
     height: 100vh;
     position: fixed;
-    z-index: 1000;
+    z-index: 2000;
     background: #162B49; /* For browsers that do not support gradients */
     background: -webkit-linear-gradient(#061730, #0f3874); /* For Safari 5.1 to 6.0 */
     background:      -o-linear-gradient(#061730, #0f3874); /* For Opera 11.1 to 12.0 */
@@ -10,6 +11,16 @@
     background:         linear-gradient(#061730, #0f3874); /* Standard syntax */
     color: #FFF;
     padding-top: 30vh;
+}
+
+.loading-light {
+    background: #ecf0f1 !important;
+    color: #162B49 !important;
+    z-index: 500;
+}
+
+.loading-light  .spinner > div {
+    background-color: #162B49;
 }
 
 .loading-window h3 {

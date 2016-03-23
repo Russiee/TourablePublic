@@ -1,3 +1,9 @@
+var config = require('../config.js');
+
+Parse = require('parse/node').Parse;
+Parse.initialize(config.database().appID, config.database().masterKey);
+Parse.serverURL = config.database().serverURL;
+
 //require the necessary files for this module, and initialize Parse
 var validate = require('./validate.js');
 
@@ -118,6 +124,8 @@ var admin = {
         var expectedInput = {
             "username": "", //expected input is a String
             "email": "",
+            "firstname": "",
+            "lastname": "",
             "password": "",
             "organization": "",
             "isSuper": false //expected input is a Boolean
@@ -152,137 +160,6 @@ var admin = {
                 }
             });
         }
-    },
-
-    //PUT route function
-    //updates an admin object
-    //required param(s) in req: id of the admin object to be updated
-    //optional param(s) in req: none
-    //required data in req.body: see expectedInput
-    //TODO: AUTHENTICATE FOR THIS ROUTE TO WORK
-    PUT: function(req, res) {
-        //server log for debugging
-        console.log("PUT ADMIN:\n", req.body);
-
-        //isolates relevant data from request
-        var data = req.body;
-        //isolates id from request params
-        var id = req.params.id;
-
-        //check expected input with validate functions, see POST route for more detailed documentation
-        var expectedInput = {
-            "username": "",
-            "email": "",
-            "organization": "",
-            "isSuper": false
-        };
-
-        var validInput = validate.validateInput(data, expectedInput);
-        var parseData = validate.parseData(data, expectedInput);
-
-        //server log for debugging
-        console.log("Parsed Data: ", parseData);
-
-        //instantiates a new query to Parse (database mount) for the Admin prototype
-        var query = new Parse.Query(Admin);
-
-        //first GET the admin object to be updated
-        //execute query and pass the id as a parameter, as well as success and error callbacks
-        query.get(id, {
-            //success callback, executed if the query is successful
-            success: function(admin) {
-                //server log for debugging
-                console.log("Admin " + id + " retrieved succesfully");
-
-                //iterate over the properties in the parsed data
-                for (var prop in parseData) {
-                    //override the current data in the admin object with our parsed data
-                    admin.set(prop.toString(), parseData[prop]);
-                }
-
-                //execute the save function on the object on the database with Parse, passing success and error callbacks
-                admin.save(null, {
-                    //success callback, executed if the save is successful
-                    success: function(admin) {
-                        //server log for debugging
-                        console.log("Admin " + id + " updated succesfully");
-                        //send an https response with status code 200 and the updated admin data in JSON format
-                        res.status(200).send(admin);
-                    },
-                    //error callback, executed if an error occurs during the save
-                    error: function(admin, error) {
-                        //server logs for debugging
-                        console.log("Failed to update admin " + id);
-                        console.log(error);
-                        //send an https response with status code 500, as well as the error data in JSON format
-                        res.status(500).send(error);
-                    }
-                });
-            },
-            //error callback, executed if an error occurs
-            error: function(object, error) {
-                //server log for debugging
-                console.log("Error retrieving " + id);
-                //send an https response with status code 500
-                res.sendStatus(500);
-            }
-        });
-    },
-
-    //DELETE route function
-    //deletes an admin object
-    //required param(s) in req: id of the admin object to be deleted
-    //optional param(s) in req: none
-    //TODO: AUTHENTICATE FOR THIS ROUTE TO WORK
-    DELETE: function(req, res) {
-        //server log for debugging
-        console.log("DELETE ADMIN");
-
-        //isolates id from request params
-        var id = req.params.id;
-
-        //instantiates a new query to Parse (database mount) for the Admin prototype
-        var query = new Parse.Query(Admin);
-
-        //first GET the admin object to be deleted
-        //execute query and pass the id as a parameter, as well as success and error callbacks
-        query.get(id, {
-            //required to delete admin objects
-            useMasterKey: true,
-            //success callback, executed if the query is successful
-            success: function(admin) {
-                //server log for debugging
-                console.log("Admin " + id + " retrieved succesfully");
-
-                //execute the destroy function on the object on the database with Parse, passing success and error callbacks
-                admin.destroy({
-                    //success callback, executed if the destroy is successful
-                    success: function(admin) {
-                        //server log for debugging
-                        console.log("Deleted admin " + id);
-                        //send an https response with status code 200 to confirm the deletion
-                        res.sendStatus(200);
-                    },
-                    //error callback, executed if an error occurs during deletion (delete not successful)
-                    error: function(error) {
-                        //server logs for debugging
-                        console.log("Failed to delete " + id);
-                        console.log(error);
-                        //send an https response with status code 500
-                        res.sendStatus(500);
-                    }
-                });
-            },
-            //error callback, executed if an error occurs
-            error: function(object, error) {
-                //server logs for debugging
-                console.log("Error retrieving " + id);
-                console.log(error);
-                //send an https response with status code 500, as well as the error data in JSON format
-                res.sendStatus(500);
-            }
-        });
-
     }
 }
 

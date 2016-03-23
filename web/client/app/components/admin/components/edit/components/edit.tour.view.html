@@ -46,7 +46,7 @@
         <div class="admin-main col-sm-8">
             <h5 class="admin-subheader no-padding-top">Tour Keys</h5>
             <ul class="admin-cell-list">
-                <div ng-repeat="key in tour.keys track by $index">
+                <div ng-repeat="key in keys track by $index">
                     <li class="cursor-pointer">{{key.code}}<i class="fa fa-chevron-right pull-right"></i></li>
                 </div>
                 <li class="cursor-pointer admin-edit-new-li" ng-click="createKey()"><i>Add a new key</i><i class="fa fa-plus pull-right"></i></li>
@@ -58,7 +58,9 @@
 <div class="row">
     <div class="admin-main col-sm-8">
         <button class="btn admin-btn" ng-click="save()" ng-disabled="saving">Save</button>
-        <button class="btn admin-btn admin-delete-btn" ng-click="delete()" ng-disabled="saving">Delete</button>
+<!--        <button class="btn admin-btn admin-preview-btn" ui-sref="tour.overview" ng-disabled="saving">Preview tour</button>-->
+        <button class="btn admin-btn admin-delete-btn" ng-click="deleteSwitch = 1" ng-disabled="saving" ng-show="deleteSwitch === 0">Delete</button>
+        <button class="btn admin-btn admin-delete-btn" ng-click="delete()" ng-disabled="saving" ng-show="deleteSwitch === 1">Are you sure?</button>
         <br>
         <h5 ng-show="creating" class="admin-subheader"><i class="fa fa-spin fa-cog"></i> Saving your tour...</h5>
         <div class="admin-message admin-message-success" ng-show="accountmessage === success">Your tour has been saved  successfully</div>
