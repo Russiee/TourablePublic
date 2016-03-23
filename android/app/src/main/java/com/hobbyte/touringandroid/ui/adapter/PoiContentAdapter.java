@@ -30,10 +30,10 @@ import com.hobbyte.touringandroid.App;
 import com.hobbyte.touringandroid.R;
 import com.hobbyte.touringandroid.io.VideoCacheListener;
 import com.hobbyte.touringandroid.tourdata.ListViewItem;
-import com.hobbyte.touringandroid.ui.util.Quiz;
 import com.hobbyte.touringandroid.ui.fragment.POIFragment;
 import com.hobbyte.touringandroid.ui.fragment.VideoFragment;
 import com.hobbyte.touringandroid.ui.util.ImageCache;
+import com.hobbyte.touringandroid.ui.util.Quiz;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -418,15 +418,22 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
 
             Bitmap sampledBM = BitmapFactory.decodeFile(file.getAbsolutePath(), options);
 
-            // if the sampled image is over a certain height, use half the screen height
-            int height = POIFragment.SCREEN_HEIGHT / 2;
-            boolean resizePhoto = sampledBM.getHeight() > height || sampledBM.getWidth() < POIFragment.SCREEN_WIDTH;
 
-            if (resizePhoto) {
-                return Bitmap.createScaledBitmap(sampledBM, POIFragment.SCREEN_WIDTH, height, true);
-            } else {
-                return sampledBM;
+
+            int newWidth = POIFragment.SCREEN_WIDTH;
+            int newHeight = sampledBM.getHeight() * (POIFragment.SCREEN_WIDTH / sampledBM.getWidth());
+
+            Log.d(TAG, "newHeight: " + newHeight);
+            Log.d(TAG, "newWidth: " + newWidth);
+
+            if (newHeight > POIFragment.SCREEN_HEIGHT - 100) {
+                newHeight = POIFragment.SCREEN_HEIGHT;
+                float ratio = (float)POIFragment.SCREEN_HEIGHT / (float) sampledBM.getHeight();
+                newWidth = (int) (sampledBM.getWidth() * ratio);
             }
+
+            return Bitmap.createScaledBitmap(sampledBM, newWidth, newHeight, true);
+
         }
 
         /**
