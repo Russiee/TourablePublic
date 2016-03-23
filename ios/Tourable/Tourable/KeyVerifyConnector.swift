@@ -98,7 +98,6 @@ class KeyVerifyConnector: NSObject, NSURLConnectionDelegate{
     ///A synchronus method to get return from API. Will hold unitl data is returned.
     ///This is useful for some UI blocking waits.
     func getTourMetadata(tourCode: String) -> NSDictionary {
-        print("PROBLEM IS IN JEY VERIFY CONNECTOR")
         // if the network call is not finished retrieve the tour metadata from the cache
         if JSONMetadataFromAPI != nil {
            return JSONMetadataFromAPI

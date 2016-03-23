@@ -123,7 +123,6 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
     }
     
     func setTourInfomation(){
-        print("PROBLEM IS IN ADD NEW TOUR VIEW CONTROLLER")
         let dataId = TourIdParser().getTourMetadata(tourIdForSummary)["objectId"] as! String
         //get the tourID so if cancel is called it get deleted
         tourID = TourIdParser.sharedInstance.getAllTourIDs()[tourIndex!]

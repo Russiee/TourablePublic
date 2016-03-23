@@ -25,7 +25,7 @@ class MainTableTableViewController: UITableViewController, UIAlertViewDelegate {
         tourIDs = tourParser.getAllTourIDs()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "Notified", name: TableUpdateNotificationKey, object: nil)
         self.clearsSelectionOnViewWillAppear = false
-      //  checkToursToDelete()
+        checkToursToDelete()
         
         tableView.contentInset = UIEdgeInsetsMake(50, 0, 0, 0)
         
