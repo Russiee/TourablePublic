@@ -136,7 +136,7 @@ public class SummaryActivity extends AppCompatActivity {
     /**
      * Starts the TourActivity for this tour.
      */
-    public void openTourActivity() {
+    public void openTourActivity(View v) {
         Intent intent = new Intent(this, TourActivity.class);
         intent.putExtra(TourActivity.INTENT_KEY_ID, keyID);
         startActivity(intent);
