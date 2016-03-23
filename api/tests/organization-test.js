@@ -20,6 +20,7 @@ var organizationTest = {
             "color": "Blue",
             "logo": "Lion"
         };
+        //connects to the API database
         request(url)
         //sends object to API
        .post('api/v1/organization/')
@@ -39,6 +40,8 @@ var organizationTest = {
               res.status.should.be.equal(201);
               objID = res.body.objectId;
               //uses callback to ensure tests run synchronously (for the purpose of linking objects through pointers)
+            
+              //calls the callback function and returns with it the created object's ID
               callback(objID);
             });
         },
@@ -49,7 +52,9 @@ var organizationTest = {
     GET1: function(pointerID, url, callback){
         //queries the url with given objectID
         request(url)
+        //queries database with the given object ID
         .get('api/v1/organization/'+pointerID)
+        //expected status codes and content type to be returned
         .expect('Content-Type', /json/)
         .expect(200 || 304) //Status code
         //expected response, test fails if response is not the expected value
@@ -112,7 +117,7 @@ var organizationTest = {
         request(url)
         //queries database with the given object ID
         .get('api/v1/organization/'+pointerID)
-        //expected status codes and values to be returned
+        //expected status codes and content type to be returned
         .expect('Content-Type', /json/)
         .expect(200 || 304) //Status code
         .end(function(err,res) {
