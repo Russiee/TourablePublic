@@ -5,7 +5,7 @@ var morgan = require('morgan');
 
 var config = require('./config.js');
 
-var Parse = require('parse/node').Parse;
+Parse = require('parse/node').Parse;
 Parse.initialize(config.database().appID, config.database().masterKey);
 Parse.serverURL = config.database().serverURL;
 
