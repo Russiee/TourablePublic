@@ -107,7 +107,7 @@ public class FileManagerTest {
      * Make sure that all traces of a tour are removed correctly.
      */
     @Test
-    public void testTourRemoval() {
+    public void testTourRemoval() throws Exception {
         // first we need to make a fake row in the db for our tour
         TourDBManager dbHelper = TourDBManager.getInstance(context);
         dbHelper.putRow(KEY_ID, KEY_NAME, "def", "ghi", EXPIRY, false, 1);
@@ -117,19 +117,16 @@ public class FileManagerTest {
 
         // the row should have been removed
         assertFalse(dbHelper.doesTourKeyNameExist(KEY_NAME));
+        dbHelper.close();
 
         // the files are deleted on a separate thread, so give it some time
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            System.out.println("Interrupted");
-        }
+        Thread.sleep(500);
 
+        // a directory cannot be deleted if it has contents, so if the base directory
+        // doesn't exist, then all the contents have been deleted as well
         File file = new File(context.getFilesDir(), KEY_ID);
         assertFalse(file.exists());
 
-        dbHelper.clearTable();
-        dbHelper.close();
     }
 
     @After
