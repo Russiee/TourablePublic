@@ -8,9 +8,10 @@
 
 import Foundation
 
+///Saves the JSON to NSUserDefaults using the objectId as the key.
 class POIParser{
 
-    //creates and returns a pointOfInterest object from the JSON passed to it
+    ///Creates and returns a pointOfInterest object from the JSON passed to it
     func createNewPOI(data: NSDictionary)-> pointOfInterest {
         //Create and return the POI
         if data["post"] != nil{
@@ -48,17 +49,13 @@ class POIParser{
 
         self.createNewPOI(data).downloadContent()
     }
-    
+
     func createEmptyPOI(){
-        
          imageHandler.sharedInstance.queueImage([" "])
-        
     }
 
-    //Retrives the JSON from the cache and returns a POI object created from it
+    ///Takes parameter Retrives the JSON from NSUserDefaults and returns a POI object created from it.
     func getTourSection(objectId: String)-> pointOfInterest{
-        //Get the JSON
-
         let data = NSUserDefaults.standardUserDefaults().objectForKey(objectId) as! NSDictionary
         //Create a poi object
         return createNewPOI(data)

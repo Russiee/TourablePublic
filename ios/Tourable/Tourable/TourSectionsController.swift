@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+///TourSectionsController is responsible for displaying the tour sections. Display Subsections and POIS.
 class TourSectionsController: UITableViewController {
 
     var models = [String: String]()
@@ -34,6 +34,7 @@ class TourSectionsController: UITableViewController {
         let tdp = tourDataParser.init()
         tableView.tableHeaderView = tourSummaryTextView
         
+        //Get all the Subsections.
         for subsectionPointer in subsectionArray{
             if subsectionPointer["objectId"] != nil {
                 let subsectionData = tdp.getTourSection((subsectionPointer["objectId"] as! String))
@@ -46,8 +47,8 @@ class TourSectionsController: UITableViewController {
         }
 
         tourSummaryTextView.sizeToFit()
-
         
+        //Get all the POIS.
         let poip = POIParser.init()
         for poiPointer in poiArray{
             let poiData = poip.getTourSection((poiPointer["objectId"] as? String)!)
@@ -90,7 +91,7 @@ class TourSectionsController: UITableViewController {
     // MARK: - Table view data source
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
+        //Depending on existance of Subsections and POIs will determine amount of sections we have.
         if poiKeys.isEmpty || sectionKeys.isEmpty{
             return 1
         }else{
@@ -99,7 +100,7 @@ class TourSectionsController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
+        //Get the amount of rows based on amount of Subsections and POIs.
         if section == 0 && poiKeys.isEmpty{
         return sectionKeys.count
         }else if section == 0 && sectionKeys.isEmpty{
@@ -118,7 +119,7 @@ class TourSectionsController: UITableViewController {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("tableCell2", forIndexPath: indexPath)
         
-        // Configure the cell...
+        //Set the cell text to be that of the Subection or POI.
         if indexPath.section == 0 && poiKeys.isEmpty{
             cell.textLabel?.text = sectionKeys[indexPath.row]
         }else if indexPath.section == 0 && sectionKeys.isEmpty{
@@ -132,7 +133,7 @@ class TourSectionsController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        //CODE TO GO TO THE NEXT LEVEL OF TOUR OR DISPLAY POINT OF INTEREST
+        //Code to go to a Subsection or display POI
         let row = tableView.indexPathForSelectedRow!.row
         var rowTitle = ""
      
@@ -200,7 +201,8 @@ class TourSectionsController: UITableViewController {
         }
 
         let objectId = models[title]
-
+        
+        //Choose which segue to perform depending on which cell was tapped.
         if (segue.identifier == "showNextPage") {
             let newViewController = segue.destinationViewController as! TourSectionsController
             newViewController.superTableId = objectId!
@@ -224,6 +226,7 @@ class TourSectionsController: UITableViewController {
     
     
  override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    //Set the headerTitles depending on exiatance of Subsections and POIs.
     let headerTitles = ["SUBSECTIONS","POINTS OF INTEREST"]
     if tableView.numberOfSections == 1 && sectionKeys.isEmpty{
         return headerTitles[1]

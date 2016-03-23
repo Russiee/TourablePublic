@@ -10,6 +10,7 @@ import UIKit
 import AVFoundation
 import AVKit
 
+///Deals with the creation of views for POIs, creating thumbnails for videos, playing videos and creating navigation between POIS.
 class POITableViewController: UITableViewController {
     
     var poiID = ""
@@ -28,10 +29,7 @@ class POITableViewController: UITableViewController {
     
     @IBOutlet var PreviousSectionButton: UIBarButtonItem!
     
-    
-    
     @IBAction func BackToOverView() {
-        print("go back to overview")
         self.navigationController?.popViewControllerAnimated(true)
     }
     
@@ -42,22 +40,17 @@ class POITableViewController: UITableViewController {
         getPOIS()
         let pointToDisplay = POIParser().getTourSection(poiID)
         self.title = pointToDisplay.title
-        print(pointToDisplay.post)
+
         createSubviews(pointToDisplay.post)
-        print(poiViews.count)
+
         createNavigationViews()
         //reloads the tableViewData so that the Views are shown, potential move to viewWillAppear the createSubViews method
         self.tableView.reloadData()
         self.tableView.separatorStyle = UITableViewCellSeparatorStyle.None
         self.tableView.clipsToBounds = true
-        
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-        
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
-    
+
+    ///Returns a list of pois that are in this section
     func getPOIS(){
         POIList = []
         for POIS in (((NSUserDefaults.standardUserDefaults().objectForKey(superSectionID)) as! NSDictionary)["pois"]) as! NSArray{
@@ -65,20 +58,24 @@ class POITableViewController: UITableViewController {
             POIList.append(POIS["objectId"] as! String)
         }
     }
-    
+
+    ///Appends necessary labels to nextNavigationView and previousNavigationView that will display depending if current POI has a next/previous POI.
     func createNavigationViews(){
+        //Reset the navigaton view array for every call of this method.
         nextNavigationView = []
         previousNavigationView = []
+
+        //Find positionof current POI in respect to all other POIS in this section.
         let Z = POIList.indexOf(poiID)!
-        
-        //if only poi in the list then wont add any labels for navigation
+
+        //if only poi in the list then won't add any labels for navigation
         if(POIList.count > 1){
-            
+
             //case where the poi is first in the list
             if(POIList.indexOf(poiID) == 0){
                 //get the next POI
                 let nextPOIID = POIList[Z + 1]
-                //get the next POI's title so display
+                //get the next POI's title to display
                 let nextPOITitle = (NSUserDefaults.standardUserDefaults().objectForKey(nextPOIID))!["title"] as! String
                 print(nextPOITitle)
                 let nextPOILabel = UILabel(frame: CGRectMake(0,0,UIScreen.mainScreen().bounds.size.width-12, 59))
@@ -92,7 +89,7 @@ class POITableViewController: UITableViewController {
             else if(POIList.indexOf(poiID) == (POIList.count - 1)){
                 //get the previous POI
                 let previousPOIID = POIList[Z - 1]
-                //get the previous POI's title so display
+                //get the previous POI's title to display
                 let previousPOITitle = (NSUserDefaults.standardUserDefaults().objectForKey(previousPOIID))!["title"] as! String
                 print(previousPOITitle)
                 let previousPOILabel = UILabel(frame: CGRectMake(0,0,UIScreen.mainScreen().bounds.size.width-12, 59))
@@ -108,7 +105,6 @@ class POITableViewController: UITableViewController {
                 let nextPOIID = POIList[Z + 1]
                 //getting next POI's title to display
                 let nextPOITitle = (NSUserDefaults.standardUserDefaults().objectForKey(nextPOIID))!["title"] as! String
-                print(nextPOITitle)
                 let nextPOILabel = UILabel(frame: CGRectMake(0,0,UIScreen.mainScreen().bounds.size.width-12, 59))
                 nextPOILabel.text = " Go to next POI (\(nextPOITitle))"
                 
@@ -137,35 +133,30 @@ class POITableViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    // MARK: - Table view data source
-    
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
+        //so we know how many cells we have, this is why the navigation views are in an array.
         return poiViews.count + nextNavigationView.count + previousNavigationView.count
     }
     
     func createSubviews(post: NSArray){
-        
+        //deal with text (header/body), media (image/video) types and any desriptions linked with the media.
         let width = UIScreen.mainScreen().bounds.size.width
         
         for row in post{
-            print("========")
-            print(row)
             let type = (row["type"] as! String).lowercaseString
             switch type{
                 
-            case "Header" :
+            case "header" :
                 
                 let label = UITextView(frame: CGRectMake(0, 0, width, 40))
                 label.textContainerInset = UIEdgeInsetsMake(10, 12, 0, 12)
                 label.editable = false
                 label.font = UIFont.boldSystemFontOfSize(18)
-                label.text = "\(row["content"] as! String) "
+                label.text = "\(row["content"] as? String) "
                 
                 label.sizeToFit()
                 label.textAlignment = NSTextAlignment.Center
@@ -177,7 +168,7 @@ class POITableViewController: UITableViewController {
                 
                 
             case "body" :
-                
+                //make sure that we get the right amount of lines to textfield is correct size.
                 let chars: CGFloat = CGFloat((row["content"] as! String).characters.count)
                 var lines: CGFloat = chars/60
                 if lines < 2{
@@ -235,10 +226,9 @@ class POITableViewController: UITableViewController {
                         self.poiViews.append(label)
                         self.tableView.reloadInputViews()
                         self.tableView.reloadData()
-                        
                     })
-                }else{
-                    
+                } else {
+                    //calculate the correct size of width and height for imageView based of original images width compared to the devices width.
                     let  h_fact = width / (img?.size.width)!
                     let new_height = (img?.size.height)! * h_fact
                     let new_width = (img?.size.width)! * h_fact
@@ -249,6 +239,7 @@ class POITableViewController: UITableViewController {
                     imageView1.setNeedsDisplay()
                     self.poiViews.append(imageView1)
                     
+                    //deal with the creation of medias description
                     let chars: CGFloat = CGFloat((row["description"] as! String).characters.count)
                     var lines: CGFloat = chars/60
                     if lines < 2{
@@ -271,6 +262,7 @@ class POITableViewController: UITableViewController {
                 
             case "video":
                 do {
+                    //load videos url from where we saved it
                     let videoURL = videoHandler.sharedInstance.loadVideoPath(row["url"] as? String)!
                     videoList.append(videoURL)
                     let asset = AVURLAsset(URL: videoURL, options: nil)
@@ -286,6 +278,8 @@ class POITableViewController: UITableViewController {
                     
                     let imageView = UIImageView(frame: CGRectMake(0, 0, new_width, new_height))
                     imageView.userInteractionEnabled = true
+                    
+                    //adds a recognizer so that video starts when image clicked.
                     recognizer.addTarget(self, action: "videoThumbnailTapped")
                     imageView.addGestureRecognizer(recognizer)
                     imageView.clipsToBounds = true
@@ -320,6 +314,7 @@ class POITableViewController: UITableViewController {
                     print("Error generating thumbnail: \(error)")
                 }
             case "quiz":
+                //create a button to add to the poi to then take the user to take the tour
                 quizes.append(row as! NSDictionary)
                 let button   = UIButton(type: UIButtonType.Custom) as UIButton
                 button.frame = CGRectMake(0 , 0, width, 60)
@@ -339,13 +334,10 @@ class POITableViewController: UITableViewController {
                 print("something is wrong")
                 print(row["type"])
             }
-            
-            
-            
         }
     }
     
-    //a function to resize the preview image of the video and overlay the play button
+    ///Takes as parameter image you want play button overlayed on, width and height wanted for view. The returned image has a play button overlayed on top of the thumbnail of the video.
     func createPreviewImage(image: UIImage, Width: CGFloat, Height: CGFloat) -> UIImage{
         let widthScale = Width / image.size.width
         let newWidth = image.size.width * widthScale
@@ -374,8 +366,7 @@ class POITableViewController: UITableViewController {
         
         return finalImage
     }
-    
-    
+
     func videoThumbnailTapped(){
         let url = videoList[0]
         do{
@@ -384,55 +375,60 @@ class POITableViewController: UITableViewController {
             print("error playing video")
         }
     }
+
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
+        //have to intialise it to empty cell, which we choose will follow on.
         var cell = UITableViewCell()
-        //gets rid of subviews before adding new ones to make sure no overlaps occur
         
+        //gets rid of subviews before adding new ones to make sure no overlaps occur
         if(indexPath.row < poiViews.count){
+            //as the row is still in the poiViews we use the poiCells cell. We add the view that corresponds to the view in poiViews.
             cell = tableView.dequeueReusableCellWithIdentifier("poiCells", forIndexPath: indexPath)
-            // Configure the cell...
+
+            //to stop overlap of views.
             for view in cell.contentView.subviews {
                 view.removeFromSuperview()
-                
             }
+
             //adding the contents of the post into our tableView
             cell.contentView.addSubview(poiViews[indexPath.row])
             cell.selectionStyle = UITableViewCellSelectionStyle.None
         }
         else if (indexPath.row < (poiViews.count + 1)){
+            //if one of the navigation views isnt empty it will be added, if there is a view in both then nextPOI will be added here.
             var navigationToAdd: UIView
             if(nextNavigationView.count != 0){
+                //now we use our NextPOI cell to load the nagivation view into
                 cell = tableView.dequeueReusableCellWithIdentifier("NextPOI", forIndexPath: indexPath)
-                
+
                 for view in cell.contentView.subviews {
                     view.removeFromSuperview()
-                    
                 }
-                
+
+                //set the tag so we know which cell is for NextPOI navigation.
                 cell.tag = 999
                 navigationToAdd = nextNavigationView[0]
                 print("add NextPOI label")
             }
             else {
+                //if no nextPOI navigation then we add a previous poi navigation instead.
                 cell = tableView.dequeueReusableCellWithIdentifier("PreviousPOI", forIndexPath: indexPath)
+
                 for view in cell.contentView.subviews {
                     view.removeFromSuperview()
-                    
                 }
-                
+
+                //different tag to nextPOI, again so we know which cell is for PreviousPOI navigation.
                 cell.tag = 998
                 navigationToAdd = previousNavigationView[0]
-                print("add PreviousPOI label")
             }
-            
             
             cell.contentView.addSubview(navigationToAdd)
             cell.accessoryType = .DisclosureIndicator
-            print("adding navigation cell")
             
         }
         else if (indexPath.row < (poiViews.count + 2)){
+            //as if we have 2 navigation cells as know that the first one is always nextPOI, so we need to add previousPOI. This is due to our designs.
             cell = tableView.dequeueReusableCellWithIdentifier("PreviousPOI", forIndexPath: indexPath)
             for view in cell.contentView.subviews {
                 view.removeFromSuperview()
@@ -443,62 +439,67 @@ class POITableViewController: UITableViewController {
             print("adding navigation cell")
         }
         
-        print(indexPath.row)
         return cell
     }
-    
+
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        //here we check for navigation based on the cell's tag. if 999 then nextPOI, if 998 then previous poi. Every other cell doesnt navigate.
         
         let Z = POIList.indexOf(poiID)!
         if(tableView.cellForRowAtIndexPath(indexPath)?.tag == 999){
-            print("i got here")
+            //change the poiID form the pois in the list
             poiID = POIList[Z + 1]
+
+            //reset the poiViews before we reloadData
             poiViews=[]
+
+            //reset all views of current POI
             self.tableView.reloadData()
+
+            //changes the current ViewController to change to new POI.
             viewDidLoad()
         }
-            
+        
+        // same principle here except for previous POI
         else if(tableView.cellForRowAtIndexPath(indexPath)?.tag == 998){
             poiID = (POIList)[Z - 1]
             poiViews = []
             self.tableView.reloadData()
             viewDidLoad()
-            
         }
-        
-        
     }
     
-    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        //takes us to new view with the quiz there
         if segue.identifier == "quizSegue"{
-            
+
             let destination =  segue.destinationViewController as! QuizTableViewController
             destination.quiz = sender as! Quiz
         }
     }
+
     func quizButtonAction(sender: UIButton) {
-        // do something else
-        print("fuck this I want to go home")
+        //when a quiz button gets pressed, creates new quiz and then goes to that view by performing segue to it
         let quizData = quizes[sender.tag]
         let quiz = Quiz()
+
         quiz.question = quizData["question"] as! String
         quiz.options = quizData["options"] as! NSArray
         quiz.correct = quizData["solution"] as! Int
-        print(quizData["question"])
+
         performSegueWithIdentifier("quizSegue", sender: quiz)
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        //varying heights so deals with padding
         if indexPath.row < poiViews.count {
             return poiViews[indexPath.row].frame.height+5
         }
         return 60
     }
     
-    //used to display a video when it is tapped on screen.
-    //videoUrl: file url or online url of video to display
-    //loop: should the video repeat
+    ///Takes as parameter videoUrl and a boolean. Creates an AVPlayerViewController to play the video and loops should the video need to.
     func playVideo(videoUrl: String, loop: Bool) throws {
         //path of video to play
         let path = videoHandler.sharedInstance.loadVideoPath(videoUrl)
@@ -516,7 +517,8 @@ class POITableViewController: UITableViewController {
             self.player.play()
         }
     }
-    //Loop the video when this is notified by the player.
+
+    ///Loop the video when this is notified by the player.
     func playerDidFinishPlaying() {
         
         //Defines the start of the video and sets the video back there.
@@ -525,8 +527,6 @@ class POITableViewController: UITableViewController {
         let timeToGoTo : CMTime = CMTimeMake(restartTime, preferredTimeScale)
         self.player.seekToTime(timeToGoTo)
         self.player.play()
-        
     }
-    
     
 }

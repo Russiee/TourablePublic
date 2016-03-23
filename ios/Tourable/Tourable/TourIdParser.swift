@@ -9,16 +9,12 @@
 import Foundation
 
 let TableUpdateNotificationKey = "tableAddWasComplete"
-
+///TourIdParser class is responsible for parsing the tourIds. Adds tour metadata,g ets tour meta data, updates our "Array", deletes tours from "Array", saves tours to "Array", get all tour IDs and get all tour Titles.
 public class TourIdParser {
-
-    //making the TourIdParser a singleton to parse all tours from the API
-    //in order to access TourIdParser methods call TourIdParser.shardInstance.METHOD()
-    
-    //static let sharedInstance = TourIdParser()
     
      static let sharedInstance = TourIdParser()
-
+    
+    ///Takes as parameter the position of tour to delete. Deletes it from NSUserDefaults "Array"
     func deleteTourIdAtRow(row: Int) {
         //remove from "Array"
         var newArray : [AnyObject] = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! [[String: String]]
@@ -28,7 +24,7 @@ public class TourIdParser {
     }
    
     
-    //Adds a new tourId to the array
+    ///Takes as parameter the tourID and tourTitle as string. Updates the "Array" and saves the key value pair in NSUserDefaults using the saveArray method.
     func updateArray(tourId: String, tourTitle: String){
         //Duplicates the array, creating a mutable version that the new tourId can be added to.
         var newArray : [AnyObject] = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! [[String: String]]
@@ -47,8 +43,7 @@ public class TourIdParser {
         notify()
     }
     
-    //Adds the metadata passed to it into the cache, after turning it into a dictonary that can be retrieved 
-    // from the cache with its tour Id code
+    ///Takes as parameter the JSON received from APIConnector. Adds the metadata into NSUserDefauls, after tuurning it into a dictionary that can be retrieved with the tour Id as the key.
     func addTourMetaData(metadata: NSDictionary){
 
         let tourCode = metadata["code"]!
@@ -81,7 +76,7 @@ public class TourIdParser {
         )
     }
 
-    //Gets the dictonary from the cache with the tour code passed to it
+    ///Takes as parameter the tourId and return the metaData stored in NSUserDefaults.
     func getTourMetadata(tourCode: String) -> Dictionary<String,AnyObject> {
         let result = NSUserDefaults.standardUserDefaults().objectForKey(tourCode)
         if result != nil{
@@ -97,7 +92,7 @@ public class TourIdParser {
         NSNotificationCenter.defaultCenter().postNotificationName(TableUpdateNotificationKey, object: self)
     }
 
-    //method for getting tourIds that have been added for checking the table updates.
+    ///Return an array of the tour titles that are currently in "Array". Used for checking updates to the mainTableView.
     public func getAllTours() -> [String] {
         let tours = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! NSMutableArray
         var tourTitles = [String]()
@@ -109,6 +104,7 @@ public class TourIdParser {
         return tourTitles
     }
     
+    ///Return an array of the tour Ids that are currently in "Array". Used for checking updates to the mainTableView.
     public func getAllTourIDs() -> [String] {
         let tours = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! NSMutableArray
         var tourIDs = [String]()

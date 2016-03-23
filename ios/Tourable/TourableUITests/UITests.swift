@@ -73,7 +73,7 @@ class UITourTests: XCTestCase {
         tablesQuery.buttons["Add Tour"].tap()
       
         let collectionViewsQuery = app.alerts["Add New Tour"].collectionViews
-        collectionViewsQuery.textFields["Enter Tour Key"].typeText("KCL;")
+        collectionViewsQuery.textFields["Enter Tour Key"].typeText("IOS-3333")
         
         let addButton = collectionViewsQuery.buttons["Add"]
         addButton.tap()
@@ -93,7 +93,7 @@ class UITourTests: XCTestCase {
         collectionViewsQuery.textFields["Enter Tour Key"].typeText("KCL-1111")
         collectionViewsQuery.buttons["Add"].tap()
         sleep(10)
-        app.alerts["Download Tour"].collectionViews.buttons["Download with media (Larger)"].tap()
+        app.alerts["Download Tour"].collectionViews.buttons["Download text only (Smaller)"].tap()
         sleep(20)
         let tablesQuery2 = app.tables
         let tablesQuery = tablesQuery2
@@ -102,7 +102,7 @@ class UITourTests: XCTestCase {
         tablesQuery.staticTexts["The Imaging Facilities"].tap()
         tablesQuery.staticTexts["Specific Medical Imaging Hallway"].tap()
         tablesQuery.staticTexts["Medical Machine ABC"].tap()
-        tablesQuery2.childrenMatchingType(.Cell).elementBoundByIndex(1).tap()
+        tablesQuery2.childrenMatchingType(.Cell).elementBoundByIndex(2).tap()
         sleep(6)
         app.buttons["Done"].tap()
         

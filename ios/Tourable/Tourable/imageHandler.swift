@@ -13,16 +13,11 @@ let endDownloadKey = "DownloadComplete"
 var countOfImages = 0;
 
 
-//Deals with the download and saving for offline use of image from the verious points of interest.
-//Also triggers the download and save of videos.
-//Notifiers in this class are used by the UI to give download status information to the user.
+///ImageHandler deals with the downloading and saving images from various POIs for offline use. Also triggers the download and saving of videos. Norifiers in thie class are used by the UI to give download status information to the user.
 class imageHandler: NSObject {
     lazy var imageQueue = [String]()
     
-    //making the TourIdParser a singleton to parse all tours from the API
-    //in order to access TourIdParser methods call TourIdParser.shardInstance.METHOD()
     static let sharedInstance = imageHandler()
-    
     
     //Notifies observers that an image from the queue has been successfully downloaded.
     func triggerDownloadCompleteNotify() {
@@ -51,28 +46,21 @@ class imageHandler: NSObject {
         notify()
     }
     
-    //Persistently stores an image for offline viewing, using the hash function of its name as the file name.
-    //This is to avoid invliad save names causing the save to fail.
-    //Returns a boolean that indicates the success of the save operation.
+    ///Stores an image for offline viewing, using the hash function of its name as the file name. This is to avoid invalid save names causing the save to fail. Returns a boolean that indicates the success of the save operation.
     func saveImage(image: UIImage, name: String ) -> Bool{
         
         let fileName1 = String(name.hash)
-        //let fileName2 = fileName1.substringToIndex(fileName1.endIndex.advancedBy(-6))
-        
-        //self.addUrlToFileNameMap(name, fileName: fileName1)
         let path = MediaHelper.sharedInstance.fileInDocumentsDirectory(fileName1, fileType: ".jpg")
-        //TODO when profiling, this was found to be extremely heavy, so we should look at putting this in an async
-        //let pngImageData = UIImagePNGRepresentation(image)
         let jpgImageData = UIImageJPEGRepresentation(image, 1.0)
         
         let result = jpgImageData!.writeToFile(path, atomically: true)
-        //At this point the imahge has been downloaded so notify observers that this is the case.
+        //At this point the image has been downloaded so notify observers that this is the case.
         countOfImages--
         triggerDownloadCompleteNotify()
         return result
     }
     
-    //Takes a url of an image and returns the UIImage at that location. Can return nil
+    //Takes a url of an image as a paramenter and returns the UIImage at that location. Can return nil
     func loadImageFromPath(name: String?) -> UIImage? {
         //let fileName = self.getFileNameFromUrl(name)
         if name == nil{
@@ -88,14 +76,12 @@ class imageHandler: NSObject {
         }
     }
     
-    //adds an image to the queue of images to be downloaded asyncronusly.
+    //Adds an image to the queue of images to be downloaded asyncronusly.
     func queueImage(urls: [String]){
         imageQueue.appendContentsOf(urls)
     }
     
-    //called just once in pointOfInterest.swift, this is the method that goes online and downloads the images.
-    //It triggers video downloads too if the file type is MP4.
-    //It will notify observers that the image handler has started downloading an image by calling triggerDownloadBegin notify.
+    ///Called just done in pointOfInterest.swift, this is the method that goes online and downloads the images. It triggers video downloads too if there are. It will notify observers that the image handler has started downloading an image by calling triggerDonwloadBegin notify
     func downloadMediaSet(urls: [String]){
         
         countOfImages = countOfImages + urls.count

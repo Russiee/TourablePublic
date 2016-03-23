@@ -8,15 +8,17 @@
 
 import Foundation
 
-
+///The TourDeleter class deals with the deletion of tours. Handles deletion of the media files and every object associated with the tour.
 public class TourDeleter {
     
+    ///Var used to store objectIDS in getAllIDs().
     private var objectIDs = [String]()
+    ///Var used to store mediaURLs in getAllMediaURL().
     private var mediaURLS = [String]()
     
-     static let sharedInstance = TourDeleter()
+    static let sharedInstance = TourDeleter()
     
-    //deletes whole tour
+    ///Takes a parameter of String expecting a tourCode. Uses the tourcode to find it in the NSUserDefaults to find position in "Array" and to delete it.
     func deleteTour(tourCode: String){
         let arrayOfTours = NSUserDefaults.standardUserDefaults().objectForKey("Array") as! [AnyObject]
         var tourIDs = [String]()
@@ -44,26 +46,29 @@ public class TourDeleter {
         //deletes the objectId of the tour itself
         NSUserDefaults.standardUserDefaults().removeObjectForKey(tourID)
         NSUserDefaults.standardUserDefaults().synchronize()
+        
+        //removes the tour from the "Array"
         if pos != nil {
-           TourIdParser().deleteTourIdAtRow(pos!)
+            TourIdParser().deleteTourIdAtRow(pos!)
         }
         
         
     }
     
-    //gets all tours objectIDs
+    ///Take as param the sections of the tour. Gets all tours objectIDs recursively.
     func getAllIDs(section: NSArray){
         
         for subsection in section{
             objectIDs.append(subsection["objectId"] as! String)
             let keys = subsection.allKeys
             for value in keys{
+                //base case checking if it is a poi
                 if value as! String == "pois"{
                     let POIS = subsection["pois"] as! NSArray
                     for pois in POIS{
                         objectIDs.append(pois["objectId"] as! String)
                     }
-                }
+                } //otherwise call this method again
                 else if((value as! String) == "subsections"){
                     getAllIDs(subsection["subsections"] as! NSArray)
                 }
@@ -71,7 +76,7 @@ public class TourDeleter {
         }
     }
     
-    //permanently deletes the image with the specified name
+    ///Takes as param url of media and its file type. Permanently deletes the image with the specified name.
     func deleteMedia(imageURL: String, fileType: String)-> Bool {
         //get the storage name and path of the file to delete
         let fileName = String(imageURL.hash)
@@ -88,7 +93,7 @@ public class TourDeleter {
         
     }
     
-    //deletes the media files in the tour. Currently only .jpg s
+    ///Takes a parameter of String expecting a tourCode. Uses the tourcode to find it in the NSUserDefaults to find its media files and delete them.
     func deleteMediaInTour(tourCode: String){
         //gets the pointer of the tour
         let tourPointer = NSUserDefaults.standardUserDefaults().objectForKey(tourCode)
@@ -102,11 +107,11 @@ public class TourDeleter {
         for url in mediaURLS{
             deleteMedia(url, fileType: url.substringFromIndex(url.endIndex.advancedBy(-4)))
         }
-        //resets the array
+        //resets the array to empty for next call of getAllMediaURL
         mediaURLS = []
     }
     
-    //searches the JSON for image URLS
+    ///Take as param the sections of the tour. Gets all tours media urls recursively.
     func getAllMediaURL(tour: NSArray){
         
         for subsection in tour{

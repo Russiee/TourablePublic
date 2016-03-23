@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+///TourDataParser class is responsible for the creation of new tours, saving new tours/sections/subsections to NSUserDefaults and for the retrieval of tour sections from NSUserDefaults.
 class tourDataParser{
     
     
@@ -55,6 +55,7 @@ class tourDataParser{
         }
     }
 
+    ///Takes as parameter a NSDictionary expecting the tour section data that is going to be saved into NSUserDefauls with its objectId as the key. Gets any POI data associated with section.
     func saveTourSection(data: NSDictionary){
         let key = data["objectId"] as! String
         NSUserDefaults.standardUserDefaults().setObject(data, forKey: key)
@@ -66,7 +67,8 @@ class tourDataParser{
         returnValue.downloadPOIcontent()
      
     }
-    
+
+    ///Takes as parameter a String expecting an objectId and will return a tour section saved with that objectId from NSUserDefaults.
     func getTourSection(objectId: String)-> tourSection{
         let data = NSUserDefaults.standardUserDefaults().objectForKey(objectId) as! NSDictionary
         let returnVlaue = createNewTour(data)
@@ -74,6 +76,7 @@ class tourDataParser{
         return returnVlaue
     }
 
+    ///Takes as parameter a NSDictionary and saves tours sections and subsections using saveTourSection and saveSubsections.
     func saveNewTour(data: NSDictionary){
         saveTourSection(data)
         
@@ -87,7 +90,8 @@ class tourDataParser{
             self.saveTourSection(tourTopLevelSection as! NSDictionary)
         }
     }
-    
+
+    ///Takes as paramter a NSArray expecting the array of tours subsections. Saves them recursively.
     func saveSubsections(tourSubsections: NSArray){
         
         for section in tourSubsections{

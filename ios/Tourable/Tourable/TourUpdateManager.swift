@@ -8,6 +8,7 @@
 
 import Foundation
 
+///TourUpdateManager is responsible for handling updates of tours that are in NSUserDefaults.
 public class TourUpdateManager: NSObject {
 
     var tourTableRow: Int!
@@ -49,13 +50,13 @@ public class TourUpdateManager: NSObject {
         }
     }
 
-    // set field variables when preparing the class object for the various tasks of the class
+    ///Set field variables when preparing the class object for the various tasks of the class
     func setTourCodeAndTableRow(tourCodetoCheck: String, tableRow: Int) {
         self.tourCode = tourCodetoCheck
         self.tourTableRow = tableRow
     }
     
-    // this method received data from the api or cache and load it onto the tourSummaryViewController
+    ///This method received data from the api or cache and load it onto the tourSummaryViewController
     func formatDataforTourSummaryAndDiplayIt(jsonResult: NSDictionary) {
         // TOUR LENGTH HOURS AND MINUTES
         let minutes = jsonResult["estimatedTime"]
@@ -87,20 +88,19 @@ public class TourUpdateManager: NSObject {
         self.triggerTourMetaDataAvailableNotification()
     }
 
-    // receive minutes as a paramenter and return hours and minutes of that length
+    ///Receive minutes as a paramenter and return hours and minutes of that length
     func calculateTourLengthFromMinutes(minutes: Int) -> (timeHours: Int, timeMins: Int) {
         let hours = minutes / 60
         let minutes = minutes % 60
         return (hours,minutes)
     }
 
-    // returns fields variable set when data is returned by API
+    ///Returns fields variable set when data is returned by API
     func getTourStatusInfo() -> (timeHours: Int,timeMins: Int, isCurrent: Bool, expiresIn: Int, expiresInHours: Int, expiresInMinutes: Int){
         return (self.timeHours, self.timeMinutes, self.isTourUpTodate, self.expiresIn, self.expiresInHours, self.expiresInMinutes)
     }
 
-    // check for updates comparing freshly downloaded metadata with current stored one
-    // if there are updates the user is asked if he wants to download them
+    ///Check for updates comparing freshly downloaded metadata with current stored one. if there are updates the user is asked if he wants to download them
     func isTourUpToDate(currentVersion: Int, versionFreshFromAPI: Int) -> Bool {
         if KeyVerifyConnector.sharedInstance.isConnectedToNetwork() {
             if currentVersion < versionFreshFromAPI {
@@ -110,7 +110,7 @@ public class TourUpdateManager: NSObject {
         return true
     }
 
-    // trigger download of the tour metadata needed on the tourSummary
+    ///Trigger download of the tour metadata needed on the tourSummary
     func getTourMetadata() {
         // if there is no connection get the data from the cache and load that on tourSummary
         if KeyVerifyConnector.sharedInstance.isConnectedToNetwork() {
@@ -122,8 +122,7 @@ public class TourUpdateManager: NSObject {
     }
 
 
-    // check if a project is out to date comparing metadata with current today's date.
-    // if the project is out to date, it is deleted after informing the user
+    ///Check if a project is out to date comparing metadata with current today's date. if the project is out to date, it is deleted after informing the use
     func checkIfOutdatedAndDeleteProject() {
         if self.newTourKEYmetadata != nil {
             let todaysDate = NSDate()
@@ -150,7 +149,7 @@ public class TourUpdateManager: NSObject {
         }
     }
     
-    // receive a string of format "yyyy-MM-dd'T'hh:mm:ss.SSSz" and returns an NSDate object
+    ///Receive a string of format "yyyy-MM-dd'T'hh:mm:ss.SSSz" and returns an NSDate object
     func getDateFromString(date: String) -> NSDate {
         let enUSPOSIXLocale: NSLocale = NSLocale(localeIdentifier: "en_US")
         let dateFormatter = NSDateFormatter()
@@ -159,7 +158,7 @@ public class TourUpdateManager: NSObject {
         return dateFormatter.dateFromString(date)!
     }
     
-    // trigger fields to be updated in the TourSummary when TourMetadata Arrived
+    ///Trigger fields to be updated in the TourSummary when TourMetadata Arrived
     func triggerTourMetaDataAvailableNotification() {
         NSNotificationCenter.defaultCenter().addObserver(
             self,
@@ -172,7 +171,7 @@ public class TourUpdateManager: NSObject {
         notify()
     }
 
-    // called from the tourSummary when the user clikes the updates in the TourSummary
+    ///Called from the tourSummary when the user clikes the updates in the TourSummary
     func triggerUpdate() {
         // GET RID OF NOTIFIER!
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedValid", name: validIdNotificationKey, object: nil)
@@ -180,15 +179,14 @@ public class TourUpdateManager: NSObject {
         KeyVerifyConnector.sharedInstance.initiateKeyVerifyConnection(tourCode, isCheckingForUpdate: false)
     }
     
-    // images re-downloaded only when it's notified to do so
+    ///Images re-downloaded only when it's notified to do so
     func NotifiedValid(){
         sleep(1)
         imageHandler.sharedInstance.downloadMediaSet(imageHandler.sharedInstance.imageQueue)
     }
 }
 
-// credit to: Leo Dabus
-// http://stackoverflow.com/questions/27182023/getting-the-difference-between-two-nsdates-in-months-days-hours-minutes-seconds
+///Credit to: Leo Dabus http://stackoverflow.com/questions/27182023/getting-the-difference-between-two-nsdates-in-months-days-hours-minutes-seconds
 extension NSDate {
     func daysFrom(date:NSDate) -> Int{
         return NSCalendar.currentCalendar().components(.Day, fromDate: date, toDate: self, options: []).day

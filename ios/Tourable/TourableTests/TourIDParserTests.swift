@@ -27,13 +27,13 @@ class TourIDParserTests: XCTestCase {
  
         XCTAssertEqual(NSUserDefaults.standardUserDefaults().objectForKey("Array")!.count, 0, "No tours been added yet")
         TourIdParser.sharedInstance.updateArray("KCL-1010", tourTitle: "Ultimate Flat Tour")
-        XCTAssertEqual(NSUserDefaults.standardUserDefaults().objectForKey("Array")![0], ["Ultimate Flat Tour" : "KCL-1010" ], "should be the same, as they are the params passed into the updateArray function")
+        XCTAssertEqual(NSUserDefaults.standardUserDefaults().objectForKey("Array")![0] as! [String : String], ["Ultimate Flat Tour" : "KCL-1010" ], "should be the same, as they are the params passed into the updateArray function")
     }
     
     func testAddingAndDeletingTourId(){
         XCTAssertEqual(NSUserDefaults.standardUserDefaults().objectForKey("Array")!.count, 0, "No tours been added yet")
         TourIdParser.sharedInstance.updateArray("KCL-1010", tourTitle: "Ultimate Flat Tour")
-        XCTAssertEqual(NSUserDefaults.standardUserDefaults().objectForKey("Array")![0], ["Ultimate Flat Tour" : "KCL-1010" ], "should be the same, as they are the params passed into the updateArray function")
+        XCTAssertEqual(NSUserDefaults.standardUserDefaults().objectForKey("Array")![0] as! [String : String], ["Ultimate Flat Tour" : "KCL-1010" ], "should be the same, as they are the params passed into the updateArray function")
         
         TourIdParser.sharedInstance.deleteTourIdAtRow(0)
         XCTAssertEqual(NSUserDefaults.standardUserDefaults().objectForKey("Array")!.count, 0, "Tour's been deleted")

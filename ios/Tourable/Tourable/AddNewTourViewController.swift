@@ -8,6 +8,7 @@
 
 import UIKit
 
+///AddNewTourController is reponsible for displaying a busy wheel whilst making connections, displaying options of download to the user. If with media is selected then it displays the percentage of files downloaded. Users can cancel downloading a new tour.
 class addNewTourViewController: UIViewController, UIAlertViewDelegate {
 
     var tourID: String = ""
@@ -28,10 +29,10 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
         //Adds the observers for image downloading, alowing progress bar to be updated.
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedDownloading", name: beginDownloadKey, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedFinishedDownloading", name: endDownloadKey, object: nil)
-          //Adds the observers for a valid or invalid key input completion message from ApiController
+        //Adds the observers for a valid or invalid key input completion message from ApiController
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedInvalid", name: invalidIdNotificationKey, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "NotifiedValid", name: validIdNotificationKey, object: nil)
-       //Starts busy wheel animation and hides the other items in the view.
+        //Starts busy wheel animation and hides the other items in the view.
         self.busyWheel.startAnimating()
         self.hideButtonsForBusyWheel(true)
         
@@ -43,8 +44,6 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
     //Lets the UI know that another image is due to be downloaded.
     func NotifiedDownloading() {
             totalImagesToDownload++
-        
-    
     }
     
     //Lets UI know that an image has been downloaded: progress bar incremented.
@@ -73,7 +72,7 @@ class addNewTourViewController: UIViewController, UIAlertViewDelegate {
         
     }
     
-    //a method to allow the user to cancel the data download and return to the main table view
+    ///Cancels the data download and return to the main table view
     func cancelDownload() {
         //delete the metaData and data stored in "Array"
         TourIdParser.sharedInstance.deleteTourIdAtRow(tourIndex!)

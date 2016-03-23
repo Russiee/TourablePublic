@@ -9,7 +9,7 @@
 import Foundation
 import MediaPlayer
 
-//Deals with the download and saving of video mp4 files for playback in tours.
+///VideoHandler deals with the download and saving of video mp4 files for playback in tours.
 class videoHandler {
     //This is a singleton class.
      static let sharedInstance = videoHandler()
