@@ -77,6 +77,39 @@ var poiTest = {
             callback();
         });
     },
+    
+    //GET ALL function tests
+    //test whether the get all route includes the created POI
+    GET_ALL: function(pointerID, server, callback){
+        //queries the server
+        request(server)
+        //queries database for the POI
+        .get('/api/v1/pois')
+        //expected status codes and content type to be returned
+        .expect('Content-Type', /json/)
+        .expect(200 || 304) //Status code
+        //expected response, test fails if response is not the expected value
+        .end(function(err,res) {
+            if (err) {
+                throw err;
+            }
+            //a Boolean checking if the POI exists 
+            var exists = false;
+            
+            //a loop to go through all the POI returned
+            for (var index in res.body) {
+                //checks if the ID of the created POI is found amongst the POIs returned
+                //sets the exists Boolean to true if found
+                if (res.body[index].objectId === pointerID) {
+                    exists = true;
+                }
+            }
+            exists.should.equal(true);
+            //check whether the POI we created exists
+
+            callback();
+        });
+    },
 
 
     //PUT function tests

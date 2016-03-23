@@ -13,7 +13,7 @@ var admin = require('../routes/admin.js');
 var adminTest = {
 
     //POST function tests
-    //creates and adds admin object to API database with given values
+    //creates and adds admin object to server with given values
     POST: function(pointerID, server, callback){
         //takes pointerID to link admin object to given admin
 
@@ -59,9 +59,9 @@ var adminTest = {
     //GET function tests
     //first get function test to check object was added correctly
     GET1: function(pointerID, server, callback) {
-        //connects to the API database
+        //connects to the server
         request(server)
-        //queries database with the given object ID
+        //queries server with the given object ID
         .get('/api/v1/admin/'+pointerID)
         //expected status codes and content type to be returned
         .expect('Content-Type', /json/)
@@ -88,7 +88,7 @@ var adminTest = {
     GET_ALL: function(pointerID, server, callback){
         //queries the server
         request(server)
-        //queries database with the given object ID
+        //queries server for the admins
         .get('/api/v1/admins')
         //expected status codes and content type to be returned
         .expect('Content-Type', /json/)
@@ -98,15 +98,19 @@ var adminTest = {
             if (err) {
                 throw err;
             }
-
+            //a Boolean checking if the key exists 
             var exists = false;
+            
+            //a loop to go through all the keys returned
             for (var index in res.body) {
+                //checks if the ID of the created key is found amongst the keys returned
+                //sets the exists Boolean to true if found
                 if (res.body[index].objectId === pointerID) {
                     exists = true;
                 }
             }
             exists.should.equal(true);
-            //check whether the admin we created exists
+            //check whether the key we created exists
 
             callback();
         });
