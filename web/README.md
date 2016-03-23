@@ -1,5 +1,7 @@
 # Web
 
+[![Build Status](https://travis-ci.com/philefstat/touring.svg?token=xRmb9YdhmsBgxRxc5wxz&branch=master)](https://travis-ci.com/philefstat/touring)
+
 To run this site:
 
 ```npm install```

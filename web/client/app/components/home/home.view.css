@@ -49,3 +49,15 @@
     color: #D8DCE0;
     font-size: 10px;
 }
+
+.app-badges {
+    display: block;
+    margin: 0 auto;
+    max-width: 274px;
+}
+
+.app-badges img {
+    max-width: 135px;
+    display: inline-block;
+    cursor: pointer;
+}
