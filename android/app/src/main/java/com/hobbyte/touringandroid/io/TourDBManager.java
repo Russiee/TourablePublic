@@ -216,60 +216,24 @@ public class TourDBManager extends SQLiteOpenHelper {
     }
 
     /**
-     * Update a tour entry in the db. All fields, with the exception of `hasMedia`, will
-     * be extracted from JSON that was fetched from the server.
-     * <p>
-     * All the timestamp parameters should be passed in the string form in which the server stores
-     * them. They will be converted into, and stored as, milliseconds since Epoch.
+     * Update a tour entry in the db. The new `tourName` and `version` will come from the server,
+     * and `hasMedia` depends on whether or not the user decided to update with/without media.
      *
      * @param keyID the objectId of the key used to fetch the tour
-     * @param tourID the objectId of the tour itself
      * @param tourName the tour's title
-     * @param expiryDate when the tour expires
      * @param hasMedia whether or not the user opted to download the tour with video
      * @param version the current version of the tour
      */
-    public void updateRow(String keyID, String tourID, String tourName,
-                          String expiryDate, boolean hasMedia, int version) {
+    public void updateRow(String keyID, String tourName, boolean hasMedia, int version) {
         open(true);
 
         int video = (hasMedia ? 1 : 0);
-        long expiryLong;
-
-        try {
-            expiryLong = convertStampToMillis(expiryDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            // is there a better way to handle this?
-            expiryLong = 100;
-        }
-
         String[] whereArgs = {keyID};
 
         ContentValues values = new ContentValues();
-
-        values.put(TourList.COL_TOUR_ID, tourID);
         values.put(TourList.COL_TOUR_NAME, tourName);
-        values.put(TourList.COL_DATE_EXPIRES_ON, expiryLong);
         values.put(TourList.COL_HAS_MEDIA, video);
         values.put(TourList.COL_VERSION, version);
-
-        db.update(TourList.TABLE_NAME, values, WHERE_KEY_ID, whereArgs);
-    }
-
-    /**
-     * Changes a tour's version number. Used to trigger updates.
-     *
-     * @param keyID the ID of a tour key (not the tour ID itself)
-     * @param version the new version number
-     */
-    public void updateTourVersion(String keyID, int version) {
-        open(true);
-
-        ContentValues values = new ContentValues();
-        values.put(TourList.COL_VERSION, version);
-
-        String[] whereArgs = {keyID};
 
         db.update(TourList.TABLE_NAME, values, WHERE_KEY_ID, whereArgs);
     }
@@ -485,7 +449,7 @@ public class TourDBManager extends SQLiteOpenHelper {
     }
 
     /**
-     * Changes the `hasUpdate` attribute on a tour.
+     * Changes the `hasUpdate` attribute on a tour. Used to trigger updates in SummaryActivity.
      *
      * @param keyID the ID of a tour key (not the tour ID itself)
      * @param hasUpdate true if there is a new version of the tour on the server

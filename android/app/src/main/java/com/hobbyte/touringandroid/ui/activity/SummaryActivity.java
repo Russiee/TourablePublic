@@ -85,6 +85,8 @@ public class SummaryActivity extends AppCompatActivity {
         keyID = intent.getStringExtra(KEY_ID);
         tourID = intent.getStringExtra(TOUR_ID);
         keyName = intent.getStringExtra(KEY_NAME);
+
+        // this will be present if
         expiryTimeString = intent.getStringExtra(EXPIRY_TIME_STRING);
         Boolean doDownload = intent.getBooleanExtra(DOWNLOAD, false);
         withMedia = intent.getBooleanExtra(MEDIA, false);
@@ -338,12 +340,13 @@ public class SummaryActivity extends AppCompatActivity {
     }
 
     /**
-     * Creates a enw entry in the local db for a newly downloaded tour.
+     * Creates an entry in the local db for a newly downloaded tour, or update it if there was an
+     * update available.
      */
     private void addTourToDB() {
         TourDBManager dbHelper = TourDBManager.getInstance(getApplicationContext());
 
-        String name = "empty";
+        String name = toolbar.getTitle().toString();
         int version = 0;
 
         try {
@@ -354,13 +357,13 @@ public class SummaryActivity extends AppCompatActivity {
         }
 
         if (updating) {
-            dbHelper.updateTourVersion(keyID, version);
-//            dbHelper.updateRow(keyID, tourID, name, String.valueOf(datetime), withMedia, version);
+            // put updated values in the db
+            dbHelper.updateRow(keyID, name, withMedia, version);
 
             // unflag this tour as having an update available
             dbHelper.flagTourUpdate(keyID, false);
         } else {
-            Log.i(TAG, "Putting row in db for " + name);
+            // make a new entry for this tour
             dbHelper.putRow(keyID, tourID, keyName, name, expiryTimeString, withMedia, version);
         }
 
