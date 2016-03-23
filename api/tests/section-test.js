@@ -22,6 +22,7 @@ var sectionTest = {
             "description": "This is the main section test",
             "depth": 0
         };
+        //connects to the API database
         request(url)
         //sends object to API
        .post('api/v1/section/')
@@ -31,6 +32,8 @@ var sectionTest = {
               if (err) {
                 throw err;
               }
+              //statements checking the expected properties of the response
+              //determines if the API is working as expected
               res.body.should.have.property("tour");
               res.body.should.have.property("depth")
               res.body.should.have.property("superSection");
@@ -39,6 +42,8 @@ var sectionTest = {
               res.status.should.be.equal(201);
               objID = res.body.objectId;
             //uses callback to ensure tests run synchronously (for the purpose of linking objects through pointers) 
+            
+            //calls the callback function and returns with it the created object's ID
               callback(objID);
         });
     },
@@ -48,9 +53,11 @@ var sectionTest = {
     //first get function test to check object was added correctly
 
     GET1: function(pointerID, url, callback){
-        //queries the url with given objectID
+        //connects to the API database
         request(url)
+        //queries database with the given object ID
         .get('api/v1/section/'+pointerID)
+        //expected status codes and content type to be returned
         .expect('Content-Type', /json/)
         .expect(200 || 304) //Status code
         //expected response, test fails if response is not the expected value
@@ -58,10 +65,13 @@ var sectionTest = {
             if (err) {
                 throw err;
             }
+            //statements checking the expected properties of the response
+            //determines if the API is working as expected
             res.body.title.should.equal('The Test');
-            res.body.description.should.equal("This is the main section test");                    
+            res.body.description.should.equal("This is the main section test");   
             res.body.tour.should.not.equal(null);
             res.body.depth.should.equal(0);
+            //calls the callback function and returns with it the created object's ID
             callback();
         });
     },
@@ -88,21 +98,29 @@ var sectionTest = {
         "depth": 0
 
         };
+        //connects to the API database
         request(url)
+        
+        //prepares the update the object in the database using reference to the object's ID
         .put('api/v1/section/'+pointerID)
+        
+        //sends request to database
         .send(section2)
         //ensures response is correct by checking against expected values
         .end(function(err, res) {
               if (err) {
                 throw err;
               }
-
+                
+              //statements checking the expected properties of the response
+              //determines if the API is working as expected
               res.body.should.have.property("tour");
               res.body.should.have.property("superSection");
               res.body.should.have.property("title");
               res.body.should.have.property("description");
               res.body.should.have.property("depth");
               res.status.should.be.equal(200);
+            //calls the callback function and returns with it the created object's ID
               callback();
           });
     },
@@ -110,18 +128,24 @@ var sectionTest = {
     //GET function tests
     //second GET test to check object values were correctly updated
     GET2: function(pointerID, url, callback){
+        //connects to the API database
         request(url)
+        //queries database with the given object ID
         .get('api/v1/section/'+pointerID)
+        //expected status codes and content type to be returned
         .expect('Content-Type', /json/)
         .expect(200 || 304) //Status code
         .end(function(err,res) {
             if (err) {
                 throw err;
             }
+            //statements checking the expected properties of the response
+            //determines if the API is working as expected
             res.body.title.should.equal('The Test2');
-            res.body.description.should.equal("This is the main section test2");                    
+            res.body.description.should.equal("This is the main section test2");     
             res.body.tour.should.not.equal(null);
             res.body.depth.should.equal(0);
+            //calls the callback function and returns with it the created object's ID
             callback();
         });
     },
@@ -131,13 +155,18 @@ var sectionTest = {
     //DELETE function tests
     //Deletes the test object
     DELETE: function(pointerID, url, callback){
+        //connects to the API database
         request(url)
+        //sends delete request for the given object ID
         .delete('api/v1/section/'+pointerID)
+        //expected status code to be returned
         .expect(200) //Status code
+        //function to be called at the end of the test
         .end(function(err,res) {
             if (err) {
                 throw err;
             }
+            //calls the callback function and returns with it the created object's ID
             callback();
         });
     }, 
@@ -145,17 +174,22 @@ var sectionTest = {
     //GET function tests
     //third GET test to check objet no longer exists / object was correctly deleted
     GET3: function(pointerID, url, callback){
+        //connects to the API database
          request(url)
+        //sends the get query for the given object ID
         .get('api/v1/section/'+pointerID)
+        //expected status code to be returned
         .expect(404 || 400) //Status code
+        //function to be called at the end of the test
         .end(function(err,res) {
             if (err) {
                 throw err;
             }
-           ;
+            //calls the callback function and returns with it the created object's ID
             callback();
         });
     }
 }
 
+//export this module
 module.exports = sectionTest;

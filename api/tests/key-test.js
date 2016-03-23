@@ -1,3 +1,4 @@
+//require the necessary modules for this file
 var should = require('should'); 
 var assert = require('assert');
 var request = require('supertest');
@@ -21,10 +22,12 @@ var keyTest = {
 			"tour": ""+pointerID,
 			"expiry": "20-03-2018"
         };
+        //connects to the API database
         request(url)
         //sends object to API
        .post('api/v1/key/')
        .send(key)
+        
         .end(function(err, res) {
               if (err) {
                 throw err;
@@ -45,19 +48,20 @@ var keyTest = {
     //GET function tests
     //first GET test to check object was added properly
     GET1: function(pointerID, url, callback){
-        //queries the url with the given objectID
+        //connects to the API database
         request(url)
         .get('api/v1/key/'+pointerID)
-        
-        //expected response, test fails if response is not the expected value
+        //expected status codes and content type to be returned
         .expect('Content-Type', /json/)
         .expect(200 || 304) //Status code
+        //expected response, test fails if response is not the expected value
         .end(function(err,res) {
             if (err) {
                 throw err;
             }
             res.body.code.should.equal('KCL-1000');
             res.body.expiry.should.not.equal(null);
+            //calls the callback function to finish the test
             callback();
         });
     },
@@ -76,7 +80,7 @@ var keyTest = {
         "code": "KCL-1001",
         "expiry": "21-03-2016",
       };
-        //updates the object with given objectID
+        //connects to the API database
         request(url)
         .put('api/v1/key/'+pointerID)
         .send(key2)
@@ -85,10 +89,12 @@ var keyTest = {
               if (err) {
                 throw err;
               }
-
+              //statements checking the expected properties of the response
+              //determines if the API is working as expected
               res.body.should.have.property("expiry");
               res.body.should.have.property("code");
               res.status.should.be.equal(200);
+              //calls the callback function to finish the test
               callback();
           });
     },
@@ -96,7 +102,7 @@ var keyTest = {
     //GET function tests
     //second GET test to check object values were correctly updated
     GET2: function(pointerID, url, callback){
-
+        //connects to the API database
         request(url)
         .get('api/v1/key/'+pointerID)
         .expect('Content-Type', /json/)
@@ -108,6 +114,7 @@ var keyTest = {
             res.body.expiry.should.not.equal(null);
             res.body.code.should.equal("KCL-1001");
             res.body.tour.should.not.equal(null);
+            //calls the callback function to finish the test
             callback();
         });
     },
@@ -117,14 +124,18 @@ var keyTest = {
     //DELETE function tests
     //Deletes the test object
     DELETE: function(pointerID, url, callback){
-
+        //connects to the API database
         request(url)
+        //sends delete request for the given object ID
         .delete('api/v1/key/'+pointerID)
+        //expected status code to be returned
         .expect(200) //Status code
+        //function to be called at the end of the test
         .end(function(err,res) {
             if (err) {
                 throw err;
             }
+            //calls the callback function to finish the test
             callback();
         });
     },
@@ -132,16 +143,22 @@ var keyTest = {
     //GET function tests
     //third GET test to check objet no longer exists / object was correctly deleted
     GET3: function(pointerID, url, callback){
+        //connects to the API database
         request(url)
+        //sends the get query for the given object ID
         .get('api/v1/key/'+pointerID)
+        //expected status code to be returned
         .expect(404 || 400) //Status code
+        //function to be called at the end of the test
         .end(function(err,res) {
             if (err) {
                 throw err;
             }
+            //calls the callback function to finish the test
             callback();
         });
     } 
 }
 
+//export this module
 module.exports =keyTest;
