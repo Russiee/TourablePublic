@@ -106,19 +106,23 @@ public class DownloadTourTask extends Thread {
                 informActivity(++count / total);
             }
 
-            // inform the calling activity that the download is complete
-            Bundle bundle = new Bundle();
-            bundle.putInt(STATE, STATE_FINISHED);
-            Message msg = handler.obtainMessage();
-            msg.setData(bundle);
-            handler.handleMessage(msg);
+            if (handler != null) {
+                // inform the calling activity that the download is complete
+                Bundle bundle = new Bundle();
+                bundle.putInt(STATE, STATE_FINISHED);
+                Message msg = handler.obtainMessage();
+                msg.setData(bundle);
+                handler.handleMessage(msg);
+            }
 
         } else {
-            Bundle bundle = new Bundle();
-            bundle.putInt(STATE, STATE_FINISHED);
-            Message msg = handler.obtainMessage();
-            msg.setData(bundle);
-            handler.handleMessage(msg);
+            if (handler != null) {
+                Bundle bundle = new Bundle();
+                bundle.putInt(STATE, STATE_FINISHED);
+                Message msg = handler.obtainMessage();
+                msg.setData(bundle);
+                handler.handleMessage(msg);
+            }
 
             for (Iterator<String> i = imageURLs.iterator(); i.hasNext(); ) {
                 String urlString = i.next();
@@ -187,12 +191,14 @@ public class DownloadTourTask extends Thread {
      * Sends a message to the calling activity's ProgressHandler, which updates the progress bar.
      */
     private void informActivity(float progress) {
-        Bundle bundle = new Bundle();
-        bundle.putInt(STATE, STATE_DOWNLOADING);
-        bundle.putFloat(PROGRESS, progress);
-        Message msg = handler.obtainMessage();
-        msg.setData(bundle);
-        handler.handleMessage(msg);
+        if (handler != null) {
+            Bundle bundle = new Bundle();
+            bundle.putInt(STATE, STATE_DOWNLOADING);
+            bundle.putFloat(PROGRESS, progress);
+            Message msg = handler.obtainMessage();
+            msg.setData(bundle);
+            handler.handleMessage(msg);
+        }
     }
 
 
