@@ -71,7 +71,6 @@ class TourSummaryController: UIViewController, UITableViewDataSource, UITableVie
         TourUpdateManager.sharedInstance.prepareTourMangaer(tourId, tableRow: tableRow)
         TourUpdateManager.sharedInstance.getTourMetadata()
 
-
         //set the data source and deligate of the table to this class.
         tableView.dataSource = self
         tableView.delegate = self

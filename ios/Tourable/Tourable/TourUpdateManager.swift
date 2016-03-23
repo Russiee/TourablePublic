@@ -37,7 +37,6 @@ public class TourUpdateManager: NSObject {
 
     // to be called as an initialiser to prepare the object for other methods
     func prepareTourMangaer(tourCodetoCheck: String, tableRow: Int) {
-        
         setTourCodeAndTableRow(tourCodetoCheck, tableRow: tableRow)
 
         // get current tourKey metadata from cache
@@ -59,7 +58,6 @@ public class TourUpdateManager: NSObject {
     // this method received data from the api or cache and load it onto the tourSummaryViewController
     func formatDataforTourSummaryAndDiplayIt(jsonResult: NSDictionary) {
         // TOUR LENGTH HOURS AND MINUTES
-        print(jsonResult)
         let minutes = jsonResult["estimatedTime"]
         let estimatedLenght = calculateTourLengthFromMinutes(minutes as! Int)
         timeHours = estimatedLenght.timeHours

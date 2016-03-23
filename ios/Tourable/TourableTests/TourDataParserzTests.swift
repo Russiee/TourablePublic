@@ -26,7 +26,7 @@ class TestTourDataParser: XCTestCase {
     func testTopLevelTourCreation() {
         
         let bundleDownload = bundleRouteConnector()
-        bundleDownload.startConnection("cjWRKDygIZ")
+        bundleDownload.initiateBundleConnection("cjWRKDygIZ")
         let data = bundleDownload.getJSONResult()
         let result = tourDataParser().createNewTour(data)
         
@@ -44,7 +44,7 @@ class TestTourDataParser: XCTestCase {
     
     func testTourSave(){
         let bundleDownload = bundleRouteConnector()
-        bundleDownload.startConnection("cjWRKDygIZ")
+        bundleDownload.initiateBundleConnection("cjWRKDygIZ")
         let data = bundleDownload.getJSONResult()
         tourDataParser().saveNewTour(data)
         
@@ -62,7 +62,7 @@ class TestTourDataParser: XCTestCase {
         
         self.measureBlock {
             let bundleDownload = bundleRouteConnector()
-            bundleDownload.startConnection("cjWRKDygIZ")
+            bundleDownload.initiateBundleConnection("cjWRKDygIZ")
             let data = bundleDownload.getJSONResult()
             tourDataParser().saveNewTour(data)
         }
@@ -73,7 +73,7 @@ class TestTourDataParser: XCTestCase {
     func testReadPerformance(){
         
         let bundleDownload = bundleRouteConnector()
-        bundleDownload.startConnection("cjWRKDygIZ")
+        bundleDownload.initiateBundleConnection("cjWRKDygIZ")
         let data = bundleDownload.getJSONResult()
         tourDataParser().saveNewTour(data)
         
@@ -90,14 +90,14 @@ class TestTourDataParser: XCTestCase {
         
         self.measureBlock {
             let bundleDownload = bundleRouteConnector()
-            bundleDownload.startConnection("cjWRKDygIZ")
+            bundleDownload.initiateBundleConnection("cjWRKDygIZ")
         }
     }
     func testParsePerformance(){
         
         
         let bundleDownload = bundleRouteConnector()
-        bundleDownload.startConnection("cjWRKDygIZ")
+        bundleDownload.initiateBundleConnection("cjWRKDygIZ")
         
         self.measureBlock {
             let data = bundleDownload.getJSONResult()
