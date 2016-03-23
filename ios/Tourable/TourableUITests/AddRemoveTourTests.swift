@@ -73,7 +73,7 @@ class AddRemoveTourTests: XCTestCase {
         tablesQuery.buttons["Add Tour"].tap()
       
         let collectionViewsQuery = app.alerts["Add New Tour"].collectionViews
-        collectionViewsQuery.textFields["Enter Tour Key"].typeText("KCL-1010")
+        collectionViewsQuery.textFields["Enter Tour Key"].typeText("KCL;")
         
         let addButton = collectionViewsQuery.buttons["Add"]
         addButton.tap()
@@ -120,7 +120,8 @@ class AddRemoveTourTests: XCTestCase {
     func testAddInvalidTour() {
         
         let app = XCUIApplication()
-        app.tables["Empty list"].buttons["Add Tour"].tap()
+        let tablesQueryBeginning = app.tables
+        tablesQueryBeginning.buttons["Add Tour"].tap()
         
         let collectionViewsQuery = app.alerts["Add New Tour"].collectionViews
         collectionViewsQuery.textFields["Enter Tour Key"].typeText("KNOTVALIDTOURKEY")
@@ -131,18 +132,26 @@ class AddRemoveTourTests: XCTestCase {
     }
     
     
-    func testNaviateTourAndClickQuiz() {
-
+    func testNavigateTourAndClickQuiz() {
+        
         let app = XCUIApplication()
-        let tablesQuery = app.tables
-
+        let tablesQueryBeginning = app.tables
+        tablesQueryBeginning.buttons["Add Tour"].tap()
+        
+        let collectionViewsQuery = app.alerts["Add New Tour"].collectionViews
+        collectionViewsQuery.textFields["Enter Tour Key"].typeText("KCL-1010")
+        collectionViewsQuery.buttons["Add"].tap()
+        sleep(10)
+        app.alerts["Download Tour"].collectionViews.buttons["Download with media (Larger)"].tap()
+        sleep(60)
+        let tablesQuery2 = app.tables
+        let tablesQuery = tablesQuery2
         tablesQuery.staticTexts["Ultimate Flat Tour"].tap()
-      
         app.buttons["Start Tour"].tap()
         tablesQuery.staticTexts["The Flat"].tap()
         tablesQuery.staticTexts["Alex's Room"].tap()
         tablesQuery.staticTexts["Alex's Desk"].tap()
-        tablesQuery.childrenMatchingType(.Cell).elementBoundByIndex(3).tap()
+        tablesQuery2.childrenMatchingType(.Cell).elementBoundByIndex(3).tap()
         tablesQuery.buttons["The correct answer is a?"].tap()
         tablesQuery.staticTexts["a"].tap()
         
