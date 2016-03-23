@@ -1,6 +1,8 @@
 angular.module('tourable')
     .controller('EditCtrl', function ($rootScope, $scope, $state, editFactory) {
 
+        $rootScope.loadingLight = true;
+
         for (var index in $scope.$parent.tours.all) {
             if ($scope.$parent.tours.all[index].objectId === $state.params.id) {
                 $scope.tour = $scope.$parent.tours.all[index];
@@ -59,6 +61,7 @@ angular.module('tourable')
                 $scope.tour = response.data;
                 $scope.tour.keys = keys;
                 sessionStorage.setItem('tour', JSON.stringify($scope.tour));
+                $rootScope.loadingLight = false;
             }, function(error) {
                 //Console log in case we need to debug with a user
                 console.log('An error occured while retrieving the admin data: ', error);

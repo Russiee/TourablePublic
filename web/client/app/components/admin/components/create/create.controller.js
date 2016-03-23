@@ -9,15 +9,14 @@ angular.module('tourable')
             $state.go('admin.dashboard');
         }
 
-
-
         $scope.class = $state.params.className;
         $scope.tour = $state.params.tour;
         $scope.section = $state.params.section;
         $scope.superSection = $state.params.superSection;
         $scope.depth = $state.params.depth;
+        $scope.organization = $state.params.organization;
 
-        console.log("States",$state.params);
+        console.log("States", $state.params);
 
         if ($scope.class === 'tour') {
             $scope.classData = classDataFactory.tour($scope.$parent.admin);
@@ -48,6 +47,12 @@ angular.module('tourable')
                 $state.go('admin.dashboard');
             } else {
                 $scope.classData = classDataFactory.poi($scope.section);
+            }
+        } else if ($scope.class === 'admin') {
+            if (!$scope.organization) {
+                $state.go('admin.manageAdmins');
+            } else {
+                $scope.classData = classDataFactory.admin($scope.organization);
             }
         }else {
             $state.go('admin.dashboard');
@@ -89,6 +94,9 @@ angular.module('tourable')
             for (var index in data) {
                 console.log(data[index].value);
                 prepped[data[index].model] = data[index].value;
+            }
+            if ($scope.class === 'admin') {
+                prepped.username = prepped.email;
             }
             return prepped;
         }

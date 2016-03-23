@@ -13,7 +13,7 @@
         <h5 class="admin-subheader no-padding-top">Admins of {{organization.name}}</h5>
         <ul class="admin-cell-list">
             <div ng-repeat="_admin in admins track by $index">
-                <li class="cursor-pointer">{{_admin.username}}<i class="fa fa-chevron-right pull-right"></i></li>
+                <li class="cursor-pointer">{{_admin.firstname}} {{_admin.lastname}}<i class="fa fa-chevron-right pull-right"></i></li>
             </div>
         </ul>
     </div>
@@ -24,7 +24,7 @@
 </div>
 <div class="row">
     <div class="admin-main col-sm-8">
-        <button class="btn admin-btn" ui-sref="admin.create({class: 'admin'})">Create an Admin</button><br>
+        <button class="btn admin-btn" ui-sref="admin.create({className: 'admin', organization: organization.objectId})">Create an Admin</button><br>
     </div>
     <div class="admin-help col-md-4 hidden-xs">
         Click on the "Create an Admin" button to create a new admin in your organization, so that they can add and edit tours.

@@ -44,10 +44,24 @@
 .admin-btn-small {
     border-radius: 5px;
     padding: 10px 10px;
+    margin-right: 5px;
     border: 2px;
     background-color: #D8DCE0;
     color: #162B49;
     min-width: 100px;
+}
+
+.admin-btn:focus,
+.admin-btn-small:focus {
+    outline: 0 !important;
+}
+
+.admin-btn-radio-on {
+    background-color: #B2FFB1;
+}
+
+.admin-btn-radio-off {
+    background-color: #FFB2B1;
 }
 
 .admin-message {

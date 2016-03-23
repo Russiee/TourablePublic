@@ -19,7 +19,7 @@ tourable.factory('classDataFactory', function() {
                             },
                             {
                                 description: "Email",
-                                model: "lastname",
+                                model: "email",
                                 type: "text",
                                 help: "",
                                 required: true
@@ -27,13 +27,13 @@ tourable.factory('classDataFactory', function() {
                             {
                                 description: "Temporary Password",
                                 model: "password",
-                                type: "password",
+                                type: "text",
                                 help: "",
                                 required: true
                             },
                             {
                                 description: "Is this a super admin?",
-                                model: "password",
+                                model: "isSuper",
                                 type: "boolean",
                                 help: "Super admins can manage admins and edit every tour in an organization",
                                 required: true
