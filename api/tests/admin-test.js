@@ -14,8 +14,8 @@ var adminTest = {
 
     //POST function tests
     //creates and adds admin object to API database with given values
-    POST: function(pointerID, url, callback){
-        //takes pointerID to link admin object to given organization
+    POST: function(pointerID, server, callback){
+        //takes pointerID to link admin object to given admin
 
         date = Date.now();
 
@@ -29,8 +29,8 @@ var adminTest = {
             "isSuper": true
         };
         //sends object to API
-        request(url)
-       .post('api/v1/admin/')
+        request(server)
+       .post('/api/v1/admin/')
        .send(admin)
         //checks to ensure the created object adheres to format requirements
        .end(function(err, res) {
@@ -48,7 +48,7 @@ var adminTest = {
               res.status.should.be.equal(201);
               objID = res.body.objectId;
               //uses callback to ensure tests run synchronously (for the purpose of linking objects through pointers)
-            
+
               //calls the callback function and returns with it the created object's ID
               callback(objID);
         });
@@ -58,11 +58,11 @@ var adminTest = {
 
     //GET function tests
     //first get function test to check object was added correctly
-    GET1: function(pointerID, url, callback){
+    GET1: function(pointerID, server, callback) {
         //connects to the API database
-        request(url)
+        request(server)
         //queries database with the given object ID
-        .get('api/v1/admin/'+pointerID)
+        .get('/api/v1/admin/'+pointerID)
         //expected status codes and content type to be returned
         .expect('Content-Type', /json/)
         .expect(200 || 304) //Status code
@@ -79,6 +79,35 @@ var adminTest = {
             res.body.lastname.should.equal("Last");
             res.body.isSuper.should.equal(true);
             res.body.organization.should.not.equal(null);
+            callback();
+        });
+    },
+
+    //GET ALL function tests
+    //test whether the get all route includes the created admin
+    GET_ALL: function(pointerID, server, callback){
+        //queries the server
+        request(server)
+        //queries database with the given object ID
+        .get('/api/v1/admins')
+        //expected status codes and content type to be returned
+        .expect('Content-Type', /json/)
+        .expect(200 || 304) //Status code
+        //expected response, test fails if response is not the expected value
+        .end(function(err,res) {
+            if (err) {
+                throw err;
+            }
+
+            var exists = false;
+            for (var index in res.body) {
+                if (res.body[index].objectId === pointerID) {
+                    exists = true;
+                }
+            }
+            exists.should.equal(true);
+            //check whether the admin we created exists
+
             callback();
         });
     }

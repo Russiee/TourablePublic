@@ -77,6 +77,9 @@ var admin = {
         //set the limit to the appropriate value in the query
         query.limit(parseInt(limit));
 
+        //default to createdAt
+        query.descending('updatedAt');
+
         //if orderBy was passed as a param, sort the query by that value
         if (orderBy) {
             query.ascending(orderBy);

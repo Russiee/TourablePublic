@@ -2,6 +2,9 @@ var gulp = require('gulp');
 var nodemon = require('gulp-nodemon');
 var mocha = require('gulp-mocha');
 var util = require('util');
+var istanbul = require('gulp-istanbul');
+var stripDebug = require('gulp-strip-debug');
+
 
 gulp.task('default', function() {
     nodemon({
@@ -23,14 +26,20 @@ gulp.task('validate-tests', function () {
         .on('error', util.log);
 });
 
-gulp.task('test-coverage', function () {
-    return gulp.src(['tests/*.js'], { read: false })
-        .pipe(cover.instrument({
-            pattern: ['server.js', 'routes/*'],
-            debugDirectory: 'debug'
-        }))
-        .pipe(mocha())
-        .pipe(cover.gather())
-        .pipe(cover.format())
-        .pipe(gulp.dest('test-reports'));
+gulp.task('pre-test', function () {
+  return gulp.src(['server.js', 'routes/*.js'])
+    .pipe(stripDebug())
+    // Covering files
+    .pipe(istanbul())
+    // Force `require` to return covered files
+    .pipe(istanbul.hookRequire());
+});
+
+gulp.task('test', ['pre-test'], function () {
+  return gulp.src(['tests/*.js'])
+    .pipe(mocha())
+    // Creating the reports after tests ran
+    .pipe(istanbul.writeReports())
+    // Enforce a coverage of at least 90%
+    .pipe(istanbul.enforceThresholds({ thresholds: { global: 90 } }));
 });

@@ -1,5 +1,5 @@
 //require the necessary modules for this file
-var should = require('should'); 
+var should = require('should');
 var assert = require('assert');
 var request = require('supertest');
 var tour = require('../routes/tour.js');
@@ -10,7 +10,7 @@ var tour = require('../routes/tour.js');
 //Uses hardcoded checks for data to be expected based on test input
 //All functions are called in the route-test.js file
 var tourTest = {
-    POST: function(pointerID, url, callback) {
+    POST: function(pointerID, server, callback) {
         //takes pointerID to link tour object to given admin
         var tour  = {
                 "admin": ""+pointerID,
@@ -21,16 +21,16 @@ var tourTest = {
                 "version": 10
         };
         //connects to the API database
-        request(url)
+        request(server)
         //sends object to API
-        .post('api/v1/tour/')
+        .post('/api/v1/tour/')
         .send(tour)
         //checks to ensure the created object adheres to format requirements
         .end(function(err, res) {
               if (err) {
                 throw err;
               }
-                
+
               //statements checking the expected properties of the response
               //determines if the API is working as expected
               res.body.should.have.property("title");
@@ -42,46 +42,46 @@ var tourTest = {
               res.status.should.be.equal(201);
               objID = res.body.objectId;
             //uses callback to ensure tests run synchronously (for the purpose of linking objects through pointers)
-            
+
             //calls the callback function and returns with it the created object's ID
               callback(objID);
           });
-    },  
-      
+    },
+
     //GET function tests
-    //first get function test to check object was added correctly  
-    GET1: function(pointerID, url, callback){
+    //first get function test to check object was added correctly
+    GET1: function(pointerID, server, callback){
         //connects to the API database
-        request(url)
+        request(server)
         //queries database with the given object ID
-		.get('api/v1/tour/' + pointerID)
+        .get('/api/v1/tour/' + pointerID)
         //expected status codes and content type to be returned
         .expect('Content-Type', /json/)
         .expect(200 || 304) //Status code
         //expected response, test fails if response is not the expected value
-		.end(function(err,res) {
-			if (err) {
-				throw err;
-			}
+        .end(function(err,res) {
+            if (err) {
+                throw err;
+            }
             //statements checking the expected properties of the response
             //determines if the API is working as expected
             res.body.title.should.equal('Ultimate Test Tour');
-	        res.body.description.should.equal("This is a test tour");                 
-	        res.body.isPublic.should.equal(true);
+            res.body.description.should.equal("This is a test tour");
+            res.body.isPublic.should.equal(true);
             res.body.admin.should.not.equal(null);
             res.body.estimatedTime.should.equal(10);
             res.body.version.should.equal(10);
             //calls the callback function to finish the test
-			callback();
-		});
-	},
-      
-      
+            callback();
+        });
+    },
+
+
     //PUT function tests
-    //updates the object  
-    PUT: function(pointerID, pointID, url, callback){
-	    //updates the object with new given values
-        var tour2 = {			
+    //updates the object
+    PUT: function(pointerID, pointID, server, callback){
+        //updates the object with new given values
+        var tour2 = {
             "admin": {
               "__type": "Pointer",
               "className": "Admin",
@@ -94,20 +94,20 @@ var tourTest = {
             "version": 0
         };
         //connects to the API database
-	     request(url)
-         
+         request(server)
+
         //prepares the update the object in the database using reference to the object's ID
-		.put('api/v1/tour/'+pointID)
+        .put('/api/v1/tour/'+pointID)
         //sends request to database
-		.send(tour2)
+        .send(tour2)
         //function to be called at the end of the test
-		.end(function(err,res) {
-			if (err) {
-				throw err;
-			}
+        .end(function(err,res) {
+            if (err) {
+                throw err;
+            }
             //statements checking the expected properties of the response
             //determines if the API is working as expected
-	       res.body.should.have.property("title");
+           res.body.should.have.property("title");
            res.body.should.have.property("description");
            res.body.should.have.property("admin");
            res.body.should.have.property("isPublic");
@@ -116,17 +116,17 @@ var tourTest = {
            res.status.should.be.equal(200);
             //calls the callback function to finish the test
            callback();
-		});
-	},  
-      
-      
+        });
+    },
+
+
     //GET function tests
-    //second GET test to check object values were correctly updated  
-    GET2: function(pointerID, url, callback){
+    //second GET test to check object values were correctly updated
+    GET2: function(pointerID, server, callback){
         //connects to the API database
-        request(url)
+        request(server)
         //queries database with the given object ID
-        .get('api/v1/tour/'+pointerID)
+        .get('/api/v1/tour/'+pointerID)
         //expected status codes and content type to be returned
         .expect('Content-Type', /json/)
         .expect(200 || 304) //Status code
@@ -138,7 +138,7 @@ var tourTest = {
             //statements checking the expected properties of the response
             //determines if the API is working as expected
             res.body.title.should.equal('TestTour2');
-            res.body.description.should.equal("described");                     
+            res.body.description.should.equal("described");
             res.body.isPublic.should.equal(true);
             res.body.admin.should.not.equal(null);
             res.body.estimatedTime.should.equal(0);
@@ -150,11 +150,11 @@ var tourTest = {
 
     //DELETE function tests
     //Deletes the test object
-    DELETE: function(pointerID, url, callback){
+    DELETE: function(pointerID, server, callback){
         //connects to the API database
-        request(url)
+        request(server)
         //sends delete request for the given object ID
-        .delete('api/v1/tour/'+pointerID)
+        .delete('/api/v1/tour/'+pointerID)
         //expected status code to be returned
         .expect(200) //Status code
         //function to be called at the end of the test
@@ -165,15 +165,15 @@ var tourTest = {
             //calls the callback function to finish the test
             callback();
         });
-    }, 
-    
+    },
+
     //GET function tests
     //third GET test to check objet no longer exists / object was correctly deleted
-    GET3: function(pointerID, url, callback){
+    GET3: function(pointerID, server, callback){
         //connects to the API database
-        request(url)
+        request(server)
         //sends the get query for the given object ID
-        .get('api/v1/tour/'+pointerID)
+        .get('/api/v1/tour/'+pointerID)
         //expected status code to be returned
         .expect(404 || 400) //Status code
         //function to be called at the end of the test
