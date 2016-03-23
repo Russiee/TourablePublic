@@ -32,15 +32,11 @@ public class TourBuilderTest {
 
     @Before
     public void setup() throws JSONException {
-        try {
-            json = new JSONObject(TEST_JSON);
-            TourBuilder builder = new TourBuilder(json);
-            builder.run(); // intentionally not doing start()
-            tour = builder.getTour();
-            root = tour.getRoot();
-        } catch (JSONException e) {
-            throw e;
-        }
+        json = new JSONObject(TEST_JSON);
+        TourBuilder builder = new TourBuilder(json);
+        builder.run(); // intentionally not doing start()
+        tour = builder.getTour();
+        root = tour.getRoot();
     }
 
     @Test
@@ -88,6 +84,17 @@ public class TourBuilderTest {
         assertEquals(poi4, poi3.getNextPOI());
         assertEquals(poi5, poi4.getNextPOI());
         assertNull(poi5.getNextPOI());
+    }
+
+    @Test
+    public void hasCorrectParent() {
+        SubSection section1 = root.getSubSection(0);
+        SubSection section3 = root.getSubSection(2);
+        PointOfInterest poi3 = section3.getPOI(0);
+
+        assertEquals(section3, poi3.getParent());
+        assertEquals(root, section1.getParent());
+        assertEquals(root, section3.getParent());
     }
 
 
