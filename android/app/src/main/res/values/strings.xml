@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">TouringAndroid</string>
+    <string name="app_name">Tourable</string>
 
     <string name="title_activity_start">StartActivity</string>
     <string name="title_activity_download">DownloadActivity</string>
@@ -17,30 +17,47 @@
     <string name="prefs_current_expiry">CURRENT_KEY_EXPIRATION</string>
     <string name="prefs_tours_to_update">TO_UPDATE</string>
 
-    <string name="start_activity_enter_key">Enter a tour key:</string>
-    <string name="submit_key_button_text">Submit</string>
-    <string name="no_tours_exist">You haven\'t added any tours yet.</string>
-    <string name="no_tours_click">Press</string>
-    <string name="no_tours_cross">+</string>
-    <string name="no_tours_help">to add a tour!</string>
+    <string name="start_activity_your_tours">Your Tours</string>
+    <string name="start_activity_enter_key">Enter the provided tour key:</string>
+    <string name="start_activity_add_new_tour">Add New Tour</string>
+    <string name="start_activity_add_tour">Add Tour</string>
+    <string name="start_activity_submit_key_button_text">Submit</string>
+    <string name="start_activity_no_tours_exist">You haven\'t added any tours yet.</string>
     <string name="poi_first_text">Current placeholder text</string>
+
+    <string name="download_dialog_download_text"> "Your tour key is valid! You can now download this tour.
+        If you download it without media, you will need internet to view media during the tour.</string>
+
+    <string name="download_dialog_download_tour">Download Tour</string>
+    <string name="download_dialog_just_text">Download text only (Smaller)</string>
+    <string name="download_dialog_with_media">Download with media (Larger)</string>
 
     <string name="download_option_image">Download just Images</string>
     <string name="download_option_video">Download with Video</string>
     <string name="download_option_image_label">Videos streamed over network when needed.</string>
     <string name="download_option_video_label">Videos viewable without internet connection.</string>
-    <string name="download_activity_label">"Downloading images&#8230; "</string>
+    <string name="download_activity_label">"Downloading&#8230; "</string>
     <string name="download_activity_not_enough_space">Not enough space</string>
 
-    <string name="summary_activity_start_tour">Open tour</string>
+    <string name="summary_activity_start_tour">Start tour</string>
     <string name="summary_activity_update_tour">Update</string>
     <string name="summary_activity_estimated_time">Estimated time:</string>
     <string name="summary_activity_version_is_current">Your version is current</string>
     <string name="summary_activity_new_version_is_available">A new version is available</string>
-    <string name="summary_activity_expires_in">Tour key expires in </string>
-    <string name="summary_activity_expires_in_day">days</string>
-    <string name="summary_activity_expires_in_days">day </string>
+    <string name="expires_in">Tour key expires in</string>
+    <string name="expires_in_days">days</string>
+    <string name="expires_in_day">day</string>
+    <string name="expires_in_hours">hours</string>
+    <string name="expires_in_hour">hour</string>
+    <string name="expires_in_minutes">minutes</string>
+    <string name="expires_in_minute">minute</string>
     <string name="enter_tour_text">Enter the provided tour key: </string>
+
+    <string name="tour_activity_subsection">SUBSECTION</string>
+    <string name="tour_activity_poi">POINT OF INTEREST</string>
+    <string name="poi_back_to_overview">Back to overview</string>
+    <string name="poi_previous">Go to previous POI</string>
+    <string name="poi_next">Go to next POI</string>
 
     <string name="msg_no_internet">No internet connection</string>
     <string name="msg_invalid_key">Invalid tour key</string>
@@ -51,4 +68,6 @@
 
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+
+    <string name="space"> </string>
 </resources>

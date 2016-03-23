@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/poiContentTextView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:includeFontPadding="false"
+    android:paddingLeft="@dimen/poi_padding_side"
+    android:paddingRight="@dimen/poi_padding_side"
+    android:paddingTop="@dimen/poi_padding_top_small"
     android:textColor="@color/colorDarkText"
-    android:padding="16dp"
-    android:background="@color/colorLightBackground"/>
+    android:textSize="@dimen/dimension_text_size_small" />

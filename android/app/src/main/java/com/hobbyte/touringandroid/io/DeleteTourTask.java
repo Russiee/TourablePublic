@@ -12,10 +12,10 @@ import java.io.File;
  * <li>2) the key ID</li>
  * </ul>
  * </p>
- * There is no need to use this class yourself - use {@link FileManager#removeTour(Context, String)}
- * instead.
+ * There is no need to use this class yourself (nor can you, outside this package) - use
+ * {@link FileManager#removeTour(Context, String)} instead.
  */
-public class DeleteTourTask extends Thread {
+class DeleteTourTask extends Thread {
     private static final String TAG = "DeleteTourTask";
 
     private File filesDir;
@@ -31,40 +31,32 @@ public class DeleteTourTask extends Thread {
         File tourDir = new File(filesDir, keyID);
 
         if (tourDir.exists() && tourDir.isDirectory()) {
-            Log.d(TAG, "About to start deleting files");
 
-            int fileCount = 0;
-            int dirCount = 0;
-
-            /*
-            Have to delete the tour JSON, plus folders containing sections, pois, images, and video
-             */
-            new File(tourDir, "tour").delete();
-            fileCount++;
-
-            new File(tourDir, "bundle").delete();
-            fileCount++;
-
-            String[] dirs = {"poi", "image", "video"};
-
-            for (String d : dirs) {
-                File dir = new File(tourDir, d);
-
-                if (dir.exists() && dir.isDirectory()) {
-                    for (File f : dir.listFiles()) {
-                        f.delete();
-                        fileCount++;
-                    }
-
-                    dir.delete();
-                    dirCount++;
+            for (File f : tourDir.listFiles()) {
+                if (f.isDirectory()) {
+                    deleteContentsOf(f);
                 }
+
+                f.delete();
             }
 
             tourDir.delete();
-            dirCount++;
+        }
 
-            Log.d(TAG, "Deleted " + fileCount + " files and " + dirCount + " folders");
+
+        if (tourDir.exists()) {
+            Log.w(TAG, String.format("Failed to delete all files for %s!", keyID));
+        } else {
+            Log.d(TAG, String.format("Deleted all files for %s", keyID));
+        }
+    }
+
+    /**
+     * Delete the contents of a directory.
+     */
+    private void deleteContentsOf(File dir) {
+        for (File f : dir.listFiles()) {
+            f.delete();
         }
     }
 }

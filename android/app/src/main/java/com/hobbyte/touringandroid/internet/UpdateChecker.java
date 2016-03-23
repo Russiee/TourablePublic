@@ -1,25 +1,21 @@
 package com.hobbyte.touringandroid.internet;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.hobbyte.touringandroid.R;
 import com.hobbyte.touringandroid.io.TourDBManager;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /**
- * Queries the server to see if there are any tours which need updating.
+ * Queries the server to see if there are any tours which need updating. This can mean a change in
+ * version number, which means a change in tour content, and/or a change in key expiry date.
  */
 public class UpdateChecker extends Thread {
     private static final String TAG = "UpdateChecker";
 
     private Context context;
-    private Set<String> toUpdate = new HashSet<>();
 
     public UpdateChecker(Context context) {
         this.context = context;
@@ -27,38 +23,56 @@ public class UpdateChecker extends Thread {
 
     @Override
     public void run() {
-        Object[][] keys = TourDBManager.getInstance(context).getTourUpdateInfo();
+
+        //if no internet, don't run
+        if (!ServerAPI.checkConnection()) return;
+
+        int updateCount = 0;
+        TourDBManager dbHelper = TourDBManager.getInstance(context);
+
+        // has keyID, tourID, version, and expiry date
+        Object[][] keys = dbHelper.getTourUpdateInfo();
 
         for (Object[] row : keys) {
             String keyID = (String) row[0];
             String tourID = (String) row[1];
 
+
+            // first check if version number has changed
             JSONObject tour = ServerAPI.getJSON(tourID, ServerAPI.TOUR);
 
+            if (tour == null) continue;
+
             try {
-                // TODO: change this when tour version numbers are implemented
-                String version = tour.getString("updatedAt");
+                int version = tour.getInt("version");
 
-                if (TourDBManager.convertStampToMillis(version)[0] > (long) row[2]) {
-                    toUpdate.add(keyID);
+                // if the version number has changed, flag it so that the update is picked
+                // up in SummaryActivity
+                if (version > (int) row[2]) {
+                    dbHelper.flagTourUpdate(keyID, true);
+                    ++updateCount;
                 }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
+            // then check if expiry date has changed
+            JSONObject key = ServerAPI.getJSON(keyID, ServerAPI.KEY);
+
+            if (key == null) continue;
+
+            try {
+                long currentExpiry = (long) row[3];
+                long newExpiry = TourDBManager.convertStampToMillis(key.getString("expiry"));
+
+                if (newExpiry != currentExpiry) {
+                    dbHelper.updateTourExpiry(keyID, newExpiry);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        if (toUpdate.size() > 0) {
-            SharedPreferences prefs = context.getSharedPreferences(
-                    context.getString(R.string.preference_file_key),
-                    Context.MODE_PRIVATE
-            );
-
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putStringSet(context.getString(R.string.prefs_tours_to_update), toUpdate);
-            editor.apply();
-        }
-
-        Log.d(TAG, String.format("There are %d tours to update", toUpdate.size()));
+        Log.d(TAG, String.format("There are %d tours to update", updateCount));
     }
 }

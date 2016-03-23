@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:id="@+id/poiHeaderTextView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="bottom|clip_horizontal"
+    android:includeFontPadding="false"
+    android:paddingLeft="@dimen/poi_padding_side"
+    android:paddingRight="@dimen/poi_padding_side"
+    android:paddingTop="@dimen/poi_padding_top"
     android:textColor="@color/colorDarkText"
-    android:padding="16dp"
-    android:textStyle="bold"
-    android:background="@color/colorLightBackground">
-</TextView>
+    android:textSize="@dimen/dimension_text_size"
+    android:textStyle="bold" />

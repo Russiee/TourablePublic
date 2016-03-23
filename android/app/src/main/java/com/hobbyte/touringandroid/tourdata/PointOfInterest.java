@@ -13,7 +13,9 @@ public class PointOfInterest extends TourItem implements Parcelable {
     private final String title;
     private final SubSection parent;
 
-    /** The index of the following POI in the parent's list of POIs. */
+    /**
+     * The index of the following POI in the parent's list of POIs.
+     */
     private final int nextIndex;
 
     public PointOfInterest(SubSection parent, String title, String objectID, int nextIndex) {

@@ -22,30 +22,30 @@ import java.util.regex.Pattern;
  * This is the format of the bundle that is saved on the device:
  * <p/>
  * {
- *     "sectionID_A": {
- *         "title": "hello",
- *         "description": "I say hello",
- *         "subsections": [
- *              {
- *                  "objectId": "sectionID_B",
- *                  "title": "world"
- *              }, ...
- *          ],
- *          "pois": [
- *              {
- *                  "objectId": "poiID_A",
- *                  "title": "Foo"
- *              }, ...
- *     },
- *     "sectionID_B": {
- *         "title": "world",
- *         "description": "Goodbye",
- *         "subsections": [
- *              ....
- *         ],
- *         ...
- *     },
- *     ...
+ * "sectionID_A": {
+ * "title": "hello",
+ * "description": "I say hello",
+ * "subsections": [
+ * {
+ * "objectId": "sectionID_B",
+ * "title": "world"
+ * }, ...
+ * ],
+ * "pois": [
+ * {
+ * "objectId": "poiID_A",
+ * "title": "Foo"
+ * }, ...
+ * },
+ * "sectionID_B": {
+ * "title": "world",
+ * "description": "Goodbye",
+ * "subsections": [
+ * ....
+ * ],
+ * ...
+ * },
+ * ...
  * }
  * <p/>
  * Additionally a "root" key is stored, which determines what is shown when the user first enters a
@@ -87,22 +87,16 @@ public class BundleSaver extends Thread {
             int depthZeroCount = bundleTemp.getJSONArray("sections").length();
 
             JSONObject tourRoot = new JSONObject();
+            JSONArray topSections = new JSONArray();
 
-            // if the tour has only one section at depth = 0, use that as the root of the tour
-            if (depthZeroCount == 1) {
-                tourRoot.put("objectId", sections.getJSONObject(0).getString("objectId"));
-            } else {
-                tourRoot.put("objectId", "tour");
-                JSONArray topSections = new JSONArray();
-
-                for (int i = 0; i < depthZeroCount; ++i) {
-                    String objectId = sections.getJSONObject(i).getString("objectId");
-                    topSections.put(i, objectId);
-                }
-
-                tourRoot.put("subsections", topSections);
-                tourRoot.put("title", bundleTemp.getString("title"));
+            for (int i = 0; i < depthZeroCount; ++i) {
+                String objectId = sections.getJSONObject(i).getString("objectId");
+                topSections.put(i, objectId);
             }
+
+            tourRoot.put("subsections", topSections);
+            tourRoot.put("title", bundleTemp.getString("title"));
+            tourRoot.put("description", bundleTemp.getString("description"));
 
             json.put("root", tourRoot);
 
@@ -130,7 +124,6 @@ public class BundleSaver extends Thread {
     }
 
     /**
-     *
      * @return all video URLs in the bundle JSON
      */
     public HashSet<String> getVideoURLs() {
@@ -208,6 +201,7 @@ public class BundleSaver extends Thread {
 
     /**
      * Extract the objectId's and titles from a sections POIs, and save each POI on the device.
+     *
      * @param section a JSONObject of one section in bundle.sections
      * @return a JSONArray containing JSONObjects for each POI in this section
      */

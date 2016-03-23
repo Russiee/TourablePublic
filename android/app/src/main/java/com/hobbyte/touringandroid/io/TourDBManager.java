@@ -14,19 +14,20 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * Performs all required database operations. To use, simply call {@link #getInstance(Context)}.
  * There is no need to worry about readable/writable databases, as this is handled for you.
- * <p>
+ * <p/>
  * The only piece of housekeeping that you <b>MUST</b> do is to call {@link #close()} in
  * {@link Activity#onPause()} or {@link Activity#onStop()} of any Activity that uses this class.
  * (And close any {@link Cursor} instances that you use outside of this class, naturally).
- * <p>
+ * <p/>
  * Database operations are not inherently run on separate threads. If you are worried about blocking
  * the UI thread, make a new one. However, it is not expected that this database will ever contain
  * so many rows that it will slow the UI thread.
- * <p>
+ * <p/>
  * Largely taken from the Android
  * <a href="https://developer.android.com/training/basics/data-storage/databases.html">training guides.</a>
  * Some outside guidance was also had regarding the
@@ -36,10 +37,10 @@ import java.util.Date;
 public class TourDBManager extends SQLiteOpenHelper {
     private static final String TAG = "TourDBManager";
 
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 4;
     public static final String DATABASE_NAME = "TourData.db";
 
-    public static final String dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+    public static final String SERVER_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
     private static TourDBManager tdbmInstance;
     private SQLiteDatabase db;
@@ -51,20 +52,22 @@ public class TourDBManager extends SQLiteOpenHelper {
     private static final String SQL_CREATE_TABLE =
             "CREATE TABLE " + TourList.TABLE_NAME + " (" +
                     TourList.COL_KEY_ID + " TEXT PRIMARY KEY," +
+                    TourList.COL_KEY_NAME + " TEXT NOT NULL," +
                     TourList.COL_TOUR_ID + " TEXT NOT NULL," +
                     TourList.COL_TOUR_NAME + " TEXT NOT NULL," +
-                    TourList.COL_DATE_CREATED + " NUMERIC NOT NULL," +
-                    TourList.COL_DATE_UPDATED + " NUMERIC NOT NULL," +
                     TourList.COL_DATE_EXPIRES_ON + " NUMERIC," +
-                    TourList.COL_DATE_LAST_ACCESSED + " NUMERIC," +
-                    TourList.COL_HAS_VIDEO + " INTEGER DEFAULT 0" +
-            ")";
+                    TourList.COL_HAS_MEDIA + " INTEGER DEFAULT 0," +
+                    TourList.COL_VERSION + " NUMERIC NOT NULL," +
+                    TourList.COL_HAS_UPDATE + " INTEGER DEFAULT 0" +
+                    ")";
 
     private static final String SQL_DELETE_TABLE =
             "DROP TABLE IF EXISTS " + TourList.TABLE_NAME;
 
     private static final String SQL_ROW_COUNT =
             "SELECT COUNT(" + TourList.COL_TOUR_ID + ") FROM " + TourList.TABLE_NAME;
+
+    private static final String WHERE_KEY_ID = TourList.COL_KEY_ID + " = ?";
 
     /*=============================================
         DATABASE METHODS
@@ -95,7 +98,7 @@ public class TourDBManager extends SQLiteOpenHelper {
      * Creates the DB using the script above. This method is automatically called the
      * first time the app uses either SQLiteOpenHelper.getReadableDatabase() or
      * SQLiteOpenHelper.getWritableDatabase().
-     * <p>
+     * <p/>
      * Don't use it yourself.
      *
      * @param db an SQLite DB instance
@@ -110,6 +113,7 @@ public class TourDBManager extends SQLiteOpenHelper {
      */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        Log.i(TAG, "DB WAS UPGRADED");
         // for now, just start over with fresh db
         db.execSQL(SQL_DELETE_TABLE);
         onCreate(db);
@@ -142,7 +146,8 @@ public class TourDBManager extends SQLiteOpenHelper {
     }
 
     /**
-     * Fetches every row in the table, ordered by when tours were last access by the user.
+     * Fetches the columns needed to display tours in the UI for every row. They will be ordered
+     * based on when they were entered into the table.
      *
      * @return a {@link Cursor} at position -1
      */
@@ -150,54 +155,48 @@ public class TourDBManager extends SQLiteOpenHelper {
         open(false);
 
         String[] cols = {
-                TourList.COL_KEY_ID, TourList.COL_TOUR_ID,
-                TourList.COL_TOUR_NAME, TourList.COL_DATE_EXPIRES_ON
-        };
-        String orderBy = TourList.COL_DATE_LAST_ACCESSED + " DESC";
+                TourList.COL_KEY_ID, TourList.COL_TOUR_ID, TourList.COL_TOUR_NAME};
 
-        return db.query(TourList.TABLE_NAME, cols, null, null, null, null, orderBy);
+        return db.query(TourList.TABLE_NAME, cols, null, null, null, null, null);
     }
 
     /**
-     * Insert a tour entry into the db. All fields, with the exception of `db` and `hasVideo`, will
+     * Insert a tour entry into the db. All fields, with the exception of `hasMedia`, will
      * be extracted from JSON that was fetched from the server.
-     * <p>
+     * <p/>
      * All the timestamp parameters should be passed in the string form in which the server stores
      * them. They will be converted into, and stored as, milliseconds since Epoch.
      *
-     * @param keyID the objectId of the key used to fetch the tour
-     * @param tourID the objectId of the tour itself
-     * @param tourName the tour's title
-     * @param creationDate when the tour was created
-     * @param updateDate when the tour was last updated
+     * @param keyID      the objectId of the key used to fetch the tour
+     * @param tourID     the objectId of the tour itself
+     * @param tourName   the tour's title
      * @param expiryDate when the tour expires
-     * @param hasVideo whether or not the user opted to download the tour with video
+     * @param hasMedia   whether or not the user opted to download the tour with video
      */
-    public void putRow(String keyID, String tourID, String tourName, String creationDate,
-                       String updateDate, String expiryDate, boolean hasVideo) {
+    public void putRow(String keyID, String tourID, String keyName, String tourName,
+                       String expiryDate, boolean hasMedia, int version) {
         open(true);
 
-        int video = (hasVideo ? 1 : 0);
-        long[] datetimes;
+        int video = (hasMedia ? 1 : 0);
+        long expiryLong;
 
         try {
-            datetimes = convertStampToMillis(creationDate, updateDate, expiryDate);
+            expiryLong = convertStampToMillis(expiryDate);
         } catch (ParseException e) {
             e.printStackTrace();
             // is there a better way to handle this?
-            datetimes = new long[] {1, 1, 1};
+            expiryLong = 100;
         }
 
         ContentValues values = new ContentValues();
 
         values.put(TourList.COL_KEY_ID, keyID);
+        values.put(TourList.COL_KEY_NAME, keyName);
         values.put(TourList.COL_TOUR_ID, tourID);
         values.put(TourList.COL_TOUR_NAME, tourName);
-        values.put(TourList.COL_DATE_CREATED, datetimes[0]);
-        values.put(TourList.COL_DATE_UPDATED, datetimes[1]);
-        values.put(TourList.COL_DATE_EXPIRES_ON, datetimes[2]);
-        values.put(TourList.COL_DATE_LAST_ACCESSED, Calendar.getInstance().getTimeInMillis());
-        values.put(TourList.COL_HAS_VIDEO, video);
+        values.put(TourList.COL_DATE_EXPIRES_ON, expiryLong);
+        values.put(TourList.COL_HAS_MEDIA, video);
+        values.put(TourList.COL_VERSION, version);
 
         db.insert(TourList.TABLE_NAME, null, values);
     }
@@ -211,10 +210,50 @@ public class TourDBManager extends SQLiteOpenHelper {
     public Cursor getRow(String keyID) {
         open(false);
 
-        String where = TourList.COL_KEY_ID + " = ?";
         String[] whereArgs = {keyID};
 
-        return db.query(TourList.TABLE_NAME, null, where, whereArgs, null, null, null);
+        return db.query(TourList.TABLE_NAME, null, WHERE_KEY_ID, whereArgs, null, null, null);
+    }
+
+    /**
+     * Update a tour entry in the db. The new `tourName` and `version` will come from the server,
+     * and `hasMedia` depends on whether or not the user decided to update with/without media.
+     *
+     * @param keyID    the objectId of the key used to fetch the tour
+     * @param tourName the tour's title
+     * @param hasMedia whether or not the user opted to download the tour with video
+     * @param version  the current version of the tour
+     */
+    public void updateRow(String keyID, String tourName, boolean hasMedia, int version) {
+        open(true);
+
+        int video = (hasMedia ? 1 : 0);
+        String[] whereArgs = {keyID};
+
+        ContentValues values = new ContentValues();
+        values.put(TourList.COL_TOUR_NAME, tourName);
+        values.put(TourList.COL_HAS_MEDIA, video);
+        values.put(TourList.COL_VERSION, version);
+
+        db.update(TourList.TABLE_NAME, values, WHERE_KEY_ID, whereArgs);
+    }
+
+    /**
+     * Changes a tour's expiry date.
+     *
+     * @param keyID  the ID of a tour key (not the tour ID itself)
+     * @param expiry the new expiry date
+     */
+    public void updateTourExpiry(String keyID, long expiry) {
+        open(true);
+
+        ContentValues values = new ContentValues();
+        values.put(TourList.COL_DATE_EXPIRES_ON, expiry);
+
+        String[] whereArgs = {keyID};
+
+        db.update(TourList.TABLE_NAME, values, WHERE_KEY_ID, whereArgs);
+
     }
 
     /**
@@ -225,71 +264,37 @@ public class TourDBManager extends SQLiteOpenHelper {
     public void deleteTour(String keyID) {
         open(true);
 
-        String where = TourList.COL_KEY_ID + " = ?";
         String[] whereArgs = {keyID};
-        int count = db.delete(TourList.TABLE_NAME, where, whereArgs);
+        int count = db.delete(TourList.TABLE_NAME, WHERE_KEY_ID, whereArgs);
         Log.d(TAG, "Deleted " + count + " row");
-    }
-
-    /**
-     * Deletes a number of rows corresponding to the provided key IDs. Use when removing expired
-     * tours.
-     *
-     * @param keyIDs the ID of a tour key (not the tour ID itself)
-     */
-    public void deleteTours(String[] keyIDs) {
-        open(true);
-
-        String where = String.format(
-                TourList.COL_KEY_ID + " IN (%s)",
-                getPlaceHolders(keyIDs.length)
-        );
-
-        int count = db.delete(TourList.TABLE_NAME, where, keyIDs);
-        Log.d(TAG, "Deleted " + count + " row(s)");
-    }
-
-    /**
-     * Sets the `lastAccessedOn` field of a tour to be the current time. Should be used when the
-     * user selects a tour from the StartActivity.
-     *
-     * @param keyID the ID of a tour key (not the tour ID itself)
-     */
-    public void updateAccessedTime(String keyID) {
-        open(true);
-
-        ContentValues values = new ContentValues();
-        values.put(TourList.COL_DATE_LAST_ACCESSED, Calendar.getInstance().getTimeInMillis());
-
-        String where = TourList.COL_KEY_ID + " = ?";
-        String[] whereArgs = {keyID};
-
-        db.update(TourList.TABLE_NAME, values, where, whereArgs);
     }
 
     /**
      * Fetches the information required to find out if a tour needs updating.
      *
      * @return an array where each row is of the form [(String) keyID, (String) tourID,
-     * (long) updatedAt]
+     * (int) version, (long) expiry date]
      */
     public Object[][] getTourUpdateInfo() {
         open(false);
 
-        // TODO: change the return array and second column when tour version numbers are implemented
-        String[] cols = {TourList.COL_KEY_ID, TourList.COL_TOUR_ID, TourList.COL_DATE_UPDATED};
+        String[] cols = {
+                TourList.COL_KEY_ID, TourList.COL_TOUR_ID,
+                TourList.COL_VERSION, TourList.COL_DATE_EXPIRES_ON
+        };
         Cursor c = db.query(
                 TourList.TABLE_NAME, cols,
                 null, null, null, null, null
         );
 
-        Object[][] keys = new Object[c.getCount()][3];
+        Object[][] keys = new Object[c.getCount()][4];
         int i = 0;
 
         while (c.moveToNext()) {
             keys[i][0] = c.getString(0);
             keys[i][1] = c.getString(1);
-            keys[i][2] = c.getLong(2);
+            keys[i][2] = c.getInt(2);
+            keys[i][3] = c.getLong(3);
             ++i;
         }
 
@@ -320,16 +325,37 @@ public class TourDBManager extends SQLiteOpenHelper {
         int count = c.getCount();
 
         // return expired keys
-            String[] toDelete = new String[count];
+        String[] toDelete = new String[count];
 
-            while (c.moveToNext()) {
-                toDelete[--count] = c.getString(0);
-            }
+        while (c.moveToNext()) {
+            toDelete[--count] = c.getString(0);
+        }
 
-            c.close();
+        c.close();
 
         c.close();
         return toDelete;
+    }
+
+    /**
+     * Gets a tour's expiry date.
+     *
+     * @param keyID the ID of a tour key (not the tour ID itself)
+     * @return the (long) expiry date for the specified tour
+     */
+    public long getExpiryDate(String keyID) {
+        open(false);
+
+        String[] cols = {TourList.COL_DATE_EXPIRES_ON};
+        String[] whereArgs = {keyID};
+
+        Cursor c = db.query(TourList.TABLE_NAME, cols, WHERE_KEY_ID, whereArgs, null, null, null);
+        c.moveToFirst();
+
+        long expiry = c.getLong(0);
+        c.close();
+
+        return expiry;
     }
 
     /**
@@ -361,15 +387,15 @@ public class TourDBManager extends SQLiteOpenHelper {
      * Checks if a key has already been used (i.e. there is a row for it in the db). Used when the
      * user enters a key, to prevent downloading duplicate tours.
      *
-     * @param keyID the ID of a tour key (not the tour ID itself)
+     * @param keyName the key that was first entered by the user to download the tour
      * @return true if the tour exists
      */
-    public boolean doesTourExist(String keyID) {
+    public boolean doesTourKeyNameExist(String keyName) {
         open(false);
 
         String[] cols = {TourList.COL_KEY_ID};
-        String where = TourList.COL_KEY_ID + " = ?";
-        String[] whereArgs = {keyID};
+        String where = TourList.COL_KEY_NAME + " = ?";
+        String[] whereArgs = {keyName};
 
         Cursor c = db.query(
                 TourList.TABLE_NAME, cols,
@@ -384,47 +410,78 @@ public class TourDBManager extends SQLiteOpenHelper {
     }
 
     /**
-     * Checks if a tour was downloaded with both images and video, or images only.
+     * Checks if a tour was downloaded with or without images and video.
      *
      * @param keyID the ID of a tour key (not the tour ID itself)
-     * @return false if the tour was downloaded with images only
+     * @return false if the tour was downloaded without media
      */
-    public boolean doesTourHaveVideo(String keyID) {
+    public boolean doesTourHaveMedia(String keyID) {
         open(false);
 
-        String[] cols = {TourList.COL_HAS_VIDEO};
-        String where = TourList.COL_KEY_ID + " = ?";
+        String[] cols = {TourList.COL_HAS_MEDIA};
         String[] whereArgs = {keyID};
 
-        Cursor c = db.query(
-                TourList.TABLE_NAME, cols,
-                where, whereArgs,
-                null, null, null
-        );
-
+        Cursor c = db.query(TourList.TABLE_NAME, cols, WHERE_KEY_ID, whereArgs, null, null, null);
         c.moveToFirst();
-        boolean hasVideo = c.getInt(0) == 1;
 
+        boolean hasMedia = c.getInt(0) == 1;
         c.close();
-        return hasVideo;
+
+        return hasMedia;
     }
 
     /**
-     * Takes one or more timestamps and converts them into milliseconds since Epoch.
+     * Changes the `hasUpdate` attribute on a tour. Used to trigger updates in SummaryActivity.
      *
-     * @param timeArgs one or more timestamps
-     * @return millisecond representations of the provided timestamps
-     * @throws ParseException if the timestamps don't match the dateFormat
+     * @param keyID     the ID of a tour key (not the tour ID itself)
+     * @param hasUpdate true if there is a new version of the tour on the server
      */
-    public static long[] convertStampToMillis(String... timeArgs) throws ParseException {
-        SimpleDateFormat df = new SimpleDateFormat(dateFormat);
+    public void flagTourUpdate(String keyID, boolean hasUpdate) {
+        open(true);
 
-        long[] toReturn = new long[timeArgs.length];
+        ContentValues values = new ContentValues();
+        int update = hasUpdate ? 1 : 0;
+        values.put(TourList.COL_HAS_UPDATE, update);
 
-        for (int i = 0; i < timeArgs.length; i++) {
-            Date date = df.parse(timeArgs[i]);
-            toReturn[i] = date.getTime();
-        }
+        String[] whereArgs = {keyID};
+
+        db.update(TourList.TABLE_NAME, values, WHERE_KEY_ID, whereArgs);
+    }
+
+    /**
+     * Checks if the specified tour has an update available.
+     *
+     * @param keyID the ID of a tour key (not the tour ID itself)
+     * @return true if the `hasUpdate` attribute is set to true
+     */
+    public boolean doesTourHaveUpdate(String keyID) {
+        open(false);
+
+        String[] whereArgs = {keyID};
+        String[] cols = {TourList.COL_HAS_UPDATE};
+
+        Cursor c = db.query(TourList.TABLE_NAME, cols, WHERE_KEY_ID, whereArgs, null, null, null);
+        c.moveToFirst();
+
+        boolean hasUpdate = c.getInt(0) == 1;
+        c.close();
+
+        return hasUpdate;
+    }
+
+    /**
+     * Takes a timestamp and converts it into milliseconds since Epoch.
+     *
+     * @param timestamp a timestamp formatted like yyyy-MM-dd'T'HH:mm:ss.SSS'Z'
+     * @return millisecond representation of the provided timestamp
+     * @throws ParseException if the timestamp doesn't match {@link #SERVER_TIME_FORMAT}
+     */
+    public static long convertStampToMillis(String timestamp) throws ParseException {
+        SimpleDateFormat df = new SimpleDateFormat(SERVER_TIME_FORMAT);
+        df.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+        Date date = df.parse(timestamp);
+        long toReturn = date.getTime();
 
         return toReturn;
     }
@@ -433,7 +490,7 @@ public class TourDBManager extends SQLiteOpenHelper {
      * Returns a number of question marks separated by commas. Needed for SQL queries that have
      * "WHERE x IN (...)" (e.g. `SQL_DELETE_TOURS`). The API can't handle dynamic placeholders so
      * we have to do it ourselves.
-     * <p>
+     * <p/>
      * Don't pass 0 to this as it will return a single question mark anyway.
      *
      * @param count the number of placeholders to generate

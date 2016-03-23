@@ -21,7 +21,7 @@ public class ImageCache {
     private ImageCache() {
         if (lruCache == null) {
             final int maxMemory = (int) (Runtime.getRuntime().maxMemory());
-            final int cacheSize = maxMemory / 5; // TODO decide on appropriate fraction of heap to use
+            final int cacheSize = maxMemory / 8;
 
             // need to override sizeOf() to make the cache measure itself by a memory amount
             // instead of a fixed number of entries
@@ -47,11 +47,13 @@ public class ImageCache {
     /**
      * Adds a {@link Bitmap} to the cache, associating it with its filename.
      *
-     * @param key an image's filename
+     * @param key   an image's filename
      * @param value a Bitmap of that image
      */
     public void addBitmap(String key, Bitmap value) {
         lruCache.put(key, value);
+
+        Log.i(TAG, String.format("Adding bitmap to cache. Size is %d", lruCache.size()));
     }
 
     /**
@@ -61,6 +63,7 @@ public class ImageCache {
      * @return a Bitmap if the key was found, otherwise null
      */
     public Bitmap getBitmap(String key) {
+        Log.i(TAG, "Fetching image...");
         return lruCache.get(key);
     }
 
@@ -68,6 +71,8 @@ public class ImageCache {
      * Removes all entries from the cache.
      */
     public void clearCache() {
+        float size = (float) lruCache.size() / (1024 * 1024);
+        Log.i(TAG, String.format("Evicting %.2f MB of memory from cache", size));
         lruCache.evictAll();
     }
 }

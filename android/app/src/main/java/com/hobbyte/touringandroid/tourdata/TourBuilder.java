@@ -24,21 +24,16 @@ public class TourBuilder extends Thread {
     public void run() {
         try {
             JSONObject rootJSON = bundle.getJSONObject("root");
-            String rootID = rootJSON.getString("objectId");
-
-            // if there is only one section at depth 0, BundleSaver maps the root ID to the ID for
-            // that section.
-            if (!rootID.equals("tour")) {
-                rootJSON = bundle.getJSONObject(rootID);
-            }
-
             JSONArray subsectionIDs = rootJSON.getJSONArray("subsections");
 
             // because SubSections hold their items as TourItems, we need this number to let
             // SubSections know how many of their contents are SubSections, as opposed to POIs.
             int numSubSections = subsectionIDs.length();
 
-            root = new SubSection(null, rootJSON.getString("title"), rootJSON.getString("description"), rootID, numSubSections);
+            root = new SubSection(
+                    null, rootJSON.getString("title"), rootJSON.getString("description"),
+                    "root", numSubSections
+            );
 
             for (int i = 0; i < numSubSections; ++i) {
                 parseSections(root, subsectionIDs.getString(i));
@@ -57,7 +52,7 @@ public class TourBuilder extends Thread {
      * Recursively travel through the bundle JSON, creating {@link SubSection}s and
      * {@link PointOfInterest}s along the way.
      *
-     * @param parent the parent {@link SubSection}
+     * @param parent       the parent {@link SubSection}
      * @param subsectionID the objectId of the new {@link SubSection} to create
      */
     private void parseSections(SubSection parent, String subsectionID) {

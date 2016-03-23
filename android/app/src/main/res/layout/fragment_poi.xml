@@ -4,13 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.hobbyte.touringandroid.ui.fragment.POIFragment"
-    android:background="#ffffff">
+    android:background="@color/colorLightBackground"
+    android:id="@+id/fragmentID">
 
     <!--<android.support.v7.widget.R-->
 
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:divider="@null"
+        android:dividerHeight="0dp"/>
 
 </LinearLayout>

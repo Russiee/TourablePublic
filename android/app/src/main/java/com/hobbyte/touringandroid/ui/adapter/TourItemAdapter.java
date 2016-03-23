@@ -1,13 +1,14 @@
 package com.hobbyte.touringandroid.ui.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.hobbyte.touringandroid.App;
 import com.hobbyte.touringandroid.R;
 import com.hobbyte.touringandroid.tourdata.TourItem;
 
@@ -18,9 +19,14 @@ import java.util.ArrayList;
  */
 public class TourItemAdapter extends ArrayAdapter<TourItem> {
     private static final String TAG = "TourItemAdapter";
+    private boolean hasSubSectionText;
+    private boolean hasPOIText;
+
 
     public TourItemAdapter(Context context, ArrayList<TourItem> items) {
         super(context, 0, items);
+        hasSubSectionText = false;
+        hasPOIText = false;
     }
 
     @Override
@@ -33,17 +39,21 @@ public class TourItemAdapter extends ArrayAdapter<TourItem> {
 
         TextView subsectionView = (TextView) view.findViewById(R.id.SubSectionTextView);
         TextView separator = (TextView) view.findViewById(R.id.separator);
+        separator.setVisibility(View.GONE);
 
         if (selected.getType() == TourItem.TYPE_SUBSECTION) {
-            if(position == 0) {
+            if (!hasSubSectionText && position == 0) {
                 separator.setVisibility(View.VISIBLE);
-                separator.setText("SUBSECTIONS");
+                separator.setText(App.context.getString(R.string.tour_activity_subsection));
+                hasSubSectionText = true;
             }
             subsectionView.setText(selected.getTitle());
+            Log.d(TAG, String.format(".%s.", selected.getTitle()));
         } else {
-            if((position != 0) && getItem(position-1).getType() == TourItem.TYPE_SUBSECTION) {
+            if (!hasPOIText || position == 0 || ((position != 0) && getItem(position - 1).getType() == TourItem.TYPE_SUBSECTION)) {
                 separator.setVisibility(View.VISIBLE);
-                separator.setText("POINTS OF INTEREST");
+                separator.setText(App.context.getString(R.string.tour_activity_poi));
+                hasPOIText = true;
             }
             subsectionView.setText(selected.getTitle());
         }

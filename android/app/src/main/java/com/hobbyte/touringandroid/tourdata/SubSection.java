@@ -17,11 +17,15 @@ public class SubSection extends TourItem implements Parcelable {
     private final String description;
     private final SubSection parent;
 
-    /** This lets the object skip over any SubSections in `contents`. See {@link #getPOI(int)}*/
+    /**
+     * This lets the object skip over any SubSections in `contents`. See {@link #getPOI(int)}
+     */
     private final int numSubSections;
 
-    /** Holds all child SubSections and POIs. From the way the JSON is parsed, this will be filled
-     *  with SubSections first, and POIs after. */
+    /**
+     * Holds all child SubSections and POIs. From the way the JSON is parsed, this will be filled
+     * with SubSections first, and POIs after.
+     */
     private ArrayList<TourItem> contents = new ArrayList<>();
     
     public SubSection(SubSection parent, String title, String description, String objectID, int numSubSections) {
@@ -76,7 +80,9 @@ public class SubSection extends TourItem implements Parcelable {
     /**
      * Get the SubSection's description, as described in the JSON.
      */
-    public String getDescription() { return description; }
+    public String getDescription() {
+        return description;
+    }
 
     /**
      * Get this object's parent section.

@@ -1,36 +1,35 @@
 package com.hobbyte.touringandroid.internet;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
+import com.hobbyte.touringandroid.App;
+import com.hobbyte.touringandroid.io.TourDBManager;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.text.ParseException;
 
 /**
  * This class provides some static methods for sending requests to the server and processing
  * responses.
  */
 public class ServerAPI {
-    private static final String TAG = "ServerAPI";
-
-    private static final String BASE_URl = "https://touring-api.herokuapp.com/api/v1";
     public static final String KEY_VALIDATION = "/key/verify/";
     public static final String BUNDLE = "/bundle/";
     public static final String TOUR = "/tour/";
     public static final String KEY = "/key/";
-
-
-
+    private static final String TAG = "ServerAPI";
+    private static final String BASE_URl = "https://touring-api.herokuapp.com/api/v1";
 
     /**
      * Asks the server if a provided Tour Key is a real, valid key. If it is, return the
@@ -54,24 +53,44 @@ public class ServerAPI {
                 BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String line = in.readLine();
 
+                //read response into string
                 while (line != null) {
                     jsonString.append(line);
                     line = in.readLine();
                 }
 
+                //close connection
                 in.close();
                 connection.disconnect();
 
-                Log.d(TAG, "Valid key: " + tourKey);
+                //convert response to json object
                 JSONObject json = new JSONObject(jsonString.toString());
+
+                //check if key has expired
+                //return null if it has
+                long newExpiry = TourDBManager.convertStampToMillis(json.getString("expiry"));
+                if (newExpiry < System.currentTimeMillis()) {
+                    Log.d(TAG, String.format("Key Expired: keyExpiry: %d, current time %d",
+                            newExpiry, System.currentTimeMillis()));
+                    return null;
+                }
+
+                //valid key
                 String tourID = json.getJSONObject("tour").getString("objectId");
+
+                Log.d(TAG, "Valid key: " + tourKey);
                 Log.d(TAG, "Fetched tourId: " + tourID);
+
                 return json;
+
             } else {
                 Log.d(TAG, "Invalid key: " + tourKey);
                 connection.disconnect();
                 return null;
             }
+        } catch (ParseException e) {
+            e.printStackTrace();
+            Log.e(TAG, "couldn't parse expiry");
         } catch (JSONException jex) {
             jex.printStackTrace();
             Log.e(TAG, "Something went wrong with the JSON!");
@@ -94,6 +113,7 @@ public class ServerAPI {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setDoInput(true);
+            connection.setConnectTimeout(2000);
             connection.connect();
 
             int response = connection.getResponseCode();
@@ -113,7 +133,6 @@ public class ServerAPI {
                 in.close();
 
                 JSONObject json = new JSONObject(jsonString.toString());
-                Log.d(TAG, "Returning JSON for tour: " + json.getString("title"));
                 connection.disconnect();
 
                 return json;
@@ -125,12 +144,21 @@ public class ServerAPI {
 
         } catch (JSONException jex) {
             jex.printStackTrace();
+        } catch (SocketTimeoutException e) {
+            e.printStackTrace();
+            Log.d(TAG, "Bad connection, update aborted");
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 
+    /**
+     * Connects to API using a given tourID and retrieves corresponding bundle as a string
+     *
+     * @param tourID tourID whose bundle to retrieve
+     * @return Bundle string
+     */
     public static String getBundleString(String tourID) {
         try {
             URL url = new URL(BASE_URl + BUNDLE + tourID);
@@ -165,41 +193,19 @@ public class ServerAPI {
         return null;
     }
 
-    public static Bitmap downloadBitmap(String urlString) {
-        Log.d(TAG, "Preparing to download image at " + urlString);
-        HttpURLConnection connection = null;
-        Bitmap bitmap = null;
-
-        try {
-            URL url = new URL(urlString);
-            connection = (HttpURLConnection) url.openConnection();
-            connection.connect();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        if (connection != null) {
-            // download image into a bitmap
-            try (BufferedInputStream bis = new BufferedInputStream(connection.getInputStream())) {
-
-                bitmap = BitmapFactory.decodeStream(bis);
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                connection.disconnect();
-            }
-        }
-        return bitmap;
-    }
-
+    /**
+     * Opens a connection to a given URL
+     *
+     * @param urlString URL to open connection to
+     * @return Open connection
+     */
     public static HttpURLConnection getConnection(String urlString) {
         HttpURLConnection connection = null;
-
         try {
             URL url = new URL(urlString);
             connection = (HttpURLConnection) url.openConnection();
             connection.connect();
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -212,12 +218,11 @@ public class ServerAPI {
      * Taken from the Android
      * <a href="https://developer.android.com/training/monitoring-device-state/connectivity-monitoring.html">training guides.</a>
      *
-     * @param context an Activity
      * @return true if the device has an internet connection
      */
-    public static boolean checkConnection(Context context) {
+    public static boolean checkConnection() {
         ConnectivityManager cm =
-                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                (ConnectivityManager) App.context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 

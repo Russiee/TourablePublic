@@ -1,140 +1,197 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:layout_alignParentTop="true">
+    android:layout_alignParentTop="true"
+    android:fillViewport="true">
 
 
     <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:minHeight="?android:attr/actionBarSize"
-            app:titleTextColor="@android:color/white"
-            app:titleTextAppearance="@style/Toolbar.TitleText"
-            android:elevation="4dp"
-            android:textAlignment="center" />
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:elevation="4dp"
+        android:minHeight="?android:attr/actionBarSize"
+        android:textAlignment="center"
+        app:titleTextAppearance="@style/Toolbar.TitleText"
+        app:titleTextColor="@android:color/white" />
 
-    <LinearLayout
-        android:orientation="vertical"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/activity_horizontal_margin">
+        android:layout_below="@+id/toolbar"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/txtTourDescription"
+            style="@style/summaryScreen"
             android:layout_width="match_parent"
+
             android:layout_height="wrap_content"
             android:gravity="clip_vertical"
-            style="@style/summaryScreen"
             android:padding="16dp" />
 
-        <Space
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:layout_gravity="center_horizontal" />
+        <RelativeLayout
+            android:id="@+id/downloadLayout"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@+id/tourCard"
+            android:layout_centerInParent="true"
+            android:visibility="invisible">
 
-        <android.support.v7.widget.CardView
-                xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/tourCard"
+            <ProgressBar
+                android:id="@+id/downloadSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/downloadButton"
+                android:layout_alignParentTop="false"
+                android:layout_centerInParent="true"
+                android:paddingBottom="20dp" />
+
+            <Button
+                android:id="@+id/downloadButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:paddingBottom="8dp"
+                android:paddingLeft="50dp"
+                android:paddingRight="50dp"
+                android:paddingTop="8dp"
+                android:text="Downloading" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/tourCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtTourDescription"
+            android:layout_gravity="center_vertical"
+            android:background="#ffffff"
+            android:visibility="invisible">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                card_view:cardCornerRadius="4dp"
-                android:elevation="8dp"
-                android:visibility="visible"
-                android:layout_gravity="center_vertical">
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:background="#D9DDE1"
+                    android:paddingLeft="18dp" />
+
+                <TextView
+                    android:id="@+id/txtEstimatedTime"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:text="@string/summary_activity_estimated_time"
+                    android:textSize="@dimen/dimension_text_size" />
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:background="#D9DDE1"
+                    android:paddingLeft="18dp" />
 
                 <LinearLayout
+                    android:id="@+id/updateTourLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:paddingTop="8dp"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingRight="18dp">
 
                     <TextView
-                        android:layout_width="fill_parent"
+                        android:id="@+id/txtVersion"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="@string/summary_activity_estimated_time"
-                        android:id="@+id/txtEstimatedTime"
-                        android:padding="12dp" />
+                        android:layout_weight="1"
+                        android:padding="16dp"
+                        android:text="@string/summary_activity_version_is_current"
+                        android:textSize="@dimen/dimension_text_size" />
 
                     <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
+                        android:id="@+id/updateTour"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/updateTourLayout">
+                        android:layout_gravity="center_vertical"
+                        android:orientation="horizontal">
 
                         <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:text="@string/summary_activity_version_is_current"
-                            android:id="@+id/txtVersion"
-                            android:layout_weight="1"
-                            android:padding="12dp" />
-
-                        <LinearLayout
-                            android:orientation="horizontal"
+                            android:id="@+id/updateTourText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/updateTour"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:padding="12dp"
+                            android:text="@string/summary_activity_update_tour"
+                            android:visibility="gone"
+                            android:clickable="false"/>
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/summary_activity_update_tour"
-                                android:id="@+id/updateTourText"
-                                android:padding="12dp"
-                                android:visibility="gone"
-                                android:layout_gravity="center_vertical" />
-                            <ImageButton
-                                android:id="@+id/updateTourButton"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:src="@mipmap/ic_check_black_24dp"
-                                android:tint="#00ff0f"
-                                android:background="@null"
-                                android:visibility="visible"
-                                android:layout_gravity="center_vertical" />
-                        </LinearLayout>
-
+                        <ImageButton
+                            android:id="@+id/updateTourButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:background="@null"
+                            android:src="@mipmap/ic_check_black_24dp"
+                            android:tint="#00ff0f"
+                            android:clickable="false"
+                            android:visibility="visible" />
                     </LinearLayout>
 
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/summary_activity_expires_in"
-                        android:id="@+id/txtExpiry"
-                        android:padding="12dp" />
-
                 </LinearLayout>
-            </android.support.v7.widget.CardView>
 
-        <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:background="#D9DDE1"
+                    android:paddingLeft="18dp" />
 
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_gravity="right"
-                    android:layout_weight="1" />
-
-                <Button
-                    android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/txtExpiry"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/summary_activity_start_tour"
-                    android:id="@+id/buttonStartTour"
-                    android:layout_gravity="right"
-                    android:textColor="@color/colorWhiteText" />
+                    android:padding="16dp"
+                    android:text="@string/expires_in"
+                    android:textIsSelectable="false"
+                    android:textSize="@dimen/dimension_text_size" />
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:background="#D9DDE1"
+                    android:paddingLeft="18dp" />
+
             </LinearLayout>
-    </LinearLayout>
+        </RelativeLayout>
 
+        <RelativeLayout
+            android:id="@+id/buttonLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentBottom="false"
+            android:layout_below="@+id/tourCard"
+            android:layout_centerHorizontal="true"
+            android:visibility="invisible">
 
-</LinearLayout>
+            <Button
+                android:id="@+id/buttonStartTour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="end"
+                android:layout_marginBottom="84dp"
+                android:paddingBottom="20dp"
+                android:paddingLeft="40dp"
+                android:paddingRight="40dp"
+                android:paddingTop="20dp"
+                android:text="@string/summary_activity_start_tour"
+                android:textSize="@dimen/dimension_text_size_small"
+                android:textStyle="bold"
+                android:onClick="openTourActivity"/>
+        </RelativeLayout>
+    </RelativeLayout>
+</RelativeLayout>
