@@ -35,7 +35,6 @@ public class SummaryWithUpdatesTest {
     private static final String EXPIRY = "2018-01-01T00:00:00.000Z";
 
     private TourDBManager db;
-    private Intent intent;
 
     @Rule
     public ActivityTestRule<SummaryActivity> activityRule = new ActivityTestRule<>(
@@ -52,7 +51,7 @@ public class SummaryWithUpdatesTest {
         db.putRow(KEY_ID, TOUR_ID, KEY_NAME, "test-tour", EXPIRY, true, 3);
         db.flagTourUpdate(KEY_ID, true);
 
-        intent = new Intent();
+        Intent intent = new Intent();
         intent.putExtra(SummaryActivity.KEY_ID, KEY_ID);
         intent.putExtra(SummaryActivity.TOUR_ID, TOUR_ID);
         intent.putExtra(SummaryActivity.KEY_NAME, KEY_NAME);
