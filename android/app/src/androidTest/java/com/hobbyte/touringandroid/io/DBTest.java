@@ -253,12 +253,19 @@ public class DBTest {
      */
     @Test
     public void testVersionUpdateWorks() {
+        String newName = "Sanders 2016";
         db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRES_IN_FUTURE, false, VERSION_1);
 
-        db.updateTourVersion(KEYID_1, VERSION_1 + 1); // method under test
-        Object[][] info = db.getTourUpdateInfo();
+        db.updateRow(KEYID_1, newName, true, VERSION_1 + 1); // method under test
+        Cursor c = db.getRow(KEYID_1);
+        c.moveToFirst();
+        String name = c.getString(3);
+        int version = c.getInt(6);
+        c.close();
 
-        assertEquals(VERSION_1 + 1, (int) info[0][2]);
+        assertEquals(VERSION_1 + 1, version);
+        assertEquals(newName, name);
+        assertTrue(db.doesTourHaveMedia(KEYID_1));
     }
 
     /**
