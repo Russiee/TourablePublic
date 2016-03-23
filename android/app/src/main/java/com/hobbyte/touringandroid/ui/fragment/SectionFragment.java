@@ -2,7 +2,6 @@ package com.hobbyte.touringandroid.ui.fragment;
 
 import android.app.Activity;
 import android.app.ListFragment;
-//import android.support.v4.app.ListFragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,11 +27,8 @@ import java.util.ArrayList;
 public class SectionFragment extends ListFragment {
     private static final String TAG = "SectionFragment";
 
-    private static final String PARAM_SECTIONS = "subsections";
-    private static final String PARAM_POIS = "pois";
     private static final String PARAM_CONTENTS = "sectionContents";
 
-//    private SubSection[] subSections;
 
     private OnFragmentInteractionListener mListener;
 
@@ -47,7 +43,6 @@ public class SectionFragment extends ListFragment {
      * @return A new instance of fragment SectionFragment.
      */
     public static SectionFragment newInstance(ArrayList<TourItem> items) {
-        Log.d(TAG, "newInstance() called");
         SectionFragment fragment = new SectionFragment();
         Bundle args = new Bundle();
         args.putParcelableArrayList(PARAM_CONTENTS, items);
@@ -59,7 +54,6 @@ public class SectionFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate() called");
 
         if (getArguments() != null) {
             ArrayList<TourItem> contents = getArguments().getParcelableArrayList(PARAM_CONTENTS);
@@ -71,7 +65,6 @@ public class SectionFragment extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView() called");
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_section, container, false);
     }
@@ -79,13 +72,6 @@ public class SectionFragment extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.d(TAG, "onActivityCreated() called");
-    }
-
-    public void onButtonPressed(int position) {
-        if (mListener != null) {
-            mListener.onSubSectionClicked(position);
-        }
     }
 
     @Override
@@ -115,7 +101,6 @@ public class SectionFragment extends ListFragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        Log.d(TAG, "onDetach() called");
         mListener = null;
     }
 

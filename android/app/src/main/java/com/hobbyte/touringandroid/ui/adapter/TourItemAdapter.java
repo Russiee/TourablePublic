@@ -1,6 +1,7 @@
 package com.hobbyte.touringandroid.ui.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,14 +42,15 @@ public class TourItemAdapter extends ArrayAdapter<TourItem> {
         separator.setVisibility(View.GONE);
 
         if (selected.getType() == TourItem.TYPE_SUBSECTION) {
-            if(!hasSubSectionText && position == 0) {
+            if (!hasSubSectionText && position == 0) {
                 separator.setVisibility(View.VISIBLE);
                 separator.setText(App.context.getString(R.string.tour_activity_subsection));
                 hasSubSectionText = true;
             }
             subsectionView.setText(selected.getTitle());
+            Log.d(TAG, String.format(".%s.", selected.getTitle()));
         } else {
-            if(!hasPOIText || position == 0 || ((position != 0) && getItem(position-1).getType() == TourItem.TYPE_SUBSECTION)) {
+            if (!hasPOIText || position == 0 || ((position != 0) && getItem(position - 1).getType() == TourItem.TYPE_SUBSECTION)) {
                 separator.setVisibility(View.VISIBLE);
                 separator.setText(App.context.getString(R.string.tour_activity_poi));
                 hasPOIText = true;
