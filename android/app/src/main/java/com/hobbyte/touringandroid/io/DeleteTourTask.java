@@ -31,41 +31,32 @@ class DeleteTourTask extends Thread {
         File tourDir = new File(filesDir, keyID);
 
         if (tourDir.exists() && tourDir.isDirectory()) {
-            int count = 0;
-            boolean b;
 
-            /*
-            Have to delete the tour JSON, plus folders containing sections, pois, images, and video
-             */
-            b = new File(tourDir, "tour").delete();
-            if (b) count++;
-
-            b = new File(tourDir, "bundle").delete();
-            if (b) count++;
-
-            b = new File(tourDir, "key").delete();
-            if (b) count++;
-
-            String[] dirs = {"poi", "image", "video"};
-
-            for (String d : dirs) {
-                File dir = new File(tourDir, d);
-
-                if (dir.exists() && dir.isDirectory()) {
-                    for (File f : dir.listFiles()) {
-                        b = f.delete();
-                        if (b) count++;
-                    }
-
-                    b = dir.delete();
-                    if (b) count++;
+            for (File f : tourDir.listFiles()) {
+                if (f.isDirectory()) {
+                    deleteContentsOf(f);
                 }
+
+                f.delete();
             }
 
-            b = tourDir.delete();
-            if (b) count++;
+            tourDir.delete();
+        }
 
-            Log.d(TAG, "Deleted " + count + " files/folders");
+
+        if (tourDir.exists()) {
+            Log.w(TAG, String.format("Failed to delete all files for %s!", keyID));
+        } else {
+            Log.d(TAG, String.format("Deleted all files for %s", keyID));
+        }
+    }
+
+    /**
+     * Delete the contents of a directory.
+     */
+    private void deleteContentsOf(File dir) {
+        for (File f : dir.listFiles()) {
+            f.delete();
         }
     }
 }
