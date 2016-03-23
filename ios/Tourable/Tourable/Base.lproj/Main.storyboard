@@ -156,8 +156,9 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qFn-jb-js7">
-                                    <rect key="frame" x="179" y="-13" width="243" height="112"/>
+                                    <rect key="frame" x="179" y="45" width="243" height="54"/>
                                     <constraints>
+                                        <constraint firstAttribute="height" constant="54" id="09C-Uq-FHl"/>
                                         <constraint firstAttribute="width" constant="243" id="pj3-2u-tIl"/>
                                     </constraints>
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
