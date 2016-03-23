@@ -13,7 +13,7 @@
         <h5 class="admin-subheader no-padding-top">Admins of {{organization.name}}</h5>
         <ul class="admin-cell-list">
             <div ng-repeat="_admin in admins track by $index">
-                <li class="cursor-pointer">{{_admin.firstname}} {{_admin.lastname}}<i class="fa fa-chevron-right pull-right"></i></li>
+                <li class="cursor-pointer" ng-hide="admin.objectId === _admin.objectId">{{_admin.firstname}} {{_admin.lastname}}<i class="fa fa-chevron-right pull-right"></i></li>
             </div>
         </ul>
     </div>
