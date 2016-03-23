@@ -28,96 +28,45 @@ class AddRemoveTourTests: XCTestCase {
         super.tearDown()
     }
 
-    func testAddingAndDeletingTour() {
+    func testOpenAboutPage() {
+        let app = XCUIApplication()
+        app.navigationBars["Your Tours"].buttons["About  "].tap()
+        app.navigationBars["entryController"].childrenMatchingType(.Button).matchingIdentifier("Back").elementBoundByIndex(0).tap()
+        
+    }
+    
+    func testAddAndDeleteTourWithoutMedia() {
         let app = XCUIApplication()
         let tablesQuery = app.tables
         tablesQuery.buttons["Add Tour"].tap()
 
         let collectionViewsQuery = app.alerts["Add New Tour"].collectionViews
-        collectionViewsQuery.textFields["Enter Tour Key"].typeText("KCL-1010")
+        collectionViewsQuery.textFields["Enter Tour Key"].typeText("KCL-0000")
         collectionViewsQuery.buttons["Add"].tap()
-        sleep(8)
         app.alerts["Download Tour"].collectionViews.buttons["Download text only (Smaller)"].tap()
-        tablesQuery.staticTexts["Ultimate Flat Tour"].swipeLeft()
+        tablesQuery.staticTexts["test"].swipeLeft()
         tablesQuery.buttons["Delete"].tap()
     }
 
-    func testAddTourWithMedia() {
+    func testAddAndDeleteTourWithMedia() {
         
         let app = XCUIApplication()
-        
-        // decide which add button to press based on if it is an empty screen or tours are already present
-        if app.tables["Empty list"].buttons.count != 0 {
-              app.tables["Empty list"].buttons["Add Tour"].tap()
-        } else {
-            app.tables.buttons["Add Tour"].tap()
-        }
+        let tablesQuery = app.tables
+        tablesQuery.buttons["Add Tour"].tap()
       
         let collectionViewsQuery = app.alerts["Add New Tour"].collectionViews
-        collectionViewsQuery.textFields["Enter Tour Key"].typeText("KCL-2020")
+        collectionViewsQuery.textFields["Enter Tour Key"].typeText("KCL-1010")
         
         let addButton = collectionViewsQuery.buttons["Add"]
         addButton.tap()
         sleep(10)
         app.alerts["Download Tour"].collectionViews.buttons["Download with media (Larger)"].tap()
+        sleep(80) // very slow to download
+        let tablesQuery2 = app.tables
+        tablesQuery2.staticTexts["Ultimate Flat Tour"].swipeLeft()
         
-    }
-    
-    func testAddTourWithoutMedia() {
-        
-        let app = XCUIApplication()
-        
-        if app.tables["Empty list"].buttons.count != 0 {
-            app.tables["Empty list"].buttons["Add Tour"].tap()
-        } else {
-            app.tables.buttons["Add Tour"].tap()
-        }
-        
-        let collectionViewsQuery = app.alerts["Add New Tour"].collectionViews
-        collectionViewsQuery.textFields["Enter Tour Key"].typeText("KCL-1010")
-        collectionViewsQuery.buttons["Add"].tap()
-        sleep(10)
-        app.alerts["Download Tour"].collectionViews.buttons["Download text only (Smaller)"].tap()
-        
-    }
-    
-    func testNavigateTourBetweenPOIs() {
-        
-        let app = XCUIApplication()
-        let tablesQuery = app.tables
-        tablesQuery.buttons["Add Tour"].tap()
-        
-        let collectionViewsQuery = app.alerts["Add New Tour"].collectionViews
-        collectionViewsQuery.textFields["Enter Tour Key"].typeText("KCL-1111")
-        collectionViewsQuery.buttons["Add"].tap()
-        sleep(10)
-        app.alerts["Download Tour"].collectionViews.buttons["Download with media (Larger)"].tap()
-        let tablesQuery2 = tablesQuery
-        tablesQuery2.staticTexts["Royal Brompton Test Tour"].tap()
-        app.buttons["Start Tour"].tap()
-        sleep(1)
-        tablesQuery2.staticTexts["The Imaging Facilities"].tap()
-        sleep(1)
-        tablesQuery2.staticTexts["Medical Imaging Room 1"].tap()
-        sleep(1)
-        tablesQuery2.staticTexts["Medical Machine ZYX"].tap()
-        sleep(1)
-        let cell = tablesQuery.childrenMatchingType(.Cell).elementBoundByIndex(1)
-        sleep(1)
-        cell.tap()
-        sleep(1)
-        tablesQuery2.staticTexts["  Go to next POI (Medical Machine XYZ)"].tap()
-        sleep(1)
-        cell.childrenMatchingType(.TextView).element.tap()
-        sleep(1)
-        tablesQuery2.staticTexts["  Go to previous POI (Medical Machine ZYX)"].tap()
-        sleep(1)
-        cell.tap()
-        sleep(1)
-        tablesQuery.buttons["Back to overview"].tap()
     }
 
-    
     func testNavigateTourAndPlayVideo() {
         
         let app = XCUIApplication()
@@ -129,7 +78,7 @@ class AddRemoveTourTests: XCTestCase {
         collectionViewsQuery.buttons["Add"].tap()
         sleep(10)
         app.alerts["Download Tour"].collectionViews.buttons["Download with media (Larger)"].tap()
-        
+        sleep(20)
         let tablesQuery2 = app.tables
         let tablesQuery = tablesQuery2
         tablesQuery.staticTexts["Royal Brompton Test Tour"].tap()
@@ -140,7 +89,7 @@ class AddRemoveTourTests: XCTestCase {
         tablesQuery2.childrenMatchingType(.Cell).elementBoundByIndex(1).tap()
         sleep(6)
         app.buttons["Done"].tap()
-
+        
         app.navigationBars["Medical Machine ABC"].childrenMatchingType(.Button).matchingIdentifier("Back").elementBoundByIndex(0).tap()
         app.navigationBars["Specific Medical Imaging Hallway"].childrenMatchingType(.Button).elementBoundByIndex(0).tap()
         app.navigationBars["The Imaging Facilities"].childrenMatchingType(.Button).matchingIdentifier("Back").elementBoundByIndex(0).tap()
@@ -150,14 +99,24 @@ class AddRemoveTourTests: XCTestCase {
         backButton.tap()
         tablesQuery.staticTexts["Royal Brompton Test Tour"].swipeLeft()
         tablesQuery.buttons["Delete"].tap()
-        
     }
+   
     
-    func testOpenAboutPage() {
+    func testNaviateTourAndClickQuiz() {
+        
         let app = XCUIApplication()
-        app.navigationBars["Your Tours"].buttons["About  "].tap()
-        app.navigationBars["entryController"].childrenMatchingType(.Button).matchingIdentifier("Back").elementBoundByIndex(0).tap()
+        let tablesQuery = app.tables
+        
+        tablesQuery.staticTexts["Ultimate Flat Tour"].tap()
+        
+        app.buttons["Start Tour"].tap()
+        tablesQuery.staticTexts["The Flat"].tap()
+        tablesQuery.staticTexts["Alex's Room"].tap()
+        tablesQuery.staticTexts["Alex's Desk"].tap()
+        tablesQuery.childrenMatchingType(.Cell).elementBoundByIndex(3).tap()
+        tablesQuery.buttons["The correct answer is a?"].tap()
+        tablesQuery.staticTexts["a"].tap()
         
     }
-    
+
 }
