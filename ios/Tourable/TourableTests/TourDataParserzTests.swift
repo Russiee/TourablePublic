@@ -49,7 +49,6 @@ class TestTourDataParser: XCTestCase {
         tourDataParser().saveNewTour(data)
         
         let result = tourDataParser().getTourSection("xI21AHATXD")
-        print(result.sectionId)
         XCTAssertEqual(result.title, "Alex's Room")
         XCTAssertEqual(result.sectionId, "xI21AHATXD")
         
@@ -79,7 +78,6 @@ class TestTourDataParser: XCTestCase {
         
         self.measureBlock{
             let result = tourDataParser().getTourSection("xI21AHATXD")
-            print(result.sectionId)
             XCTAssertEqual(result.title, "Alex's Room")
             XCTAssertEqual(result.sectionId, "xI21AHATXD")
         }

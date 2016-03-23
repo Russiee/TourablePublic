@@ -62,7 +62,6 @@ class KeyVerifyConnector: NSObject, NSURLConnectionDelegate{
                     
                 } else {
                     //Key is not valid, notify observers.
-                    print("invalid")
                     dispatch_async(dispatch_get_main_queue()){
                         
                         self.triggerInvalidKeyNotification()

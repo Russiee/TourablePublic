@@ -217,7 +217,6 @@ class APIConnectorTests: XCTestCase {
             catch let err as NSError{
                 print(err.description)
             }
-            print(JSONMetadataFromAPI)
             XCTAssertNil(error, "there shouldn't be any error")
             XCTAssertEqual(JSONMetadataFromAPI, expectedKCL111VerifierData, "These should be identical")
             expectation.fulfill()
