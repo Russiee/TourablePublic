@@ -130,7 +130,6 @@ public class SummaryActivity extends AppCompatActivity {
         super.onPause();
     }
 
-
     /**
      * Starts the TourActivity for this tour.
      */
@@ -154,7 +153,7 @@ public class SummaryActivity extends AppCompatActivity {
             int tourMinutes = timeForTour % 60;
             toolbar.setTitle(tourJSON.getString("title"));
             txtDescription.setText(tourJSON.getString("description"));
-            timeTourTakes.setText("Estimated time for tour: " + tourHours + " hours " + tourMinutes + " minutes");
+            timeTourTakes.setText(String.format("Estimated time for tour: %d hours, %d minutes", tourHours, tourMinutes));
         } catch (JSONException e) {
             e.printStackTrace();
             toolbar.setTitle("Error");
@@ -174,9 +173,6 @@ public class SummaryActivity extends AppCompatActivity {
 
         if (TourDBManager.getInstance(getApplicationContext()).doesTourHaveUpdate(keyID)) {
             displayUpdateOption();
-        } else {
-            updateTour.setTag("Updated");
-            updateText.setVisibility(View.GONE);
         }
     }
 
@@ -184,16 +180,14 @@ public class SummaryActivity extends AppCompatActivity {
      * Displays the button options for updating the tour
      */
     private void displayUpdateOption() {
-
         TextView version = (TextView) findViewById(R.id.txtVersion);
         version.setText(getApplicationContext().getString(
                 R.string.summary_activity_new_version_is_available));
 
         updateText.setVisibility(View.VISIBLE);
         updateText.setTextColor(ContextCompat.getColor(App.context, R.color.colorPrimaryLight));
-        updateButton.setClickable(true);
-        updateButton.setImageResource(R.mipmap.ic_get_app_black_24dp);
-        updateButton.setColorFilter(ContextCompat.getColor(App.context, R.color.colorPrimaryLight));
+        updateText.setClickable(true);
+        updateButton.setVisibility(View.INVISIBLE);
         updateTour.setTag("ToUpdate");
     }
 
@@ -400,13 +394,11 @@ public class SummaryActivity extends AppCompatActivity {
         displayVersionAndUpdate();
         displayExpiry();
 
-        (findViewById(R.id.updateTour)).setOnClickListener(new View.OnClickListener() {
+        updateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (v.getTag().equals("ToUpdate")) {
                     updating = true;
                     showDownloadDialog();
-                }
             }
         });
     }

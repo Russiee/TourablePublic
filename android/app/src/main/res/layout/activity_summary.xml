@@ -126,7 +126,8 @@
                             android:layout_gravity="center_vertical"
                             android:padding="12dp"
                             android:text="@string/summary_activity_update_tour"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            android:clickable="false"/>
 
                         <ImageButton
                             android:id="@+id/updateTourButton"
