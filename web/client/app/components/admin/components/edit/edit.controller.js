@@ -13,6 +13,12 @@ angular.module('tourable')
             $state.go('admin.manageTours');
         }
 
+        $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+            if (toState.name === 'admin.edit.tour' || toState.name === 'admin.edit.section') {
+                $rootScope.loadingLight = true;
+            }
+        });
+
         $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
 
             if (toState.name === 'admin.edit.tour') {
@@ -61,7 +67,9 @@ angular.module('tourable')
                 $scope.tour = response.data;
                 $scope.tour.keys = keys;
                 sessionStorage.setItem('tour', JSON.stringify($scope.tour));
-                $rootScope.loadingLight = false;
+                if ($state.current.name === 'admin.edit.tour') {
+                    $rootScope.loadingLight = false;
+                }
             }, function(error) {
                 //Console log in case we need to debug with a user
                 console.log('An error occured while retrieving the admin data: ', error);
@@ -91,6 +99,9 @@ angular.module('tourable')
                 $scope.section.subsections = subsections;
                 $scope.section.pois = pois;
                 sessionStorage.setItem('section', JSON.stringify($scope.tour.keys));
+                if ($state.current.name === 'admin.edit.section') {
+                    $rootScope.loadingLight = false;
+                }
             }, function(error) {
                 //Console log in case we need to debug with a user
                 console.log('An error occured while retrieving the admin data: ', error);
