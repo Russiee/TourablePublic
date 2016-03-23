@@ -65,9 +65,6 @@ public class StartActivity extends AppCompatActivity {
                 showInput();
             }
         });
-
-
-        loadPreviousTours();
     }
 
     @Override
