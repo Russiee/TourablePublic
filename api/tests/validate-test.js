@@ -1,3 +1,4 @@
+//require the necessary modules for this file
 var should = require('should');
 var request = require('supertest');
 var assert = require('assert');
@@ -28,12 +29,19 @@ this.timeout(5000);
 			"subsections": [],
 			"pois": []
       };
+       
+      //calls the validate module's validateInput function
       var validInput = validate.validateInput(data, expectedInput);
+       
+      //test to check the value returned by the validateInput function and the expecte output
       validInput.should.equal(false);
+    
+     //informs the test suite the test is complete
       done();      
    });         
     
-    
+
+  //this test should return false, as the input format fails to match the expected input format
   it("Return false for input data", function(done){
       var data = {
             "SomeString": "Correct type",
@@ -53,13 +61,19 @@ this.timeout(5000);
 			"SomeString": "Incorrect type",
             "SomeBoolean": true
       };
+      
+      //calls the validate module's validateInput function
       var validInput = validate.validateInput(data, expectedInput);
+      
+      //test to check the value returned by the validateInput function and the expecte output
       validInput.should.equal(false);
+      
+      //informs the test suite the test is complete
       done();
     });         
     
     
-    
+   //this test should return true, as the input format successfully matches the expected input format 
   it("Return true for input data", function(done){
       var data = {
             "SomeString": "Correct type",
@@ -79,11 +93,18 @@ this.timeout(5000);
 			"SomeString": ["Incorrect type", 12],
             "SomeBoolean": true
       };
+      
+      //calls the validate module's validateInput function
       var validInput = validate.validateInput(data, expectedInput);
-      validInput.should.equal(true);    
+      
+      //test to check the value returned by the validateInput function and the expecte output
+      validInput.should.equal(true);  
+      
+      //informs the test suite the test is complete
       done();
    });    
 
+    //this test should return true, as the input format successfully matches the expected input format 
   it("Return true for input data", function(done){      
       var data = {
             "SomeString": "Correct type",
@@ -103,8 +124,14 @@ this.timeout(5000);
 			"SomeString": ["Incorrect type"],
             "SomeBoolean": false
       };
+      
+      //calls the validate module's validateInput function
       var validInput = validate.validateInput(data, expectedInput);
+      
+      //test to check the value returned by the validateInput function and the expecte output
       validInput.should.equal(true);
+      
+      //informs the test suite the test is complete
       done();
     });         
 });
