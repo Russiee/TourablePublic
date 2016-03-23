@@ -22,9 +22,6 @@ tourable.factory('editFactory', function($http, $q) {
         delete: function(className, id) {
             return $q(function(resolve, reject) {
                 $http({
-                    headers: {
-                        'Content-Type': "text/plain"
-                    },
                     method: 'DELETE',
                     url: 'https://api.tourable.org/api/v1/' + className + '/' + id
                 }).then(function success(response) {
