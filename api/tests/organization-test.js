@@ -12,7 +12,7 @@ var organization = require('../routes/organization.js');
 var organizationTest = {
 
     //POST function tests
-    //creates and adds organization object to API database with given values
+    //creates and adds organization object to server with given values
     POST: function(server, callback) {
         var organization  = {
             "key": "KCL",
@@ -20,7 +20,7 @@ var organizationTest = {
             "color": "Blue",
             "logo": "Lion"
         };
-        //connects to the API database
+        //connects to the server
         request(server)
         //sends object to API
        .post('/api/v1/organization')
@@ -52,7 +52,7 @@ var organizationTest = {
     GET1: function(pointerID, server, callback){
         //queries the server with given objectID
         request(server)
-        //queries database with the given object ID
+        //queries server with the given object ID
         .get('/api/v1/organization/'+pointerID)
         //expected status codes and content type to be returned
         .expect('Content-Type', /json/)
@@ -78,7 +78,7 @@ var organizationTest = {
     GET_ALL: function(pointerID, server, callback){
         //queries the server
         request(server)
-        //queries database with the given object ID
+        //queries server with the given object ID
         .get('/api/v1/organizations')
         //expected status codes and content type to be returned
         .expect('Content-Type', /json/)
@@ -114,13 +114,13 @@ var organizationTest = {
         "logo": "Lion2"
         };
 
-        //connects to the API database
+        //connects to the server
         request(server)
 
-        //prepares the update the object in the database using reference to the object's ID
+        //prepares the update the object in the server using reference to the object's ID
         .put('/api/v1/organization/'+pointerID)
 
-        //sends request to database
+        //sends request to server
         .send(organization2)
         //ensures response is correct by checking against expected values
         .end(function(err, res) {
@@ -142,9 +142,9 @@ var organizationTest = {
     //GET function tests
     //second GET test to check object values were correctly updated
     GET2: function(pointerID, server, callback){
-        //connects to the API database
+        //connects to the server
         request(server)
-        //queries database with the given object ID
+        //queries server with the given object ID
         .get('/api/v1/organization/'+pointerID)
         //expected status codes and content type to be returned
         .expect('Content-Type', /json/)
@@ -170,7 +170,7 @@ var organizationTest = {
     //Deletes the test object
     DELETE: function(pointerID, server, callback){
 
-        //connects to the API database
+        //connects to the server
         request(server)
         //sends delete request for the given object ID
         .delete('/api/v1/organization/'+pointerID)
@@ -189,7 +189,7 @@ var organizationTest = {
     //GET function tests
     //third GET test to check objet no longer exists / object was correctly deleted
     GET3: function(pointerID, server, callback){
-        //connects to the API database
+        //connects to the server
         request(server)
         //sends the get query for the given object ID
         .get('/api/v1/organization/'+pointerID)

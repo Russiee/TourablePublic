@@ -119,6 +119,12 @@ describe('Route tests', function() {
             done();
         });
     })
+    
+    it('Should correctly get all tours', function(done){
+        tourTest.GET_ALL(tourObjID, server, function(){
+            done();
+        });
+    })
 
     it('Should correctly update the added tour', function(done){
         tourTest.PUT(adminObjID, tourObjID, server, function(){
@@ -143,6 +149,12 @@ describe('Route tests', function() {
 
     it('Should correctly get the added section', function(done){
         sectionTest.GET1(sectionObjID, server, function(){
+            done();
+        });
+    })
+    
+    it('Should correctly get all sections', function(done){
+        sectionTest.GET_ALL(sectionObjID, server, function(){
             done();
         });
     })
@@ -173,6 +185,12 @@ describe('Route tests', function() {
             done();
         });
     })
+    
+    it('Should correctly get all POIs', function(done){
+        poiTest.GET_ALL(poiObjID, server, function(){
+            done();
+        });
+    })
 
     it('should correctly update the added poi', function(done){
         poiTest.PUT(sectionObjID, poiObjID, server, function(){
@@ -197,6 +215,12 @@ describe('Route tests', function() {
 
     it('should correctly get added key', function(done){
         keyTest.GET1(keyObjID, server, function(){
+            done();
+        });
+    })
+    
+    it('Should correctly get all keys', function(done){
+        keyTest.GET_ALL(keyObjID, server, function(){
             done();
         });
     })
