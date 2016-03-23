@@ -136,6 +136,7 @@
                             android:background="@null"
                             android:src="@mipmap/ic_check_black_24dp"
                             android:tint="#00ff0f"
+                            android:clickable="false"
                             android:visibility="visible" />
                     </LinearLayout>
 

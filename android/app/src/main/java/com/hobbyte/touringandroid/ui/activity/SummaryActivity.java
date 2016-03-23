@@ -4,10 +4,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -21,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hobbyte.touringandroid.App;
 import com.hobbyte.touringandroid.R;
 import com.hobbyte.touringandroid.internet.ServerAPI;
 import com.hobbyte.touringandroid.io.DownloadTourTask;
@@ -96,11 +99,11 @@ public class SummaryActivity extends AppCompatActivity {
         // tells the app if the tour is to be downloaded with/without media
         withMedia = intent.getBooleanExtra(MEDIA, false);
 
-        // false if the tour is being downloaded for the first time
-        updating = intent.getBooleanExtra(UPDATING, false);
-
         // true if the tour is going to be downloaded or updated
         Boolean doDownload = intent.getBooleanExtra(DOWNLOAD, false);
+
+        // true if the tour is going to be updated, as opposed to downloaded for the first time
+        updating = intent.getBooleanExtra(UPDATING, false);
 
         downloadLayout = (RelativeLayout) findViewById(R.id.downloadLayout);
         tourCard = (RelativeLayout) findViewById(R.id.tourCard);
@@ -174,8 +177,6 @@ public class SummaryActivity extends AppCompatActivity {
         if (TourDBManager.getInstance(getApplicationContext()).doesTourHaveUpdate(keyID)) {
             displayUpdateOption();
         } else {
-            updateButton.setImageResource(R.mipmap.ic_check_black_24dp);
-            updateButton.setColorFilter(Color.parseColor("#00ff0f"));
             updateTour.setTag("Updated");
             updateText.setVisibility(View.GONE);
         }
@@ -191,9 +192,10 @@ public class SummaryActivity extends AppCompatActivity {
                 R.string.summary_activity_new_version_is_available));
 
         updateText.setVisibility(View.VISIBLE);
-        updateText.setTextColor(getResources().getColor(R.color.colorPrimaryLight));
+        updateText.setTextColor(ContextCompat.getColor(App.context, R.color.colorPrimaryLight));
+        updateButton.setClickable(true);
         updateButton.setImageResource(R.mipmap.ic_get_app_black_24dp);
-        updateButton.setColorFilter(getResources().getColor(R.color.colorPrimaryLight));
+        updateButton.setColorFilter(ContextCompat.getColor(App.context, R.color.colorPrimaryLight));
         updateTour.setTag("ToUpdate");
     }
 
@@ -219,7 +221,7 @@ public class SummaryActivity extends AppCompatActivity {
         } else {
 
             //if there are no days left, then set text to red and display hours & minutes
-            txtExpiry.setTextColor(getResources().getColor(R.color.red));
+            txtExpiry.setTextColor(ContextCompat.getColor(App.context, R.color.red));
 
             //number of hours, hours or hour
             if (durationHours > 1) {
