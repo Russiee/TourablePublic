@@ -34,6 +34,11 @@ import java.lang.ref.WeakReference;
 import java.util.Calendar;
 import java.util.TimeZone;
 
+/**
+ * This activity has two forms. In the first it downloads a tour, displaying progress. In the
+ * second, it shows some basic information about the tour: it's description, if it's up to date or
+ * has an update available, and how much time is left until it expires.
+ */
 public class SummaryActivity extends AppCompatActivity {
     private static final String TAG = "SummaryActivity";
 
@@ -55,8 +60,12 @@ public class SummaryActivity extends AppCompatActivity {
     private String tourID;
     private String keyName;
     private Boolean withMedia;
-
     private String expiryTimeString;
+    private Boolean updating;
+
+    private int durationMinutes;
+    private int durationHours;
+    private int durationDays;
 
     private JSONObject tourJSON;
 
@@ -67,12 +76,6 @@ public class SummaryActivity extends AppCompatActivity {
     private RelativeLayout tourCard;
     private RelativeLayout buttonLayout;
     private Button downloadButton;
-
-    private Boolean updating;
-
-    private int durationMinutes;
-    private int durationHours;
-    private int durationDays;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,11 +89,18 @@ public class SummaryActivity extends AppCompatActivity {
         tourID = intent.getStringExtra(TOUR_ID);
         keyName = intent.getStringExtra(KEY_NAME);
 
-        // this will be present if
+        // this will be present if the tour is being downloaded for the first time, in which
+        // case the expiry date will be retrieved from the key JSON
         expiryTimeString = intent.getStringExtra(EXPIRY_TIME_STRING);
-        Boolean doDownload = intent.getBooleanExtra(DOWNLOAD, false);
+
+        // tells the app if the tour is to be downloaded with/without media
         withMedia = intent.getBooleanExtra(MEDIA, false);
+
+        // false if the tour is being downloaded for the first time
         updating = intent.getBooleanExtra(UPDATING, false);
+
+        // true if the tour is going to be downloaded or updated
+        Boolean doDownload = intent.getBooleanExtra(DOWNLOAD, false);
 
         downloadLayout = (RelativeLayout) findViewById(R.id.downloadLayout);
         tourCard = (RelativeLayout) findViewById(R.id.tourCard);
@@ -101,6 +111,7 @@ public class SummaryActivity extends AppCompatActivity {
 
 
         if (doDownload) {
+            handler = new ProgressHandler(this);
             findViewById(R.id.downloadLayout).setVisibility(View.VISIBLE);
             executeDownload();
         } else {
@@ -108,7 +119,6 @@ public class SummaryActivity extends AppCompatActivity {
             displaySummary();
         }
 
-        handler = new ProgressHandler(this);
     }
 
     @Override
@@ -121,7 +131,7 @@ public class SummaryActivity extends AppCompatActivity {
 
 
     /**
-     * Starts the Tour activity
+     * Starts the TourActivity for this tour.
      */
     public void openTourActivity() {
         Intent intent = new Intent(this, TourActivity.class);
@@ -370,7 +380,7 @@ public class SummaryActivity extends AppCompatActivity {
     }
 
     /**
-     * Once download is finished adds tour to database and displays summary
+     * Once download is finished adds tour to database and returns to StartActivity.
      */
     private void onDownloadFinished() {
         addTourToDB();
@@ -378,8 +388,8 @@ public class SummaryActivity extends AppCompatActivity {
     }
 
     /**
-     * Displays the summary of downloaded tour
-     * This includes its description, current version and if an update is available, and the expiry date
+     * Displays the summary of downloaded tour. This includes its description, current version, if
+     * an update is available, and the expiry date.
      */
     private void displaySummary() {
         downloadLayout.setVisibility(View.GONE);
@@ -467,7 +477,7 @@ public class SummaryActivity extends AppCompatActivity {
     }
 
     /**
-     * Parses the curren    tly set date (in Long) to an appropriate X Days - X Hours - X Minutes format
+     * Parses the currently set date (in Long) to an appropriate X Days - X Hours - X Minutes format
      */
     private void parseDate() {
         long expiryDate = TourDBManager.getInstance(getApplicationContext()).getExpiryDate(keyID);
