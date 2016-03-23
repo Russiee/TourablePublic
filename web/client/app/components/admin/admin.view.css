@@ -255,3 +255,12 @@ textarea {
     outline: 0;
 }
 
+/* admin login styles */
+
+.admin-login-view form {
+    max-width: 400px;
+    display: block;
+    margin: 0 auto;
+    margin-top: 20vh;
+}
+
