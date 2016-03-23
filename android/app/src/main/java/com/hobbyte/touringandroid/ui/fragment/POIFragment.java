@@ -112,6 +112,13 @@ public class POIFragment extends ListFragment {
         DisplayMetrics metrics = App.context.getResources().getDisplayMetrics();
         SCREEN_WIDTH = metrics.widthPixels;
         SCREEN_HEIGHT = metrics.heightPixels;
+
+        LinearLayout l = (LinearLayout) getActivity().findViewById(R.id.fragmentID);
+        SCREEN_WIDTH = l.getWidth();
+        SCREEN_HEIGHT = l.getHeight();
+
+        Log.d(TAG, "Layout width: " + SCREEN_WIDTH);
+        Log.d(TAG, "Layout height: " + SCREEN_HEIGHT);
     }
 
     @Override

@@ -2,9 +2,7 @@ package com.hobbyte.touringandroid.ui.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -136,7 +134,7 @@ public class SummaryActivity extends AppCompatActivity {
     /**
      * Starts the TourActivity for this tour.
      */
-    public void openTourActivity() {
+    public void openTourActivity(View v) {
         Intent intent = new Intent(this, TourActivity.class);
         intent.putExtra(TourActivity.INTENT_KEY_ID, keyID);
         startActivity(intent);
