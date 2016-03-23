@@ -15,10 +15,11 @@ public class ListViewItem {
 
     /**
      * Create an item for a certain custom listView
-     * @param text The body text or the main text of the type of content
-     * @param type Type of content, Header, Body, Image, Video or Quiz
-     * @param url The url of a video or image if one exists
-     * @param option The options available for a quiz if one exists
+     *
+     * @param text     The body text or the main text of the type of content
+     * @param type     Type of content, Header, Body, Image, Video or Quiz
+     * @param url      The url of a video or image if one exists
+     * @param option   The options available for a quiz if one exists
      * @param solution The solution to the quiz if one exists
      */
     public ListViewItem(String text, int type, String url, ArrayList<String> option, int solution) {
@@ -31,6 +32,7 @@ public class ListViewItem {
 
     /**
      * returns the main body of text of a pointofinterest
+     *
      * @return
      */
     public String getText() {
@@ -39,6 +41,7 @@ public class ListViewItem {
 
     /**
      * The type of content - Header, Body, Image, Video or Quiz
+     *
      * @return Type of content of this item
      */
     public int getType() {
@@ -47,6 +50,7 @@ public class ListViewItem {
 
     /**
      * Return the url of the listviewitem if one exists
+     *
      * @return
      */
     public String getUrl() {
@@ -55,13 +59,19 @@ public class ListViewItem {
 
     /**
      * The options available for a quiz if such exist
+     *
      * @return the options for a quiz
      */
-    public ArrayList<String> getOption() { return option; }
+    public ArrayList<String> getOption() {
+        return option;
+    }
 
     /**
      * Returns solution of the quiz
+     *
      * @return Solutions to the quiz
      */
-    public int getSolution() { return solution; }
+    public int getSolution() {
+        return solution;
+    }
 }

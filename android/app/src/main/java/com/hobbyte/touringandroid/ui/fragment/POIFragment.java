@@ -80,8 +80,6 @@ public class POIFragment extends ListFragment {
     /**
      * Loads the JSON for a POI, then iterates through all the items in the "post" JSONArray,
      * adding them to an Adapter which handles text and images.
-     *
-     * @param savedInstanceState
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -122,6 +120,7 @@ public class POIFragment extends ListFragment {
                 getActivity().onBackPressed();
             }
         });
+
         //Checks next Point of Interest, if not null sets layout to visisble and configures onClickListener
         if (currentPOI.getNextPOI() != null) {
             rightPOI.setText("Go to Next POI (" + currentPOI.getNextPOI().getTitle() + ")");
@@ -178,6 +177,11 @@ public class POIFragment extends ListFragment {
         }
     }
 
+    /**
+     * Creates a {@link ListViewItem} with attributes depending on what `item` is.
+     *
+     * @param item part of a POI
+     */
     private ListViewItem makeListViewItemForType(JSONObject item) {
         String text;
         String url = null;
@@ -235,16 +239,15 @@ public class POIFragment extends ListFragment {
     }
 
 
+    /**
+     * Calculates the size available in the layout, which is used to size images properly.
+     */
     public int[] getLayoutViewDimensions() {
         Toolbar l = (Toolbar) getActivity().findViewById(R.id.toolbar);
         View content = getActivity().getWindow().findViewById(Window.ID_ANDROID_CONTENT);
 
         int contentViewWidth = content.getWidth();
         int contentViewHeight = content.getHeight() - l.getHeight();
-
-        //logging
-        Log.d(TAG, "contentViewHeight: " + contentViewHeight);
-        Log.d(TAG, "contentViewWidth: " + contentViewWidth);
 
         return new int[]{contentViewWidth, contentViewHeight};
     }

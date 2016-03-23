@@ -23,12 +23,14 @@ public class App extends Application {
 
     /**
      * Returns the current activity to allow it to be used outside an Activity or Fragment
+     *
      * @return currentActivity
      */
-    public Activity getCurrentActivity(){
+    public Activity getCurrentActivity() {
         return currentActivity;
     }
-    public void setCurrentActivity(Activity currentActivity){
+
+    public void setCurrentActivity(Activity currentActivity) {
         this.currentActivity = currentActivity;
     }
 

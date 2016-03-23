@@ -101,7 +101,7 @@ public class FileManager {
         foldersCreatedSuccessfully = videoFolder.mkdir() && foldersCreatedSuccessfully;
 
         //logging
-        if (foldersCreatedSuccessfully)  {
+        if (foldersCreatedSuccessfully) {
             Log.i(TAG, "folders created successfully");
         } else {
             Log.e(TAG, "error creating folders");
@@ -133,7 +133,7 @@ public class FileManager {
         File tourFolder = new File(context.getFilesDir(), keyID);
         File tourFile = new File(tourFolder, filename);
 
-        try (FileWriter fw = new FileWriter(tourFile)){
+        try (FileWriter fw = new FileWriter(tourFile)) {
             fw.write(jsonObject.toString());
         } catch (IOException e) {
             Log.w(TAG, "Something went wrong when saving " + filename);
@@ -159,7 +159,7 @@ public class FileManager {
      * Deletes all downloaded files for a particular tour.
      *
      * @param context the calling Activity
-     * @param keyID the key ID for a specific tour
+     * @param keyID   the key ID for a specific tour
      */
     private static void deleteTourFiles(Context context, String keyID) {
         Log.d(TAG, "Deleting tour files for " + keyID);

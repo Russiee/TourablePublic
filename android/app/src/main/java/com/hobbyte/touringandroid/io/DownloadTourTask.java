@@ -42,10 +42,9 @@ public class DownloadTourTask extends Thread {
     private Handler handler;
 
     /**
-     *
-     * @param handler a {@link Handler} implementation from an Activity that updates a progress bar
-     * @param keyID a tour's key ID
-     * @param tourID a tour's ID
+     * @param handler  a {@link Handler} implementation from an Activity that updates a progress bar
+     * @param keyID    a tour's key ID
+     * @param tourID   a tour's ID
      * @param getVideo should be false if you want to download images only
      */
     public DownloadTourTask(Handler handler, String keyID, String tourID, boolean getVideo) {
@@ -142,9 +141,9 @@ public class DownloadTourTask extends Thread {
      * Creates a stream from the URL connection, which is read in chunks of bytes and written
      * straight to disk.
      *
-     * @param url the URL of the file
-     * @param name the file name & extension
-     * @param folder the destination folder (image or video)
+     * @param url        the URL of the file
+     * @param name       the file name & extension
+     * @param folder     the destination folder (image or video)
      * @param bufferSize the amount of memory to read/write at a time. Please use a whole number
      *                   of kB
      */
@@ -180,7 +179,7 @@ public class DownloadTourTask extends Thread {
                 while (!ServerAPI.checkConnection()) {
                     Thread.sleep(1000);
                 }
-            } catch(InterruptedException ie) {
+            } catch (InterruptedException ie) {
                 ie.printStackTrace();
             }
             saveFile(url, name, folder, bufferSize);

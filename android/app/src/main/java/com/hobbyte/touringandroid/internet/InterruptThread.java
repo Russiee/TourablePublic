@@ -9,6 +9,7 @@ import java.net.URLConnection;
 public class InterruptThread implements Runnable {
     Thread parent;
     URLConnection connection;
+
     public InterruptThread(Thread parent, URLConnection con) {
         this.parent = parent;
         this.connection = con;

@@ -23,12 +23,10 @@ import java.io.File;
  * create an instance of this fragment.
  */
 public class VideoFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String PARAM_VIDEO = "video";
     private static final String PARAM_URL = "url";
 
-    // TODO: Rename and change types of parameters
     private String filePath;
     private String url;
 
@@ -40,7 +38,6 @@ public class VideoFragment extends Fragment {
      * @param filePath Path of the video to play.
      * @return A new instance of fragment VideoFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static VideoFragment newInstance(String filePath, String url) {
         VideoFragment fragment = new VideoFragment();
         Bundle args = new Bundle();

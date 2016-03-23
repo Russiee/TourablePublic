@@ -24,7 +24,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         TextView logo = (TextView) findViewById(R.id.header_text);
-        Typeface font = Typeface.createFromAsset(getAssets(),  "fonts/Pacifico.ttf");
+        Typeface font = Typeface.createFromAsset(getAssets(), "fonts/Pacifico.ttf");
         logo.setTypeface(font);
 
         new InitialisationTask().execute();

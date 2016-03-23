@@ -52,7 +52,7 @@ public class TourBuilder extends Thread {
      * Recursively travel through the bundle JSON, creating {@link SubSection}s and
      * {@link PointOfInterest}s along the way.
      *
-     * @param parent the parent {@link SubSection}
+     * @param parent       the parent {@link SubSection}
      * @param subsectionID the objectId of the new {@link SubSection} to create
      */
     private void parseSections(SubSection parent, String subsectionID) {

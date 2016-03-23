@@ -47,7 +47,7 @@ public class ImageCache {
     /**
      * Adds a {@link Bitmap} to the cache, associating it with its filename.
      *
-     * @param key an image's filename
+     * @param key   an image's filename
      * @param value a Bitmap of that image
      */
     public void addBitmap(String key, Bitmap value) {
@@ -71,7 +71,7 @@ public class ImageCache {
      * Removes all entries from the cache.
      */
     public void clearCache() {
-        float size = (float) lruCache.size() / (1024*1024);
+        float size = (float) lruCache.size() / (1024 * 1024);
         Log.i(TAG, String.format("Evicting %.2f MB of memory from cache", size));
         lruCache.evictAll();
     }
