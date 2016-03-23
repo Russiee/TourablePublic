@@ -23,6 +23,7 @@ angular.module('tourable')
         var verifyKey = keyFactory.verify($location.search().key);
         verifyKey.then(function(response) {
             $scope.key = $location.search().key;
+            $scope.expiry = moment().to(moment(response.data.expiry));
             console.log('Success: ', response.data);
             getTourMetaData(response.data.tour.objectId);
             getTourBundle(response.data.tour.objectId);
@@ -73,8 +74,6 @@ angular.module('tourable')
                 console.log(response.data);
                 $scope.tour = response.data;
                 sessionStorage.setItem('tour', response.data);
-
-
 
                 if ($state.current.name === "tour.section" && $state.params.path.length > 0) {
                     getSectionFromPath($state.params.path);

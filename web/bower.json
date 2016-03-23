@@ -20,6 +20,7 @@
     "parse": "^1.7.0",
     "pouchdb": "^5.3.1",
     "ng-file-upload": "^12.0.4",
-    "ng-s3upload": "^0.1.2"
+    "ng-s3upload": "^0.1.2",
+    "moment": "^2.12.0"
   }
 }
