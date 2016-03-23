@@ -270,24 +270,6 @@ public class TourDBManager extends SQLiteOpenHelper {
     }
 
     /**
-     * Deletes a number of rows corresponding to the provided key IDs. Use when removing expired
-     * tours.
-     *
-     * @param keyIDs the ID of a tour key (not the tour ID itself)
-     */
-    public void deleteTours(String[] keyIDs) {
-        open(true);
-
-        String where = String.format(
-                TourList.COL_KEY_ID + " IN (%s)",
-                getPlaceHolders(keyIDs.length)
-        );
-
-        int count = db.delete(TourList.TABLE_NAME, where, keyIDs);
-        Log.d(TAG, "Deleted " + count + " row(s)");
-    }
-
-    /**
      * Fetches the information required to find out if a tour needs updating.
      *
      * @return an array where each row is of the form [(String) keyID, (String) tourID,
