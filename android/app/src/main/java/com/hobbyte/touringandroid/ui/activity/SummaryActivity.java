@@ -402,13 +402,6 @@ public class SummaryActivity extends AppCompatActivity {
         displayVersionAndUpdate();
         displayExpiry();
 
-        (findViewById(R.id.buttonStartTour)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openTourActivity();
-            }
-        });
-
         (findViewById(R.id.updateTour)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -438,6 +431,7 @@ public class SummaryActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
         final View view = inflater.inflate(R.layout.dialog_download, null);
+
         Button noMedia = (Button) view.findViewById(R.id.download_without_media);
         noMedia.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -452,6 +446,7 @@ public class SummaryActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         Button media = (Button) view.findViewById(R.id.download_with_media);
         media.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -466,6 +461,7 @@ public class SummaryActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         builder.setView(view);
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
