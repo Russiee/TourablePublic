@@ -247,7 +247,7 @@ class APIConnectorTests: XCTestCase {
         ]
         
         KeyVerifyConnector.sharedInstance.initiateKeyVerifyConnection("KCL-1010", isCheckingForUpdate: false)
-        sleep(10)
+        sleep(20)
         let returnedData = TourIdParser().getTourMetadata("KCL-1010")
         let originalData = data["tour"] as! NSDictionary
         XCTAssertEqual(originalData["objectId"] as? String, returnedData["objectId"] as? String)
