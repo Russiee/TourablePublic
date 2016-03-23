@@ -47,8 +47,8 @@ public class StartActivityTest {
     RenamingDelegatingContext context;
 
     @Rule
-    public ActivityTestRule<SplashActivity> mActivityRule = new ActivityTestRule<>(
-            SplashActivity.class);
+    public ActivityTestRule<StartActivity> mActivityRule = new ActivityTestRule<>(
+            StartActivity.class);
 
     @Before
     public void initValidKey() {
@@ -77,7 +77,12 @@ public class StartActivityTest {
     public void CTestEnterSummaryWithoutMedia() {
         enterKey(validKey);
         onView(withId(R.id.download_without_media)).perform(click());
-        onView(withId(R.id.txtTourDescription)).check(matches(isDisplayed()));
+        try {
+            Thread.sleep(1000);
+        } catch(InterruptedException e) {
+            e.printStackTrace();
+        }
+        onView(withId(R.id.tourItem)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -105,14 +110,9 @@ public class StartActivityTest {
         onView(withId(R.id.tourItem)).check(matches(isDisplayed()));
     }
 
-    @Test
-    public void HTestClickExistingTour() {
-        onView(withId(R.id.tourItem)).perform(click());
-        onView(withId(R.id.buttonStartTour)).check(matches(isDisplayed()));
-        onView(withId(R.id.txtTourDescription)).check(matches(isDisplayed()));
-        onView(withId(R.id.tourCard)).check(matches(isDisplayed()));
-    }
-
+    /**
+     * These tests are for TourActivity class, testing navigation
+     */
     @Test
     public void KTestEnterTourActivity() {
         enterTourActivity();
@@ -191,7 +191,8 @@ public class StartActivityTest {
         onView(withText(containsString("Alexander Gubbay (born 1995)"))).check(matches(isDisplayed()));
         onData(instanceOf(String.class)).onChildView(withId(R.id.previousPOIFooter)).check(matches(isDisplayed()));
         onData(instanceOf(String.class)).onChildView(withId(R.id.previousPOIFooter)).perform(click());
-        pressBack();
+        onData(instanceOf(String.class)).onChildView(withId(R.id.backToSectionButton)).perform(click());
+        onView(withText("Alex's Bed")).check(matches(isDisplayed()));
         pressBack();
         pressBack();
         pressBack();

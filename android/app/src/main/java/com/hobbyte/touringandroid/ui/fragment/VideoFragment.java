@@ -1,6 +1,7 @@
 package com.hobbyte.touringandroid.ui.fragment;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.pm.ActivityInfo;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -96,4 +97,5 @@ public class VideoFragment extends Fragment {
         super.onDetach();
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
+
 }

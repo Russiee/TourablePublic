@@ -231,7 +231,7 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
                         //generate fragment transaction using fragment manager
                         FragmentTransaction transaction = manager.beginTransaction();
                         transaction.replace(R.id.fragmentContainer, video);
-                        transaction.addToBackStack(null);
+                        transaction.addToBackStack("video");
 
                         //display the video view
                         transaction.commit();
