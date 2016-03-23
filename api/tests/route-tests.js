@@ -13,8 +13,6 @@ var keyTest = require('../tests/key-test.js');
 var sectionTest = require('../tests/section-test.js');
 var bundleTest = require('../tests/bundle-test.js');
 
-
-
 //Test suite for testing the organization, admin, key, tour, POI and section routes
 //Tests consist of checking all functions of the routes
 //Each route is tested by adding it to the API (POST function)
@@ -27,41 +25,62 @@ var bundleTest = require('../tests/bundle-test.js');
 //The test suite is started by typing 'gulp tests' in the terminal when in the project directory
 
 describe('Route tests', function() {
-var organizationObjID;
-var sectionObjID;
-var poiObjID;
-var adminObjID;
-var tourObjID;
-var keyObjID;
 
-//The source for all requests, the database url
-var url = 'http://touring-api-testing.herokuapp.com/';
-//Tests time out after 10s (not the default of 2s), allowing for the database to 'wake up'
-this.timeout(10000);
+    var organizationObjID;
+    var sectionObjID;
+    var poiObjID;
+    var adminObjID;
+    var tourObjID;
+    var keyObjID;
 
+    //The source for all requests, the database url
+    var url = 'http://touring-api-testing.herokuapp.com/';
+    //Tests time out after 10s (not the default of 2s), allowing for the database to 'wake up'
+    this.timeout(10000);
+
+    var server;
+
+    beforeEach(function () {
+        server = require('../server.js');
+    });
+    afterEach(function () {
+        server.close();
+    });
+
+    it('responds to /api', function (done) {
+        request(server)
+            .get('/api')
+            .expect(200, done);
+    });
 
     //begin adding organization
     it('Should correctly add an organization', function(done){
-        organizationTest.POST(url, function(returnedID){
+        organizationTest.POST(server, function(returnedID){
             organizationObjID = returnedID;
             done();
         });
     })
 
     it('Should correctly get the added organization', function(done){
-        organizationTest.GET1(organizationObjID, url, function(){
+        organizationTest.GET1(organizationObjID, server, function(){
+            done();
+        });
+    })
+
+    it('Should correctly get all organizations', function(done){
+        organizationTest.GET_ALL(organizationObjID, server, function(){
             done();
         });
     })
 
     it('Should correctly update the added organization', function(done){
-        organizationTest.PUT(organizationObjID, url, function(){
+        organizationTest.PUT(organizationObjID, server, function(){
             done();
         });
     })
 
     it('Should correctly get the updated organization', function(done){
-        organizationTest.GET2(organizationObjID, url, function(){
+        organizationTest.GET2(organizationObjID, server, function(){
             done();
         });
     })
@@ -69,40 +88,46 @@ this.timeout(10000);
     //Begin adding admin
 
     it('Should correctly add the admin pointing to the test organization', function(done){
-        adminTest.POST(organizationObjID, url, function(returnID){
+        adminTest.POST(organizationObjID, server, function(returnID){
             adminObjID = returnID;
             done();
         });
     })
 
     it('Should correctly get the added admin', function(done){
-        adminTest.GET1(adminObjID, url, function(){
+        adminTest.GET1(adminObjID, server, function(){
+            done();
+        });
+    })
+
+    it('Should correctly get all admins', function(done){
+        adminTest.GET_ALL(adminObjID, server, function(){
             done();
         });
     })
 
     //Begin adding tour
     it('Should correctly add a tour pointing to the admin', function(done){
-        tourTest.POST(adminObjID, url, function(returnID){
+        tourTest.POST(adminObjID, server, function(returnID){
             tourObjID = returnID;
             done();
         });
     })
 
     it('Should correctly get the added tour', function(done){
-        tourTest.GET1(tourObjID, url, function(){
+        tourTest.GET1(tourObjID, server, function(){
             done();
         });
     })
 
     it('Should correctly update the added tour', function(done){
-        tourTest.PUT(adminObjID, tourObjID, url, function(){
+        tourTest.PUT(adminObjID, tourObjID, server, function(){
             done();
         });
     })
 
     it('Should correctly get the updated tour', function(done){
-        tourTest.GET2(tourObjID, url, function(){
+        tourTest.GET2(tourObjID, server, function(){
             done();
         });
     })
@@ -110,26 +135,26 @@ this.timeout(10000);
     //Begin adding section
 
     it('Should correctly add a section pointing to the tour', function(done){
-        sectionTest.POST(tourObjID, url, function(returnID){
+        sectionTest.POST(tourObjID, server, function(returnID){
             sectionObjID = returnID;
             done();
         });
     })
 
     it('Should correctly get the added section', function(done){
-        sectionTest.GET1(sectionObjID, url, function(){
+        sectionTest.GET1(sectionObjID, server, function(){
             done();
         });
     })
 
     it('Should correctly update the added section', function(done){
-        sectionTest.PUT(tourObjID, sectionObjID, url, function(){
+        sectionTest.PUT(tourObjID, sectionObjID, server, function(){
             done();
         });
     })
 
     it('Should correctly get the updated section', function(done){
-        sectionTest.GET2(sectionObjID, url, function(){
+        sectionTest.GET2(sectionObjID, server, function(){
             done();
         });
     })
@@ -137,26 +162,26 @@ this.timeout(10000);
     //Begin adding POI
 
     it('should correctly add a POI', function(done){
-        poiTest.POST(sectionObjID, url, function(returnedID){
+        poiTest.POST(sectionObjID, server, function(returnedID){
             poiObjID = returnedID;
             done();
         });
     });
 
     it('should correctly get added POI', function(done){
-        poiTest.GET1(poiObjID, url, function(){
+        poiTest.GET1(poiObjID, server, function(){
             done();
         });
     })
 
     it('should correctly update the added poi', function(done){
-        poiTest.PUT(sectionObjID, poiObjID, url, function(){
+        poiTest.PUT(sectionObjID, poiObjID, server, function(){
             done();
         });
     })
 
     it('should correctly get added POI', function(done){
-        poiTest.GET2(poiObjID, url, function(){
+        poiTest.GET2(poiObjID, server, function(){
             done();
         });
     })
@@ -164,26 +189,26 @@ this.timeout(10000);
     //Begin adding a key
 
     it('should correctly add a key', function(done){
-        keyTest.POST(tourObjID, url, function(returnedID){
+        keyTest.POST(tourObjID, server, function(returnedID){
             keyObjID = returnedID;
             done();
         });
     });
 
     it('should correctly get added key', function(done){
-        keyTest.GET1(keyObjID, url, function(){
+        keyTest.GET1(keyObjID, server, function(){
             done();
         });
     })
 
     it('should correctly update the added key', function(done){
-        keyTest.PUT(tourObjID, keyObjID, url, function(){
+        keyTest.PUT(tourObjID, keyObjID, server, function(){
             done();
         });
     })
 
     it('should correctly get added key', function(done){
-        keyTest.GET2(keyObjID, url, function(){
+        keyTest.GET2(keyObjID, server, function(){
             done();
         });
     })
@@ -191,7 +216,7 @@ this.timeout(10000);
     //Bundle test
 
     it('should correctly get the bundle of the tour', function(done){
-        bundleTest.GET(tourObjID, url, function(){
+        bundleTest.GET(tourObjID, server, function(){
             done();
         });
     })
@@ -201,13 +226,13 @@ this.timeout(10000);
     //Begin deleting from bottom up, and checking they are deleted
 
     it('should correctly delete the POI', function(done){
-        poiTest.DELETE(poiObjID, url, function(){
+        poiTest.DELETE(poiObjID, server, function(){
             done();
         });
     })
 
     it('should get null for deleted POI', function(done){
-        poiTest.GET3(poiObjID, url, function(){
+        poiTest.GET3(poiObjID, server, function(){
             done();
         })
     })
@@ -215,13 +240,13 @@ this.timeout(10000);
     //Begin deleting section
 
     it('should correctly delete the section', function(done){
-        sectionTest.DELETE(sectionObjID, url, function(){
+        sectionTest.DELETE(sectionObjID, server, function(){
             done();
         });
     })
 
     it('should get null for deleted section', function(done){
-        sectionTest.GET3(sectionObjID, url, function(){
+        sectionTest.GET3(sectionObjID, server, function(){
             done();
         })
     })
@@ -229,13 +254,13 @@ this.timeout(10000);
     //Begin deleting tour
 
     it('should correctly delete the tour', function(done){
-        tourTest.DELETE(tourObjID, url, function(){
+        tourTest.DELETE(tourObjID, server, function(){
             done();
         });
     })
 
     it('should get null for deleted tour', function(done){
-        tourTest.GET3(tourObjID, url, function(){
+        tourTest.GET3(tourObjID, server, function(){
             done();
         })
     })
@@ -243,13 +268,13 @@ this.timeout(10000);
     //Begin deleting key
 
     it('should correctly delete the key', function(done){
-        keyTest.DELETE(keyObjID, url, function(){
+        keyTest.DELETE(keyObjID, server, function(){
             done();
         });
     })
 
     it('should get null for deleted key', function(done){
-        keyTest.GET3(keyObjID, url, function(){
+        keyTest.GET3(keyObjID, server, function(){
             done();
         });
     })
@@ -257,13 +282,13 @@ this.timeout(10000);
     //Begin deleting Organization
 
     it('should correctly delete the Organization', function(done){
-        organizationTest.DELETE(organizationObjID, url, function(){
+        organizationTest.DELETE(organizationObjID, server, function(){
             done();
         });
     })
 
     it('should get null for deleted Organization', function(done){
-        organizationTest.GET3(organizationObjID, url, function(){
+        organizationTest.GET3(organizationObjID, server, function(){
             done();
         });
     })

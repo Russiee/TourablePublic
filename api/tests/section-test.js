@@ -1,4 +1,4 @@
-var should = require('should'); 
+var should = require('should');
 var assert = require('assert');
 var request = require('supertest');
 var section = require('../routes/section.js');
@@ -10,10 +10,10 @@ var section = require('../routes/section.js');
 //All functions are called in the route-test.js file
 
 var sectionTest = {
-    
+
     //POST function tests
     //creates and adds secction object to API database with given values
-    POST: function(pointerID, url, callback){
+    POST: function(pointerID, server, callback){
         //takes pointerID to link section object to given tour / supersection
         var section  = {
             "tour":  ""+pointerID,
@@ -23,9 +23,9 @@ var sectionTest = {
             "depth": 0
         };
         //connects to the API database
-        request(url)
+        request(server)
         //sends object to API
-       .post('api/v1/section/')
+       .post('/api/v1/section/')
        .send(section)
         //checks to ensure the created object adheres to format requirements
         .end(function(err, res) {
@@ -41,8 +41,8 @@ var sectionTest = {
               res.body.should.have.property("description");
               res.status.should.be.equal(201);
               objID = res.body.objectId;
-            //uses callback to ensure tests run synchronously (for the purpose of linking objects through pointers) 
-            
+            //uses callback to ensure tests run synchronously (for the purpose of linking objects through pointers)
+
             //calls the callback function and returns with it the created object's ID
               callback(objID);
         });
@@ -52,11 +52,11 @@ var sectionTest = {
     //GET function tests
     //first get function test to check object was added correctly
 
-    GET1: function(pointerID, url, callback){
+    GET1: function(pointerID, server, callback){
         //connects to the API database
-        request(url)
+        request(server)
         //queries database with the given object ID
-        .get('api/v1/section/'+pointerID)
+        .get('/api/v1/section/'+pointerID)
         //expected status codes and content type to be returned
         .expect('Content-Type', /json/)
         .expect(200 || 304) //Status code
@@ -68,7 +68,7 @@ var sectionTest = {
             //statements checking the expected properties of the response
             //determines if the API is working as expected
             res.body.title.should.equal('The Test');
-            res.body.description.should.equal("This is the main section test");   
+            res.body.description.should.equal("This is the main section test");
             res.body.tour.should.not.equal(null);
             res.body.depth.should.equal(0);
             //calls the callback function and returns with it the created object's ID
@@ -79,7 +79,7 @@ var sectionTest = {
 
     //PUT function tests
     //updates the object
-    PUT: function(tourID, pointerID, url, callback){
+    PUT: function(tourID, pointerID, server, callback){
         //updates the object with new given values
        var section2  = {
         "tour":  {
@@ -92,18 +92,18 @@ var sectionTest = {
           "className": "Section",
           "objectId": "null"
         },
-       
+
         "title": "The Test2",
         "description": "This is the main section test2",
         "depth": 0
 
         };
         //connects to the API database
-        request(url)
-        
+        request(server)
+
         //prepares the update the object in the database using reference to the object's ID
-        .put('api/v1/section/'+pointerID)
-        
+        .put('/api/v1/section/'+pointerID)
+
         //sends request to database
         .send(section2)
         //ensures response is correct by checking against expected values
@@ -111,7 +111,7 @@ var sectionTest = {
               if (err) {
                 throw err;
               }
-                
+
               //statements checking the expected properties of the response
               //determines if the API is working as expected
               res.body.should.have.property("tour");
@@ -127,11 +127,11 @@ var sectionTest = {
 
     //GET function tests
     //second GET test to check object values were correctly updated
-    GET2: function(pointerID, url, callback){
+    GET2: function(pointerID, server, callback){
         //connects to the API database
-        request(url)
+        request(server)
         //queries database with the given object ID
-        .get('api/v1/section/'+pointerID)
+        .get('/api/v1/section/'+pointerID)
         //expected status codes and content type to be returned
         .expect('Content-Type', /json/)
         .expect(200 || 304) //Status code
@@ -142,7 +142,7 @@ var sectionTest = {
             //statements checking the expected properties of the response
             //determines if the API is working as expected
             res.body.title.should.equal('The Test2');
-            res.body.description.should.equal("This is the main section test2");     
+            res.body.description.should.equal("This is the main section test2");
             res.body.tour.should.not.equal(null);
             res.body.depth.should.equal(0);
             //calls the callback function and returns with it the created object's ID
@@ -154,11 +154,11 @@ var sectionTest = {
 
     //DELETE function tests
     //Deletes the test object
-    DELETE: function(pointerID, url, callback){
+    DELETE: function(pointerID, server, callback){
         //connects to the API database
-        request(url)
+        request(server)
         //sends delete request for the given object ID
-        .delete('api/v1/section/'+pointerID)
+        .delete('/api/v1/section/'+pointerID)
         //expected status code to be returned
         .expect(200) //Status code
         //function to be called at the end of the test
@@ -169,15 +169,15 @@ var sectionTest = {
             //calls the callback function and returns with it the created object's ID
             callback();
         });
-    }, 
-    
+    },
+
     //GET function tests
     //third GET test to check objet no longer exists / object was correctly deleted
-    GET3: function(pointerID, url, callback){
+    GET3: function(pointerID, server, callback){
         //connects to the API database
-         request(url)
+         request(server)
         //sends the get query for the given object ID
-        .get('api/v1/section/'+pointerID)
+        .get('/api/v1/section/'+pointerID)
         //expected status code to be returned
         .expect(404 || 400) //Status code
         //function to be called at the end of the test

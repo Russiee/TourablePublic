@@ -5,7 +5,7 @@ var morgan = require('morgan');
 
 var config = require('./config.js');
 
-Parse = require('parse/node').Parse;
+var Parse = require('parse/node').Parse;
 Parse.initialize(config.database().appID, config.database().masterKey);
 Parse.serverURL = config.database().serverURL;
 
@@ -94,5 +94,9 @@ router.get('/v1/bundle/:id', bundle.GET);
 
 app.use('/api', router);
 
-app.listen(port);
+var server = app.listen(port);
 console.log("We're live on port " + port);
+
+module.exports = server;
+
+
