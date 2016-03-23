@@ -220,7 +220,6 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
                 Log.d(TAG, "Finished TourBuildTask");
                 bundle = null;
 
-                tour.printTour(tour.getRoot(), 0);
                 loadCurrentSection();
             }
         }
