@@ -179,30 +179,6 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
                     loadImageFromDiskOrCache(filename, imageView);
                 }
 
-//                imageView.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//
-//                        //get fragment manager
-//                        Activity activity = ((App) getContext().getApplicationContext()).getCurrentActivity();
-//                        FragmentManager manager = activity.getFragmentManager();
-//
-//                        //generate fragment transaction using fragment manager
-//                        FragmentTransaction transaction = manager.beginTransaction();
-//                        transaction.replace(R.id.fragmentContainer, video);
-//                        transaction.addToBackStack("video");
-//
-//                        //display the video view
-//                        transaction.commit();
-//
-//                        //set toolbar title to be something other than the poi title
-//                        ActionBar actionBar = ((AppCompatActivity) activity).getSupportActionBar();
-//                        if (actionBar != null) {
-//                            actionBar.setTitle("Video Player");
-//                        }
-//                    }
-//                });
-
                 return view;
 
             case VIDEO:
