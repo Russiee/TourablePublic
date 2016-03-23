@@ -179,6 +179,30 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
                     loadImageFromDiskOrCache(filename, imageView);
                 }
 
+//                imageView.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//
+//                        //get fragment manager
+//                        Activity activity = ((App) getContext().getApplicationContext()).getCurrentActivity();
+//                        FragmentManager manager = activity.getFragmentManager();
+//
+//                        //generate fragment transaction using fragment manager
+//                        FragmentTransaction transaction = manager.beginTransaction();
+//                        transaction.replace(R.id.fragmentContainer, video);
+//                        transaction.addToBackStack("video");
+//
+//                        //display the video view
+//                        transaction.commit();
+//
+//                        //set toolbar title to be something other than the poi title
+//                        ActionBar actionBar = ((AppCompatActivity) activity).getSupportActionBar();
+//                        if (actionBar != null) {
+//                            actionBar.setTitle("Video Player");
+//                        }
+//                    }
+//                });
+
                 return view;
 
             case VIDEO:
@@ -424,7 +448,7 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
             int mpView = viewHeight * viewWidth;
 
             //calculate the factor by which we can sub-sample the saved image
-            options.inSampleSize = (int) ((1.41 * mpFile) / mpView);
+            options.inSampleSize = (int) (mpFile / (1.41 * mpView));
 
             //now load file, but only load the size we need, not the whole thing
             options.inJustDecodeBounds = false;
@@ -441,7 +465,7 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
             }
 
             //return the bitmap for the screen
-            return Bitmap.createScaledBitmap(sampledBM, newWidth, newHeight, false);
+            return Bitmap.createScaledBitmap(sampledBM, newWidth, newHeight, true);
         }
     }
 }
