@@ -9,7 +9,7 @@
 import XCTest
 
 
-class AddRemoveTourTests: XCTestCase {
+class UITourTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
