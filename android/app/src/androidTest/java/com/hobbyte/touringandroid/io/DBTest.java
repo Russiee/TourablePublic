@@ -111,7 +111,7 @@ public class DBTest {
      * Make sure that the method only deletes the specified tour.
      */
     @Test
-    public void testRowDeletion_single() {
+    public void testRowDeletion() {
         db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRES_IN_FUTURE, false, VERSION_1);
         db.putRow(KEYID_2, TOURID_2, KEY_NAME_2, NAME_2, EXPIRES_IN_FUTURE, false, VERSION_2);
 
@@ -124,20 +124,6 @@ public class DBTest {
         c.close();
 
         assertEquals(0, count);
-    }
-
-    /**
-     * Make sure that deleting multiple tours at once works.
-     */
-    @Test
-    public void testRowDeletion_multi() {
-        db.putRow(KEYID_1, TOURID_1, KEY_NAME_1, NAME_1, EXPIRES_IN_FUTURE, false, VERSION_1);
-        db.putRow(KEYID_2, TOURID_2, KEY_NAME_2, NAME_2, EXPIRES_IN_FUTURE, false, VERSION_2);
-
-        String[] toDelete = {KEYID_1, KEYID_2};
-
-        db.deleteTours(toDelete); // method under test
-        assertTrue(db.dbIsEmpty());
     }
 
     /**
