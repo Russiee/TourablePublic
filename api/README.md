@@ -20,11 +20,9 @@ Dependencies required to run this API:
 See package.json for module version details.
 
 
-To build this API:
+To run this API:
 
 ```npm install```
-
-To run this API:
 
 ```gulp```
 
@@ -42,7 +40,7 @@ To push to the heroku testing server:
 
 ```git remote add heroku-api-testing https://git.heroku.com/touring-api-testing.git```
 
-from the main directory:
+from the root directory:
 
 ```git subtree push --prefix api heroku master```
 
