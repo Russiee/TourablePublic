@@ -28,7 +28,7 @@ class TourMetadataConnector {
             data = resetData
 
             //The path to where the Tour Data is stored
-            urlPath = "https://touring-api.herokuapp.com/api/v1/tour/" + objectID
+            urlPath = "https://api.tourable.org/api/v1/tour/" + objectID
 
             //Standard URLConnection method
             let request = NSURLRequest(URL: NSURL(string: urlPath)!)
@@ -60,7 +60,7 @@ class TourMetadataConnector {
         data = resetData
 
         //The path to where the Tour Data is stored
-        urlPath = "https://touring-api.herokuapp.com/api/v1/tour/" + objectID
+        urlPath = "https://api.tourable.org/api/v1/tour/" + objectID
 
         //Standard URLConnection method
         let request = NSURLRequest(URL: NSURL(string: urlPath)!)

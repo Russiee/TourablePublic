@@ -19,10 +19,8 @@ class QuizTableViewController: UITableViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         questionTitle.text = quiz.question as String
-        print(quiz.options)
         self.title = "Quiz Question"
         self.tableView.rowHeight = 60
-        print("here in view didLoad")
         self.tableView.dataSource = self
         self.tableView.delegate = self
         // Uncomment the following line to preserve selection between presentations

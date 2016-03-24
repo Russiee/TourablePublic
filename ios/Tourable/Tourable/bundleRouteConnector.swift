@@ -14,7 +14,7 @@ class bundleRouteConnector: NSObject, NSURLConnectionDelegate{
         //Reseting data to blank with every new connection
 
         //The path to where the Tour Data is stored
-        let urlPath = "https://touring-api.herokuapp.com/api/v1/bundle/" + objectID
+        let urlPath = "https://api.tourable.org/api/v1/bundle/" + objectID
         let request = NSURLRequest(URL: NSURL(string: urlPath)!)
         let config = NSURLSessionConfiguration.defaultSessionConfiguration()
         let session = NSURLSession(configuration: config)

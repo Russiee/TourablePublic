@@ -69,8 +69,6 @@ class TourIDParserTests: XCTestCase {
         TourIdParser().addTourMetaData(data)
         sleep(1)
         let returnedData = TourIdParser().getTourMetadata("KCL-1010")
-        print(data)
-        print(returnedData)
         let originalData = data["tour"] as! NSDictionary
         
         

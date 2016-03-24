@@ -66,8 +66,6 @@ class ImageHandlerTests: XCTestCase {
     
     func NotifiedDownloading(){
         imagesToDownload++
-        print(imagesToDownload)
-        print(imagesDownloaded)
     }
     
     func NotifiedFinishedDownloading(){

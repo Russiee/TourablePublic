@@ -47,7 +47,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 try fileManager.createDirectoryAtPath(MediaHelper.sharedInstance.getDocumentsURL().absoluteString,
                     withIntermediateDirectories: false, attributes: nil)
             } catch {
-                print("An Error was generated creating directory")
+                print("directory already exists")
             }
         }
        // UINavigationBar.appearance().setBackgroundImage(UIImage(), forBarPosition: .Any, barMetrics: .Default)
