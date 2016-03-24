@@ -7,7 +7,10 @@ import android.content.Context;
 import com.danikula.videocache.HttpProxyCacheServer;
 
 /**
- * Created by max on 06/03/16.
+ * @author Max
+ * @author Jonathan
+ * Application class to enable non activity classes to perform methods from {@Link Activity},
+ * to get app {@Link Context} and to access the HttpProxyCacheServer instance
  */
 public class App extends Application {
 
