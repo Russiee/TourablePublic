@@ -41,7 +41,7 @@ To run this site:
 
 ```npm install```
 
-(you might have to use sudo depending on your config)
+...you might have to use sudo depending on your config...
 
 ```gulp```
 
