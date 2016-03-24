@@ -1,3 +1,8 @@
+//This code is modfified open-source software (MIT license)
+//credit goes to:
+//https://github.com/nukulb/s3-angular-file-upload
+//license: https://github.com/nukulb/s3-angular-file-upload/blob/master/LICENSE
+
 'use strict';
 
 var AWS = require('aws-sdk'),

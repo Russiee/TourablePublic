@@ -106,9 +106,11 @@ angular.module('tourable')
         }
 
 
-        //file upload code is a combination of the following open source software:
-        //http://jsfiddle.net/danialfarid/0mz6ff9o/135/
+        //This code is modfified open-source software (MIT license)
+        //credit goes to:
         //https://github.com/nukulb/s3-angular-file-upload
+        //and //http://jsfiddle.net/danialfarid/0mz6ff9o/135/
+        //license: https://github.com/nukulb/s3-angular-file-upload/blob/master/LICENSE
 
         $scope.uploadFiles = function(file, errFiles) {
             $scope.f = file;

@@ -24,14 +24,14 @@ angular.module('tourable')
             if (toState.name === 'admin.edit.tour') {
                 if (!toParams.id) {
                     $state.go('admin.manageTours');
-                } else {
+                } else if (fromState.name.indexOf('admin.edit') !== -1) {
                     getTourData();
                     getKeyData();
                 }
             } else if (toState.name === 'admin.edit.section') {
                 if (!toParams.id && toParams.id !== null) {
                     $state.go('admin.manageTours');
-                } else {
+                } else if (fromState.name.indexOf('admin.edit') !== -1) {
                     getSectionData();
                     getSubsectionData();
                     getPOIdata();
@@ -67,7 +67,7 @@ angular.module('tourable')
                 $scope.tour = response.data;
                 $scope.tour.keys = keys;
                 sessionStorage.setItem('tour', JSON.stringify($scope.tour));
-                if ($state.current.name === 'admin.edit.tour') {
+                if ($state.current.name === 'admin.edit.tour' && $scope.tour.objectId) {
                     $rootScope.loadingLight = false;
                 }
             }, function(error) {

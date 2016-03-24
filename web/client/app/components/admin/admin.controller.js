@@ -49,7 +49,9 @@ angular.module('tourable')
                     getOrganization(response.data.organization.objectId);
                     getAllAdmins(response.data.organization.objectId);
                 } else {
-                    $rootScope.loadingLight = false;
+                    if ($state.current.name === 'admin.manageAdmins') {
+                        $rootScope.loadingLight = false;
+                    }
                 }
             }, function(error) {
                 //Console log in case we need to debug with a user
@@ -64,11 +66,9 @@ angular.module('tourable')
             getOrganizationData.then(function(response) {
                 $scope.organization = response.data;
                 sessionStorage.setItem('organization', JSON.stringify($scope.organization));
-                $rootScope.loadingLight = false;
                 $rootScope.loading = false;
             }, function(error) {
                 //Console log in case we need to debug with a user
-                $rootScope.loadingLight = false;
                 console.log('An error occured while retrieving the admin data: ', error);
             });
         }
@@ -106,6 +106,9 @@ angular.module('tourable')
                             }
                         }
                     }
+                }
+                if ($state.current.name === 'admin.manageTours') {
+                    $rootScope.loadingLight = false;
                 }
             }, function(error) {
                 //Console log in case we need to debug with a user

@@ -13,13 +13,13 @@
         <h5 class="admin-subheader no-padding-top">Admins of {{organization.name}}</h5>
         <ul class="admin-cell-list">
             <div ng-repeat="_admin in admins track by $index">
-                <li class="cursor-pointer" ng-hide="admin.objectId === _admin.objectId">{{_admin.firstname}} {{_admin.lastname}}<i class="fa fa-chevron-right pull-right"></i></li>
+                <li class="cursor-pointer" ng-hide="admin.objectId === _admin.objectId">{{_admin.firstname}} {{_admin.lastname}}</li>
             </div>
         </ul>
     </div>
     <div class="admin-help admin-subheader-offset col-md-4 hidden-xs">
         This is a list of all the admins in your organization.
-        Click on an admin to edit or delete their information.
+        For security reasons, admins can only edit their information themselves. To delete an admin account of an admin that refuses to delete themselves, login to <a href="https://db.tourable.org">the database control system</a>.
     </div>
 </div>
 <div class="row">
