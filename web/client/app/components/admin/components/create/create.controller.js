@@ -103,12 +103,24 @@ angular.module('tourable')
         }
 
         $scope.createPostItem = function (type) {
+            //initiate POI post array
             if (!$scope.classData.expectedInput[1].value) {
                 $scope.classData.expectedInput[1].value = [];
             }
-            $scope.classData.expectedInput[1].value.push({
-                type: type
-            });
+            //initialize options array if type is quiz
+            if (type === 'quiz') {
+                $scope.classData.expectedInput[1].value.push({
+                    type: 'quiz',
+                    value: {
+                        options: ["Wrong Answer A"]
+                    }
+                });
+            } else {
+                $scope.classData.expectedInput[1].value.push({
+                    type: type
+                });
+            }
+            console.log($scope.classData.expectedInput[1].value);
         }
 
 

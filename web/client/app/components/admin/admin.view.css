@@ -243,12 +243,12 @@ textarea {
 }
 
 .admin-create-post {
-    padding-left: 15px;
+    padding-left: 30px;
 }
 
 .admin-create-post-buttons {
     margin-top: 20px;
-    margin-left: -15px;
+    margin-left: 0px;
 }
 
 .admin-create-post-buttons button:focus {
