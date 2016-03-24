@@ -138,3 +138,12 @@
     background-color: #FFB2B1;
     border-color: #FFB2B1;
 }
+
+@media (max-width: 600px) {
+    .tour-cell-list,
+    #tour-view li,
+    #tour-view img,
+    #tour-view video {
+        border-radius: 0px !important;
+    }
+}
