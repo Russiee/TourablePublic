@@ -38,18 +38,17 @@
                         <input type="text" class="form-control" ng-model="item.description" ng-disabled="saving">
                     </div>
 
-                    <div ng-if="item.type === 'quiz'" class="admin-create-post" ng-init="item.options">
+                    <div ng-if="item.type === 'quiz'" class="admin-create-post">
                         <h5 class="admin-subheader">Question</h5>
                         <input type="text" class="form-control" ng-model="item.question" ng-disabled="saving">
-                        <h5 class="admin-subheader">Solution</h5>
-                        <input type="text" class="form-control" ng-model="item.solution" ng-disabled="saving">
-                        <h5 class="admin-subheader">Alternate Options</h5>
-
-                            <input type="text" class="form-control" ng-model="item.solution" ng-disabled="true" ng-if="item.solution">
+                        <h5 class="admin-subheader">Solution (Which option is the right one?)</h5>
+                        <input type="number" class="form-control" ng-model="item.solution" ng-disabled="saving" placeholder="1" ng-value="item.solution + 1">
+                        <h5 class="admin-subheader">Options</h5>
                             <div ng-repeat="option in item.options track by $index">
-                                 <input type="text" class="form-control" ng-model="option">
+                                 <input type="text" class="form-control" ng-model="option" ng-disabled="saving">
                             </div>
-                            <button class="btn admin-btn-small" ng-click="item.options.push(' ')" ng-disabled="saving">Add Another (Wrong) Option</button>
+                            <button class="btn admin-btn-small" ng-click="item.options.push(' ')" ng-disabled="saving">Add Another Option</button>
+                            <button class="btn admin-btn-small" ng-click="item.options.pop()" ng-disabled="saving">Remove Last Option</button>
 
                     </div>
             </div>
@@ -57,8 +56,8 @@
         <div class="admin-create-post-buttons">
             <button class="btn admin-btn-small" ng-click="createPostItem('header')" ng-disabled="saving">Add Header</button>
             <button class="btn admin-btn-small" ng-click="createPostItem('body')" ng-disabled="saving">Add Body</button>
-            <button class="btn admin-btn-small" type="file" ngf-select="uploadFiles($file, $invalidFiles, 'image')" accept="image/*">Add Image</button>
-            <button class="btn admin-btn-small" type="file" ngf-select="uploadFiles($file, $invalidFiles, 'video')" accept="image/*">Add Video</button>
+            <button class="btn admin-btn-small" type="file" ngf-select="uploadFiles($file, $invalidFiles, 'image')" accept="image/*" ng-disabled="saving">Add Image</button>
+            <button class="btn admin-btn-small" type="file" ngf-select="uploadFiles($file, $invalidFiles, 'video')" accept="image/*" ng-disabled="saving">Add Video</button>
             <button class="btn admin-btn-small" ng-click="createPostItem('quiz')" ng-disabled="saving">Add Quiz</button>
 
             <div style="font:smaller" ng-show="uploading">{{f.name}} {{errFile.name}} {{errFile.$error}} {{errFile.$errorParam}}
@@ -66,7 +65,8 @@
                           <div style="width:{{f.progress}}%"
                                ng-bind="f.progress + '%'"></div>
                       </span>
-                  </div>
+                If you upload a dicom or .avi file, it will take a few seconds or minutes (depending on the file size) before it will show up.
+            </div>
                   {{errorMsg}}
         </div>
     </div>

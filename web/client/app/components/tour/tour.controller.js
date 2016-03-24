@@ -27,7 +27,6 @@ angular.module('tourable')
             $scope.key = $location.search().key;
             $scope.expiry = moment().to(moment(response.data.expiry));
 
-            alert($scope.expiry);
             if (moment(response.data.expiry).diff(moment()) < 0) {
                 //Console log in case we need to debug with a user
                 console.log('Invalid Key: ', $location.search().key);

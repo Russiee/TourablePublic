@@ -7,7 +7,7 @@ tourable.factory('editFactory', function($http, $q) {
 
                 if (className === 'tour') {
                     newData.version += 1;
-                } else {
+                } else if (tourID) {
                     var increment = editFunctions.incrementVersion(tourID);
                     increment.then(function(response) {
                         console.log("incremented tour");
@@ -15,6 +15,8 @@ tourable.factory('editFactory', function($http, $q) {
                         console.log("Error ", error);
                     });
                 }
+
+                console.log("POI", newData);
 
                 $http({
                     method: 'PUT',

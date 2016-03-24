@@ -66,6 +66,7 @@ angular.module('tourable')
             getKeyData();
         } else if ($state.current.name === 'admin.edit.poi') {
             $rootScope.loadingLight = true;
+            $scope.tour = sessionStorage.getItem('tour');
             getPOIdata();
         }
 
@@ -191,16 +192,23 @@ angular.module('tourable')
 
             var id = data.objectId;
 
-            console.log(data);
+            console.log("Temp",data);
 
-            var editObj = editFactory.save(className, data, id, $scope.tour.objectId || $scope.key.tour.objectId || $scope.section.tour.objectId || $scope.objectId);
+
+
+            var tourID = undefined;
+            if ($scope.tour) {
+                tourID = $scope.tour.objectId;
+            }
+
+            var editObj = editFactory.save(className, data, id, tourID);
             editObj.then(function(response) {
                 $scope.saving = false;
                 console.log('EDIT response: ', response.data);
                 if ($state.current.name === 'admin.edit.tour') {
                     $rootScope.loadingLight = true;
                     getTourData();
-                } if ($state.current.name === 'admin.edit.key') {
+                } else if ($state.current.name === 'admin.edit.key') {
                     $state.go('admin.edit.tour', {id: $scope.key.tour.objectId});
                 } else if ($state.current.name === 'admin.edit.section') {
                     if ($scope.section.superSection.objectId !== "null") {
@@ -303,13 +311,15 @@ angular.module('tourable')
             //initiate POI post array
             if (!$scope.poi.post) {
                 $scope.poi.post = [];
+            } else {
+                console.log($scope.poi);
             }
             //initialize options array if type is quiz
             if (type === 'quiz') {
                 $scope.poi.post.push({
                     type: 'quiz',
-                    answer: '',
-                    options: ["Wrong Answer A"]
+                    solution: '',
+                    options: ["Answer A", "Answer B"]
                 });
             } else {
                 $scope.poi.post.push({
@@ -331,6 +341,7 @@ angular.module('tourable')
 
         $scope.uploadFiles = function(file, errFiles, item) {
             $scope.uploading = true;
+            $scope.saving = true;
             $scope.f = file;
             $scope.errFile = errFiles && errFiles[0];
             if (file) {
@@ -364,25 +375,38 @@ angular.module('tourable')
 
                             $scope.uploading = false;
 
-                            var fileuri = file.name;
+                            var fileuri = file.name.replace(' ','+');
 
-                            if (file.type === 'video/avi' || file.type === 'video/dcm') {
+                            console.log(file.type);
+
+                            if (file.type === 'video/avi' || (file.type === 'application/dicom' && item === 'video')) {
                                 fileuri = fileuri.substring(0, fileuri.lastIndexOf('.')) + '.mp4';
+                            } else if (file.type === 'application/dicom') {
+                                fileuri = fileuri.substring(0, fileuri.lastIndexOf('.')) + '.jpg';
                             }
 
                             var url = "https://tourable-media.s3.amazonaws.com/" + $state.params.section + '/' + fileuri;
 
-                            $scope.poi.post.push({
-                                type: item,
-                                url: url,
-                                description: " "
-                            });
+//                            $scope.poi.post.push({
+//                                type: item,
+//                                url: url,
+//                                description: " "
+//                            });
 
                             console.log(response);
                             $timeout(function () {
                                 file.result = response.data;
 
                             });
+
+                            $timeout(function () {
+                                $scope.poi.post.push({
+                                    type: item,
+                                    url: url,
+                                    description: " "
+                                });
+                                $scope.save();
+                            }, 5000);
                         }, function (response) {
                             if (response.status > 0)
                                 $scope.errorMsg = response.status + ': ' + response.data;
