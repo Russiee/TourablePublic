@@ -75,7 +75,7 @@ public class SummaryWithUpdatesTest {
      */
     @Test
     public void hasUpdateIcon() {
-        onView(withId(R.id.updateTour)).check(matches(isClickable()));
+        onView(withId(R.id.updateTourText)).check(matches(isClickable()));
     }
 
     /**
