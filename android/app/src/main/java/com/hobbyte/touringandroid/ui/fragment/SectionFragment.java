@@ -29,7 +29,6 @@ public class SectionFragment extends ListFragment {
 
     private static final String PARAM_CONTENTS = "sectionContents";
 
-
     private OnFragmentInteractionListener mListener;
 
     public SectionFragment() {

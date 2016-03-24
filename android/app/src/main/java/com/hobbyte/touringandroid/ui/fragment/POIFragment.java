@@ -113,12 +113,15 @@ public class POIFragment extends ListFragment {
         // Inflate the layout for this fragment
         ListViewItem[] listItems = null;
 
+        //get views & layouts
         View view = getActivity().getLayoutInflater().inflate(R.layout.poi_footer, null);
         LinearLayout rightLayout = (LinearLayout) view.findViewById(R.id.rightLayout);
         TextView rightPOI = (TextView) view.findViewById(R.id.nextPOIFooter);
         LinearLayout leftLayout = (LinearLayout) view.findViewById(R.id.leftLayout);
         TextView leftPOI = (TextView) view.findViewById(R.id.previousPOIFooter);
         Button backToSection = (Button) view.findViewById(R.id.backToSectionButton);
+
+        //set onclick listener
         backToSection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -151,13 +154,17 @@ public class POIFragment extends ListFragment {
         } else {
             leftLayout.setVisibility(View.GONE);
         }
+
         //If POI is solitary, hides the toolbar as it is not needed.
         if (rightLayout.getVisibility() == View.INVISIBLE && leftLayout.getVisibility() == View.INVISIBLE) {
             view.setVisibility(View.GONE);
         }
 
+        //add the footer to the layout. This layout fits at the end of the list and dynamically
+        // resizes to fill the screen if necessary
         getListView().addFooterView(view, FOOTER, true);
 
+        //get poi items from poi and put them into array
         try {
             JSONArray post = poiJSON.getJSONArray("post");
             listItems = new ListViewItem[post.length()];
@@ -167,11 +174,11 @@ public class POIFragment extends ListFragment {
                 listItems[i] = makeListViewItemForType(item);
             }
 
-
         } catch (JSONException je) {
             je.printStackTrace();
         }
 
+        //add adapter to list
         if (listItems != null) {
             PoiContentAdapter adapter = new PoiContentAdapter(
                     getActivity().getApplicationContext(),
