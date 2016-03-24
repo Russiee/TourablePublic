@@ -142,6 +142,7 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
 
         TextView contentView;
 
+        //if poi item has a url, get it
         if (listViewItem.getUrl() != null) {
             Matcher m = namePattern.matcher(listViewItem.getUrl());
             if (m.matches()) {
@@ -149,6 +150,7 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
             }
         }
 
+        //when list is first created the views are null, so we need to inflate them
         if (view == null) {
             if (listViewItemType == IMAGE) {
                 view = LayoutInflater.from(getContext()).inflate(R.layout.poi_image, parent, false);
@@ -163,6 +165,7 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
             }
         }
 
+        //depending on the tpe of content, the view should be inflated different ways
         switch (listViewItemType) {
 
             case IMAGE:
@@ -185,36 +188,8 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
                 File file = new File(savedVideoFilePath);
 
                 if (file.exists()) {
-                    //if file exists then create a thumbnail from it
 
-                    ///get dimensions of the view that we want to show the image in
-                    int[] dimens = fragment.getLayoutViewDimensions();
-                    int viewWidth = dimens[0];
-                    int viewHeight = dimens[1];
-
-                    //get dimensions of video without loading it
-                    MediaMetadataRetriever retriever = new MediaMetadataRetriever();//
-                    retriever.setDataSource(file.getPath());
-                    Bitmap bmp = retriever.getFrameAtTime();
-                    int videoHeight = bmp.getHeight();
-                    int videoWidth = bmp.getWidth();
-
-                    //scale video to fit width
-                    int newWidth = viewWidth;
-                    int newHeight = (int) (((float) videoHeight) * (((float) viewWidth) / ((float) videoWidth)));
-
-                    //if video is taller than the screen, scale to the height of the fragment view instead
-                    if (newHeight > viewHeight) {
-                        newHeight = viewHeight;
-                        newWidth = (int) (((float) videoWidth) * (((float) viewHeight) / ((float) videoHeight)));
-                    }
-
-                    //make square thumbnail out of it
-                    thumbnail = (ImageView) view.findViewById(R.id.poiContentVideoView);
-                    Bitmap bMap = ThumbnailUtils.createVideoThumbnail(file.getAbsolutePath(), MediaStore.Video.Thumbnails.FULL_SCREEN_KIND);
-                    bMap = ThumbnailUtils.extractThumbnail(bMap, newWidth, newHeight);
-
-                    thumbnail.setImageBitmap(bMap);
+                    new VideoThumbnailLoadingTask((ImageView) view.findViewById(R.id.poiContentVideoView)).execute(filename, keyID);
 
                 } else {
                     //change file path to use the caching facility
@@ -370,6 +345,7 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
 
         @Override
         protected Bitmap doInBackground(String... params) {
+
             String imgPath = params[0];
             String keyID = params[1];
             File file = new File(App.context.getFilesDir(), String.format("%s/image/%s", keyID, imgPath));
@@ -455,4 +431,74 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
             return Bitmap.createScaledBitmap(sampledBM, newWidth, newHeight, true);
         }
     }
+
+
+    /**
+     * ASynchronously loads a saved image file into a {@link Bitmap}, which in turn gets placed in
+     * an {@link ImageView}. The file is sampled, which saves a considerable amount of memory when
+     * creating a Bitmap. The loaded image will be cached for quick access if its parent View is
+     * scrolled off screen.
+     */
+    private class VideoThumbnailLoadingTask extends AsyncTask<String, Void, Bitmap> {
+
+        private final WeakReference<ImageView> view;
+
+        public VideoThumbnailLoadingTask(ImageView imageView) {
+            // use weak reference to facilitate garbage collection
+            view = new WeakReference<>(imageView);
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... params) {
+
+            String imgPath = params[0];
+            String keyID = params[1];
+            File file = new File(App.context.getFilesDir(), String.format("%s/video/%s", keyID, imgPath));
+
+            if (file.exists()) {
+                //if file exists then create a thumbnail from it
+
+                ///get dimensions of the view that we want to show the image in
+                int[] dimens = fragment.getLayoutViewDimensions();
+                int viewWidth = dimens[0];
+                int viewHeight = dimens[1];
+
+                //get dimensions of video without loading it
+                MediaMetadataRetriever retriever = new MediaMetadataRetriever();//
+                retriever.setDataSource(file.getPath());
+                Bitmap bmp = retriever.getFrameAtTime();
+                int videoHeight = bmp.getHeight();
+                int videoWidth = bmp.getWidth();
+
+                //scale video to fit width
+                int newWidth = viewWidth;
+                int newHeight = (int) (((float) videoHeight) * (((float) viewWidth) / ((float) videoWidth)));
+
+                //if video is taller than the screen, scale to the height of the fragment view instead
+                if (newHeight > viewHeight) {
+                    newHeight = viewHeight;
+                    newWidth = (int) (((float) videoWidth) * (((float) viewHeight) / ((float) videoHeight)));
+                }
+
+                Bitmap bMap = ThumbnailUtils.createVideoThumbnail(file.getAbsolutePath(), MediaStore.Video.Thumbnails.FULL_SCREEN_KIND);
+                bMap = Bitmap.createScaledBitmap(bMap, newWidth, newHeight,true);
+
+                return bMap;
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            final ImageView imageView = view.get();
+
+            if (imageView != null && bitmap != null) {
+                imageView.setImageBitmap(bitmap);
+            }
+        }
+
+    }
+
+
 }
