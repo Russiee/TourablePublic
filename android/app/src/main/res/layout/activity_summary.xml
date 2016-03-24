@@ -68,7 +68,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/txtTourDescription"
             android:layout_gravity="center_vertical"
-            android:background="#ffffff"
             android:visibility="invisible">
 
             <LinearLayout
@@ -76,32 +75,26 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <View
-                    android:layout_width="fill_parent"
-                    android:layout_height="1dp"
-                    android:background="#D9DDE1"
-                    android:paddingLeft="18dp" />
-
                 <TextView
                     android:id="@+id/txtEstimatedTime"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:padding="16dp"
                     android:text="@string/summary_activity_estimated_time"
-                    android:textSize="@dimen/dimension_text_size" />
+                    android:textSize="@dimen/dimension_text_size"
+                    android:background="#ffffff" />
 
-                <View
-                    android:layout_width="fill_parent"
-                    android:layout_height="1dp"
-                    android:background="#D9DDE1"
-                    android:paddingLeft="18dp" />
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp" />
 
                 <LinearLayout
                     android:id="@+id/updateTourLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingRight="18dp">
+                    android:paddingRight="18dp"
+                    android:background="#ffffff">
 
                     <TextView
                         android:id="@+id/txtVersion"
@@ -143,11 +136,9 @@
 
                 </LinearLayout>
 
-                <View
-                    android:layout_width="fill_parent"
-                    android:layout_height="1dp"
-                    android:background="#D9DDE1"
-                    android:paddingLeft="18dp" />
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp" />
 
                 <TextView
                     android:id="@+id/txtExpiry"
@@ -156,13 +147,8 @@
                     android:padding="16dp"
                     android:text="@string/expires_in"
                     android:textIsSelectable="false"
-                    android:textSize="@dimen/dimension_text_size" />
-
-                <View
-                    android:layout_width="fill_parent"
-                    android:layout_height="1dp"
-                    android:background="#D9DDE1"
-                    android:paddingLeft="18dp" />
+                    android:textSize="@dimen/dimension_text_size"
+                    android:background="#ffffff" />
 
             </LinearLayout>
         </RelativeLayout>
