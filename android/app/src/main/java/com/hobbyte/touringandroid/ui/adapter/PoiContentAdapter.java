@@ -57,6 +57,7 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
     public static final int IMAGE = 2;
     public static final int VIDEO = 3;
     public static final int QUIZ = 4;
+    public static final int NUMBER_OF_TYPES = 5;
 
     private static final String TAG = "PoiContentAdapter";
     private static final String FILE_NAME_PATTERN = "https?:\\/\\/[-\\w\\.\\/]*\\/(.+\\.(jpe?g|png|mp4))";
@@ -119,7 +120,7 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
      */
     @Override
     public int getViewTypeCount() {
-        return 5;
+        return NUMBER_OF_TYPES;
     }
 
     @Override
@@ -143,6 +144,7 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
 
         TextView contentView;
 
+        //If item has a url (it will be a video or image) then get the url
         if (listViewItem.getUrl() != null) {
             Matcher m = namePattern.matcher(listViewItem.getUrl());
             if (m.matches()) {
@@ -150,6 +152,8 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
             }
         }
 
+        //In beginning all views in list are null so we must
+        //inflate them before we can put any content into them
         if (view == null) {
             if (listViewItemType == IMAGE) {
                 view = LayoutInflater.from(getContext()).inflate(R.layout.poi_image, parent, false);
@@ -164,6 +168,7 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
             }
         }
 
+        //Depending on the type of the item we need to put content into different views
         switch (listViewItemType) {
 
             case IMAGE:
@@ -194,7 +199,7 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
                     int viewHeight = dimens[1];
 
                     //get dimensions of video without loading it
-                    MediaMetadataRetriever retriever = new MediaMetadataRetriever();//
+                    MediaMetadataRetriever retriever = new MediaMetadataRetriever();
                     retriever.setDataSource(file.getPath());
                     Bitmap bmp = retriever.getFrameAtTime();
                     int videoHeight = bmp.getHeight();
@@ -223,11 +228,11 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
                     savedVideoFilePath = proxy.getProxyUrl(listViewItem.getUrl());
 
                     //this isn't strictly necessary until we want to move the cached file to
-                    // permanent video folder, but it provides debugging info until it's implemented
+                    // permanent video folder, (if we want to) but it provides debugging info
                     proxy.registerCacheListener(new VideoCacheListener(), savedVideoFilePath);
                 }
 
-                //create final URL's so they can be accessed within the anon' inner class
+                //create final URLs so they can be accessed within the anon' inner class
                 final String filePath = savedVideoFilePath;
                 final String url = listViewItem.getUrl();
 
@@ -269,7 +274,6 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
 
             case HEADER:
 
-                // TODO
                 if (view.findViewById(R.id.poiHeaderTextView) == null) {
                     view = LayoutInflater.from(getContext()).inflate(R.layout.poi_header, parent, false);
                 }
@@ -285,7 +289,6 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
 
             case BODY:
 
-                // TODO
                 contentView = (TextView) view.findViewById(R.id.poiContentTextView);
                 contentView.setText(listViewItem.getText());
 
