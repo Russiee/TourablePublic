@@ -156,8 +156,9 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qFn-jb-js7">
-                                    <rect key="frame" x="179" y="-13" width="243" height="112"/>
+                                    <rect key="frame" x="179" y="45" width="243" height="54"/>
                                     <constraints>
+                                        <constraint firstAttribute="height" constant="54" id="09C-Uq-FHl"/>
                                         <constraint firstAttribute="width" constant="243" id="pj3-2u-tIl"/>
                                     </constraints>
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
@@ -333,7 +334,7 @@
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="separatorColor" red="0.94117647059999998" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="sectionIndexColor" red="0.086274509799999996" green="0.18039215689999999" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
-                        <textView key="tableHeaderView" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" id="j9k-H7-b43">
+                        <textView key="tableHeaderView" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" id="j9k-H7-b43">
                             <rect key="frame" x="0.0" y="0.0" width="600" height="59"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.08235294118" green="0.1647058824" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>

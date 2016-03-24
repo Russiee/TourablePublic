@@ -44,6 +44,7 @@ class tourDataParser{
             
             return toplevelTour
         }else{
+            print(data)
             let toplevelTour = tourSection.init(sectionId: data["objectId"] as! String,
                 description: data["description"] as! String,
                 createdAt: data["createdAt"] as! String,

@@ -40,7 +40,6 @@ class POIParser{
         //Get the unique object id used as key for the cache
     
         let key = data["objectId"] as! String
-        print(data)
         //Save the JSON under the key.
         NSUserDefaults.standardUserDefaults().setObject(data, forKey: key)
         //Commits changes to memory, required for iOS 7 and below.

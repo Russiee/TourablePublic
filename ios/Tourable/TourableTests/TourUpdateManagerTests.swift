@@ -46,8 +46,6 @@ class TourUpdateManagerTests: XCTestCase {
         let dateOld = NSDate()
         sleep(3)
         let dateNew = NSDate()
-        print(dateOld)
-        print(dateNew)
         let resultComparison = TourUpdateManager.sharedInstance.compareDates(dateOld, newDate: dateNew)
         XCTAssertEqual("ascending", resultComparison)
     }
@@ -56,8 +54,6 @@ class TourUpdateManagerTests: XCTestCase {
         let dateOld = NSDate()
         sleep(3)
         let dateNew = NSDate()
-        print(dateOld)
-        print(dateNew)
         let resultComparison = TourUpdateManager.sharedInstance.compareDates(dateNew, newDate: dateOld)
         XCTAssertEqual("descending", resultComparison)
     }

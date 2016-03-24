@@ -77,7 +77,6 @@ class POITableViewController: UITableViewController {
                 let nextPOIID = POIList[Z + 1]
                 //get the next POI's title to display
                 let nextPOITitle = (NSUserDefaults.standardUserDefaults().objectForKey(nextPOIID))!["title"] as! String
-                print(nextPOITitle)
                 let nextPOILabel = UILabel(frame: CGRectMake(0,0,UIScreen.mainScreen().bounds.size.width-12, 59))
                 nextPOILabel.text = "  Go to next POI (\(nextPOITitle))"
                 nextPOILabel.font = UIFont.systemFontOfSize(16)
@@ -91,7 +90,6 @@ class POITableViewController: UITableViewController {
                 let previousPOIID = POIList[Z - 1]
                 //get the previous POI's title to display
                 let previousPOITitle = (NSUserDefaults.standardUserDefaults().objectForKey(previousPOIID))!["title"] as! String
-                print(previousPOITitle)
                 let previousPOILabel = UILabel(frame: CGRectMake(0,0,UIScreen.mainScreen().bounds.size.width-12, 59))
                 previousPOILabel.text = "  Go to previous POI (\(previousPOITitle))"
                 previousPOILabel.font = UIFont.systemFontOfSize(16)
@@ -116,7 +114,6 @@ class POITableViewController: UITableViewController {
                 let previousPOIID = POIList[Z - 1]
                 //get the previous POI's title to display
                 let previousPOITitle = (NSUserDefaults.standardUserDefaults().objectForKey(previousPOIID))!["title"] as! String
-                print(previousPOITitle)
                 let previousPOILabel = UILabel(frame: CGRectMake(0,0,UIScreen.mainScreen().bounds.size.width-12, 59))
                 previousPOILabel.text = "  Go to previous POI (\(previousPOITitle))"
                 previousPOILabel.font = UIFont.systemFontOfSize(16)
@@ -156,7 +153,7 @@ class POITableViewController: UITableViewController {
                 label.textContainerInset = UIEdgeInsetsMake(10, 12, 0, 12)
                 label.editable = false
                 label.font = UIFont.boldSystemFontOfSize(18)
-                label.text = "\(row["content"] as? String) "
+                label.text = row["content"] as? String
                 
                 label.sizeToFit()
                 label.textAlignment = NSTextAlignment.Center
@@ -194,6 +191,7 @@ class POITableViewController: UITableViewController {
                 var imageView1 = UIImageView()
                 img = imageHandler.sharedInstance.loadImageFromPath(imageAtRow)
                 if img == nil{
+                    print(row["url"])
                     ImageLoader.sharedLoader.imageForUrl((row["url"] as? String)!, completionHandler:{(image: UIImage?, url: String) in
                         let img = image
                         let  h_fact = width / (image?.size.width)!
@@ -332,7 +330,6 @@ class POITableViewController: UITableViewController {
                 poiViews.append(button)
             default:
                 print("something is wrong")
-                print(row["type"])
             }
         }
     }
@@ -408,7 +405,6 @@ class POITableViewController: UITableViewController {
                 //set the tag so we know which cell is for NextPOI navigation.
                 cell.tag = 999
                 navigationToAdd = nextNavigationView[0]
-                print("add NextPOI label")
             }
             else {
                 //if no nextPOI navigation then we add a previous poi navigation instead.
@@ -436,7 +432,6 @@ class POITableViewController: UITableViewController {
             }
             cell.contentView.addSubview(previousNavigationView[0])
             cell.tag = 998
-            print("adding navigation cell")
         }
         
         return cell
