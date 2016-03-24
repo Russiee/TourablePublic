@@ -19,6 +19,9 @@ angular.module('tourable')
                 },
                 error: function(user, error) {
                     console.log(error);
+                    $rootScope.loading = false;
+                    $rootScope.loginError = true;
+                    $rootScope.$apply();
                     // The login failed. Check error to see why.
                 }
             });
@@ -40,6 +43,52 @@ angular.module('tourable')
             } else {
                 return undefined;
             }
+        },
+        updateUser: function(data) {
+            var user = Parse.User.current();
+
+            console.log(data);
+
+            user.set("firstname", data.firstname);
+            user.set("lastname", data.lastname);
+            user.setEmail(data.email);  // attempt to change username
+            user.setUsername(data.email);  // attempt to change username
+            user.setPassword(data.password);  // attempt to change username
+
+            user.save(null, {
+                success: function(user) {
+                    $rootScope.$broadcast('accountmessage', "success");
+                },
+                error: function(error) {
+                    $rootScope.$broadcast('accountmessage', "error");
+                    console.log("Error updating user",error);
+                }
+            });
+        },
+        deleteUser: function(data) {
+            var user = Parse.User.current();
+
+
+
+            //parse doesn't allow automatic deletes, so we set the account unusable
+            console.log(data);
+
+            user.set("organization", null);
+            user.set("firstname", data.firstname);
+            user.set("lastname", data.lastname);
+            user.setEmail(data.email);  // attempt to change username
+            user.setUsername(data.email);  // attempt to change username
+            user.setPassword("deleted");  // attempt to change username
+
+            user.save(null, {
+                success: function(user) {
+                    $rootScope.$broadcast('accountmessage', "success");
+                },
+                error: function(error) {
+                    $rootScope.$broadcast('accountmessage', "error");
+                    console.log("Error updating user",error);
+                }
+            });
         }
     };
 })

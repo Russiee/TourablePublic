@@ -1,5 +1,5 @@
 angular.module('tourable')
-    .controller('CreateCtrl', function ($scope, $location, $state, createFactory, classDataFactory, Upload, $timeout, $http) {
+    .controller('CreateCtrl', function ($rootScope, $scope, $location, $state, createFactory, classDataFactory, Upload, $timeout, $http) {
 
         String.prototype.capitalize = function() {
             return this.charAt(0).toUpperCase() + this.slice(1);
@@ -8,6 +8,8 @@ angular.module('tourable')
         if (!$scope.$parent.admin) {
             $state.go('admin.dashboard');
         }
+
+        $rootScope.loadingLight = false;
 
         $scope.class = $state.params.className;
         $scope.tour = $state.params.tour;
@@ -61,12 +63,13 @@ angular.module('tourable')
 
 
         $scope.create = function() {
+            console.log("hello");
             $scope.validate = true;
             var isValid = true;
             var data = $scope.classData.expectedInput;
 
             for (var index in data) {
-                if (data[index].required && !data[index].value) {
+                if (data[index].required && data[index].value === undefined) {
                     isValid = false;
                 }
             }
@@ -78,10 +81,13 @@ angular.module('tourable')
                 createObject.then(function(response) {
                     $state.go($scope.classData.afterCreate.route, $scope.classData.afterCreate.options);
                 }, function(error) {
+                    $scope.createError = true;
                     //Console log in case we need to debug with a user
-                    console.log('An error occured while retrieving the admin data: ', error);
+                    console.log('An error occured while creating the object: ', error);
                 });
 
+            } else {
+                $scope.createError = true;
             }
         }
 
@@ -106,10 +112,9 @@ angular.module('tourable')
         }
 
 
-        //This code is modfified open-source software (MIT license)
+        //This code is modfified open-source software
         //credit goes to:
         //https://github.com/nukulb/s3-angular-file-upload
-        //and //http://jsfiddle.net/danialfarid/0mz6ff9o/135/
         //license: https://github.com/nukulb/s3-angular-file-upload/blob/master/LICENSE
 
         $scope.uploadFiles = function(file, errFiles) {

@@ -41,7 +41,9 @@ angular.module('tourable')
             if (fromState.name === 'admin.create' && fromParams.className === 'tour') {
                 getAllTours();
             } else if (fromState.name === 'admin.create' && fromParams.class === 'admin') {
-                getAllAdmins();
+                getAdmin();
+            } else if (toState.name === 'admin.manageAdmins') {
+                getAdmin();
             }
         });
 
@@ -54,6 +56,9 @@ angular.module('tourable')
             getAdminData.then(function(response) {
                 $scope.admin = response.data;
                 sessionStorage.setItem('admin', JSON.stringify($scope.admin));
+                if ($state.current.name === 'admin.account') {
+                    $rootScope.loadingLight = false;
+                }
                 if ($scope.admin.isSuper) {
                     getOrganization(response.data.organization.objectId);
                     getAllAdmins(response.data.organization.objectId);
@@ -87,6 +92,9 @@ angular.module('tourable')
                 $scope.admins = response.data;
                 sessionStorage.setItem('admins', JSON.stringify($scope.admins));
                 getAllTours();
+                if ($state.current.name === 'admin.manageAdmins') {
+                    $rootScope.loadingLight = false;
+                }
             }, function(error) {
                 //Console log in case we need to debug with a user
                 console.log('An error occured while retrieving the all-admin data: ', error);
@@ -137,5 +145,26 @@ angular.module('tourable')
         $scope.logout = function () {
             AuthService.logout();
         };
+
+        $scope.saveAccountDetails = function() {
+            $scope.saving = true;
+            $scope.accountmessage = "";
+
+            AuthService.updateUser($scope.admin);
+        };
+
+        $scope.$on('accountmessage', function (event, message) {
+            $scope.accountmessage = message;
+            $scope.saving = false;
+            console.log($scope.accountmessage);
+            $scope.$apply();
+        });
+
+        $scope.accountDeleteSwitch = 0;
+
+        $scope.deleteAccount = function () {
+            AuthService.deleteUser($scope.admin);
+            AuthService.logout();
+        }
 
     });

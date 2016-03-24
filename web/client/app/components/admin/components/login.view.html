@@ -6,7 +6,8 @@
         <div class="form-group">
             <input type="password" class="form-control" id="passwordInput" placeholder="password" ng-model="login.password">
         </div>
-        <button type="submit" class="btn admin-btn-small" ng-click="login()">Login</button>
+        <button type="submit" class="btn admin-btn-small" ng-click="login()">Login</button><br>
+        <div class="admin-message admin-message-error" ng-show="loginError">A user with that email / password combination was not found.</div>
     </form>
 </div>
 

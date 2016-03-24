@@ -187,9 +187,10 @@ angular.module('tourable')
 
             var editObj = editFactory.save(className, data, id);
             editObj.then(function(response) {
+                $scope.saving = false;
                 console.log('EDIT response: ', response.data);
                 if ($state.current.name === 'admin.edit.tour' || $state.current.name === 'admin.edit.key') {
-                    $state.go('admin.edit.tour', {id: $scope.tour.objectId});
+                    $state.go('admin.edit.tour', {id: $scope.key.tour.objectId});
                 } else if ($state.current.name === 'admin.edit.section') {
                     if ($scope.section.superSection.objectId !== "null") {
                         $state.go('admin.edit.section', {

@@ -10,21 +10,27 @@
 <div class="row">
     <div class="admin-main col-sm-8 admin-account-inputs">
         <h5 class="admin-subheader">First Name</h5>
-        <input type="text" class="form-control" ng-model="admin.firstname">
+        <input type="text" class="form-control" ng-model="admin.firstname" ng-disabled="saving">
         <h5 class="admin-subheader">Last Name</h5>
-        <input type="text" class="form-control" ng-model="admin.lastname">
+        <input type="text" class="form-control" ng-model="admin.lastname" ng-disabled="saving">
         <h5 class="admin-subheader">Email</h5>
-        <input type="text" class="form-control" ng-model="admin.email">
+        <input type="email" class="form-control" ng-model="admin.email" ng-disabled="saving">
+        <h5 class="admin-subheader">Change Password</h5>
+        <input type="password" class="form-control" ng-model="admin.password" ng-disabled="saving">
 
     </div>
 <!--    <div class="admin-help col-sm-4 hidden-xs">help 2</div>-->
 </div>
 <div class="row">
     <div class="admin-main col-sm-8">
-        <button class="btn admin-btn">Save Account Settings</button><br>
-        <div class="admin-message admin-message-success" ng-show="accountmessage === success">Your changes have been saved successfully</div>
-        <div class="admin-message admin-message-error" ng-show="accountmessage === error">There was an error saving your changes</div>
-        <div class="admin-message admin-message-neutral" ng-show="accountmessage === neutral">You haven't modified any details</div>
+        <button class="btn admin-btn" ng-click="saveAccountDetails()" ng-disabled="saving">Save Account Settings</button>
+<!--
+        <button class="btn admin-btn admin-delete-btn" ng-click="accountDeleteSwitch = 1" ng-disabled="saving" ng-show="accountDeleteSwitch === 0">Delete Account</button>
+        <button class="btn admin-btn admin-delete-btn" ng-click="deleteAccount()" ng-disabled="saving" ng-show="accountDeleteSwitch === 1">Are you sure?</button><br>
+-->
+        <div class="admin-message admin-message-success" ng-show="accountmessage === 'success'">Your changes have been saved successfully</div>
+        <div class="admin-message admin-message-error" ng-show="accountmessage === 'error'">There was an error saving your changes</div>
+        <div class="admin-message admin-message-neutral" ng-show="accountmessage === 'neutral'">You haven't modified any details</div>
     </div>
     <div class="admin-help col-sm-4 hidden-xs"></div>
 </div>
