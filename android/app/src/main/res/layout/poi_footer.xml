@@ -3,14 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingTop="@dimen/poi_padding_top">
+    android:paddingTop="@dimen/poi_padding_top_footer">
 
     <LinearLayout
         android:id="@+id/rightLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="#ffffff"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginBottom="1dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -38,11 +39,6 @@
             android:paddingRight="16dp" />
 
         </LinearLayout>
-
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:background="#D9DDE1" />
 
     </LinearLayout>
 
@@ -79,11 +75,6 @@
                 android:paddingRight="16dp" />
 
         </LinearLayout>
-
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:background="#D9DDE1" />
 
     </LinearLayout>
 
