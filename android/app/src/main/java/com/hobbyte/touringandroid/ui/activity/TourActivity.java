@@ -2,6 +2,7 @@ package com.hobbyte.touringandroid.ui.activity;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.ComponentCallbacks2;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -30,6 +31,11 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+/**
+ * This is the activity in which the user views the content of a tour. It makes use of fragments,
+ * and will have either a {@link SectionFragment} or {@link POIFragment} depending on what is
+ * being displayed.
+ */
 public class TourActivity extends AppCompatActivity implements SectionFragment.OnFragmentInteractionListener {
 
     private static final String TAG = "TourActivity";
@@ -86,9 +92,9 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
     }
 
     /**
-     * Listens for a back button press and displays previously opened fragment
+     * Listens for a back button press and displays previously opened fragment.
      * Also listens for a back button press at the Root Fragment and signals
-     * that another back button press will return to summary activity
+     * that another back button press will return to summary activity.
      */
     @Override
     public void onBackPressed() {
@@ -113,6 +119,15 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
         Log.d(TAG, "onStop Called");
         ImageCache.getInstance().clearCache();
         super.onStop();
+    }
+
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+
+        if (level >= ComponentCallbacks2.TRIM_MEMORY_MODERATE) {
+            ImageCache.getInstance().clearCache();
+        }
     }
 
     /**
