@@ -18,6 +18,7 @@ app.set('trust proxy', true);
 
 var port = process.env.PORT || 3000;
 
-app.listen(port, function () {
-    console.log("We're live on port " + port);
-});
+var server = app.listen(port);
+console.log("We're live on port " + port);
+
+module.exports = server;
