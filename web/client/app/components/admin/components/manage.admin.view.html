@@ -16,6 +16,9 @@
                 <li class="cursor-pointer" ng-hide="admin.objectId === _admin.objectId">{{_admin.firstname}} {{_admin.lastname}}</li>
             </div>
         </ul>
+        <ul class="admin-cell-list" ng-if="admins.length === 1">
+            <li class="empty-state-cell">You're currently the only admin of {{organization.name}}</li>
+        </ul>
     </div>
     <div class="admin-help admin-subheader-offset col-md-4 hidden-xs">
         This is a list of all the admins in your organization.

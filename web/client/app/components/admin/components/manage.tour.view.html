@@ -16,6 +16,9 @@
                 <li class="cursor-pointer" ui-sref="admin.edit.tour({id: tour.objectId})">{{tour.title}}<i class="fa fa-chevron-right pull-right"></i></li>
             </div>
         </ul>
+        <ul class="admin-cell-list" ng-if="tours.thisAdmin.length === 0">
+            <li class="empty-state-cell">You don't have any tours yet. Click on the "Create a Tour" button to get started.</li>
+        </ul>
     </div>
     <div class="admin-help admin-subheader-offset col-md-4 hidden-xs">This is a list of your tours. Click on a tour to edit it.</div>
 </div>
@@ -26,6 +29,9 @@
             <div ng-repeat="tour in tours.otherAdmins track by $index">
                 <li class="cursor-pointer" ui-sref="admin.edit.tour({id: tour.objectId})">{{tour.title}}<i class="fa fa-chevron-right pull-right"></i></li>
             </div>
+        </ul>
+        <ul class="admin-cell-list" ng-if="tours.otherAdmins.length === 0">
+            <li class="empty-state-cell">No other admins in this organization have tours.</li>
         </ul>
     </div>
     <div class="admin-help admin-subheader-offset col-md-4 hidden-xs">This is a list of all the tours in your organization that aren't yours (they belong to other admins). As a Super Admin, you still have full control over them.</div>

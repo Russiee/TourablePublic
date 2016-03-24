@@ -115,6 +115,11 @@
     padding: 4px 0;
 }
 
+.empty-state-cell {
+    background-color: #DDD;
+    border-radius: 5px;
+}
+
 
 /* admin sidenav styles */
 
