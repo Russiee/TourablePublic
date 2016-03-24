@@ -7,20 +7,18 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.MediaMetadataRetriever;
 import android.media.ThumbnailUtils;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -63,12 +61,10 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
     private static final String FILE_NAME_PATTERN = "https?:\\/\\/[-\\w\\.\\/]*\\/(.+\\.(jpe?g|png|mp4))";
 
     private static Pattern namePattern;
+    POIFragment fragment;
     private ListViewItem[] items;
     private Bitmap loadingBitmap;
     private String keyID;
-
-    POIFragment fragment;
-
     // needed to prevent ListView recycling form making many duplicate quizzes
     private Quiz quiz;
 
@@ -189,19 +185,34 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
                 File file = new File(savedVideoFilePath);
 
                 if (file.exists()) {
-                    //create a thumbnail from it
+                    //if file exists then create a thumbnail from it
 
-                    //get screen width
-                    WindowManager wm = (WindowManager) App.context.getSystemService(Context.WINDOW_SERVICE);
-                    Display display = wm.getDefaultDisplay();
-                    Point size = new Point();
-                    display.getSize(size);
-                    int dimension = size.x;
+                    ///get dimensions of the view that we want to show the image in
+                    int[] dimens = fragment.getLayoutViewDimensions();
+                    int viewWidth = dimens[0];
+                    int viewHeight = dimens[1];
+
+                    //get dimensions of video without loading it
+                    MediaMetadataRetriever retriever = new MediaMetadataRetriever();//
+                    retriever.setDataSource(file.getPath());
+                    Bitmap bmp = retriever.getFrameAtTime();
+                    int videoHeight = bmp.getHeight();
+                    int videoWidth = bmp.getWidth();
+
+                    //scale video to fit width
+                    int newWidth = viewWidth;
+                    int newHeight = (int) (((float) videoHeight) * (((float) viewWidth) / ((float) videoWidth)));
+
+                    //if video is taller than the screen, scale to the height of the fragment view instead
+                    if (newHeight > viewHeight) {
+                        newHeight = viewHeight;
+                        newWidth = (int) (((float) videoWidth) * (((float) viewHeight) / ((float) videoHeight)));
+                    }
 
                     //make square thumbnail out of it
                     thumbnail = (ImageView) view.findViewById(R.id.poiContentVideoView);
                     Bitmap bMap = ThumbnailUtils.createVideoThumbnail(file.getAbsolutePath(), MediaStore.Video.Thumbnails.FULL_SCREEN_KIND);
-                    bMap = ThumbnailUtils.extractThumbnail(bMap, dimension, dimension);
+                    bMap = ThumbnailUtils.extractThumbnail(bMap, newWidth, newHeight);
 
                     thumbnail.setImageBitmap(bMap);
 
