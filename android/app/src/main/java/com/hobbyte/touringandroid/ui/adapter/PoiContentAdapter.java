@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -255,6 +256,8 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
                         if (actionBar != null) {
                             actionBar.setTitle("Video Player");
                         }
+
+                        fullScreenRotation();
                     }
                 });
 
@@ -307,6 +310,26 @@ public class PoiContentAdapter extends ArrayAdapter<ListViewItem> {
                 return view;
 
         }
+    }
+
+    /**
+     * Sets the screen to be fullscreen and to allow screen roataion
+     * The opposite of {@Link TourActivity} private method portraitShowUI()
+     */
+    private void fullScreenRotation() {
+        //get activity
+        Activity a = ((App) getContext().getApplicationContext()).getCurrentActivity();
+
+        //allow rotation
+        a.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+        View decorView = a.getWindow().getDecorView();
+
+        //Hide the status bar
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+
+        //hide toolbar
+        a.findViewById(R.id.toolbar).setVisibility(View.GONE);
     }
 
     /**

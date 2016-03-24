@@ -18,7 +18,8 @@
         <activity
             android:name=".ui.activity.SplashActivity"
             android:noHistory="true"
-            android:theme="@style/SplashScreen">
+            android:theme="@style/SplashScreen"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -27,17 +28,20 @@
 
         <activity
             android:name=".ui.activity.StartActivity"
-            android:label="@string/title_activity_start" />
+            android:label="@string/title_activity_start"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.activity.TourActivity"
             android:label="@string/title_activity_tour"
-            android:configChanges="orientation|screenSize|keyboardHidden" />/>
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.activity.SummaryActivity"
             android:label="@string/title_activity_summary"
-            android:parentActivityName=".ui.activity.StartActivity"/>
+            android:parentActivityName=".ui.activity.StartActivity"
+            android:screenOrientation="portrait" />
 
     </application>
 

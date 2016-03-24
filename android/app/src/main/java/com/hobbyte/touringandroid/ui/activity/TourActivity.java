@@ -5,6 +5,7 @@ import android.app.FragmentTransaction;
 import android.content.ComponentCallbacks2;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -98,7 +99,11 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
      */
     @Override
     public void onBackPressed() {
+        //if name is not null then we were viewing a video
+        // and so we should load the last viewed or 'current' poi
         if (getFragmentManager().getBackStackEntryAt(getFragmentManager().getBackStackEntryCount() - 1).getName() != null) {
+            //force landscape after video watching
+            portraitShowUI();
             loadPointOfInterest(currentPOI);
         } else if (backStack.size() > 1) {
             currentSection = backStack.getLast();
@@ -238,6 +243,24 @@ public class TourActivity extends AppCompatActivity implements SectionFragment.O
                 loadCurrentSection();
             }
         }
+    }
+
+    /**
+     * Sets the screen to not be fullscreen and to lock orientation to be portrait again
+     * The opposite of {@Link PoiContentAdapter} private method fullScreenRotation()
+     */
+    private void portraitShowUI() {
+
+        //allow rotation
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        View decorView = getWindow().getDecorView();
+
+        //Hide the status bar
+        int uiOptions = View.SYSTEM_UI_FLAG_VISIBLE;
+        decorView.setSystemUiVisibility(uiOptions);
+
+        //hide toolbar
+        findViewById(R.id.toolbar).setVisibility(View.VISIBLE);
     }
 
 }
