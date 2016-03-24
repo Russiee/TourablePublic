@@ -29,7 +29,7 @@ public class ServerAPI {
     public static final String TOUR = "/tour/";
     public static final String KEY = "/key/";
     private static final String TAG = "ServerAPI";
-    private static final String BASE_URl = "https://touring-api.herokuapp.com/api/v1";
+    private static final String BASE_URl = "https://api.tourable.org/api/v1";
 
     /**
      * Asks the server if a provided Tour Key is a real, valid key. If it is, return the

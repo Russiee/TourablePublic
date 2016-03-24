@@ -77,6 +77,9 @@ public class DownloadTourTask extends Thread {
         float total = (float) imageURLs.size() + 2 * videoURLs.size(); // make video files fill more progress
         float count = 0.0f;
 
+        /*
+         * If video download is enabled, DownloadTask will download Videos and Images to storage
+         */
         if (getVideo) {
             for (Iterator<String> i = videoURLs.iterator(); i.hasNext(); ) {
                 String urlString = i.next();
@@ -84,7 +87,7 @@ public class DownloadTourTask extends Thread {
 
                 if (m.matches()) {
                     String img = m.group(1);
-                    saveFile(urlString, img, "video", 8192); // TODO figure out if there's ever a reason to use bigger than 8192
+                    saveFile(urlString, img, "video", 8192);
                 }
 
                 count += 2;
@@ -123,6 +126,9 @@ public class DownloadTourTask extends Thread {
                 handler.handleMessage(msg);
             }
 
+            /*
+             * Saves images in background thread automatically whenever wifi is enabled
+             */
             for (Iterator<String> i = imageURLs.iterator(); i.hasNext(); ) {
                 String urlString = i.next();
                 Matcher m = namePattern.matcher(urlString);
