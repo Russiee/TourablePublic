@@ -159,12 +159,37 @@ angular.module('tourable')
             });
         }
 
-        $scope.edit = function () {
-            var editObj = editFactory.edit($state.current.name.substring($state.current.name.lastIndexOf('.') + 1), $state.params.id);
+        $scope.save = function () {
+
+            $scope.saving = true;
+
+            var data, className;
+
+            if ($state.current.name === 'admin.edit.tour') {
+                data = $scope.tour;
+                className = 'tour';
+            } else if ($state.current.name === 'admin.edit.section') {
+                data = $scope.section;
+                className = 'section';
+            } else if ($state.current.name === 'admin.edit.key') {
+                data = $scope.key;
+                className = 'key';
+            } else if ($state.current.name === 'admin.edit.poi') {
+                data = $scope.poi;
+                className = 'poi'
+            }
+
+            var id = data.objectId;
+
+            delete data.objectId, delete data.createdAt, delete data.updatedAt;
+
+            console.log(data);
+
+            var editObj = editFactory.save(className, data, id);
             editObj.then(function(response) {
-                console.log('DELETE response: ', response.data);
-                if ($state.current.name === 'admin.edit.tour') {
-                    $state.go('admin.manageTours');
+                console.log('EDIT response: ', response.data);
+                if ($state.current.name === 'admin.edit.tour' || $state.current.name === 'admin.edit.key') {
+                    $state.go('admin.edit.tour', {id: $scope.tour.objectId});
                 } else if ($state.current.name === 'admin.edit.section') {
                     if ($scope.section.superSection.objectId !== "null") {
                         $state.go('admin.edit.section', {
@@ -181,17 +206,8 @@ angular.module('tourable')
             }, function(error) {
                 //Console log in case we need to debug with a user
                 console.log('An error occured while retrieving the admin data: ', error);
-                if ($scope.section.superSection.objectId !== "null") {
-                    $state.go('admin.edit.section', {
-                        className: 'section',
-                        id: $scope.section.superSection.objectId
-                    });
-                } else if ($scope.tour.objectId) {
-                     $state.go('admin.edit.tour', {
-                        className: 'tour',
-                        id: $scope.tour.objectId
-                    });
-                }
+                $scope.saving = false;
+                $scope.errormessage = true;
             });
         }
 

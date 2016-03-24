@@ -85,7 +85,7 @@ tourable.config(function($stateProvider, $urlRouterProvider, $locationProvider) 
         authenticate: true
     })
     .state('admin.edit.section', {
-        url: "/admin/edit/section/:id",
+        url: "/admin/edit/section/:id?&superSection&depth",
         templateUrl: "/client/app/components/admin/components/edit/components/edit.section.view.html",
         authenticate: true
     })

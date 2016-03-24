@@ -1,10 +1,10 @@
 tourable.factory('editFactory', function($http, $q) {
     return {
-        save: function(className, data) {
+        save: function(className, data, id) {
             return $q(function(resolve, reject) {
                 $http({
                     method: 'PUT',
-                    url: 'https://api.tourable.org/api/v1/' + className,
+                    url: 'https://api.tourable.org/api/v1/' + className + '/' + id,
                     data: data
                 }).then(function success(response) {
                     console.log(response);
