@@ -43,7 +43,6 @@ angular.module('tourable')
         function getAdmin () {
             var getAdminData = adminFactory.getAdmin(AuthService.currentUser().id);
             getAdminData.then(function(response) {
-                console.log('Success: ', response.data);
                 $scope.admin = response.data;
                 sessionStorage.setItem('admin', JSON.stringify($scope.admin));
                 if ($scope.admin.isSuper) {
@@ -63,7 +62,6 @@ angular.module('tourable')
         function getOrganization (id) {
             var getOrganizationData = adminFactory.getOrganization(id);
             getOrganizationData.then(function(response) {
-                console.log('Success: ', response.data);
                 $scope.organization = response.data;
                 sessionStorage.setItem('organization', JSON.stringify($scope.organization));
                 $rootScope.loadingLight = false;
@@ -78,7 +76,6 @@ angular.module('tourable')
         function getAllAdmins (orgID) {
             var getAllAdminData = adminFactory.getAllAdmins(orgID);
             getAllAdminData.then(function(response) {
-                console.log('Success: ', response.data);
                 $scope.admins = response.data;
                 sessionStorage.setItem('admins', JSON.stringify($scope.admins));
                 getAllTours();
@@ -91,7 +88,6 @@ angular.module('tourable')
         function getAllTours () {
             var getAllTourData = adminFactory.getAllTours();
             getAllTourData.then(function(response) {
-                console.log('Success: ', response.data);
                 $scope.tours = {
                     thisAdmin: [],
                     otherAdmins: [],
@@ -101,19 +97,16 @@ angular.module('tourable')
                     var tour = response.data[index];
                     $scope.tours.all.push(tour);
                     if (tour.admin && tour.admin.objectId === $scope.admin.objectId) {
-                        console.log("Compare " + tour.admin.objectId + " to " + $scope.admin.objectId);
                         $scope.tours.thisAdmin.push(tour);
                         sessionStorage.setItem('tours', JSON.stringify($scope.tours));
                     } else if (tour.admin) {
                         for (var _index in $scope.admins) {
-                            console.log("Compare " + tour.admin.objectId + " to " + $scope.admins[_index].objectId);
                             if (tour.admin.objectId === $scope.admins[_index].objectId) {
                                 $scope.tours.otherAdmins.push(tour);
                             }
                         }
                     }
                 }
-                console.log("tours", $scope.tours);
             }, function(error) {
                 //Console log in case we need to debug with a user
                 console.log('An error occured while retrieving all tours: ', error);

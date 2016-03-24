@@ -31,15 +31,10 @@
 
                     <input type="text" class="form-control" ng-model="item.value" ng-disabled="creating" ng-if="item.type === 'header'">
 
-                    <input type="text" class="form-control" ng-model="item.value" ng-disabled="creating" ng-if="item.type === 'header'">
-
                     <textarea type="text" class="form-control" ng-model="item.value" ng-disabled="creating" rows="3" ng-if="item.type === 'body'"></textarea>
 
                     <div ng-if="item.type === 'image' || item.type === 'video'">
-                        <div s3-upload bucket="s3Bucket" ng-model="item.url"
-                             s3-upload-options="{getOptionsUri: s3OptionsUri, folder: section.id + '/'}"></div>
                         <!-- http://jsfiddle.net/danialfarid/0mz6ff9o/135/ -->
-<!--
                           <button type="file" ngf-select="uploadFiles($file, $invalidFiles)" accept="image/*" class="admin-btn-small">
                               Select File</button>
                           <br><br>
@@ -51,7 +46,6 @@
                               </span>
                           </div>
                           {{errorMsg}}
--->
                     </div>
                 </div>
 

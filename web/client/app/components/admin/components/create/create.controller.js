@@ -1,5 +1,5 @@
 angular.module('tourable')
-    .controller('CreateCtrl', function ($scope, $location, $state, createFactory, classDataFactory) {
+    .controller('CreateCtrl', function ($scope, $location, $state, createFactory, classDataFactory, Upload, $timeout, $http) {
 
         String.prototype.capitalize = function() {
             return this.charAt(0).toUpperCase() + this.slice(1);
@@ -15,8 +15,6 @@ angular.module('tourable')
         $scope.superSection = $state.params.superSection;
         $scope.depth = $state.params.depth;
         $scope.organization = $state.params.organization;
-
-        console.log("States", $state.params);
 
         if ($scope.class === 'tour') {
             $scope.classData = classDataFactory.tour($scope.$parent.admin);
@@ -78,7 +76,6 @@ angular.module('tourable')
                 var postData = prepData(data, $scope.classData.defaultModels);
                 var createObject = createFactory.create($scope.class, postData);
                 createObject.then(function(response) {
-                    console.log('Success: ', response.data);
                     $state.go($scope.classData.afterCreate.route, $scope.classData.afterCreate.options);
                 }, function(error) {
                     //Console log in case we need to debug with a user
@@ -90,9 +87,7 @@ angular.module('tourable')
 
         function prepData (data, defaults) {
             var prepped = defaults;
-            console.log(prepped);
             for (var index in data) {
-                console.log(data[index].value);
                 prepped[data[index].model] = data[index].value;
             }
             if ($scope.class === 'admin') {
@@ -102,7 +97,6 @@ angular.module('tourable')
         }
 
         $scope.createPostItem = function (type) {
-            console.log($scope.classData);
             if (!$scope.classData.expectedInput[1].value) {
                 $scope.classData.expectedInput[1].value = [];
             }
@@ -111,29 +105,55 @@ angular.module('tourable')
             });
         }
 
-        //http://jsfiddle.net/danialfarid/0mz6ff9o/135/
 
-//        $scope.uploadFiles = function(file, errFiles) {
-//            $scope.f = file;
-//            $scope.errFile = errFiles && errFiles[0];
-//            if (file) {
-//                file.upload = Upload.upload({
-//                    url: 'https://angular-file-upload-cors-srv.appspot.com/upload',
-//                    data: {file: file}
-//                });
-//
-//                file.upload.then(function (response) {
-//                    $timeout(function () {
-//                        file.result = response.data;
-//                    });
-//                }, function (response) {
-//                    if (response.status > 0)
-//                        $scope.errorMsg = response.status + ': ' + response.data;
-//                }, function (evt) {
-//                    file.progress = Math.min(100, parseInt(100.0 *
-//                                             evt.loaded / evt.total));
-//                });
-//            }
-//        }
+        //file upload code is a combination of the following open source software:
+        //http://jsfiddle.net/danialfarid/0mz6ff9o/135/
+        //https://github.com/nukulb/s3-angular-file-upload
+
+        $scope.uploadFiles = function(file, errFiles) {
+            $scope.f = file;
+            $scope.errFile = errFiles && errFiles[0];
+            if (file) {
+                $http.get('/api/s3Policy?mimeType='+ file.type + '&key=' + $scope.section).success(function(response) {
+                    console.log(response);
+                        var s3Params = response;
+                        file.upload = Upload.upload({
+                            url: 'https://tourable-media.s3.amazonaws.com/',
+                            method: 'POST',
+                            transformRequest: function (data, headersGetter) {
+                                //Headers change here
+                                var headers = headersGetter();
+                                delete headers['Authorization'];
+                                return data;
+                            },
+                            data: {
+                                'key' : $scope.section + '/' + file.name,
+                                'acl' : 'public-read',
+                                'Content-Type' : file.type,
+                                'AWSAccessKeyId': s3Params.AWSAccessKeyId,
+                                'success_action_status' : '201',
+                                'Policy' : s3Params.s3Policy,
+                                'Signature' : s3Params.s3Signature
+                            },
+                            file: file,
+                        });
+
+
+
+                        file.upload.then(function (response) {
+                            console.log(response);
+                            $timeout(function () {
+                                file.result = response.data;
+                            });
+                        }, function (response) {
+                            if (response.status > 0)
+                                $scope.errorMsg = response.status + ': ' + response.data;
+                        }, function (evt) {
+                            file.progress = Math.min(100, parseInt(100.0 *
+                                                     evt.loaded / evt.total));
+                        });
+                    });
+            }
+        }
 
     });
