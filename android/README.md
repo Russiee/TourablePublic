@@ -15,7 +15,7 @@ Tours may contain sensitive information so we have included a range of tools to 
 - Tour access is controlled by a key which can have an expiry or can be revoked at any time.
 - Tours with out of date or revoked keys are deleted from the user's device automatically.
 
-This app requires Android 5.0 (API 21) as a minimum.
+This app requires Android 4.4 (API 19) as a minimum.
 
 # Installation
 
