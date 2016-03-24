@@ -26,6 +26,8 @@ angular.module('tourable')
                 sessionStorage.removeItem('admins');
                 sessionStorage.removeItem('tours');
                 sessionStorage.removeItem('tour');
+                sessionStorage.removeItem('keys');
+                sessionStorage.removeItem('key');
                 $state.go("home");
             }
         });

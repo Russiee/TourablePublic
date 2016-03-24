@@ -93,5 +93,10 @@ tourable.config(function($stateProvider, $urlRouterProvider, $locationProvider) 
         url: "/admin/edit/poi/:id",
         templateUrl: "/client/app/components/admin/components/edit/components/edit.poi.view.html",
         authenticate: true
+    })
+    .state('admin.edit.key', {
+        url: "/admin/edit/key/:id",
+        templateUrl: "/client/app/components/admin/components/edit/components/edit.key.view.html",
+        authenticate: true
     });
 });

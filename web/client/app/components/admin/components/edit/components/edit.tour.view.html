@@ -47,7 +47,7 @@
             <h5 class="admin-subheader no-padding-top">Tour Keys</h5>
             <ul class="admin-cell-list">
                 <div ng-repeat="key in keys track by $index">
-                    <li class="cursor-pointer">{{key.code}}<i class="fa fa-chevron-right pull-right"></i></li>
+                    <li class="cursor-pointer" ui-sref="admin.edit.key({id: key.objectId})">{{key.code}}<i class="fa fa-chevron-right pull-right"></i></li>
                 </div>
                 <li class="cursor-pointer admin-edit-new-li" ng-click="createKey()"><i>Add a new key</i><i class="fa fa-plus pull-right"></i></li>
             </ul>
