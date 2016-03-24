@@ -4,10 +4,15 @@ angular.module('tourable')
         $scope.startTour = function (key) {
             var promise = keyFactory.verify(key);
             promise.then(function(response) {
-                $location.url('/tour?key=' + key);
-                console.log('Success: ' + response);
+                if (moment(response.data.expiry).diff(moment()) < 0) {
+                    $scope.keyError = true;
+                    console.log('Key expired');
+                } else {
+                    $location.url('/tour?key=' + key);
+                    console.log('Success: ' + response);
+                    }
             }, function(error) {
-                alert("KEY REJECTED");
+                $scope.keyError = true;
                 console.log('Failed: ' + error);
             });
         };

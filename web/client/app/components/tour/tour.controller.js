@@ -26,14 +26,25 @@ angular.module('tourable')
         verifyKey.then(function(response) {
             $scope.key = $location.search().key;
             $scope.expiry = moment().to(moment(response.data.expiry));
-            console.log('Success: ', response.data);
-            getTourMetaData(response.data.tour.objectId);
-            getTourBundle(response.data.tour.objectId);
+
+            alert($scope.expiry);
+            if (moment(response.data.expiry).diff(moment()) < 0) {
+                //Console log in case we need to debug with a user
+                console.log('Invalid Key: ', $location.search().key);
+                //Redirect back to homepage
+                $location.url('/');
+                $rootScope.loading = false;
+            } else {
+                console.log('Success: ', response.data);
+                getTourMetaData(response.data.tour.objectId);
+                getTourBundle(response.data.tour.objectId);
+            }
 
         }, function(error) {
             //Console log in case we need to debug with a user
             console.log('Invalid Key: ', $location.search().key);
             //Redirect back to homepage
+            $rootScope.loading = false;
             $location.url('/');
         });
 

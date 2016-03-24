@@ -43,7 +43,7 @@ var bundle = require('./routes/bundle.js');
 
 //Route to test if API is working
 router.get('/', function(req, res) {
-    res.json({ message: 'This is the Hobbyte API', status: 200 });
+    res.json({ message: 'This is the Tourable API', status: 200 });
 });
 
 //Organization routes

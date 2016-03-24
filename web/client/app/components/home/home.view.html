@@ -7,6 +7,7 @@
                 <input type="text" class="form-control" id="keyInput" placeholder="RBH-9252" ng-model="key">
             </div>
             <button type="submit" class="btn btn-default" ng-click="startTour(key)">Start Tour</button>
+             <div class="admin-message admin-message-error" ng-show="keyError">This key is either expired or does not exist. Please verify your key with the person who gave it to you.</div>
         </form>
         <div class="app-badges">
             <a href="https://itunes.apple.com/us/app/tourable/id1092972213?ls=1&mt=8" target="_blank"><img src="/client/assets/apple.svg"></a>
