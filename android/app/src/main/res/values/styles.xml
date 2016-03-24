@@ -12,7 +12,6 @@
         <item name="colorButtonNormal">#D8D9DE</item>
         <item name="android:textColor">@color/colorDarkText</item>
         <item name="android:textAppearance">@color/colorDarkText</item>
-        <item name="android:fontFamily">"sans-serif-thin"</item>
         <item name="android:textColorPrimary">@color/colorPrimary</item>
         <item name="android:textColorSecondary">@color/primary_text_disabled_material_dark</item>
         <item name="android:textColorSecondaryInverse">@color/colorDarkText</item>
@@ -27,7 +26,6 @@
         <item name="colorButtonNormal">@color/colorAccent</item>
         <item name="android:textColor">@color/colorWhiteText</item>
         <item name="android:textAppearance">@color/colorWhiteText</item>
-        <item name="android:fontFamily">"sans-serif-thin"</item>
     </style>
 
 
@@ -44,7 +42,6 @@
     <style name="TourActivityTheme" parent="AppTheme">
         <item name="android:textColor">@color/colorDarkText</item>
         <item name="android:textAppearance">@color/colorDarkText</item>
-        <item name="android:fontFamily">"sans-serif-thin"</item>
     </style>
 
     <style name="ToolbarTheme" parent="AppTheme">
@@ -54,12 +51,10 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColor">@color/colorDarkText</item>
         <item name="android:textAppearance">@color/colorDarkText</item>
-        <item name="android:fontFamily">"sans-serif-thin"</item>
     </style>
 
     <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textSize">21sp</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:layout_centerHorizontal">true</item>
        <!-- <item name="android:textStyle">bold</item> -->
     </style>
