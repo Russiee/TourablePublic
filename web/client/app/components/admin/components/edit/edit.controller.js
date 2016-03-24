@@ -83,7 +83,7 @@ angular.module('tourable')
                 }
             }, function(error) {
                 //Console log in case we need to debug with a user
-                console.log('An error occured while retrieving the admin data: ', error);
+                console.log('An error occured while retrieving the tour data: ', error);
             });
         }
 
@@ -96,7 +96,7 @@ angular.module('tourable')
                 sessionStorage.setItem('tour.keys', JSON.stringify($scope.tour.keys));
             }, function(error) {
                 //Console log in case we need to debug with a user
-                console.log('An error occured while retrieving the admin data: ', error);
+                console.log('An error occured while retrieving the key data: ', error);
             });
         }
 
@@ -189,7 +189,10 @@ angular.module('tourable')
             editObj.then(function(response) {
                 $scope.saving = false;
                 console.log('EDIT response: ', response.data);
-                if ($state.current.name === 'admin.edit.tour' || $state.current.name === 'admin.edit.key') {
+                if ($state.current.name === 'admin.edit.tour') {
+                    $rootScope.loadingLight = true;
+                    getTourData();
+                } if ($state.current.name === 'admin.edit.key') {
                     $state.go('admin.edit.tour', {id: $scope.key.tour.objectId});
                 } else if ($state.current.name === 'admin.edit.section') {
                     if ($scope.section.superSection.objectId !== "null") {
@@ -218,8 +221,10 @@ angular.module('tourable')
 
 
         function deleteObject () {
+            $scope.saving = true;
             var deleteObj = editFactory.delete($state.current.name.substring($state.current.name.lastIndexOf('.') + 1), $state.params.id);
             deleteObj.then(function(response) {
+                $scope.saving = false;
                 console.log('DELETE response: ', response.data);
                 if ($state.current.name === 'admin.edit.tour') {
                     $state.go('admin.manageTours');
@@ -239,6 +244,7 @@ angular.module('tourable')
             }, function(error) {
                 //Console log in case we need to debug with a user
                 console.log('An error occured while retrieving the admin data: ', error);
+                $scope.saving = false;
                 if ($scope.section.superSection.objectId !== "null") {
                     $state.go('admin.edit.section', {
                         className: 'section',

@@ -44,6 +44,8 @@ angular.module('tourable')
                 getAdmin();
             } else if (toState.name === 'admin.manageAdmins') {
                 getAdmin();
+            } else if (toState.name === 'admin.manageTours') {
+                getAllTours();
             }
         });
 
