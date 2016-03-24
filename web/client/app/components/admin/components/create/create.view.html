@@ -25,6 +25,7 @@
 
             <input type="datetime-local" class="form-control" ng-model="input.value" ng-disabled="creating" ng-if="input.type === 'date'">
 
+<!--
             <div ng-if="input.type === 'post'" class="admin-create-post">
                 <div ng-repeat="item in input.value">
                     <h5 class="admin-subheader">{{item.type.capitalize()}}</h5>
@@ -34,9 +35,7 @@
                     <textarea type="text" class="form-control" ng-model="item.value" ng-disabled="creating" rows="3" ng-if="item.type === 'body'"></textarea>
 
                     <div ng-if="item.type === 'image' || item.type === 'video'">
-                        <div ng-if="!item.uploaded">
-                            <!-- http://jsfiddle.net/danialfarid/0mz6ff9o/135/ -->
-                              <button type="file" ngf-select="uploadFiles($file, $invalidFiles)" accept="image/*" class="admin-btn-small">
+                        <button type="file" ngf-select="uploadFiles($file, $invalidFiles)" accept="image/*" class="admin-btn-small">
                                   Select File</button>
                               <br><br>
                               File:
@@ -47,7 +46,6 @@
                                   </span>
                               </div>
                               {{errorMsg}}
-                        </div>
                     </div>
 
                     <div ng-if="item.type === 'quiz'" class="admin-create-post" ng-init="item.value.options">
@@ -64,7 +62,8 @@
                             <button class="btn admin-btn-small" ng-click="item.value.options.push(' ')" ng-disabled="creating">Add Another (Wrong) Option</button>
                     </div>
                 </div>
-
+-->
+<!--
 
 
                 <div class="admin-create-post-buttons">
@@ -74,7 +73,7 @@
                     <button class="btn admin-btn-small" ng-click="createPostItem('video')" ng-disabled="creating">Add Video</button>
                     <button class="btn admin-btn-small" ng-click="createPostItem('quiz')" ng-disabled="creating">Add Quiz</button>
                 </div>
-            </div>
+            </div>-->
 
             <div class="admin-message admin-message-error" ng-show="validate && input.value === undefined && input.required">This is a required input</div>
         </div>

@@ -181,18 +181,12 @@ tourable.factory('classDataFactory', function() {
                                 type: "text",
                                 help: "Example: 'Exercise machine A'",
                                 required: true
-                            },
-                            {
-                                description: "POI Post",
-                                model: [],
-                                type: "post",
-                                help: "",
-                                required: false
                             }
                         ],
                         defaultModels: {
                             description: " ",
-                            section: section,
+                            post: [],
+                            section: section
                         },
                         afterCreate: {
                             route: "admin.edit.section",

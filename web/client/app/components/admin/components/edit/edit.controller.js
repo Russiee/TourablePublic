@@ -14,6 +14,7 @@ angular.module('tourable')
         }
 
         $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+            $scope.pois = [];
             if (toState.name === 'admin.edit.tour' || toState.name === 'admin.edit.section') {
                 $rootScope.loadingLight = true;
             }
@@ -120,10 +121,8 @@ angular.module('tourable')
             getSection.then(function(response) {
                 console.log('Section: ', response.data);
                 var subsections = $scope.section.subsections;
-                var pois = $scope.section.pois;
                 $scope.section = response.data;
                 $scope.section.subsections = subsections;
-                $scope.section.pois = pois;
                 sessionStorage.setItem('section', JSON.stringify($scope.tour.keys));
                 if ($state.current.name === 'admin.edit.section') {
                     $rootScope.loadingLight = false;
@@ -151,7 +150,7 @@ angular.module('tourable')
             var getPOIs = editFactory.getPOIs($state.params.id);
             getPOIs.then(function(response) {
                 console.log('POIs: ', response.data);
-                $scope.section.pois = response.data;
+                $scope.pois = response.data;
                 sessionStorage.setItem('section', JSON.stringify($scope.section));
             }, function(error) {
                 //Console log in case we need to debug with a user
