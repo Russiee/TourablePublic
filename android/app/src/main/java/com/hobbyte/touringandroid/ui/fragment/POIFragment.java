@@ -26,12 +26,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 /**
- * A simple {@link ListFragment} subclass.
- * Activities that contain this fragment must implement the
- * POIFragment.OnFragmentInteractionListener interface
- * to handle interaction events.
- * Use the {@link POIFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * A simple {@link ListFragment} subclass. Activities that contain this fragment must implement the
+ * POIFragment.OnFragmentInteractionListener interface to handle interaction events. Use the
+ * {@link POIFragment#newInstance} factory method to create an instance of this fragment.
+ * <p>
+ * This fragment displays the contents of a POI in a ListView. There can be 5 different types of
+ * content: header text, body text, images, videos, and quizzes.
  */
 public class POIFragment extends ListFragment {
     private static final String TAG = "POIFragment";
@@ -102,6 +102,11 @@ public class POIFragment extends ListFragment {
         return inflater.inflate(R.layout.fragment_poi, container, false);
     }
 
+    /**
+     * Sets up the buttons at the bottom to point to the correct next/previous POI, and creates
+     * the {@link PoiContentAdapter} which populates the fragment.
+     * @param savedInstanceState
+     */
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
