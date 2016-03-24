@@ -33,6 +33,13 @@ import net.bramp.ffmpeg.FFmpegExecutor;
 import net.bramp.ffmpeg.FFprobe;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
 
+/**
+ * This Lambda function does several conversions. If an AVI file is uploaded, it is converted into
+ * MP4. If a DICOM file is uploaded, depending on how many frames are contained within it, it will
+ * be converted into either JPG or MP4. The converted files are then put back into the originating
+ * S3 bucket, and the originals deleted.
+ *
+ */
 public class LambdaFunctionHandler implements RequestHandler<S3Event, String> {
 	
 	private static final String VAR = "/var/task";
@@ -44,9 +51,7 @@ public class LambdaFunctionHandler implements RequestHandler<S3Event, String> {
 	
 	private static final String AVI = ".avi";
 	private static final String MP4 = ".mp4";
-	private static final String MP4_MIME = "video/mp4";
 	private static final String JPG = ".jpg";
-	private static final String JPG_MIME = "image/jpeg";
 	private static final String DICOM = ".dcm";
 	private static final String FILE_TYPE_PATTERN = "(.+)(\\.\\w{3,4})";
 	
@@ -110,11 +115,12 @@ public class LambdaFunctionHandler implements RequestHandler<S3Event, String> {
     }
     
     /**
-     * Conversion innit.
+     * Converts an AVI file into MP4.
      * 
      * @param bucket the S3 bucket that the file was uploaded to
      * @param fileName the file's name, without the .extension on the end
      * @param key the file's name, with the extension included
+     * @return true if the conversion was successful
      */
     private boolean convertAviToMp4(String bucket, String fileName, String key) {
     	logger.log(String.format("Converting %s to mp4", key));
@@ -163,6 +169,15 @@ public class LambdaFunctionHandler implements RequestHandler<S3Event, String> {
     	return success;
     }
     
+    /**
+     * Handles conversion of DICOM files. Depending on the number of frames, it will be converted
+     * into either JPG (single frame) or MP4 (multiple frames).
+     * 
+     * @param bucket the S3 bucket that the file was uploaded to
+     * @param fileName the file's name, without the .extension on the end
+     * @param key the file's name, with the extension included
+     * @return true if the conversion was successful
+     */
     private boolean convertDicom(String bucket, String fileName, String key) {
     	File dcmFile = new File(TMP + "/" + key);
     	boolean success = false;
@@ -178,6 +193,7 @@ public class LambdaFunctionHandler implements RequestHandler<S3Event, String> {
 			
 			int frameCount = 1;
 			
+			// find how many frames are in the files
 			try {
 				frameCount = imageReader.getNumImages(false);				
 			} catch (Exception e) {
@@ -200,6 +216,16 @@ public class LambdaFunctionHandler implements RequestHandler<S3Event, String> {
     	return success;
     }
     
+    /**
+     * Converts a DICOM file into a JPG image.
+     * 
+     * @param bucket the S3 bucket that the file was uploaded to
+     * @param fileName the file's name, without the .extension on the end
+     * @param key the file's name, with the extension included
+     * @param imageReader an ImageReader loaded with the DICOM file
+     * @param inputStream an ImageInputStream loaded with the DICOM file
+     * @return true if the conversion was successful
+     */
     private boolean convertDcmToJpg(String bucket, String fileName, String key, ImageReader imageReader, ImageInputStream inputStream) {
     	logger.log(String.format("Converting %s to jpg", key));
     	boolean success = false;
@@ -235,6 +261,7 @@ public class LambdaFunctionHandler implements RequestHandler<S3Event, String> {
     	// load converted file back into the bucket
     	File jpgFile = new File(jpgFilePath);
     	
+    	// put converted image into the originating S3 bucket
     	if (jpgFile.exists()) {
     		AmazonS3Client s3Client = new AmazonS3Client();
     		s3Client.putObject(bucket, jpgFileName, jpgFile);   
@@ -245,6 +272,16 @@ public class LambdaFunctionHandler implements RequestHandler<S3Event, String> {
     	return success;
     }
     
+    /**
+     * 
+     * @param bucket the S3 bucket that the file was uploaded to
+     * @param fileName the file's name, without the .extension on the end
+     * @param key the file's name, with the extension included
+     * @param imageReader an ImageReader loaded with the DICOM file
+     * @param inputStream an ImageInputStream loaded with the DICOM file
+     * @param frameCount the number of frames in the DICOM file
+     * @return true if the conversion was successful
+     */
     private boolean convertDcmToMp4(String bucket, String fileName, String key, ImageReader imageReader,
     		ImageInputStream inputStream, int frameCount) {
     	logger.log(String.format("Converting %s to mp4", key));
@@ -262,6 +299,7 @@ public class LambdaFunctionHandler implements RequestHandler<S3Event, String> {
     	try {
     		DicomImageReadParam dicomImageReadParam = (DicomImageReadParam) imageReader.getDefaultReadParam();
     		
+    		// create a JPG for each frame in the file
     		for (int i = 0; i < frameCount; ++i) {
     			BufferedImage myJpegImage = imageReader.read(i, dicomImageReadParam);
     			String num = String.format("%03d", i);
@@ -280,6 +318,7 @@ public class LambdaFunctionHandler implements RequestHandler<S3Event, String> {
     		e.printStackTrace();
     	}
     	
+    	// batch convert all the generated JPGs into an MP4 video
     	if (success) {
     		try {
             	FFmpeg ffmpeg = new FFmpeg(FFMPEG);
@@ -303,12 +342,14 @@ public class LambdaFunctionHandler implements RequestHandler<S3Event, String> {
     	
     	File mp4File = new File(mp4FilePath);
     	
+    	// put converted video into the originating S3 bucket
     	if (mp4File.exists()) {
     		AmazonS3Client s3Client = new AmazonS3Client();
     		s3Client.putObject(bucket, mp4FileName, mp4File);   
     		success = true;
     	}
     	
+    	// delete all the temporary JPGs
     	for (File f : tempDir.listFiles()) {
     		f.delete();
     	}
@@ -318,6 +359,9 @@ public class LambdaFunctionHandler implements RequestHandler<S3Event, String> {
     	return success;
     }
     
+    /**
+     * Deletes the specified file from the specified S3 bucket
+     */
     private void deleteFileFromS3Bucket(String bucket, String key) {
     	logger.log(String.format("Deleting file %s in bucket %s", key, bucket));
     	
@@ -325,6 +369,9 @@ public class LambdaFunctionHandler implements RequestHandler<S3Event, String> {
     	s3.deleteObject(bucket, key);
     }
     
+    /**
+     * Test to make sure that ffmpeg can be used in Lambda
+     */
     private void testFFmpeg() {
     	try {
         	FFmpeg ffmpeg = new FFmpeg(FFMPEG);
@@ -347,6 +394,7 @@ public class LambdaFunctionHandler implements RequestHandler<S3Event, String> {
     	ProcessBuilder ls = new ProcessBuilder("ls", TMP, "|", "grep", "'ff'");
     	boolean inWrongDir = true;
     	
+    	// first check if the binaries are already in /tmp
     	try {
     		Process p = ls.start();
     		BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -362,6 +410,7 @@ public class LambdaFunctionHandler implements RequestHandler<S3Event, String> {
     		e.printStackTrace();
     	}
     	
+    	// if the binaries are still in /var/task, move them
     	if (inWrongDir) {
     		ProcessBuilder move_1 = new ProcessBuilder("mv", VAR + "/ffmpeg", TMP);
     		ProcessBuilder move_2 = new ProcessBuilder("mv", VAR + "/ffprobe", TMP);

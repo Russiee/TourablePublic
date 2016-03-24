@@ -15,7 +15,7 @@ Tours may contain sensitive information so we have included a range of tools to 
 - Tour access is controlled by a key which can have an expiry or can be revoked at any time.
 - Tours with out of date or revoked keys are deleted from the user's device automatically.
 
-This assumes you are running API 21+
+This app requires Android 4.4 (API 19) as a minimum.
 
 # Installation
 
@@ -23,7 +23,7 @@ To run this app, open it in Android Studio (```touring/android``` will appear as
 
 # Testing
 
-The Tourable Android app comes with a full suite of Unit, Performance and UI Tests, which test all main features of the app and its logic. Over 100 tests are included.
+The Tourable Android app comes with a full suite of Unit and UI Tests, which test all main features of the app and its logic.
 
 
 To run tests, expand:
@@ -33,8 +33,23 @@ To run tests, expand:
    - AndroidTest
    - Right click on Java and click on "Run 'All tests'"
    - The UI tests will now be executed before the Unit tests.
- 
-- Some of the tests rely on Aysnchonus methods to check API connectivity is working correctly. If  the internet connection on the test machine is very slow (<1.5Mbps) They may time out or fail due to the delay in connecting. We recommend testing on an internet connection with at least 3G speeds, so 3.5Mbps+  
+
+# Dependencies
+
+Android libs:
+- [Design](https://developer.android.com/tools/support-library/features.html#design) 23+
+- [v7 appcompat](https://developer.android.com/tools/support-library/features.html#v7-appcompat) 23+
+- [v7 cardview](https://developer.android.com/tools/support-library/features.html#v7-cardview) 23+
+- [Testing support library](https://developer.android.com/tools/testing-support-library/index.html) 0.4
+- [Espresso-core](https://developer.android.com/tools/testing-support-library/index.html#Espresso) 2.2.1
+
+External libs (testing):
+- [JUnit](http://junit.org/junit4/) 4.12
+- [Hamcrest](https://github.com/hamcrest/JavaHamcrest) 1.3
+
+Other libs:
+- [ExoPlayer](https://github.com/google/ExoPlayer) 1.5.6 - for playing video files
+- [AndroidVideoCache](https://github.com/danikula/AndroidVideoCache) 2.3.4 - for caching video URL streams
 
 # Licence 
 

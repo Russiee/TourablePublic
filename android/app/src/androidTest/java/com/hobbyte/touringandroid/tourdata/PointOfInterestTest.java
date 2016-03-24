@@ -6,25 +6,21 @@ import android.support.test.runner.AndroidJUnit4;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
 /**
- * Created by max on 03/03/16.
+ * The {@link PointOfInterest} class has little to test, but we want to ensure that Parcelable was
+ * implemented correctly.
  */
 @RunWith(AndroidJUnit4.class)
 public class PointOfInterestTest {
 
     private PointOfInterest poi;
 
-    private SubSection parent;
-//    @Mock private SubSection parent;
-
     @Before
     public void setup() {
-        parent = new SubSection(null, "poop", "this", "poop123", 0);
+        SubSection parent = new SubSection(null, "paul", "this", "poop123", 0);
         poi = new PointOfInterest(parent, "POI Title", "poiabc123", -1);
         parent.addItem(poi);
     }

@@ -268,9 +268,4 @@ public class TestRunThrough {
         enterTour();
         onView(withId(R.id.buttonStartTour)).perform(click());
     }
-
-    public void deleteTour() {
-        onView(withText(TOUR_NAME)).perform(longClick());
-        onView(withText("Delete")).perform(click());
-    }
 }
