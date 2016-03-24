@@ -70,7 +70,6 @@ public class Quiz {
 
             optionsList.add(quizOption);
             layout.addView(quizOption);
-            layout.addView(inflater.inflate(R.layout.divider, layout, false));
         }
 
     }
