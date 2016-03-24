@@ -22,7 +22,8 @@
         android:layout_height="wrap_content"
         android:background="#ffffff"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:padding="@dimen/poi_padding_side"
+        android:layout_marginBottom="1dp">
 
         <TextView
             android:id="@+id/SubSectionTextView"

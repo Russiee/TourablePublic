@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingTop="@dimen/poi_padding_top">
+    android:paddingTop="@dimen/poi_padding_top"
+    android:showDividers="none">
 
     <TextView
         android:id="@+id/quizTitle"
@@ -19,6 +20,5 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/poi_padding_top_tiny"
-        android:background="#ffffff"
         android:orientation="vertical"/>
 </LinearLayout>
