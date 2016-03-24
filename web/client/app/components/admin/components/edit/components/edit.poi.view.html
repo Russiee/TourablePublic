@@ -1,0 +1,86 @@
+<div class="row">
+    <div class="admin-help-bkg col-sm-3 hidden-xs hidden-sm"></div>
+</div>
+<div class="row">
+    <div class="admin-main col-sm-8">
+        <h3 class="admin-header">Edit {{poi.title}}</h3>
+    </div>
+    <div class="admin-help col-sm-4 hidden-xs"></div>
+</div>
+<div class="admin-create-container">
+    <div class="row">
+        <div class="admin-main col-sm-8 admin-account-inputs admin-create-input">
+            <h5 class="admin-subheader">POI Title</h5>
+            <input type="text" class="form-control" ng-model="poi.title" ng-disabled="saving">
+            <div class="admin-message admin-message-error" ng-show="validate && !poi.title">POI titles are required.</div>
+        </div>
+        <div class="admin-help admin-subheader-offset col-sm-4 hidden-xs"></div>
+    </div>
+    <div class="row">
+        <div class="admin-main col-sm-8 admin-account-inputs admin-create-input">
+                <div ng-repeat="item in poi.post track by $index">
+                    <h5 class="admin-subheader">{{item.type.capitalize()}} - <span class="cursor-pointer admin-post-delete" ng-click="poi.post.splice($index, 1)">Delete</span></h5>
+
+                    <input type="text" class="form-control" ng-model="item.content" ng-disabled="saving" ng-if="item.type === 'header'">
+
+                    <textarea type="text" class="form-control" ng-model="item.content" ng-disabled="saving" rows="3" ng-if="item.type === 'body'"></textarea>
+
+                    <div ng-if="item.type === 'image' || item.type === 'video'" class="admin-create-post">
+                        <div ng-if="item.type === 'image'">
+                            <img class="admin-poi-img" ng-src="{{item.url}}">
+                        </div>
+                        <div ng-if="item.type === 'video'">
+                            <video class="admin-poi-video" ng-src="{{item.url | trustVideo}}" loop controls></video>
+                        </div>
+
+                        <h5 class="admin-subheader">Image Description</h5>
+
+                        <input type="text" class="form-control" ng-model="item.description" ng-disabled="saving">
+                    </div>
+
+                    <div ng-if="item.type === 'quiz'" class="admin-create-post" ng-init="item.options">
+                        <h5 class="admin-subheader">Question</h5>
+                        <input type="text" class="form-control" ng-model="item.question" ng-disabled="saving">
+                        <h5 class="admin-subheader">Solution</h5>
+                        <input type="text" class="form-control" ng-model="item.solution" ng-disabled="saving">
+                        <h5 class="admin-subheader">Alternate Options</h5>
+
+                            <input type="text" class="form-control" ng-model="item.solution" ng-disabled="true" ng-if="item.solution">
+                            <div ng-repeat="option in item.options track by $index">
+                                 <input type="text" class="form-control" ng-model="option">
+                            </div>
+                            <button class="btn admin-btn-small" ng-click="item.options.push(' ')" ng-disabled="saving">Add Another (Wrong) Option</button>
+
+                    </div>
+            </div>
+
+        <div class="admin-create-post-buttons">
+            <button class="btn admin-btn-small" ng-click="createPostItem('header')" ng-disabled="saving">Add Header</button>
+            <button class="btn admin-btn-small" ng-click="createPostItem('body')" ng-disabled="saving">Add Body</button>
+            <button class="btn admin-btn-small" type="file" ngf-select="uploadFiles($file, $invalidFiles, 'image')" accept="image/*">Add Image</button>
+            <button class="btn admin-btn-small" type="file" ngf-select="uploadFiles($file, $invalidFiles, 'video')" accept="image/*">Add Video</button>
+            <button class="btn admin-btn-small" ng-click="createPostItem('quiz')" ng-disabled="saving">Add Quiz</button>
+
+            <div style="font:smaller" ng-show="uploading">{{f.name}} {{errFile.name}} {{errFile.$error}} {{errFile.$errorParam}}
+                      <span class="progress" ng-show="f.progress >= 0">
+                          <div style="width:{{f.progress}}%"
+                               ng-bind="f.progress + '%'"></div>
+                      </span>
+                  </div>
+                  {{errorMsg}}
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="admin-main col-sm-8">
+        <button class="btn admin-btn" ng-click="save()" ng-disabled="saving">Save</button>
+<!--        <button class="btn admin-btn admin-preview-btn" ui-sref="poi.overview" ng-disabled="saving">Preview poi</button>-->
+        <button class="btn admin-btn admin-delete-btn" ng-click="deleteSwitch = 1" ng-disabled="saving" ng-show="deleteSwitch === 0">Delete</button>
+        <button class="btn admin-btn admin-delete-btn" ng-click="delete()" ng-disabled="saving" ng-show="deleteSwitch === 1">Are you sure?</button>
+        <br>
+        <h5 ng-show="saving" class="admin-subheader"><i class="fa fa-spin fa-cog"></i> Saving your poi...</h5>
+        <div class="admin-message admin-message-success" ng-show="accountmessage === success">Your poi has been saved  successfully</div>
+        <div class="admin-message admin-message-error" ng-show="accountmessage === error">There was an error saving the poi</div>
+    </div>
+    <div class="admin-help col-sm-4 hidden-xs"></div>
+</div>

@@ -1,7 +1,21 @@
 tourable.factory('editFactory', function($http, $q) {
-    return {
-        save: function(className, data, id) {
+    var editFunctions = {
+        save: function(className, data, id, tourID) {
             return $q(function(resolve, reject) {
+
+                var newData = data;
+
+                if (className === 'tour') {
+                    newData.version += 1;
+                } else {
+                    var increment = editFunctions.incrementVersion(tourID);
+                    increment.then(function(response) {
+                        console.log("incremented tour");
+                    }, function(error) {
+                        console.log("Error ", error);
+                    });
+                }
+
                 $http({
                     method: 'PUT',
                     url: 'https://api.tourable.org/api/v1/' + className + '/' + id,
@@ -144,6 +158,53 @@ tourable.factory('editFactory', function($http, $q) {
                     //or server returns response with an error status.
                 });
             });
+        },
+        getPOI: function(poi) {
+            return $q(function(resolve, reject) {
+                $http({
+                    method: 'GET',
+                    url: 'https://api.tourable.org/api/v1/poi/' + poi
+                }).then(function success(response) {
+                    console.log(response);
+                    resolve (response);
+                    //this callback will be called asynchronously
+                    //when the response is available
+                }, function error(response) {
+                    console.log("error", response);
+                    reject (response);
+                    //called asynchronously if an error occurs
+                    //or server returns response with an error status.
+                });
+            });
+        },
+        incrementVersion: function(id) {
+            return $q(function(resolve, reject) {
+                $http({
+                    method: 'GET',
+                    url: 'https://api.tourable.org/api/v1/tour/' + id
+                }).then(function success(response) {
+
+                    var data = response.data;
+
+                    var saveTour = editFunctions.save('tour', data, data.objectId);
+                    saveTour.then(function(response) {
+                        resolve(response);
+                    }, function(error) {
+                        console.log("Error ", error);
+                        reject (response);
+                    });
+
+                    //this callback will be called asynchronously
+                    //when the response is available
+                }, function error(response) {
+                    console.log("error", response);
+                    reject (response);
+                    //called asynchronously if an error occurs
+                    //or server returns response with an error status.
+                });
+            });
         }
     };
+
+    return editFunctions;
 });

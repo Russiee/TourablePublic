@@ -82,6 +82,7 @@ angular.module('tourable')
                 $scope.organization = response.data;
                 sessionStorage.setItem('organization', JSON.stringify($scope.organization));
                 $rootScope.loading = false;
+                $rootScope.loadingLight = false;
             }, function(error) {
                 //Console log in case we need to debug with a user
                 console.log('An error occured while retrieving the admin data: ', error);

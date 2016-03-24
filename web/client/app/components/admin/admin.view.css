@@ -251,8 +251,21 @@ textarea {
     margin-left: 0px;
 }
 
+.admin-post-delete {
+    color: #999;
+}
+
 .admin-create-post-buttons button:focus {
     outline: 0;
+}
+
+.admin-poi-img,
+.admin-poi-video {
+    background-color: #DDD;
+    width: 100%;
+    max-width: 600px;
+    margin: 10px 0px;
+    border-radius: 5px;
 }
 
 /* admin login styles */
@@ -263,4 +276,5 @@ textarea {
     margin: 0 auto;
     margin-top: 20vh;
 }
+
 

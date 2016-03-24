@@ -90,7 +90,7 @@ tourable.config(function($stateProvider, $urlRouterProvider, $locationProvider) 
         authenticate: true
     })
     .state('admin.edit.poi', {
-        url: "/admin/edit/poi/:id",
+        url: "/admin/edit/poi/:id?section",
         templateUrl: "/client/app/components/admin/components/edit/components/edit.poi.view.html",
         authenticate: true
     })

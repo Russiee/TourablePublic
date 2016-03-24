@@ -1,5 +1,5 @@
 angular.module('tourable')
-    .controller('EditCtrl', function ($rootScope, $scope, $state, editFactory) {
+    .controller('EditCtrl', function ($rootScope, $scope, $state, editFactory, $http, Upload, $timeout) {
 
         $rootScope.loadingLight = true;
 
@@ -21,28 +21,23 @@ angular.module('tourable')
         });
 
         $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
-
-            if (toState.name === 'admin.edit.tour') {
-                if (!toParams.id) {
-                    $state.go('admin.manageTours');
-                } else if (fromState.name.indexOf('admin.edit') !== -1) {
-                    getTourData();
-                    getKeysData();
-                }
-            } else if (toState.name === 'admin.edit.section') {
-                if (!toParams.id && toParams.id !== null) {
-                    $state.go('admin.manageTours');
-                } else if (fromState.name.indexOf('admin.edit') !== -1) {
-                    getSectionData();
-                    getSubsectionData();
-                    getPOIdata();
-                }
-            } else if (toState.name === 'admin.edit.key') {
+            if (toState.name.indexOf('admin.edit') !== -1) {
                 if (!toParams.id && toParams.id !== null) {
                     $state.go('admin.manageTours');
                 } else if (fromState.name.indexOf('admin.edit') !== -1) {
                     $rootScope.loadingLight = true;
-                    getKeyData();
+                    if (toState.name === 'admin.edit.tour') {
+                        getTourData();
+                        getKeysData();
+                    } else if (toState.name === 'admin.edit.section') {
+                        getSectionData();
+                        getSubsectionData();
+                        getAllPOIdata();
+                    } else if (toState.name === 'admin.edit.key') {
+                        getKeyData();
+                    } else if (toState.name === 'admin.edit.poi') {
+                        getPOIdata();
+                    }
                 }
             }
         });
@@ -62,13 +57,16 @@ angular.module('tourable')
             if ($state.params.id && $state.params.id !== "null") {
                 getSectionData();
                 getSubsectionData();
-                getPOIdata();
+                getAllPOIdata();
             } else {
                 $state.go('admin.manageTours');
             }
         } else if ($state.current.name === 'admin.edit.key') {
             $rootScope.loadingLight = true;
             getKeyData();
+        } else if ($state.current.name === 'admin.edit.poi') {
+            $rootScope.loadingLight = true;
+            getPOIdata();
         }
 
         function getTourData() {
@@ -147,6 +145,19 @@ angular.module('tourable')
         }
 
         function getPOIdata () {
+            var getPOI = editFactory.getPOI($state.params.id);
+            getPOI.then(function(response) {
+                console.log('POI: ', response.data);
+                $scope.poi = response.data;
+                sessionStorage.setItem('poi', JSON.stringify($scope.poi));
+                $rootScope.loadingLight = false;
+            }, function(error) {
+                //Console log in case we need to debug with a user
+                console.log('An error occured while retrieving the admin data: ', error);
+            });
+        }
+
+        function getAllPOIdata () {
             var getPOIs = editFactory.getPOIs($state.params.id);
             getPOIs.then(function(response) {
                 console.log('POIs: ', response.data);
@@ -180,11 +191,9 @@ angular.module('tourable')
 
             var id = data.objectId;
 
-            delete data.objectId, delete data.createdAt, delete data.updatedAt;
-
             console.log(data);
 
-            var editObj = editFactory.save(className, data, id);
+            var editObj = editFactory.save(className, data, id, $scope.tour.objectId || $scope.key.tour.objectId || $scope.section.tour.objectId || $scope.objectId);
             editObj.then(function(response) {
                 $scope.saving = false;
                 console.log('EDIT response: ', response.data);
@@ -288,6 +297,101 @@ angular.module('tourable')
                 className: 'key',
                 tour: $state.params.id
             });
+        }
+
+         $scope.createPostItem = function (type) {
+            //initiate POI post array
+            if (!$scope.poi.post) {
+                $scope.poi.post = [];
+            }
+            //initialize options array if type is quiz
+            if (type === 'quiz') {
+                $scope.poi.post.push({
+                    type: 'quiz',
+                    answer: '',
+                    options: ["Wrong Answer A"]
+                });
+            } else {
+                $scope.poi.post.push({
+                    type: type
+                });
+            }
+            console.log($scope.poi.post);
+        }
+
+        String.prototype.capitalize = function() {
+            return this.charAt(0).toUpperCase() + this.slice(1);
+        }
+
+
+        //This code is modfified open-source software
+        //credit goes to:
+        //https://github.com/nukulb/s3-angular-file-upload
+        //license: https://github.com/nukulb/s3-angular-file-upload/blob/master/LICENSE
+
+        $scope.uploadFiles = function(file, errFiles, item) {
+            $scope.uploading = true;
+            $scope.f = file;
+            $scope.errFile = errFiles && errFiles[0];
+            if (file) {
+                $http.get('/api/s3Policy?mimeType='+ file.type + '&key=' + $state.params.section).success(function(response) {
+                    console.log(response);
+                        var s3Params = response;
+                        file.upload = Upload.upload({
+                            url: 'https://tourable-media.s3.amazonaws.com/',
+                            method: 'POST',
+                            transformRequest: function (data, headersGetter) {
+                                //Headers change here
+                                var headers = headersGetter();
+                                delete headers['Authorization'];
+                                return data;
+                            },
+                            data: {
+                                'key' : $state.params.section + '/' + file.name,
+                                'acl' : 'public-read',
+                                'Content-Type' : file.type,
+                                'AWSAccessKeyId': s3Params.AWSAccessKeyId,
+                                'success_action_status' : '201',
+                                'Policy' : s3Params.s3Policy,
+                                'Signature' : s3Params.s3Signature
+                            },
+                            file: file,
+                        });
+
+                    console.log($state.params);
+
+                        file.upload.then(function (response) {
+
+                            $scope.uploading = false;
+
+                            var fileuri = file.name;
+
+                            if (file.type === 'video/avi' || file.type === 'video/dcm') {
+                                fileuri = fileuri.substring(0, fileuri.lastIndexOf('.')) + '.mp4';
+                            }
+
+                            var url = "https://tourable-media.s3.amazonaws.com/" + $state.params.section + '/' + fileuri;
+
+                            $scope.poi.post.push({
+                                type: item,
+                                url: url,
+                                description: " "
+                            });
+
+                            console.log(response);
+                            $timeout(function () {
+                                file.result = response.data;
+
+                            });
+                        }, function (response) {
+                            if (response.status > 0)
+                                $scope.errorMsg = response.status + ': ' + response.data;
+                        }, function (evt) {
+                            file.progress = Math.min(100, parseInt(100.0 *
+                                                     evt.loaded / evt.total));
+                        });
+                    });
+            }
         }
 
     });

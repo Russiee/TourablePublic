@@ -40,7 +40,7 @@
             <h5 class="admin-subheader no-padding-top">Points of Interest</h5>
             <ul class="admin-cell-list">
                 <div ng-repeat="poi in pois track by $index">
-                    <li class="cursor-pointer">{{poi.title}}<i class="fa fa-chevron-right pull-right"></i></li>
+                    <li class="cursor-pointer" ui-sref="admin.edit.poi({id: poi.objectId, section: section.objectId})">{{poi.title}}<i class="fa fa-chevron-right pull-right"></i></li>
                 </div>
                 <li class="cursor-pointer admin-edit-new-li" ng-click="createPOI()"><i>Add a new Point of Interest</i><i class="fa fa-plus pull-right"></i></li>
             </ul>
