@@ -43,6 +43,7 @@ class KeyVerifyConnector: NSObject, NSURLConnectionDelegate{
         
         
         //creates and runs the request to the server for key verifcation data.
+        if self.isConnectedToNetwork(){
         let task = session.dataTaskWithRequest(request) { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
             
             do { //Parses the response into JSON data
@@ -79,6 +80,10 @@ class KeyVerifyConnector: NSObject, NSURLConnectionDelegate{
             
         }
         task.resume()
+    }
+    else{
+         self.triggerInvalidKeyNotification()   
+    }
     }
 
     ///Send a notification that the tour id is valid and has been parsed correctly.

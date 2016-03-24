@@ -17,7 +17,7 @@ class POIConnector: NSObject, NSURLConnectionDelegate {
     func initateConnection(objectID: String){
         
         //The path to where the Tour Data is stored
-        urlPath = "https://touring-api.herokuapp.com/api/v1/poi/" + objectID
+        urlPath = "https://api.tourable.org/api/v1/poi/" + objectID
 
         //Standard URLConnection method
         let request = NSURLRequest(URL: NSURL(string: urlPath)!)
