@@ -1,21 +1,21 @@
 # API
 Dependencies required to run this API:
 
-node: https://github.com/nodejs/node
-parse: https://github.com/ParsePlatform/Parse-SDK-JS
-node-cache: https://github.com/tcs-de/nodecache
-morgan: github.com/expressjs/morgan
-express: github.com/expressjs/express
-body-parser: github.com/expressjs/body-parser
-async: github.com/caolan/async
-gulp: github.com/gulpjs/gulp
-gulp-istanbul: github.com/SBoudrias/gulp-istanbul
-gulp-nodemon: github.com/JacksonGariety/gulp-nodemon
-gulp-strip-debug: github.com/sindresorhus/gulp-strip-debug
-gulp-mocha: github.com/sindresorhus/gulp-mocha
-mocha: github.com/mochajs/mocha
-should: github.com/shouldjs/should.js
-supertest: github.com/visionmedia/supertest
+*node: https://github.com/nodejs/node
+*parse: https://github.com/ParsePlatform/Parse-SDK-JS
+*node-cache: https://github.com/tcs-de/nodecache
+*morgan: github.com/expressjs/morgan
+*express: github.com/expressjs/express
+*body-parser: github.com/expressjs/body-parser
+*async: github.com/caolan/async
+*gulp: github.com/gulpjs/gulp
+*gulp-istanbul: github.com/SBoudrias/gulp-istanbul
+*gulp-nodemon: github.com/JacksonGariety/gulp-nodemon
+*gulp-strip-debug: github.com/sindresorhus/gulp-strip-debug
+*gulp-mocha: github.com/sindresorhus/gulp-mocha
+*mocha: github.com/mochajs/mocha
+*should: github.com/shouldjs/should.js
+*supertest: github.com/visionmedia/supertest
 
 See package.json for module version details.
 
