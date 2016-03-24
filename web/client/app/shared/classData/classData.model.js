@@ -35,7 +35,7 @@ tourable.factory('classDataFactory', function() {
                                 description: "Is this a super admin?",
                                 model: "isSuper",
                                 type: "boolean",
-                                help: "Super admins can manage admins and edit every tour in an organization",
+                                help: "Super admins can create admins and manage/edit every tour in an organization. They also have access to the dashboard.",
                                 required: true
                             }
                         ],

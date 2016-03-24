@@ -1,9 +1,12 @@
 angular.module('tourable')
     .controller('AdminCtrl', function ($rootScope, $scope, AuthService, $state, $location, adminFactory) {
 
-
         if ($state.current.name !== 'admin.login') {
             $rootScope.loadingLight = true;
+        }
+
+        if (($state.current.name === 'admin.dashboard' || $state.current.name === 'admin.manageAdmins') && $scope.admin && !$scope.admin.isSuper) {
+            $state.go('admin.manageTours');
         }
 
         $scope.$state = $state;
@@ -11,7 +14,11 @@ angular.module('tourable')
 
         $scope.$on('loginStatusChanged', function (event, isLoggedIn) {
             if (isLoggedIn){
-                $state.go("admin.dashboard");
+                if ($scope.admin && $scope.admin.isSuper) {
+                    $state.go("admin.dashboard");
+                } else {
+                    $state.go("admin.manageTours");
+                }
                 getAdmin();
             } else {
                 sessionStorage.removeItem('admin');
@@ -49,9 +56,8 @@ angular.module('tourable')
                     getOrganization(response.data.organization.objectId);
                     getAllAdmins(response.data.organization.objectId);
                 } else {
-                    if ($state.current.name === 'admin.manageAdmins') {
-                        $rootScope.loadingLight = false;
-                    }
+                    $rootScope.loading = false;
+                    $rootScope.loadingLight = false;
                 }
             }, function(error) {
                 //Console log in case we need to debug with a user
